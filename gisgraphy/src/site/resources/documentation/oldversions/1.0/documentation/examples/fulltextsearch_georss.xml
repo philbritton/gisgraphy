@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:georss="http://www.georss.org/georss">
+	<channel>
+		<title>Gisgraphy</title>
+		<link>http://services.gisgraphy.com/</link>
+		<description>
+			Free open sources framework and GIS Services
+		</description>
+		<language>en-us</language>
+		<docs>http://services.gisgraphy.com/</docs>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2988507
+			</link>
+			<description>
+				Paris(75000), Département de Ville-de-Paris, Région
+				Île-de-France
+			</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2988507
+			</guid>
+			<georss:point>48.85340881347656 2.34879994392395
+			</georss:point>
+		</item>
+		<item>
+			<title>Département de Ville-de-Paris (Adm)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2968815
+			</link>
+			<description>
+				Département de Ville-de-Paris, Département de
+				Ville-de-Paris, Région Île-de-France
+			</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2968815
+			</guid>
+			<georss:point>
+				48.8534049987793 2.3485984802246094
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4717560
+			</link>
+			<description>Paris, Lamar County, Texas</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4717560
+			</guid>
+			<georss:point>
+				33.66093826293945 -95.55551147460938
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4647963
+			</link>
+			<description>Paris, Henry County, Tennessee</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4647963
+			</guid>
+			<georss:point>
+				36.302001953125 -88.32671356201172
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4303602
+			</link>
+			<description>Paris, Bourbon County, Kentucky</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4303602
+			</guid>
+			<georss:point>
+				38.20979690551758 -84.25298309326172
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+
+
+				http://services.gisgraphy.com/displayfeature.html?featureId=4246659
+			</link>
+			<description>Paris, Edgar County, Illinois</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4246659
+			</guid>
+			<georss:point>
+				39.61114501953125 -87.69613647460938
+			</georss:point>
+		</item>
+		<item>
+			<title>Le Touquet-Paris-Plage (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2999139
+			</link>
+			<description>
+				Le Touquet-Paris-Plage(62520), Département du
+				Pas-de-Calais, Région Nord-Pas-de-Calais
+			</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=2999139
+			</guid>
+			<georss:point>
+				50.516666412353516 1.5833332538604736
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+
+
+				http://services.gisgraphy.com/displayfeature.html?featureId=4974617
+			</link>
+			<description>Paris, Oxford County, Maine</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4974617
+			</guid>
+			<georss:point>
+				44.25979232788086 -70.50061798095703
+			</georss:point>
+		</item>
+		<item>
+			<title>Paris (City)</title>
+			<link>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4125402
+			</link>
+			<description>Paris, Logan County, Arkansas</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4125402
+			</guid>
+			<georss:point>
+				35.29203414916992 -93.72991943359375
+			</georss:point>
+		</item>
+		<item>
+			<title>South Paris (City)</title>
+			<link>
+
+
+				http://services.gisgraphy.com/displayfeature.html?featureId=4979220
+			</link>
+			<description>South Paris, Oxford County, Maine</description>
+			<pubDate>2008-12-01T07:02:32Z</pubDate>
+			<guid>
+				http://services.gisgraphy.com/displayfeature.html?featureId=4979220
+			</guid>
+			<georss:point>
+				44.22368240356445 -70.51338958740234
+			</georss:point>
+		</item>
+	</channel>
+</rss>

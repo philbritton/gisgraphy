@@ -1,0 +1,86 @@
+<h1>Free, open source, and ready to use geocoder and geolocalisation webservices </h1>
+<div>
+<h2 class="mainsection">Gisgraphy : Easy geocoding for humans !</h2>
+<p class="maindescription" style="padding-bottom:50px;">
+ Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices.
+  Because geocoding is nothing without data, it provides an easy to use importer that will automagically download and import the necessary 
+  (free) data to your local database (<a href="http://www.geonames.org/" target="_blank">Geonames</a> and <a href="http://www.openstreetmap.org" target="_blank">OpenStreetMap</a> : 42 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a Gisgraphy client...<a href="/documentation/quick-start.htm">read more</a>
+<br/>
+<a class="roundbluebutton" style="float:right;padding-right:50px;" href="/documentation/quick-start.htm">Get started&nbsp;&#x25B8;&#x25B8;&nbsp;</a>
+</p>
+<h2 class="mainsection">What's new : </h2>
+To folow the one version / per year (and After more than one year of development), I am proud to announce that the Version 3.0 of Gisgraphy is now available.
+ It is a major versions where a LOT of functionalities has been added. See <a href="/gisgraphy_v_3_0.htm">Why you should update</a>... You can try it <a href="http://services.gisgraphy.com">here</a>. 
+<h2 class="mainsection">Webservices overview : </h2>
+<p>
+<div>All the webservice are world wide (243 countries), supports pagination. Actually there is 6 (web)services, all are availables for free at <a href="http://services.gisgraphy.com">http://services.gisgraphy.com</a>. It also gives some HTML pages that uses the webservices under the hood. Find bellow a summary for each webservices : </div>
+<ul class="serviceslist">
+	<li class="servicewraper">
+	<h3 class="serviceheader">Geocoding</h3>
+	<div class="servicedescription">Give an Address and get its GPS position in 243 countries.</div>
+<div class="servicelinks"><a href="/documentation/user-guide.htm#geocodingservice">Doc</a> | <a href="/documentation/user-guide.htm#geocodingwebservice">REST API</a> | <a href="/documentation/user-guide.htm#geocodingservicejavaapi">Java API</a> | <a href="http://services.gisgraphy.com/public/geocoding.html">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</li>
+
+	<li class="servicewraper">
+	<h3 class="serviceheader">Reverse geocoding / street search</h3>
+	<div class="servicedescription">Give a GPS position and get the corresponding address</div>
+<div class="servicelinks"><a href="/documentation/user-guide.htm#streetservice">Doc</a> | <a href="/documentation/user-guide.htm#streetwebservice">REST API</a> | <a href="/documentation/user-guide.htm#streetservicejavaapi">Java API</a> | <a href="http://services.gisgraphy.com/public/reverse_geocoding_worldwide.html">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</li>
+
+
+	<li class="servicewraper">
+	<h3 class="serviceheader">Street search</h3>
+	<div class="servicedescription">Find streets and its associated informations, for a given text (and an optionnal GPS point)</div>
+<div class="servicelinks"><a href="/documentation/user-guide.htm#streetservice">Doc</a> | <a href="/documentation/user-guide.htm#streetwebservice">REST API</a> | <a href="/documentation/user-guide.htm#streetservicejavaapi">Java API</a> | <a href="http://services.gisgraphy.com/public/reverse_geocoding_worldwide.html">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</li>
+
+	<li class="servicewraper">
+	<h3 class="serviceheader">Find nearby</h3>
+	<div class="servicedescription">Find places, streets, whatever you want, around a GPS point for a given radius. Results can be sorted by distance.</div>
+<div class="servicelinks"><a href="/documentation/user-guide.htm#geolocservice">Doc</a> | <a href="/documentation/user-guide.htm#geolocwebservice">REST API</a> | <a href="/documentation/user-guide.htm#geolocservicejavaapi">Java API</a> | <a href="http://services.gisgraphy.com/ajaxgeolocsearch.html">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</li>
+
+	<li class="servicewraper" style="padding-bottom:5px;">
+	<h3 class="serviceheader">Fulltext search</h3>
+	<div class="servicedescription">For a given text or sentence and an optionnal GPS point, Find places, streets, zip codes,... and its associated informations such as GPS position, administrative divisions, population, elevation, alternate names in ather spoken languages, wikipedia link (...more than <a href="/documentation/user-guide.htm#fulltextserviceoutputfieldsdescription">50 other informations</a>). Spellchecking, all words required or not,...</div>
+<div class="servicelinks"><a href="/documentation/user-guide.htm#fulltextservice">Doc</a> | <a href="/documentation/user-guide.htm#fulltextwebservice">REST API</a> | <a href="/documentation/user-guide.htm#fulltextservicejavaapi">Java API</a> | <a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?advancedSearch=true">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</li>
+
+<li class="servicewraper" style="padding-bottom:5px;">
+	<h3 class="serviceheader">Address parser</h3>
+	<div class="servicedescription">Divide a single address (as string) into its individual component parts : house number, street type (bd, street, ..), street name, unit (apt, batiment, ...), zipcode, state, country, city.</div>
+<div class="servicelinks"><a href="/documentation/addressparser.htm">Doc</a> | <a href="/documentation/addressparser.htm#webservice">REST API</a> | <a href="/documentation/addressparser.htm#javaapi">Java API</a> | <a href="http://services.gisgraphy.com/public/addressparser.html">Demo</a> | <a href="/free-access.htm">Free access</a></div>
+	</div>
+<fieldset style="width:700px;padding:0px;margin-left:60px;margin-bottom:35px;padding:10px;">
+<legend><img src="/images/logos/gisgraphoid_72.png" alt="Gisgraphoid logo" title="Gisgraphoid logo"/><img src="/images/logos/gisgraphoid.gif" alt="Gisgraphoid" title="Gisgraphoid" /></legend>
+<a href="/gisgraphoid.htm">Gisgraphoid</a> is a library to do geocoding on your Android mobile or tab with the same <a href="http://developer.android.com/reference/android/location/Geocoder.html">Geocoder API</a> as Google but with Gisgraphy. Run on all Android versions, free, no Google API needed by the phone, no API key, no limit. You can display the result on Openstreetmap or Google maps (Google API key required)<br/>
+<div class="servicelinks"><a href="/gisgraphoid.htm">Learn More</a> | <a href="/gisgraphoid.htm#download">Download library</a> | <a href="/gisgraphoid.htm#demo">Download Demo app</a></div>
+</fieldeset>
+
+	
+</div>
+</p>
+<div class="clear"></div>
+<p>
+<h2 class="mainsection" >A little bit further...</h2>
+<ul>
+<li> Importers from geonames CSV files. Just give the country(ies) you wish to import and / or the <a href="/placetype.htm">placetypes</a>, and Gisgraphy download the files and import them with all the alternateNames (optional), and sync the database with a fulltext search engine</li>
+<li> All Openstreetmap data processed in csv format (view <a href="http://www.gisgraphy.com/download/download_data.htm"> data</a>)
+<li> Importers for Openstreetmap data in csv (view <a href="http://www.gisgraphy.com/download/download_data.htm"> data</a>)
+<li> WorldWide geocoding / worldWide reverse geocoding / street search WebServices;
+<li> REST WebService</li>
+<li> Several output formats supported : XML, json, PHP, ruby, python, Atom, RSS / GeoRSS  </li>
+<li> Full text search  (based on <a href="http://lucene.apache.org/java/"/>Lucene</a> / <a href="http://lucene.apache.org/solr/"/>Solr</a>  with default filters optimized for city search
+(case insensitivity, separator characters stripping, ..) via an Java API or a webservice</li>
+<li> Findnearby function (with limits, pagination, restrict to a specific country and/or language and other useful options) via a Java API or a Web Service</li>
+<li> An admin / back office whith statistics <a href="http://www.gisgraphy.com/screenshots.htm"> interface</a></li>
+<li> Fully replicated / scalable / high performances / cached services</li>
+<li> Search for zipcode name, IATA, ICAO </li>
+<li> Internationalized (with support of cyrillique, arabic, chinese,... alphabet)</li>
+<li> Dojo widgets / prototype / Ajax to ease search but can be use it even if javascript is not enabled on the client side</li>
+<li><a href="http://www.gisgraphy.com/documentation/addons.htm#opensearch">Opensearch module</a></li>
+<li> Plateform / language independent</li>
+<li> Provides all the countries flags in svg and png format</li> 
+</ul>
+</p>
+</div>

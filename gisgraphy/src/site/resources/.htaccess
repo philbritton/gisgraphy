@@ -1,0 +1,10 @@
+AddType application/x-httpd-php .htm
+
+<FilesMatch "\.htm$">
+php_value auto_prepend_file "header.inc"
+php_value auto_append_file "footer.inc"
+</FilesMatch>
+
+ErrorDocument 404 /404.htm
+ErrorDocument 403 /403.htm
+ErrorDocument 500 /500.htm

@@ -1,0 +1,143 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="all" href="../css/maven-base.css" />
+<link rel="stylesheet" type="text/css" media="all" href="../css/maven-theme.css" />
+<link rel="stylesheet" type="text/css" media="all" href="../css/site.css" />
+<style type="text/css" media="all">
+h1 {
+	counter-reset: section;
+	counter-reset: subsection;
+	counter-reset: indexsection;
+	counter-reset: indexsubsection;
+	counter-reset: subsubsection;
+}
+
+h2 {
+	counter-increment: section;
+	counter-reset: subsection;
+}
+
+h2:before {
+	content: counter(section) " ";
+}
+
+h3 {
+	counter-increment: subsection;
+	counter-reset: subsubsection;
+}
+
+h3:before {
+	content: counter(section) "." counter(subsection) " ";
+}
+
+h4 {
+	counter-increment: subsubsection;
+}
+
+h4:before {
+	content: counter(section) "." counter(subsection) "."
+		counter(subsubsection) " ";
+}
+</style>
+</head>
+<body>
+<div>
+<h1>Gisgraphy installation guide for Windows</h1>
+Before install and launch Gisgraphy, you must setup java, postgres, and  postgis. it is not, properly speaking, the installation of Gisgraphy, and if you already havn't Postgres, Postgis and java installed, you must install it first. a tutorial is provided <a href="setuplinux.htm">here</a> for linux and <a href="setupwindows.htm">here</a> for windows
+
+<h2>Download a Gisgraphy distribution</h2>
+<div>
+	<ul>
+		<li>Fisrt you have to download a distribution <a href="http://www.gisgraphy.com/download/index.htm">here</a>. Download a tar.gz file, if you are on Linux or download a zip file, if you are on windows.</li>
+		<li>Then extract it : tar xvf YOURFILE if you're on linux or double click on the file if your on Windows</li>
+	</ul>
+	<br/>
+</div>
+
+<h2>Initialize The database</h2>
+<div> Here are the command to run to install and init the Gisgraphy database</div> 
+
+<div class=code>
+<pre>
+# create the database
+psql -U <i>YOURUSER</i>  -h <i>YOURIP</i> -c  "CREATE DATABASE gisgraphy WITH TEMPLATE = template0 ENCODING = 'UTF8';"
+
+#create language
+createlang -U YOURUSER -h YOURIP plpgsql gisgraphy 
+
+#create postgis function
+psql -U YOURUSER -h YOURIP -d gisgraphy -f /usr/share/postgresql-YOURPOSTGRESVERSION-postgis/lwpostgis.sql
+psql -U YOURUSER -h YOURIP -d gisgraphy -f /usr/share/postgresql-YOURPOSTGRESVERSION-postgis/spatial_ref_sys.sql
+
+
+#create tables;
+psql -U<i>YOURUSER</i> -f /path/to/file/create_tables.txt
+
+#create spatial indexes
+ psql -U YOURUSER -h YOURIP -f createGISTIndex.sql
+ 
+</pre> 
+Where YOURUSER is a postgresql user with admin rights,YOURIP is the ip adress of your server(127.0.0.1 in most case) and YOURPOSTGRESVERSION is your postgres version (8.3 in this tutorial) <br/>
+</div>
+<br/>
+Then insert users (...for the admin interface,... you don't have to log to use gisgraphy webservices) in the database. A script called insert-users.sql is provided with two default users: one with admin rights and one with simple rights.
+<div class="code">
+psql -U<i>YOURPOSTGRESQLUSER</i> -f /path/to/file/insert_users.sql <br/>
+</div>
+<br/>
+<div class="tip greentip">
+It is HIGHLY recommended to modify them for security : once gisgraphy is installed :
+<ul>
+<li>loging as 'admin' with password 'admin'</li>
+<li>Go to the <a href="http://localhost:8080/admin/users.html">http://localhost:8080//admin/users.html</a>page</li>
+<li>Change the admin and user password</li>
+</ul>
+</div>
+<br/>
+<h2>Edit database and Gisgraphy settings</h2>
+Go into the directory you've extract the gisgraphy distribution, Then edit the database settings in the jdbc.properties file in the directory 'webapps/ROOT/WEB-INF/classes' of the Gisgraphy distribution.<br/>
+<br/><br/>
+You can edit the configuration (import, and so on) in the env.properties file in directory 'webapps/ROOT/WEB-INF/classes' of the Gisgraphy distribution (for more information see <a href="#options">options documentation</a>).<br/><br/>
+<br/>
+that's all, you can now start gisgraphy
+
+<h2>Start Gisgraphy</h2>
+<ul>
+<li>Open a command line (Start/run and type 'cmd')</li>
+<li>Change the current directory to the folder where you've unzip the files</li>
+<li>Type "<code>java -Xms512M -Xmx512M -jar start.jar </code>"</li>
+</ul>
+<br/>
+<div class="tip redtip">
+<span>Important</span> : You must type the command line in the directory where you've extract the Gisgraphy files. 
+<br/><br/>
+The directory where you type the command to start your servlet container (e.g : <code>java -jar start.jar</code> for Jetty or <code>startup.sh/startup.bat</code> for Tomcat) determines the directory Where The full text data will be stored : the data will be stored in the <code>$Current_Working_directory/solr</code> Directory. In other words :
+<ul>
+<li>If you are in directory 'foo' and you type : "<code>java -jar ./directory/where/Gisgraphy/is/Extracted/start.jar</code>" The data will be stored in <code>foo/solr</code>, because you are in the 'foo' directory</li>
+<li>If you are in directory 'foo' and you type : "<code>cd directroy/where/gisgraphy/is/extracted/start.jar</code>" and then "<code>java -jar start.jar</code>", the Data will be stored in the 'extracted' directory, because you are in the 'extracted' directory.</li>
+</ul>
+This is the same thing for Tomcat or any servlet Container (Resin, ...) due to solr. <a href="http://wiki.apache.org/solr/SolrInstall">More...</a>
+</div> 
+<br/>
+<div class="tip greentip">
+To avoid OutOfMemoryError : you must launch Gisgraphy with a minimum memory of 512M. To do this : set your CATALINA_OPTS to <code>-Xms512M -Xmx512M</code> (e.g : add this <i>CATALINA_OPTS=-Xms512M -Xmx512M</i> to the .bashrc file in your home directory)
+</div>
+<br/>
+<br/>
+</div>
+<h2>See if it works</h2>
+Open a browser and go to <a href="http://localhost:8080/mainMenu.html">http://localhost:8080/mainMenu.html</a>. you should see the admin page
+and then go to <a href="http://localhost:8080/">http://localhost:8080/</a> you should see a Gisgraphy page
+
+<br/>
+<h2>And now...</h2>
+Now, You can : 
+<ul>
+<li><a href="http://www.gisgraphy.com/documentation/index.htm#importdata">Import data</a></li>
+<li><a href="http://www.gisgraphy.com/documentation/index.htm#security">Improve security</a></li>
+<li><a href="http://www.gisgraphy.com/documentation/index.htm#performance">Improve performances</a></li>
+<li><a href="http://gisgraphy.com/documentation/index.htm">See the FAQ</a></li>
+<li><a href="http://gisgraphy.com/forum/">Use the forum</a></li>
+</ul>
+<br/>
+</body>

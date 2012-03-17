@@ -1,0 +1,120 @@
+body{
+background: white url(http://gisgraphy.com/images/background.gif) top left repeat-x;
+font-family: Verdana,Arial,sans-serif;
+font-size:14px;
+text-align: justify;
+margin: 5px;
+}
+
+code{
+font-style: italic;
+}
+.code {
+background-color:#F0F0F0;
+border:1px dashed #4477AA;
+padding:3px;
+width: 82%;
+margin-left: auto;
+margin-right: auto;
+margin-top : 10px;
+margin-bottom : 10px;
+text-align: left;
+}
+.tip {
+text-align:left;
+width : 80%;
+margin-left: auto;
+margin-right: auto;
+padding : 10px;
+padding-left: 20px;
+margin-top : 10px;
+margin-bottom : 10px;
+}
+
+.greentip{
+background-color:#DDFFDD;
+border:1px solid #009900;
+}
+
+.redtip{
+background-color:#FFCCCC;
+border:1px solid #CC0000;
+}
+
+.yellowtip{
+background-color:#FFFFCE;
+border:1px solid #F0C000;
+}
+
+img {
+border : 0px;
+vertical-align: middle;
+}
+#logos{
+width : 100%;
+text-align: center;
+}
+.logo {
+padding: 15px;
+border : 0px;
+}
+
+#logos{
+width : 100%;
+text-align: center;
+}
+.mediumsizetable{
+margin : 15px; 
+width : 80%;
+border:1px solid #AAAAAA;
+border-left : 0px;
+border-bottom : 0px;
+}
+
+.smallsizetable{
+margin : 15px; 
+width : 40%;
+border:1px solid #AAAAAA;
+border-left : 0px;
+border-bottom : 0px;
+}
+
+
+
+.smartborder th,td {
+border-bottom:1px solid #AAAAAA;
+border-left :1px solid #AAAAAA;
+padding-left : 5px;
+}
+
+.smartborder th {
+background-color : #DDFFDD;
+}
+
+
+.smallsizetable{
+margin : 15px;
+width: 20%;
+border:1px solid #AAAAAA;
+border-left : 0px;
+border-bottom : 0px;
+}
+
+.gisgraphy{
+color : #4477AA;
+font-size:3em;
+vertical-align: bottom;
+font-family: tahoma,arial,helvetica,sans-serif;
+}
+.tagline{
+color: #444444;
+font-size:1.2em;
+line-height:0;
+text-indent:5px;
+	}
+	
+.imagethumb{
+	padding : 10px;
+	padding-left : 50px;
+	width: 500px;
+	}
