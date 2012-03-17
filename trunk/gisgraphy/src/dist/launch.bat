@@ -1,0 +1,1 @@
+java -Dfile.encoding=UTF-8 -Xmx2048m -Xms512m -jar start.jar
