@@ -1383,6 +1383,33 @@ The following languages are supported :
 </li>
 <br/>
 
+<a name="latitudefulltext"></a>
+<li>The latitude (optional) (north-south) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates.
+<br/> Examples : 
+<ul>
+<li>-4.2</li>
+</ul>
+</li>
+<br/>
+
+
+<a name="longitudefulltext"></a>
+<li>The longitude (optional) (east-West) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates.
+<br/> Examples : 
+<ul>
+<li>3.6</li>
+</ul>
+</li>
+<br/>
+<a name="radiusfulltext"></a>
+<li>The radius (optional) : distance from the location point in meters we'd like to search around. The value is a number > 0 if it is not specify or incorrect : The default value will be used (10 km).
+<br/> Examples : 
+<ul>
+<li>50000</li>
+</ul>
+</li>
+<br/>
+
 <a name="startindex"></a>
 <li>Start pagination index (optional) : The first pagination index. Numbered from 1. If the number is < 1 or not specified, it will be set to the default value : 1.</li>
 <br/>
@@ -1490,6 +1517,9 @@ Here is a summary of the Web parameters mapping : <br/>
 <th>Parameter name</th><th>Web parameter name</th><th>comment</th>
 <tr><td>The searched text</td><td>q</td><td></td></tr>
 <tr><td>all words required</td><td>allwordsrequired</td><td></td></tr>
+<tr><td>Latitude</td><td>lat</td></tr>
+<tr><td>Longitude<td>lng</td></tr>
+<tr><td>Radius</td><td>radius</td></tr>
 <tr><td>Start pagination index</td><td>from</td><td></td></tr>
 <tr><td>End pagination index</td><td>to</td><td></td></tr>
 <tr><td>Output format</td><td>format</td><td></td></tr>
@@ -1619,7 +1649,7 @@ The fulltext API looks like this
 					
 			FulltextQuery fulltextQuery = new FulltextQuery("<a href="#searchedtext">SEARCHEDTEXT</a>",
 					pagination, output, <a href="#placetype">PLACETYPE</a>.class, <a href="#countrycode">COUNTRYCODE</a>);
-					fulltextQuery.<a href="#indent">withAllWordsRequired</a>(true);
+					fulltextQuery.<a href="#indent">withAllWordsRequired</a>(true).around(GeolocHelper.createPoint(54.2F, -95F)).withRadius(1000).limitToCountryCode("FR");
 			String result = fullTextSearchEngine.executeQueryToString(fulltextQuery);
 </pre>
 </div>
