@@ -67,8 +67,10 @@ public class GeocodingClientTest {
 	public void geocodeAddressQuery() {
 		GeocodingClient client = new GeocodingClient(HTTP_LOCALHOST_8080_GEOCODING);
 		AddressQuery query = createAddressQuery();
+		AddressQuery queryWoCallback = createAddressQuery();
+		queryWoCallback.setCallback(null);
 		IRestClient restClient = EasyMock.createMock(IRestClient.class);
-		String queryString = BeanToRestParameter.toQueryString(query);
+		String queryString = BeanToRestParameter.toQueryString(queryWoCallback);
 		AddressResultsDto addressResultsDto = new AddressResultsDto(new ArrayList<Address>(), 5L);
 		String url = HTTP_LOCALHOST_8080_GEOCODING + queryString;
 		System.out.println("url=" + url);
