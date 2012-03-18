@@ -79,11 +79,14 @@ public class AddressQuery {
      * @param callback
      */
     public void setCallback(String callback) {
-	if (callback != null && callbackValidationPattern.matcher(callback).matches()) {
-	    this.callback = callback;
-	} else {
-	    logger.warn("wrong callback specify : " + callback + ", callback method sould be alphanumeric");
-	}
+    	if (callback!=null && callbackValidationPattern.matcher(callback).matches()){
+    	    this.callback= callback;
+    	} else if (callback==null){
+    		this.callback=null;
+    	}
+    	else { 
+    	    logger.warn("wrong callback specify : "+callback+", callback method sould be alphanumeric");
+    	}
     }
 
     public boolean isIndent() {
