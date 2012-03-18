@@ -42,10 +42,11 @@ public class FulltextClient implements IFullTextSearchEngine {
 	}
 	
 	public void executeAndSerialize(FulltextQuery arg0, OutputStream arg1) throws ServiceException {
+		throw new RuntimeException("executeQueryToDatabaseObjects is not implemented");
 	}
 
 	public String executeQueryToString(FulltextQuery arg0) throws ServiceException {
-		return null;
+		throw new RuntimeException("executeQueryToDatabaseObjects is not implemented");
 	}
 
 	public List<?> executeQueryToDatabaseObjects(FulltextQuery query) throws ServiceException {
@@ -53,8 +54,8 @@ public class FulltextClient implements IFullTextSearchEngine {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see com.gisgraphy.fulltext.IFullTextSearchEngine#isAlive()
+	/*
+	 * always return true
 	 */
 	public boolean isAlive() {
 		return true;
@@ -67,17 +68,23 @@ public class FulltextClient implements IFullTextSearchEngine {
 	protected String fulltextQueryToQueryString(FulltextQuery query){
 		StringBuffer sb = new StringBuffer("?");
 		addParameter(sb,FulltextQuery.QUERY_PARAMETER,query.getQuery());
+		addParameter(sb,FulltextQuery.LAT_PARAMETER,query.getLatitude());
+		addParameter(sb,FulltextQuery.LONG_PARAMETER,query.getLongitude());
+		addParameter(sb,FulltextQuery.RADIUS_PARAMETER,query.getRadius());
 		addParameter(sb,FulltextQuery.ALLWORDSREQUIRED_PARAMETER,query.isAllwordsRequired());
 		addParameter(sb,GisgraphyServlet.FROM_PARAMETER,query.getFirstPaginationIndex());
 		addParameter(sb,GisgraphyServlet.TO_PARAMETER,query.getLastPaginationIndex());
 		addParameter(sb,GisgraphyServlet.FORMAT_PARAMETER,query.getOutputFormat());
 		addParameter(sb,FulltextQuery.LANG_PARAMETER,query.getOutputLanguage());
 		addParameter(sb,FulltextQuery.STYLE_PARAMETER,query.getOutputStyle());
-		addParameter(sb,FulltextQuery.PLACETYPE_PARAMETER,query.getPlaceTypes());
-		addParameter(sb,FulltextQuery.COUNTRY_PARAMETER,query.getCountryCode());
-		addParameter(sb,GisgraphyServlet.INDENT_PARAMETER,query.isOutputIndented());
-		addParameter(sb,FulltextQuery.SPELLCHECKING_PARAMETER,query.isSpellcheckingEnabled());
+		if (query.getPlaceTypes()!=null){
+			for (Class clazz : query.getPlaceTypes())
+			addParameter(sb,FulltextQuery.PLACETYPE_PARAMETER,clazz.getSimpleName());
+		}
 		addParameter(sb,GisgraphyServlet.APIKEY_PARAMETER, query.getApikey());
+					addParameter(sb,GisgraphyServlet.INDENT_PARAMETER,query.isOutputIndented());
+		addParameter(sb,FulltextQuery.COUNTRY_PARAMETER,query.getCountryCode());
+		addParameter(sb,FulltextQuery.SPELLCHECKING_PARAMETER,query.isSpellcheckingEnabled());
 		return sb.toString();
 	}
 	
