@@ -1517,9 +1517,9 @@ Here is a summary of the Web parameters mapping : <br/>
 <th>Parameter name</th><th>Web parameter name</th><th>comment</th>
 <tr><td>The searched text</td><td>q</td><td></td></tr>
 <tr><td>all words required</td><td>allwordsrequired</td><td></td></tr>
-<tr><td>Latitude</td><td>lat</td></tr>
-<tr><td>Longitude<td>lng</td></tr>
-<tr><td>Radius</td><td>radius</td></tr>
+<tr><td>Latitude</td><td>lat</td><td></td></tr>
+<tr><td>Longitude<td>lng</td><td></td></tr>
+<tr><td>Radius</td><td>radius</td><td></td></tr>
 <tr><td>Start pagination index</td><td>from</td><td></td></tr>
 <tr><td>End pagination index</td><td>to</td><td></td></tr>
 <tr><td>Output format</td><td>format</td><td></td></tr>
@@ -1649,7 +1649,9 @@ The fulltext API looks like this
 					
 			FulltextQuery fulltextQuery = new FulltextQuery("<a href="#searchedtext">SEARCHEDTEXT</a>",
 					pagination, output, <a href="#placetype">PLACETYPE</a>.class, <a href="#countrycode">COUNTRYCODE</a>);
-					fulltextQuery.<a href="#indent">withAllWordsRequired</a>(true).around(GeolocHelper.createPoint(54.2F, -95F)).withRadius(1000).limitToCountryCode("FR");
+					fulltextQuery.<a href="#indent">withAllWordsRequired</a>(true)
+					.around(<a href="#latitudefulltext">POINT</a>)
+					.withRadius(<a href="#radiusfulltext">RADIUS</a>).limitToCountryCode("FR");
 			String result = fullTextSearchEngine.executeQueryToString(fulltextQuery);
 </pre>
 </div>
@@ -1668,7 +1670,9 @@ Here is an example :
 					.withLanguageCode("FR").withStyle(OutputStyle.SHORT)
 					.WithIndentation();
 			FulltextQuery fulltextQuery = new FulltextQuery("Paris Texas",
-					pagination, output, new String[]{City.class}, "US");
+					pagination, output, new String[]{City.class}, "US")
+					.around(GeolocHelper.createPoint(54.2F, -95F))
+					.withRadius(1000).limitToCountryCode("FR");
 			String result = fullTextSearchEngine.executeQueryToString(fulltextQuery);
 </pre>
 </div>
