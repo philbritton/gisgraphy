@@ -19,7 +19,7 @@ import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 
 public class FulltextClientTest {
 
-	private static final String HTTP_LOCALHOST_8080_GEOLOC = "http://localhost:8080/geoloc";
+	private static final String HTTP_LOCALHOST_8080_FULLTEXT = "http://localhost:8080/fulltext";
 
 	@Test
 	public void constructorShouldNotAcceptNullBaseUrl() {
@@ -58,25 +58,25 @@ public class FulltextClientTest {
 
 //	@Test
 	public void constructorShouldAccepthttpBaseUrl() {
-		new FulltextClient(HTTP_LOCALHOST_8080_GEOLOC);
+		new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void executeQueryWithNullQuery(){
-		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_GEOLOC);
+		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
 		client.executeQuery(null);
 	}
 	
 	@Test(expected=RuntimeException.class)
 	public void executeQueryToDatabaseObjects(){
-		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_GEOLOC);
+		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
 		client.executeQueryToDatabaseObjects(new FulltextQuery("test"));
 	}
 	
 	@Test
 	public void geolocQuerytoQueryString(){
 		FulltextQuery query = createQuery();
-		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_GEOLOC);
+		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
 		String queryString = client.fulltextQueryToQueryString(query);
 		HashMap<String, String> params = splitURLParams(queryString,"&");
 		Assert.assertEquals(query.getQuery(), params.get(FulltextQuery.QUERY_PARAMETER));
@@ -94,6 +94,19 @@ public class FulltextClientTest {
 		Assert.assertEquals(query.isOutputIndented()+"", params.get(GisgraphyServlet.INDENT_PARAMETER));
 		Assert.assertEquals(query.getCountryCode()+"", params.get(FulltextQuery.COUNTRY_PARAMETER));
 		Assert.assertEquals(query.isSpellcheckingEnabled()+"", params.get(FulltextQuery.SPELLCHECKING_PARAMETER));
+		
+	}
+	
+	@Test
+	public void executeQuery(){
+		FulltextQuery query = createQuery();
+		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
+		FulltextResultsDto dto = client.executeQuery(query);
+		Assert.assertNotNull(dto.getMaxScore());
+		Assert.assertNotNull(dto.getNumFound());
+		Assert.assertNotNull(dto.getQTime());
+		Assert.assertNotNull(dto.getResults());
+		Assert.assertNotNull(dto.getResults());
 		
 	}
 	
