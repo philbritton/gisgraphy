@@ -3,10 +3,13 @@ package com.gisgraphy.fulltext;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.placetype.City;
+import com.gisgraphy.domain.placetype.Country;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.serializer.common.OutputFormat;
+import com.gisgraphy.service.ServiceException;
 import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 
 public class FulltextClientIntegrationTest {
@@ -78,7 +81,7 @@ public class FulltextClientIntegrationTest {
 	public void executeQuery(){
 		FulltextQuery query = new FulltextQuery("paris");
 		Output output = Output.withFormat(OutputFormat.JSON).withStyle(OutputStyle.FULL);
-		//query.withOutput(output);
+		query.withOutput(output);
 		FulltextClient client = new FulltextClient(BASE_URL);
 		FulltextResultsDto dto = client.executeQuery(query);
 		Assert.assertNotNull(dto.getMaxScore());
@@ -128,7 +131,29 @@ public class FulltextClientIntegrationTest {
 		//Assert.assertNotNull(doc.getStreet_type());
 		//Assert.assertNotNull(doc.getOpenstreetmap_id());
 		//Assert.assertNotNull(doc.getIs_in());
-		
+		Assert.assertNotNull(doc.getName_alternates());
+		Assert.assertTrue(doc.getName_alternates().size()>0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate());
+		Assert.assertTrue(doc.getAdm1_names_alternate().size()>0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate());
+		Assert.assertTrue(doc.getAdm2_names_alternate().size()>0);
+		Assert.assertNotNull(doc.getCountry_names_alternate());
+		Assert.assertTrue(doc.getCountry_names_alternate().size()>0);
+	}
+	
+	@Test(expected=ServiceException.class)
+	public void executeQueryWithWrongURL(){
+		FulltextQuery query = new FulltextQuery("test");
+		Output output = Output.withFormat(OutputFormat.JSON).withStyle(OutputStyle.FULL);
+		query.withOutput(output);
+		FulltextClient client = new FulltextClient(BASE_URL+"foo");
+		FulltextResultsDto dto = client.executeQuery(query);
+		Assert.assertNotNull(dto.getMaxScore());
+		Assert.assertNotNull(dto.getNumFound());
+		Assert.assertTrue(dto.getQTime()>0);
+		Assert.assertNotNull(dto.getResults());
+		Assert.assertTrue(dto.getResultsSize()>0);
+		SolrResponseDto doc = dto.getResults().get(0);
 		
 	}
 	
@@ -155,9 +180,8 @@ public class FulltextClientIntegrationTest {
 		 query.withOutput(Output.withFormat(OutputFormat.JSON).withLanguageCode("FR").withStyle(OutputStyle.FULL).withIndentation());
 		 query.setApikey("123");
 		 query.limitToCountryCode("FR");
-		 //todo placetype
+		 query.withPlaceTypes(new Class[] {City.class,Country.class});
 		 query.withoutSpellChecking();
-		 
 		 return query;
 	 }
 

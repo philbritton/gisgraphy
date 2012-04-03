@@ -1,17 +1,15 @@
 package com.gisgraphy.fulltext;
 
-import static org.junit.Assert.*;
-
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.placetype.City;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
-import com.gisgraphy.geocoloc.GeolocClient;
 import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.GisgraphyServlet;
@@ -19,7 +17,7 @@ import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 
 public class FulltextClientTest {
 
-	private static final String HTTP_LOCALHOST_8080_FULLTEXT = "http://localhost:8080/fulltext";
+	private static final String HTTP_LOCALHOST_8080_FULLTEXT = "http://services.gisgraphy.com/fulltext";
 
 	@Test
 	public void constructorShouldNotAcceptNullBaseUrl() {
@@ -89,7 +87,7 @@ public class FulltextClientTest {
 		Assert.assertEquals(query.getOutputFormat()+"", params.get(GisgraphyServlet.FORMAT_PARAMETER));
 		Assert.assertEquals(query.getOutputLanguage(), params.get(FulltextQuery.LANG_PARAMETER));
 		Assert.assertEquals(query.getOutputStyle()+"", params.get(FulltextQuery.STYLE_PARAMETER));
-		//Assert.assertEquals(query.getPlaceTypes()[0].getSimpleName(), params.get(GeolocQuery.PLACETYPE_PARAMETER));
+		Assert.assertEquals(query.getPlaceTypes()[0].getSimpleName(), params.get(GeolocQuery.PLACETYPE_PARAMETER));
 		Assert.assertEquals(query.getApikey()+"", params.get(GisgraphyServlet.APIKEY_PARAMETER));
 		Assert.assertEquals(query.isOutputIndented()+"", params.get(GisgraphyServlet.INDENT_PARAMETER));
 		Assert.assertEquals(query.getCountryCode()+"", params.get(FulltextQuery.COUNTRY_PARAMETER));
@@ -119,7 +117,7 @@ public class FulltextClientTest {
 		 query.withOutput(Output.withFormat(OutputFormat.JSON).withLanguageCode("FR").withStyle(OutputStyle.FULL).withIndentation());
 		 query.setApikey("123");
 		 query.limitToCountryCode("FR");
-		 //todo placetype
+		 query.withPlaceTypes(new Class[] {City.class});
 		 query.withoutSpellChecking();
 		 
 		 return query;

@@ -9,6 +9,7 @@ import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.placetype.City;
 import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.Output;
@@ -170,7 +171,7 @@ public class GeolocClientTest {
 		query.withOutput(Output.withFormat(OutputFormat.PHP).withIndentation());
 		query.withPagination(Pagination.paginate().from(2).to(4));
 		query.withCallback("callback");
-		query.withPlaceType(Object.class);
+		query.withPlaceType(City.class);
 		query.withDistanceField(true);
 		return query;
 	}
