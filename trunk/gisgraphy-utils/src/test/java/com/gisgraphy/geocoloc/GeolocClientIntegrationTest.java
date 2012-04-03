@@ -3,6 +3,7 @@ package com.gisgraphy.geocoloc;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.placetype.City;
 import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;
@@ -33,6 +34,7 @@ public class GeolocClientIntegrationTest {
 		query.withCallback("callback");//test that callback will be set to null
 		query.withOutput(Output.withFormat(OutputFormat.JSON).withIndentation());
 		query.withPagination(Pagination.paginate().from(2).to(4));
+		query.withPlaceType(City.class);
 		query.withDistanceField(true);
 		return query;
 	}
