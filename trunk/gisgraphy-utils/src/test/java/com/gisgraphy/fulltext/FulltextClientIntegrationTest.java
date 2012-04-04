@@ -131,6 +131,7 @@ public class FulltextClientIntegrationTest {
 		//Assert.assertNotNull(doc.getStreet_type());
 		//Assert.assertNotNull(doc.getOpenstreetmap_id());
 		//Assert.assertNotNull(doc.getIs_in());
+		//alternate names
 		Assert.assertNotNull(doc.getName_alternates());
 		Assert.assertTrue(doc.getName_alternates().size()>0);
 		Assert.assertNotNull(doc.getAdm1_names_alternate());
@@ -139,6 +140,16 @@ public class FulltextClientIntegrationTest {
 		Assert.assertTrue(doc.getAdm2_names_alternate().size()>0);
 		Assert.assertNotNull(doc.getCountry_names_alternate());
 		Assert.assertTrue(doc.getCountry_names_alternate().size()>0);
+		//alternatenames multilang
+		Assert.assertNotNull(doc.getName_alternates_localized());
+		Assert.assertTrue(doc.getName_alternates_localized().size()>0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm1_names_alternate_localized().size()>0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm2_names_alternate_localized().size()>0);
+		Assert.assertNotNull(doc.getCountry_names_alternate_localized());
+		Assert.assertTrue(doc.getCountry_names_alternate_localized().size()>0);
+		
 	}
 	
 	@Test(expected=ServiceException.class)
@@ -154,6 +165,24 @@ public class FulltextClientIntegrationTest {
 		Assert.assertNotNull(dto.getResults());
 		Assert.assertTrue(dto.getResultsSize()>0);
 		SolrResponseDto doc = dto.getResults().get(0);
+		//alternate names
+		Assert.assertNotNull(doc.getName_alternates());
+		Assert.assertTrue(doc.getName_alternates().size()==0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate());
+		Assert.assertTrue(doc.getAdm1_names_alternate().size()==0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate());
+		Assert.assertTrue(doc.getAdm2_names_alternate().size()==0);
+		Assert.assertNotNull(doc.getCountry_names_alternate());
+		Assert.assertTrue(doc.getCountry_names_alternate().size()==0);
+		//alternatenames multilang
+		Assert.assertNotNull(doc.getName_alternates_localized());
+		Assert.assertTrue(doc.getName_alternates_localized().size()==0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm1_names_alternate_localized().size()==0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm2_names_alternate_localized().size()==0);
+		Assert.assertNotNull(doc.getCountry_names_alternate_localized());
+		Assert.assertTrue(doc.getCountry_names_alternate_localized().size()==0);
 		
 	}
 	

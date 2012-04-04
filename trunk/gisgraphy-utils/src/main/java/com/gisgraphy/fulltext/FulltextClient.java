@@ -103,6 +103,10 @@ public class FulltextClient implements IFullTextSearchEngine {
 		List<String> adm1AlternateNames = new ArrayList<String>();
 		List<String> adm2AlternateNames = new ArrayList<String>();
 		List<String> countryAlternateNames = new ArrayList<String>();
+		Map<String, List<String>> alternateNamesMultiLang = new HashMap<String, List<String>>();
+		Map<String, List<String>> adm1AlternateNamesMultiLang = new HashMap<String, List<String>>();
+		Map<String, List<String>> adm2AlternateNamesMultiLang = new HashMap<String, List<String>>();
+		Map<String, List<String>> countryAlternateNamesMultiLang = new HashMap<String, List<String>>();
 		for (LinkedHashMap<String, Object> doc : docs) {
 			SolrResponseDto solrResponseDto = new SolrResponseDto();
 			// Map<String,List<String>> alternateNamesForLang = new
@@ -113,9 +117,13 @@ public class FulltextClient implements IFullTextSearchEngine {
 				if (key2 != null) {
 					System.out.println(key2 + ":" + entry.getValue());
 					String alternatenamesPrefix = FullTextFields.NAME.getValue() + FullTextFields.ALTERNATE_NAME_SUFFIX.getValue();
-					String Adm1AlternatenamesPrefix = FullTextFields.ADM1NAME.getValue() + FullTextFields.ALTERNATE_NAME_SUFFIX.getValue();
+					String adm1AlternatenamesPrefix = FullTextFields.ADM1NAME.getValue() + FullTextFields.ALTERNATE_NAME_SUFFIX.getValue();
 					String adm2alternatenamesPrefix = FullTextFields.ADM2NAME.getValue() + FullTextFields.ALTERNATE_NAME_SUFFIX.getValue();
 					String countryAlternatenamesPrefix = FullTextFields.COUNTRYNAME.getValue() + FullTextFields.ALTERNATE_NAME_SUFFIX.getValue();
+					String alternatenamesMultiLangPrefix = FullTextFields.NAME.getValue() + FullTextFields.ALTERNATE_NAME_DYNA_SUFFIX.getValue();
+					String adm1AlternatenamesMultiLangPrefix = FullTextFields.ADM1NAME.getValue() + FullTextFields.ALTERNATE_NAME_DYNA_SUFFIX.getValue();
+					String adm2alternatenamesMultiLangPrefix = FullTextFields.ADM2NAME.getValue() + FullTextFields.ALTERNATE_NAME_DYNA_SUFFIX.getValue();
+					String countryAlternatenamesMultiLangPrefix = FullTextFields.COUNTRYNAME.getValue() + FullTextFields.ALTERNATE_NAME_DYNA_SUFFIX.getValue();
 					if (key2.equals(alternatenamesPrefix)) {
 						if (entry.getValue().getClass() == ArrayList.class) {
 							alternateNames.addAll((ArrayList) entry.getValue());
@@ -123,7 +131,7 @@ public class FulltextClient implements IFullTextSearchEngine {
 							alternateNames.add((String) entry.getValue());
 						}
 					}
-					else if (key2.equals(Adm1AlternatenamesPrefix)) {
+					else if (key2.equals(adm1AlternatenamesPrefix)) {
 						if (entry.getValue().getClass() == ArrayList.class) {
 							adm1AlternateNames.addAll((ArrayList) entry.getValue());
 						} else if (entry.getValue().getClass() == String.class) {
@@ -144,12 +152,28 @@ public class FulltextClient implements IFullTextSearchEngine {
 							countryAlternateNames.add((String) entry.getValue());
 						}
 					}
+					else if(key2.startsWith(alternatenamesMultiLangPrefix)){
+						getAlternateNamesMap(entry,alternateNamesMultiLang);
+					}
+					else if(key2.startsWith(adm1AlternatenamesMultiLangPrefix)){
+						getAlternateNamesMap(entry,adm1AlternateNamesMultiLang);
+					}
+					else if(key2.startsWith(adm2alternatenamesMultiLangPrefix)){
+						getAlternateNamesMap(entry,adm2AlternateNamesMultiLang);
+					}
+					else if(key2.startsWith(countryAlternatenamesMultiLangPrefix)){
+						getAlternateNamesMap(entry,countryAlternateNamesMultiLang);
+					}
 				}
 			}
 			solrResponseDto.name_alternates = alternateNames;
 			solrResponseDto.adm1_names_alternate = adm1AlternateNames;
 			solrResponseDto.adm2_names_alternate = adm2AlternateNames;
 			solrResponseDto.country_names_alternate = countryAlternateNames;
+			solrResponseDto.name_alternates_localized= alternateNamesMultiLang;
+			solrResponseDto.adm1_names_alternate_localized = adm1AlternateNamesMultiLang;
+			solrResponseDto.adm2_names_alternate_localized = adm2AlternateNamesMultiLang;
+			solrResponseDto.country_names_alternate_localized = countryAlternateNamesMultiLang;
 			if (doc.get(FullTextFields.FEATUREID.getValue()) != null) {
 				solrResponseDto.feature_id = Long.valueOf(doc.get(FullTextFields.FEATUREID.getValue()).toString());
 			}
@@ -296,6 +320,19 @@ public class FulltextClient implements IFullTextSearchEngine {
 		}
 		dto.results = results;
 		return dto;
+	}
+
+	private void getAlternateNamesMap( Entry entry,Map<String,List<String>> map) {
+		String key = (String) entry.getKey();
+		    String languageCode = key.substring(key
+			    .lastIndexOf("_") + 1);
+		    List<String> newLanguages = (ArrayList<String>) entry.getValue();
+		    List<String> languageList = map.get(languageCode);
+		    if (languageList == null) {
+			languageList = new ArrayList<String>();
+			map.put(languageCode, languageList);
+		    }
+		    languageList.addAll(newLanguages);
 	}
 
 	public void executeAndSerialize(FulltextQuery arg0, OutputStream arg1) throws ServiceException {
