@@ -64,7 +64,7 @@ public class abstractAdvancedImporterProcessorTest {
 
 	@Override
 	protected List<File> getSplitedFiles() {
-		return null;
+		return new ArrayList<File>();
 	}
     };
 
