@@ -102,7 +102,7 @@
 						<li class="empty"><a href="#" >Reverse Geocoding</a></li>
 							<li><a href="http://services.gisgraphy.com/public/reverse_geocoding_worldwide.html"  target="gisgraphyservices">Reverse geocoding</a></li>
 						<li class="empty"><a href="#" >Address Parser</a></li>
-							<li><a href="http://services.gisgraphy.com/public/address-parser.html"  target="gisgraphyservices">Address parser</a></li>
+							<li><a href="http://services.gisgraphy.com/public/addressparser.html"  target="gisgraphyservices">Address parser</a></li>
 						<li class="empty"><a href="#" >Street search</a></li>
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?placetype=street"  target="gisgraphyservices">By name</a></li>
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?placetype=street&advancedSearch=true"  target="gisgraphyservices">By name and GPS</a></li>
