@@ -40,6 +40,7 @@ public enum FullTextFields {
 	FULLY_QUALIFIED_NAME("fully_qualified_name"),
 	PLACETYPE("placetype"),
 	POPULATION("population"),
+	CITY_POPULATION("city_population"),
 	LAT("lat"),
 	LONG("lng"),
 	ADM1CODE("adm1_code"),
