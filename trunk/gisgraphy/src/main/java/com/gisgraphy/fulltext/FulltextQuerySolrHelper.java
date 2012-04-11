@@ -46,13 +46,13 @@ public class FulltextQuerySolrHelper {
 	private static OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
 
 	private final static String IS_IN_SENTENCE = " "+FullTextFields.IS_IN.getValue()+"^1 ";
-
-	protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bq='placetype:City^2 population^2'}%s\"";
+//																																																	 bq='placetype:City^2 population^2' bf='pow(population,0.4)
+	protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bq='placetype:City^2 population^2' bf='pow(population,0.4)'}%s\"";
 	//below the all_adm1_name^0.5 all_adm2_name^0.5 has been kept
 	//protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.1 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bf=population^2.0}%s\"";
 	// protected static final String NESTED_QUERY_INTEXT_BASIC_TEMPLATE=
 	// "_query_:\"{!dismax qf='name^1.1 zipcode^1.1'  mm='1<-100%% 2<-50%% 3<-0%%' bq='_val_:\\\"pow(population,0.3)\\\"' }%s\"";
-	protected static final String NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE = "_query_:\"{!dismax qf='name^1.1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1' pf='all_adm1_name all_adm2_name' ps=6 bq='_val_:\\\"pow(population,0.3)\\\"' }%s\"";
+	protected static final String NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE = "_query_:\"{!dismax qf='name^1.1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1' pf='all_adm1_name all_adm2_name' ps=6 bf='pow(population,0.3) pow(city_population,0.3)' }%s\"";
 	// we need to consider adm1name for andora and brooklin
 	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE = "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1 zipcode^1.2 pf=name^1.1' bf=population^2.0}%s\"";
 
