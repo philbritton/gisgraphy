@@ -302,9 +302,9 @@ public class GeocodingService implements IGeocodingService {
 			List<SolrResponseDto> fulltextResultsDto = null;
 			if (address.getStreetName() != null) {
 				String streetSentenceToSearch = address.getStreetName();
-				if (importerConfig.isOpenStreetMapFillIsIn() && address.getCity() != null) {
+				/*if (importerConfig.isOpenStreetMapFillIsIn() && address.getCity() != null) {
 					streetSentenceToSearch += " " + address.getCity();
-				}
+				}*/
 				fulltextResultsDto = findStreetInText(streetSentenceToSearch, countryCode, cityLocation);
 			}
 			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(fulltextResultsDto, cities);

@@ -156,6 +156,8 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
 		OpenStreetMapSimpleImporter openStreetMapImporter = new OpenStreetMapSimpleImporter();
 		openStreetMapImporter.setImporterConfig(importerConfig);
 		final String  cityName= "cityName";
+		final Integer population = 123;
+		final GisFeature city = new City();
 		
 		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
 		Point location= GeolocHelper.createPoint(2F, 3F);
@@ -164,8 +166,8 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
 			@Override
 			public List<GisFeatureDistance> getResult() {
 				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
-				GisFeature city = new City();
 				city.setName(cityName);
+				city.setPopulation(population);
 				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
 				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
 				list.add(gisFeatureDistance);
@@ -181,8 +183,9 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
 		
 		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
 		
-		String actual = openStreetMapImporter.getNearestCityName(location);
-		Assert.assertEquals(cityName, actual);
+		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
+		Assert.assertEquals(cityName, actual.getName());
+		Assert.assertEquals(population, actual.getPopulation());
 		EasyMock.verify(geolocSearchEngine);
 		
 	}

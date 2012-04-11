@@ -195,6 +195,7 @@
   <!-- Medium --><field name="one_way" type="boolean" indexed="false" stored="true"/>
   <!-- Medium --><field name="length" type="double" indexed="false" stored="true"/>
   <!-- Medium --><field name="openstreetmap_id" type="long" indexed="true" stored="true"/>
+  <!--Medium  --><field name="city_population" type="integer" indexed="true" stored="false"/><!-- must be indexed for boost field -->
   
   
    <field name="feature_id" type="long" indexed="true" stored="true"/>
