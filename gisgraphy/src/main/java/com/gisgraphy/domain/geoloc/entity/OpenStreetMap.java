@@ -134,6 +134,9 @@ public class OpenStreetMap {
     @IntrospectionIgnoredField
     private LineString shape;
     
+    @IntrospectionIgnoredField
+    private Integer population;
+    
     private String isIn;
 
     private String countryCode;
@@ -474,5 +477,13 @@ public class OpenStreetMap {
     public void setIsIn(String isIn) {
 	this.isIn = isIn;
     }
+
+	public Integer getPopulation() {
+		return population;
+	}
+
+	public void setPopulation(Integer population) {
+		this.population = population;
+	}
 
 }

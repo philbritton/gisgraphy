@@ -36,6 +36,7 @@ import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.GeolocResultsDto;
+import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Pagination;
@@ -148,8 +149,11 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	if (!isEmptyField(fields, 5, false)) {
 	    street.setIsIn(fields[5].trim());
 	} else if (shouldFillIsInField()){
-		String cityName = getNearestCityName(street.getLocation());
-		street.setIsIn(cityName);
+		GisFeatureDistance city = getNearestCityName(street.getLocation());
+		if (city!=null){
+		street.setPopulation(city.getPopulation());
+		street.setIsIn(city.getName());
+		}
 	}
 	
 		long generatedId= idGenerator.getNextGId();
@@ -199,11 +203,11 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
    
     
-    protected String getNearestCityName(Point location) {
+    protected GisFeatureDistance getNearestCityName(Point location) {
 		GeolocQuery query = (GeolocQuery)new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class).withPagination(Pagination.ONE_RESULT);
     	GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
     	if (results.getNumFound()>=1){
-    		return results.getResult().get(0).getName();
+    		return results.getResult().get(0);
     	} else {
     		return null;
     	}
