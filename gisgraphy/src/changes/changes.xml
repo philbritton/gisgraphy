@@ -565,7 +565,9 @@
 				option importerConfig.importGisFeatureEmbededAlternateNames is false by default.
 			</action>
 			
-			
+			<action dev="David Masclet" type="add">
+				Add java client for all webservices.
+			</action>
 			
 			
 			</release>
