@@ -53,7 +53,7 @@ public class FulltextClient implements IFullTextSearchEngine {
 		if (query == null) {
 			throw new IllegalArgumentException("can not geocode a null query");
 		}
-		query.withOutput(Output.withFormat(OutputFormat.JSON).withStyle(OutputStyle.FULL));
+		query.withOutput(Output.withFormat(OutputFormat.JSON).withStyle(query.getOutputStyle()));
 		String queryString = fulltextQueryToQueryString(query);
 
 		String jsonFeed;
@@ -111,6 +111,7 @@ public class FulltextClient implements IFullTextSearchEngine {
 			SolrResponseDto solrResponseDto = new SolrResponseDto();
 			// Map<String,List<String>> alternateNamesForLang = new
 			// HashMap<String,List<String>>();
+			if (query.getOutputStyle()== OutputStyle.FULL){
 			for (Entry<String, Object> key : doc.entrySet()) {
 				Entry<String, Object> entry = (Entry<String, Object>) key;
 				String key2 = entry.getKey();
@@ -165,6 +166,7 @@ public class FulltextClient implements IFullTextSearchEngine {
 						getAlternateNamesMap(entry,countryAlternateNamesMultiLang);
 					}
 				}
+			}
 			}
 			solrResponseDto.name_alternates = alternateNames;
 			solrResponseDto.adm1_names_alternate = adm1AlternateNames;
