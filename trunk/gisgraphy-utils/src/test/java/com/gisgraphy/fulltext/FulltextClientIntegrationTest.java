@@ -151,6 +151,83 @@ public class FulltextClientIntegrationTest {
 		Assert.assertTrue(doc.getCountry_names_alternate_localized().size()>0);
 		
 	}
+
+	@Test
+	public void executeQueryInLongMode(){
+		FulltextQuery query = new FulltextQuery("paris");
+		Output output = Output.withFormat(OutputFormat.JSON).withStyle(OutputStyle.LONG);
+		query.withOutput(output);
+		FulltextClient client = new FulltextClient(BASE_URL);
+		FulltextResultsDto dto = client.executeQuery(query);
+		Assert.assertNotNull(dto.getMaxScore());
+		Assert.assertNotNull(dto.getNumFound());
+		Assert.assertTrue(dto.getQTime()>0);
+		Assert.assertNotNull(dto.getResults());
+		Assert.assertTrue(dto.getResultsSize()>0);
+		SolrResponseDto doc = dto.getResults().get(0);
+		Assert.assertNotNull(doc.getFeature_id());
+		Assert.assertNotNull(doc.getFeature_class());
+		Assert.assertNotNull(doc.getFeature_code());
+		Assert.assertNotNull(doc.getName());
+		Assert.assertNotNull(doc.getName_ascii());
+		//Assert.assertNotNull(doc.getElevation());
+		Assert.assertNotNull(doc.getGtopo30());
+		Assert.assertNotNull(doc.getTimezone());
+		Assert.assertNotNull(doc.getPlacetype());
+		Assert.assertNotNull(doc.getPopulation());
+		Assert.assertNotNull(doc.getLat());
+		Assert.assertNotNull(doc.getLng());
+		Assert.assertNotNull(doc.getAdm1_code());
+		Assert.assertNotNull(doc.getAdm2_code());
+		Assert.assertNotNull(doc.getAdm3_code());
+		Assert.assertNotNull(doc.getAdm4_code());
+		Assert.assertNotNull(doc.getAdm1_name());
+		Assert.assertNotNull(doc.getAdm2_name());
+		Assert.assertNotNull(doc.getAdm3_name());
+		Assert.assertNotNull(doc.getAdm4_name());
+		Assert.assertNotNull(doc.getCountry_code());
+		Assert.assertNotNull(doc.getCountry_name());
+		Assert.assertNotNull(doc.getCountry_flag_url());
+		Assert.assertNotNull(doc.getGoogle_map_url());
+		Assert.assertNotNull(doc.getYahoo_map_url());
+		//Assert.assertNotNull(doc.getContinent());
+		//Assert.assertNotNull(doc.getCurrency_code());
+		//Assert.assertNotNull(doc.getCurrency_name());
+		//Assert.assertNotNull(doc.getFips_code());
+		//Assert.assertNotNull(doc.getIsoalpha2_country_code());
+		//Assert.assertNotNull(doc.getIsoalpha3_country_code());
+		//Assert.assertNotNull(doc.getPostal_code_mask());
+		//Assert.assertNotNull(doc.getPostal_code_regex());
+		//Assert.assertNotNull(doc.getPhone_prefix());
+		//Assert.assertNotNull(doc.getTld());
+		//Assert.assertNotNull(doc.getCapital_name());
+		//Assert.assertNotNull(doc.getLevel());
+		//Assert.assertNotNull(doc.getLength());
+		//Assert.assertNotNull(doc.getStreet_type());
+		//Assert.assertNotNull(doc.getOpenstreetmap_id());
+		//Assert.assertNotNull(doc.getIs_in());
+		//alternate names
+		Assert.assertNotNull(doc.getName_alternates());
+		Assert.assertTrue(doc.getName_alternates().size()==0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate());
+		Assert.assertTrue(doc.getAdm1_names_alternate().size()==0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate());
+		Assert.assertTrue(doc.getAdm2_names_alternate().size()==0);
+		Assert.assertNotNull(doc.getCountry_names_alternate());
+		Assert.assertTrue(doc.getCountry_names_alternate().size()==0);
+		//alternatenames multilang
+		Assert.assertNotNull(doc.getName_alternates_localized());
+		Assert.assertTrue(doc.getName_alternates_localized().size()==0);
+		Assert.assertNotNull(doc.getAdm1_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm1_names_alternate_localized().size()==0);
+		Assert.assertNotNull(doc.getAdm2_names_alternate_localized());
+		Assert.assertTrue(doc.getAdm2_names_alternate_localized().size()==0);
+		Assert.assertNotNull(doc.getCountry_names_alternate_localized());
+		Assert.assertTrue(doc.getCountry_names_alternate_localized().size()==0);
+		
+	}
+	
+	
 	
 	@Test(expected=ServiceException.class)
 	public void executeQueryWithWrongURL(){
