@@ -58,6 +58,16 @@ public class URLUtils {
      * The default Yahoo map URL
      */
     public static final String DEFAULT_YAHOO_MAP_BASE_URL = "http://maps.yahoo.com/";
+    
+    /**
+     * A Constant to create Openstreetmap map URL
+     */
+    public static final String OPENSTREETMAP_MAP_BASE_URL = "http://www.openstreetmap.org/?zoom=14&layers=M";
+
+    /**
+     * The default Openstreetmap map URL
+     */
+    public static final String DEFAULT_OPENSTREETMAP_MAP_BASE_URL = "http://www.openstreetmap.org/";
 
     /**
      * A constant to construct country flag URL
@@ -107,6 +117,22 @@ public class URLUtils {
 	    return DEFAULT_YAHOO_MAP_BASE_URL;
 	}
 	StringBuffer sb = new StringBuffer(YAHOO_MAP_BASE_URL);
+	sb.append("&amp;lon=").append(point.getX()).append("&amp;lat=").append(
+		point.getY());
+	return sb.toString();
+    }
+    
+    /**
+     * @param point
+     *                The Point we'd like to map
+     * @see #DEFAULT_OPENSTREETMAP_MAP_BASE_URL
+     * @return an Openstreetmap Map URL for the specified point and label
+     */
+    public static String createOpenstreetmapMapUrl(Point point) {
+	if (point == null) {
+	    return DEFAULT_OPENSTREETMAP_MAP_BASE_URL;
+	}
+	StringBuffer sb = new StringBuffer(OPENSTREETMAP_MAP_BASE_URL);
 	sb.append("&amp;lon=").append(point.getX()).append("&amp;lat=").append(
 		point.getY());
 	return sb.toString();
