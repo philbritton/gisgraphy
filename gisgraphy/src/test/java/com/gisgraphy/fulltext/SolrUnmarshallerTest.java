@@ -125,6 +125,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		result.getCountry_flag_url());
 	assertEquals(URLUtils.createYahooMapUrl(city.getLocation()), result
 		.getYahoo_map_url());
+	assertEquals(URLUtils.createOpenstreetmapMapUrl(city.getLocation()), result
+			.getOpenstreetmap_map_url());
 
 	assertEquals(1, result.getName_alternates().size());
 	assertEquals("cityalternate", result.getName_alternates().get(0));

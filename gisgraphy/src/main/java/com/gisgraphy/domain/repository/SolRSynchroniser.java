@@ -343,6 +343,8 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 					.getName()));
 			ex.setField(FullTextFields.YAHOO_MAP_URL.getValue(), URLUtils
 				.createYahooMapUrl(gisFeature.getLocation()));
+			ex.setField(FullTextFields.OPENSTREETMAP_MAP_URL.getValue(), URLUtils
+					.createOpenstreetmapMapUrl(gisFeature.getLocation()));
 			// setAdmCode from adm not from the gisfeature one because of
 			// syncAdmCodesWithLinkedAdmOnes if it is false , the value may not be
 			// the same

@@ -793,6 +793,10 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			+ FullTextFields.YAHOO_MAP_URL.getValue() + "'][.='"
 			+ URLUtils.createYahooMapUrl(paris.getLocation())
 			+ "']"
+		, "//*[@name='"
+			+ FullTextFields.OPENSTREETMAP_MAP_URL.getValue()
+			+ "'][.='"
+			+ URLUtils.createOpenstreetmapMapUrl(paris.getLocation()) + "']"
 		,//spellchecker fields
 		"//*[@name='" + FullTextFields.SPELLCHECK.getValue()
 			+ "']"

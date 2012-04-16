@@ -70,6 +70,8 @@ public class solrResponseDtoBuilder {
 		    FullTextFields.GOOGLE_MAP_URL.getValue());
 	    solrResponseDto.yahoo_map_url = getFieldAsString(solrDocument,
 		    FullTextFields.YAHOO_MAP_URL.getValue());
+	    solrResponseDto.openstreetmap_map_url = getFieldAsString(solrDocument,
+			    FullTextFields.OPENSTREETMAP_MAP_URL.getValue());
 	    solrResponseDto.name_alternates = getFieldsToList(solrDocument,
 		    FullTextFields.NAME.getValue()+FullTextFields.ALTERNATE_NAME_SUFFIX.getValue());
 	    solrResponseDto.adm1_names_alternate = getFieldsToList(solrDocument,

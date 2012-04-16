@@ -209,6 +209,7 @@
  <!-- Medium --><field name="country_flag_url" type="string" indexed="false" stored="true"/>
  <!-- Medium --><field name="google_map_url" type="string" indexed="false" stored="true"/>
  <!-- Medium --><field name="yahoo_map_url" type="string" indexed="false" stored="true"/>
+ <!-- Medium --><field name="openstreetmap_map_url" type="string" indexed="false" stored="true"/>
  
  <!-- Country specific fields -->
  <!-- Medium --><field name="continent" type="string" indexed="false" stored="true"/>

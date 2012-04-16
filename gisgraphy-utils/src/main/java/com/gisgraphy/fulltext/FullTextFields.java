@@ -65,6 +65,7 @@ public enum FullTextFields {
 	COUNTRY_FLAG_URL("country_flag_url"),
 	GOOGLE_MAP_URL("google_map_url"),
 	YAHOO_MAP_URL("yahoo_map_url"),
+	OPENSTREETMAP_MAP_URL("openstreetmap_map_url"),
 	SPELLCHECK("spellcheck"),
 	SPELLCHECK_SUGGESTIONS("suggestions"),
 	SPELLCHECK_SUGGESTION("suggestion"),

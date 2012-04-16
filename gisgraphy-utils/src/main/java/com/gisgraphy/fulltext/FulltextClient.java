@@ -260,6 +260,9 @@ public class FulltextClient implements IFullTextSearchEngine {
 			if (doc.get(FullTextFields.YAHOO_MAP_URL.getValue()) != null) {
 				solrResponseDto.yahoo_map_url = doc.get(FullTextFields.YAHOO_MAP_URL.getValue()).toString();
 			}
+			if (doc.get(FullTextFields.OPENSTREETMAP_MAP_URL.getValue()) != null) {
+				solrResponseDto.openstreetmap_map_url = doc.get(FullTextFields.OPENSTREETMAP_MAP_URL.getValue()).toString();
+			}
 			if (doc.get(FullTextFields.CONTINENT.getValue()) != null) {
 				solrResponseDto.continent = doc.get(FullTextFields.CONTINENT.getValue()).toString();
 			}

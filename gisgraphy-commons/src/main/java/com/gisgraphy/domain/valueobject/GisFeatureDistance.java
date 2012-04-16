@@ -125,6 +125,8 @@ public class GisFeatureDistance {
     private String google_map_url;
 
     private String yahoo_map_url;
+    
+    private String openstreetmap_map_url;
 
     private String country_flag_url;
     
@@ -377,6 +379,13 @@ public class GisFeatureDistance {
      */
     public String getYahoo_map_url() {
 	return this.yahoo_map_url;
+    }
+    
+    /**
+     * @return the yahoo_map_url
+     */
+    public String getOpensteetmap_map_url() {
+	return this.openstreetmap_map_url;
     }
 
     /**
@@ -737,8 +746,10 @@ public class GisFeatureDistance {
 	public void setYahoo_map_url(String yahoo_map_url) {
 	    this.yahoo_map_url = yahoo_map_url;
 	}
-
-
+	
+	public void setOpenstreetmap_map_url(String openstreetmap_map_url) {
+	    this.openstreetmap_map_url = openstreetmap_map_url;
+	}
 
 	public void setCountry_flag_url(String country_flag_url) {
 	    this.country_flag_url = country_flag_url;

@@ -218,7 +218,7 @@ doAjaxSearch = function(formName){
 					<#if result.openstreetmap_id??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmap_id?c};<br/></#if>
 					<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 					<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
-					<#if result.google_map_url?? && result.yahoo_map_url??><img src="images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.yahoo_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnYahooMap"/></a><br/></#if>
+					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a><br/></#if>
 						<#if result.length??><@s.text name="global.length"/> : ${result.length} m(s); </#if>
 						<br/>
 						<#if result.street_type??><@s.text name="${result.street_type}" /><br/></#if>
@@ -343,7 +343,7 @@ doAjaxSearch = function(formName){
 						<@s.text name="global.longitude"/> : ${result.lng}<br/>
 						<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 						<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
-						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.yahoo_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnYahooMap"/></a>
+						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreemapMap"/></a>
 
 						<#if result.placeType.equals('City')>
 					<@s.url id="streetsearchurl" action="streetSearch" includeParams="none" namespace="/public" >

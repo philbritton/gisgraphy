@@ -86,6 +86,8 @@ public class OutputStyleHelper {
 			FullTextFields.GOOGLE_MAP_URL.getValue())
 		.append(",").append(
 			FullTextFields.YAHOO_MAP_URL.getValue())
+			.append(",").append(
+			FullTextFields.OPENSTREETMAP_MAP_URL.getValue())
 		.toString();
 	} else if (outputStyle == Output.OutputStyle.LONG){
 	    StringBuffer sb = new StringBuffer(getFulltextFieldList(OutputStyle.MEDIUM,languageCode)).append(",").append(

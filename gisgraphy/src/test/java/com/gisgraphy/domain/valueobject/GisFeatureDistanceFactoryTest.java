@@ -83,12 +83,14 @@ public class GisFeatureDistanceFactoryTest extends AbstractIntegrationHttpSolrTe
 	 String gMapsURL =  URLUtils.createGoogleMapUrl(gisfeatureDistance.getLocation(),
 		    gisfeatureDistance.getName());
 	   String yahooMapsUrl = URLUtils.createYahooMapUrl(gisfeatureDistance.getLocation());
+	   String openstreetmapMapsUrl = URLUtils.createOpenstreetmapMapUrl(gisfeatureDistance.getLocation());
 	   String countryflagurl = URLUtils.createCountryFlagUrl(gisfeatureDistance.getCountryCode());
 	   double lat = gisfeatureDistance.getLocation().getY();
 	   double lng = gisfeatureDistance.getLocation().getX();
 	   String placetype="City";
 	   Assert.assertEquals(gMapsURL, gisfeatureDistance.getGoogle_map_url());
 	   Assert.assertEquals(yahooMapsUrl, gisfeatureDistance.getYahoo_map_url());
+	   Assert.assertEquals(openstreetmapMapsUrl, gisfeatureDistance.getOpensteetmap_map_url());
 	   Assert.assertEquals(countryflagurl, gisfeatureDistance.getCountry_flag_url());
 	   Assert.assertEquals(lat, gisfeatureDistance.getLat());
 	   Assert.assertEquals(lng, gisfeatureDistance.getLng());
