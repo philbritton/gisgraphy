@@ -106,6 +106,7 @@ public class SolrResponseDto {
     protected String country_flag_url;
     protected String google_map_url;
     protected String yahoo_map_url;
+    protected String openstreetmap_map_url;
     
     protected Boolean one_way;
     protected Double length;
@@ -358,7 +359,11 @@ public class SolrResponseDto {
 	return yahoo_map_url;
     }
 
-    /**
+    public String getOpenstreetmap_map_url() {
+		return openstreetmap_map_url;
+	}
+
+	/**
      * @return the continent
      */
     public String getContinent() {

@@ -112,6 +112,7 @@ public class GisFeatureDistanceFactory {
      * 
      */
     public  void  updateFields(GisFeatureDistance gisFeatureDistance) {
+   	gisFeatureDistance.setOpenstreetmap_map_url(URLUtils.createOpenstreetmapMapUrl(gisFeatureDistance.getLocation()));
 	gisFeatureDistance.setGoogle_map_url(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation(),
 		gisFeatureDistance.getName()));
 	gisFeatureDistance.setYahoo_map_url(URLUtils.createYahooMapUrl(gisFeatureDistance.getLocation()));
