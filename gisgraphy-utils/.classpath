@@ -4,7 +4,7 @@
   <classpathentry kind="src" path="src/test/resources" output="target/test-classes" excluding="**/*.java"/>
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/1.0/gisgraphy-commons-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/3.0/gisgraphy-commons-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/vividsolutions/jts/1.8/jts-1.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser-commons/3.0/universalserialiser-commons-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar"/>
