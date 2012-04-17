@@ -11,11 +11,11 @@
   <classpathentry kind="var" path="M2_REPO/aspectj/aspectjtools/1.5.2a/aspectjtools-1.5.2a.jar"/>
   <classpathentry kind="var" path="M2_REPO/aspectj/aspectjweaver/1.5.2a/aspectjweaver-1.5.2a.jar"/>
   <classpathentry kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/1.0/gisgraphy-commons-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/3.0/gisgraphy-commons-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/vividsolutions/jts/1.8/jts-1.8.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser-commons/3.0/universalserialiser-commons-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar"/>
-  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-utils/1.0/gisgraphy-utils-1.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-utils/3.0/gisgraphy-utils-3.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar"/>

@@ -13,6 +13,16 @@ else
 	 exit "address parser is not present"
 fi
 
+if [[ -e ../addressParser-http ]] 
+then
+	cd ../addressParser-http/
+	mvn clean install -Dmaven.test.skip
+	cp ./target/*.jar $curDir/data/libs/
+	cd $curDir
+else
+	 exit "address parser http connector is not present"
+fi
+
 if [[ -e ../extra/link.sh ]]
 then
 	cd ../extra/

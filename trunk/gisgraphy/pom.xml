@@ -496,7 +496,7 @@
 	<dependency>
 	<groupId>com.gisgraphy</groupId>
 	<artifactId>gisgraphy-commons</artifactId>
-	<version>1.0</version>
+	<version>3.0</version>
 	</dependency>
 		<dependency>
 			<groupId>${jdbc.groupId}</groupId>
@@ -1185,7 +1185,7 @@
 		<dependency>
 			<groupId>com.gisgraphy</groupId>
 			<artifactId>gisgraphy-utils</artifactId>
-			<version>1.0</version>
+			<version>3.0</version>
 		</dependency>
 	</dependencies>
 
