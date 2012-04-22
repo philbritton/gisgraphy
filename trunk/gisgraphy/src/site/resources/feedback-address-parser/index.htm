@@ -1,0 +1,96 @@
+<?php
+
+require 'CaptchasDotNet.php';
+
+// Required Parameters
+// Replace the values you receive upon registration at http://captchas.net.
+//
+//   client: 'demo'
+//
+//   secret: 'secret'
+//
+// Optional Parameters and defaults
+//
+//   repository_prefix: '/tmp/captchasnet-random-strings' path to repository
+//   ATTENTION SAFE-MODE, YOU HAVE TO CHOOSE SOMETHING LIKE
+//   '/writable/path/captchasnet-random-strings'
+//
+//   cleanup_time: '3600' (means max 1 hour between query and check)
+//
+//   alphabet: 'abcdefghijklmnopqrstuvwxyz' (Used characters in captcha)
+//   We recommend alphabet without ijl: 'abcdefghkmnopqrstuvwxyz'
+//
+//   letters: '6' (Number of characters in captcha)
+//
+//   width: '240' (image width)
+//
+//   height: '80' (image height)
+//
+//   Usage
+//   $captchas = new CaptchasDotNet (<client>, <secret>,
+//                                   <repository_prefix>, <cleanup_time>,
+//                                   <alphabet>,<letters>,
+//                                   <height>,<width>);
+//
+// Don't forget same settings in check.asp
+
+// Construct the captchas object.
+
+$captchas = new CaptchasDotNet ('demo', 'secret',
+                                '/tmp/captchasnet-random-strings','3600',
+                                'abcdefghkmnopqrstuvwxyz','6',
+                                '240','80');
+
+?>
+
+  <h1>Address parser feedbacks and bug reports</h1>
+        Gisgraphy always try to improve the relevance of the address parser, please send us a report when the parsing is incorrect, it will automatically add a regression test, and it will be fixed if possible. Note that a mail will be send if you let your mail (we don't sell mail address :)).<br/><br/>
+  <form method="get" action="check.htm">
+            Your mail : </td><td><input name="mail" size="60" />
+            <form method="post" url="">
+                                <fieldset>
+                                        <legend>Address informations</legend>
+                                        Address : <br/> <input type="text" name="address"><br/>
+                                        country code  :<br/> <input type="text" name="countrycode"></input><br/>
+                                </fieldset><br/>
+                                <fieldset>
+                                        <legend>Expected fields</legend>
+                                        Name : <br/><input type="text" name="Name"></input><br/>
+                                        RecipientName :<br/> <input type="text" name="RecipientName"></input><br/>
+                                        HouseNumber : <br/><input type="text" name="HouseNumber"></input><br/>
+                                        HouseNumberInfo :<br/> <input type="text" name="HouseNumberInfo"></input><br/>
+                                        StreetName : <br/><input type="text" name="StreetName"></input><br/>
+                                        StreetType : <br/><input type="text" name="StreetType"></input><br/>
+                                        City : <br/><input type="text" name="City"></input><br/>
+                                        DependentLocality : <br/><input type="text" name="DependentLocality"></input><br/>
+                                        PostTown : <br/><input type="text" name="PostTown"></input><br/>
+                                        State : <br/><input type="text" name="State"></input><br/>
+District : <br/><input type="text" name="District"></input><br/>
+                                        Quarter : <br/><input type="text" name="Quarter"></input><br/>
+                                        ZipCode : <br/><input type="text" name="ZipCode"></input><br/>
+                                        ExtraInfo : <br/><input type="text" name="ExtraInfo"></input><br/>
+                                        POBox : <br/><input type="text" name="POBox"></input><br/>
+                                        POBoxInfo : <br/><input type="text" name="POBoxInfo"></input><br/>
+                                        POBoxAgency : <br/><input type="text" name="POBoxAgency"></input><br/>
+                                        PreDirection : <br/><input type="text" name="PreDirection"></input><br/>
+                                        PostDirection : <br/><input type="text" name="PostDirection"></input><br/>
+                                        StreetNameIntersection : <br/><input type="text" name="StreetNameIntersection"></input><br/>
+                                        StreetTypeIntersection : <br/><input type="text" name="StreetTypeIntersection"></input><br/>
+                                        PreDirectionIntersection : <br/><input type="text" name="PreDirectionIntersection"></input><br/>
+                                        PostDirectionIntersection  : <br/><input type="text" name="PostDirectionIntersection"></input><br/>
+                                        CivicNumberSuffix : <br/><input type="text" name="CivicNumberSuffix"></input><br/>
+                                        Floor : <br/><input type="text" name="Floor"></input><br/>
+                                        Sector : <br/><input type="text" name="Sector"></input><br/>
+                                        Quadrant : <br/><input type="text" name="Quadrant"></input><br/>
+                                        Block : <br/><input type="text" name="Block"></input><br/>
+                                        Country : <br/><input type="text" name="Country"></input><br/>
+                                        CountryCode : <br/><input type="text" name="CountryCode"></input><br/>
+                                </fieldset>
+                                The CAPTCHA password : <input name="password" size="6" /><br/>
+                                <?= $captchas->image () ?><br/>
+                                <br> <a href="<?= $captchas->audio_url () ?>">Phonetic spelling (mp3)</a><br/>
+                                 <input type="hidden" name="random" value="<?= $captchas->random () ?>" />
+                                </fieldset>
+          <input type="submit" value="Send feedback" />
+ </form>
+                                        
