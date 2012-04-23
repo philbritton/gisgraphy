@@ -569,6 +569,12 @@
 				Add java client for all webservices.
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				add direction (pre-dir and post-dir)management in geocoder
+			</action>
+			
+			
+			
 			
 			</release>
 			
