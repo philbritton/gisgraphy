@@ -38,15 +38,15 @@ $random_string = $_REQUEST['random'];
    $myFile = "feedback.htm";
     $fh = fopen($myFile, 'a');
    $date=date(" Y M j \a\\t G:i");
-if (strlen(strstr("davidmasclet@gisgraphy.com",$mail))>0){$color="rgb(221, 255, 221)";} else {$color="#EEE";}
-$textToAppend="<hr/> - ".$date.", ".$mail." said : <br/><br/><table style=\"border:0; background-color:".$color.";width:600px;\">
-<tr><td valign=\"top\" style=\"border:0px;\"><img src=\"/images/apostrophe_start.gif\"/></td><td style=\"padding-top:20px;padding-bottom:20px;padding-left:10px;padding-right:10px;border:0px;\">".$message."</td><td valign=\"bottom\"  style=\"border:0px;\"><img src=\"/images/apostrophe_end.gif\" /></td></tr>
+   if (strlen(strstr("davidmasclet@gisgraphy.com",$mail))>0){$color="rgb(221, 255, 221)";} else {$color="#EEE";}
+  $textToAppend="<hr/> - ".$date.", ".$mail." said : <br/><br/><table style=\"border:0; background-color:".$color.";width:600px;\">
+<tr><td valign=\"top\" style=\"border:0px;\"><img src=\"/images/apostrophe_start.gif\"/></td><td style=\"padding-top:20px;padding-bottom:20px;padding-left:10px;padding-right:10px;border:0px;\"><pre>".$message."</pre style=\"max-width:550;white-space: pre-wrap;white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word;\"></td><td valign=\"bottom\"  style=\"border:0px;\"><img src=\"/images/apostrophe_end.gif\" /></td></tr>
 </table><br/>\r\n\r\n";
 
     fwrite($fh,$textToAppend);
     fclose($fh);
     echo 'THANKS! Your feedback has been sent. You can see it on the <a href="/feedback/feedback.htm">feedbacks page</a>';
- }
+}
 ?>
 
 </html>
