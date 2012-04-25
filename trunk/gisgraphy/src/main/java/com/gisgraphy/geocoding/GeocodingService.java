@@ -295,7 +295,7 @@ public class GeocodingService implements IGeocodingService {
 			cities = findCitiesInText(bestSentence, countryCode);
 			Point cityLocation = null;
 			if (cities != null && cities.size() > 0 && cities.get(0) != null) {
-				logger.debug("city found "+cities.get(0));
+				logger.debug("city found "+cities.get(0).getName()+"/"+cities.get(0).getFeature_id());
 				cityLocation = GeolocHelper.createPoint(cities.get(0).getLng().floatValue(), cities.get(0).getLat().floatValue());
 			}
 			// TODO iterate over cities
