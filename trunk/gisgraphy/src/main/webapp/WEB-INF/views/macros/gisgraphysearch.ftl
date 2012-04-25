@@ -202,7 +202,7 @@ doAjaxSearch = function(formName){
 				  					<@s.param name="featureId" value="${result.feature_id?c}" />
 				 				</@s.url>
 							</#if>
-							<a href="${featureURL}">${result.name} <#if result.country_name??>(${result.country_name})</#if></a>
+							<a href="${featureURL}"><#if result.name??>${result.name}<#else><@s.text name="global.street.noname" /></#if><#if result.country_name??>(${result.country_name})</#if></a>
 							</div>
 							<div class="resultheaderright"><#if result.feature_class?? && result.feature_code??><@s.text name="${result.feature_class}_${result.feature_code}"/></#if></div>
 					</div>
