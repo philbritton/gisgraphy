@@ -10,7 +10,7 @@
 				<div id="searchbuttonbar">
 						<span id="searchexample">e.g. Paris, الرباط ,75000,  ... </span>
 					<#if ajax>
-					<@s.submit value="%{getText('global.search')}" theme="simple" onclick="return updatePopupResults()" alt="%{getText('global.search')}"/>
+					<@s.submit value="%{getText('global.search')}" theme="simple" onclick="return doSearch()" alt="%{getText('global.search')}"/>
 					<#else>
 					<@s.submit value="%{getText('global.search')}" theme="simple" alt="%{getText('global.search')}"/>
 					</#if>
@@ -126,6 +126,12 @@
     $('fulltextsearch')['to'].value=parseInt($('fulltextsearch')['to'].value)+DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
     return updatePopupResults();
     }
+
+    doSearch= function(){
+        $('fulltextsearch')['from'].value=1;
+        $('fulltextsearch')['to'].value=10;
+        return updatePopupResults();
+    }
     
     executeSpellSearch= function(words){
     $('fulltextsearch')['from'].value=1;
@@ -202,7 +208,7 @@ doAjaxSearch = function(formName){
 				  					<@s.param name="featureId" value="${result.feature_id?c}" />
 				 				</@s.url>
 							</#if>
-							<a href="${featureURL}"><#if result.name??>${result.name}<#else><@s.text name="global.street.noname" /></#if><#if result.country_name??>(${result.country_name})</#if></a>
+							<a href="${featureURL}">${result.name} <#if result.country_name??>(${result.country_name})</#if></a>
 							</div>
 							<div class="resultheaderright"><#if result.feature_class?? && result.feature_code??><@s.text name="${result.feature_class}_${result.feature_code}"/></#if></div>
 					</div>
@@ -470,9 +476,11 @@ doAjaxSearch = function(formName){
         	$('popupResults').update("");
         }
         
- 	doSearch = function(){
- 		return updatePopupResults();
- 	}
+ 	doSearch= function(){
+             $('fulltextsearch')['from'].value=1;
+             $('fulltextsearch')['to'].value=10;
+             return updatePopupResults();
+        }  
  	
     updatePopupResults = function(){
     try {
@@ -684,7 +692,7 @@ doAjaxSearch = function(formName){
 				<div id="searchbuttonbar">
 					<span id="searchexample">e.g. '3.5', '45.2', ... </span>
 					<#if withSearchButton>
-					<@s.submit title="%{getText('global.search')}" value="%{getText('global.search')}" theme="simple" />
+					<@s.submit title="%{getText('global.search')}" value="%{getText('global.search')}" theme="simple"  onclick="return doSearch()" />
 					</#if>	
 					<br/><br/>					
 					<span id="myPosition"></span><br/>

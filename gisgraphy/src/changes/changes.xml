@@ -573,6 +573,14 @@
 				add direction (pre-dir and post-dir)management in geocoder
 			</action>
 			
+			<action dev="David Masclet" type="fix">
+				fix some display problems. pagination is reset for new search.
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				We link streets no nearest city that have no number in names (some city subdivision are consider as city but should not) 
+			</action>
+			
 			
 			
 			

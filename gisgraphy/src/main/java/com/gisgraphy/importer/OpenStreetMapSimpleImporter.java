@@ -25,6 +25,8 @@ package com.gisgraphy.importer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
@@ -63,6 +65,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     protected ISolRSynchroniser solRSynchroniser;
     
     protected IGeolocSearchEngine geolocSearchEngine;
+    
+    private Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
 
     /* (non-Javadoc)
@@ -146,15 +150,20 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	if (!isEmptyField(fields, 4, false)) {
 	    street.setCountryCode(fields[4].trim());
 	}
-	if (!isEmptyField(fields, 5, false)) {
-	    street.setIsIn(fields[5].trim());
-	} else if (shouldFillIsInField()){
-		GisFeatureDistance city = getNearestCityName(street.getLocation());
-		if (city!=null){
-		street.setPopulation(city.getPopulation());
-		street.setIsIn(city.getName());
+		if (!isEmptyField(fields, 5, false)) {
+			street.setIsIn(fields[5].trim());
+		} else if (shouldFillIsInField()) {
+			GisFeatureDistance city = getNearestCityName(street.getLocation());
+			if (city != null) {
+				street.setPopulation(city.getPopulation());
+				if (city.getName() != null){
+						// tests if city is a paris district, if so it is
+						// probably a pplx that is newly considered as ppl
+						// http://forum.geonames.org/gforum/posts/list/2063.page
+						street.setIsIn(pplxToPPL(city.getName()));
+					}
+			}
 		}
-	}
 	
 		long generatedId= idGenerator.getNextGId();
 		street.setGid(new Long(generatedId));
@@ -211,8 +220,20 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     	} else {
     		return null;
     	}
-    	
 	}
+    
+    protected String pplxToPPL(String cityName){
+    	if (cityName!=null){
+    		Matcher matcher = pattern.matcher(cityName);
+    		if (matcher.find()) {
+    			return matcher.group(1);
+    		} else {
+    			return cityName;
+    		}
+    	} else {
+    		return cityName;
+    	}
+    }
 
 	/* (non-Javadoc)
      * @see com.gisgraphy.domain.geoloc.importer.AbstractImporterProcessor#shouldBeSkiped()

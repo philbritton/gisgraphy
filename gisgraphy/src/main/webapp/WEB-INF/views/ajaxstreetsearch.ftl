@@ -149,9 +149,11 @@
         	$('streetsearch')['to'].value=DEFAULT_NUMBER_OF_RESULTS_PER_PAGE
         }
         
- 	doSearch = function(){
- 		return updatePopupResults();
- 	}
+ 	doSearch= function(){
+         $('fulltextsearch')['from'].value=1;
+         $('fulltextsearch')['to'].value=10;
+         return updatePopupResults();
+    }  
  	
     updatePopupResults = function(){
     try {
