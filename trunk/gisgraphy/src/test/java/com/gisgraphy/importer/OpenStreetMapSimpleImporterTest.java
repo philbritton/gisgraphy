@@ -59,7 +59,7 @@ import com.vividsolutions.jts.geom.Point;
 
 
 
-public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCase {
+public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolrTestCase {
     
     private IImporterProcessor openStreetMapImporter;
     
@@ -268,11 +268,11 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
     @Test
     public void testSetupIsCalled(){
     	
-    	OpenStreetMapImporterTest.setupIsCalled = false;
+    	OpenStreetMapSimpleImporterTest.setupIsCalled = false;
     	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter(){
     		@Override
     		protected void setup() {
-    			OpenStreetMapImporterTest.setupIsCalled = true;
+    			OpenStreetMapSimpleImporterTest.setupIsCalled = true;
     		}
     		@Override
     		protected void tearDown() {
@@ -295,7 +295,7 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
     		}
     	};
     	importer.process();
-    	assertTrue(OpenStreetMapImporterTest.setupIsCalled);
+    	assertTrue(OpenStreetMapSimpleImporterTest.setupIsCalled);
     }
     
     
@@ -344,7 +344,17 @@ public class OpenStreetMapImporterTest extends AbstractIntegrationHttpSolrTestCa
 	    EasyMock.verify(solRSynchroniser);
     }
     }
-
+	  
+    @Test
+    public void testPplxToPPL(){
+    	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
+    	Assert.assertEquals(null,importer.pplxToPPL(null));
+    	Assert.assertEquals("Paris",importer.pplxToPPL("Paris"));
+    	Assert.assertEquals("Paris",importer.pplxToPPL("Paris 10 Entrepôt"));
+    	Assert.assertEquals("Marseille",importer.pplxToPPL("Marseille 01"));
+    }
+    
+    
     @Required
     public void setIdGenerator(IIdGenerator idGenerator) {
         this.idGenerator = idGenerator;

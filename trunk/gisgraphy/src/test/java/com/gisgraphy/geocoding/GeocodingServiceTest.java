@@ -1135,6 +1135,7 @@ public class GeocodingServiceTest {
 	final Double longitude = 5.2d;
 	EasyMock.expect(cityResult.getLng()).andStubReturn(longitude);
 	EasyMock.expect(cityResult.getFeature_id()).andStubReturn(123L);
+	EasyMock.expect(cityResult.getName()).andStubReturn("name");
 	EasyMock.replay(cityResult);
 	GeocodingService geocodingService = new GeocodingService() {
 

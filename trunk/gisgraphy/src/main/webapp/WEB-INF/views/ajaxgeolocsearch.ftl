@@ -120,13 +120,15 @@
 	pointIsRequired=true;
 	DEFAULT_NUMBER_OF_RESULTS_PER_PAGE=${defaultNumberOfResultsPerPage?c};
 
- 	updatePaginationNext= function(){
-    $('geolocsearch')['from'].value=parseInt($('geolocsearch')['from'].value)+DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
-    $('geolocsearch')['to'].value=parseInt($('geolocsearch')['to'].value)+DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
-    return updatePopupResults();
+    updatePaginationNext= function(){
+         $('geolocsearch')['from'].value=parseInt($('geolocsearch')['from'].value)+DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
+         $('geolocsearch')['to'].value=parseInt($('geolocsearch')['to'].value)+DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
+         return updatePopupResults();
     }
-    
-     updatePaginationPrevious = function(){
+	
+      
+
+    updatePaginationPrevious = function(){
     $('geolocsearch')['from'].value=parseInt($('geolocsearch')['from'].value)-DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
     $('geolocsearch')['to'].value=parseInt($('geolocsearch')['to'].value)-DEFAULT_NUMBER_OF_RESULTS_PER_PAGE;
     return updatePopupResults();
@@ -162,9 +164,11 @@
         	$('geolocsearch')['to'].value=DEFAULT_NUMBER_OF_RESULTS_PER_PAGE
         }
         
- 	doSearch = function(){
- 		return updatePopupResults();
- 	}
+ 	doSearch= function(){
+         $('fulltextsearch')['from'].value=1;
+         $('fulltextsearch')['to'].value=10;
+         return updatePopupResults();
+    }  
  	
     updatePopupResults = function(){
     try {

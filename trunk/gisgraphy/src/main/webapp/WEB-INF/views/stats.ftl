@@ -21,8 +21,8 @@
 <li><a href="https://www.google.com/analytics/settings/?et=reset&hl=en" target="statsgis">Google analytics</a></li>
 <li><a href="https://www.google.com/webmasters/tools/home" target="statsgis">Google webmaster tools</a></li>
 <br/>
-<li><a href="https://www.google.com/adsense/report/overview" target="statsgis">Google adsense</a></li>
-<li><a href="http://www.gisgraphy.com/feedback/feedback.htm" target="statsgis">feedbacks</a></li>
+<li><a href="http://www.gisgraphy.com/feedback/feedback.htm" target="statsgis">feedbacks (general)</a></li>
+<li><a href="http://www.gisgraphy.com/feedback-address-parser/tests.htm" target="statsgis">feedbacks (address parsing)</a></li>
 <li><a href="http://www.gisgraphy.com/forum/" target="statsgis">forum</a></li>
 <br/>
 <li><a href="http://code.google.com/p/gisgraphy/downloads/list" target="statsgis">Google Code (Download)</a></li>

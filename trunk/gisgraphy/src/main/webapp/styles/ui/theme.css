@@ -31,7 +31,7 @@ body {
 	text-align: left;
 	font-family: verdana, arial, helvetica, sans-serif;
 	font-size: 76%;
-	line-height: 1em;
+	/*line-height: 1em;*/
 	color: #444;
 	margin: 0;
 	padding: 0;
