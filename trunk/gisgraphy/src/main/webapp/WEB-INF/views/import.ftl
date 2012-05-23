@@ -256,7 +256,6 @@ goToStep(${step});
     <option value="CN">China</option>
     <option value="CO">Colombia</option>
     <option value="CR">Costa Rica</option>
-    <option value="CS">Serbia and Montenegro</option>
     <option value="CU">Cuba</option>
     <option value="CV">Cape Verde</option>
     <option value="CX">Christmas Island</option>
