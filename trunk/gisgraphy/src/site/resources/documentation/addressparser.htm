@@ -119,23 +119,24 @@ h4:before {
 <h1>International Address Parser documentation</h1>
 <div class="indexlevel2"><a href="#description" />Description</a></div>
 <div class="indexlevel2"><a href="#access" />Free access</a></div>
+<div class="indexlevel2"><a href="#offlineaccess" />Offline access</a></div>
 <div class="indexlevel2"><a href="#webservice" />Webservice</a></div>
 <div class="indexlevel2"><a href="#javaapi" />Java API</a></div>
 <div class="indexlevel2"><a href="#howitworks" />How it works</a></div>
 <div class="indexlevel2"><a href="#batch" />batch processing</a></div>
-<div class="indexlevel2"><a href="#lang" />Languages supported</a></div>
+<div class="indexlevel2"><a href="#lang" />Spoken languages supported</a></div>
 <div class="indexlevel2"><a href="#implemetedcountries" />Implemented countries</a></div>
 <div class="indexlevel2"><a href="#uniplemetedcountries" />Countries not yet implemented</a></div>
 <div class="indexlevel2"><a href="#formatsbycountry" />Supported formats by country</a></div>
 <div class="indexlevel2"><a href="#output_fields" />Output fields</a></div>
-<div class="indexlevel2"><a href="#Description" />Output format</a></div>
+<div class="indexlevel2"><a href="#output_formats" />Output formats</a></div>
 <div class="indexlevel2"><a href="#bug" />Known issues</a></div>
 <div class="indexlevel2"><a href="#links" />Links</a></div>
 <a name="top"></a>
 <a name="description"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2>Description</h2>
-The address parser, is a part of the <a href="http://www.gisgraphy.com">gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
+The address parser and address standardizer, are part of the <a href="http://www.gisgraphy.com">gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
 <ul>
 <li>house number</li>
 <li>street type (bd, street, ..)</li>
@@ -147,26 +148,50 @@ The address parser, is a part of the <a href="http://www.gisgraphy.com">gisgraph
 <li>city</li>
 <li><a href="#output_fields" />more...</a></li>
 </ul>
-it is case insensitive, manage several language, can handle several alphabet (not only ASCII character are accepted), accept address on multiples lines
-manage abbreviations, synonyms. number can be as digit, letter, or Roman.
+Here is a non exhaustive list of functionalities :
+<ul>
+<li>Case insensitive</li>
+<li>Manage several spoken languages</li>
+<li>Handle several alphabets (not only ASCII characters are accepted)</li>
+<li>Accept address on single or multiples lines</li>
+<li>Manage abbreviations, synonyms. number can be as digit, letter, or Roman.</li>
+<li>Street intersections are also supported via '@' and '&' separator.</li>
+<li>...</li>
+</ul>
 <br/>
 It implements all the <a href="http://www.upu.int/" target="_blank">Universal Postal Union</a> Specifications and the common usage rules, PObox, frequently used in each country (street intersection, workarounds,...)
 it is based on semantic processing and dictionary.
+<br/><br/>
+Address standardization is the process that takes an address and converts it to a standard format by correcting the address (if possible). The standardization is currently implemented for 3 countries, each country has its own certification :
+<ul>
+<li>USA : CASS (Coding Accuracy Support System), delivered by the USPS - Unites States Postal Service</li>
+<li>Canada : SERP (Software Evaluation and Recognition Program),  delivered by Canada Post</li>
+<li>Australia : AMAS (Address Matching Approval System), delivered by Australia Post</li>
+</ul>
 
+Actually Gisgraphy is not certified because it does not yet implements Spelling Correction and completion. It currently normalize street number, unit, directions, ordinal number,...
+The next versions of the standardizer will probably implement the missing requirements but it actually allows to identify address and detect duplicates (useful for CRM, mailing,...) 
 
 <a name="access"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Free access</h3>
 
-The address parser web service is available for free :
+The address parser web service is available for free but with a number of request limitation, depending on the traffic :
 <ul>
 <li>On the Gisgraphy site <a href="" target="addressparser">http://address-parser.gisgraphy.com/addressparser</a>.</li>
 <li>with a cloud version on Google App Engine (Appspot) :  <a href="http://addressparser.appspot.com/" target="addressparser">http://addressparser.appspot.com/</a></li>
 <li>A graphical user interface : <a href="http://services.gisgraphy.com/public/addressparser.html" target="addressparser">http://services.gisgraphy.com/public/addressparser.html</a></li>
 </ul>
+If you need dedicated access for address parser or standardizer , please <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a>
 <br/><br/>
+The address standardizer is not yet available online. please consult the <a href="#offlineaccess">offline section</>
+<br/>
 
-If you need dedicated access, please <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a>
+
+<a name="offlineaccess"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Offline access</h3>
+The address parser and standardizer can be buy to do offline processing. it is available as a java JAR or a .net DLL. if you are interested, please <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a>.
 
 <a name="webservice"></a>
 <div align="right"><a href="#top">[top]</a></div>
@@ -174,7 +199,7 @@ If you need dedicated access, please <a href="mailto:davidmasclet@gisgraphy.com"
 <div class="tip yellowtip">
  All the parameters should be encoded in <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a>.
 </div><br/>
-<span style="color:#FF0000">Don't put the name of the country at the end of the address, it should work but is not supported</span>
+<span style="color:#FF0000">Don't put the adressee, it is not supported</span>
 <br/><br/>
 Here is a summary of the Web parameters that address parser accepts : <br/>
 <table class="smallsizetable smartborder">
@@ -213,10 +238,12 @@ http://services.gisgraphy.com/addressparser/?address=123 3/4 N name with space 1
 	address.setStreetType("Avenue")
 	address.setStreetName("des Champs-Elysées");
 	AddressResultsDto result = addressParser.execute(address,"FR");
+	
 	*/
 	System.out.println("Query tooks "+result.getQTime()+" ms and"+
 		" return "+result.getNumFound()+" result(s)");
 	for (Address address : results.getResult()){
+		address = standardizer.
 		System.out.println("housenumber : "+address.getHouseNumber());
 		System.out.println("streetType : "+address.getStreetType());
 		System.out.println("streetname : "+address.getStreetName());
@@ -254,6 +281,8 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 Önder Cad. Ankara Ap. 11/8 ALEKSCEVSKTY </td></tr>
 <tr><td>zipCode</td><td>The zip or post code</td><td>98104</td><td>100 MAIN ST POB 1022 SEATTLE WA <span class="redtext">98104</span></td></tr>
 <tr><td>extraInfo</td><td>Informations on floor, unit, and sometimes POBOX,..</td><td>floor 6,Hangar of the century</td><td>100 MAIN ST <span class="redtext">POB 1022</span> SEATTLE WA 98104<br/>100 MAIN ST <span class="redtext">3rd floor</span> SEATTLE WA 98104</td></tr>
+<tr><td>SuiteType</td><td>Informations on the unit, mainly used and filled by standardizer</td><td>APT, #</td><td>123 Main street northwest , <span class="redtext">apartment</span> 22 SEATTLE WA 98104<br/></td></tr>
+<tr><td>SuiteNumber</td><td>Informations on the unit, mainly used and filled by standardizer</td><td>22</td><td>123 Main street northwest ,apartment <span class="redtext">22</span> SEATTLE WA 98104<br/></td></tr>
 <tr><td>POBox</td><td>Post office box, Boite postale, Casilla de Correo,..</td><td>POB 45, POBOX 52,boite postale 89,Casilla de Correo 17</td><td>100 MAIN ST <span class="redtext">POB 1022</span> SEATTLE WA 98104<br/>100 MAIN ST <span class="redtext">3rd floor</span> SEATTLE WA 98104</td></tr>
 <tr><td>POBoxInfo</td><td>extra info on Post office box, Boite postale, Casilla de Correo,..</td><td>CEDEX 01</td><td>5, rue Foobar, 75725 Paris <span class="redtext">CEDEX 01</span></td></tr>
 <tr><td>POBoxAgency</td><td>Agency where the office box, Boite postale, Casilla de Correo is</td><td>KHOURIBGA PRINCIPALE</td><td>P.O 1737 <span class="redtext">KHOURIBGA PRINCIPALE</span> 25005 KHOURIBGACEDEX</td></tr>
@@ -290,23 +319,37 @@ Note that only unit is supported, not company, gender, firstname, lastname.
 <a name="howitworks"/>
 <h2>How it works</h2>
 <div align="right"><a href="#top">[top]</a></div>
-The International address is based on a modular engine, where each country has a list of syntax. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable and give the ability to developp quickly.  
+The International address and standardizer are based on a modular engine, where each country has a list of syntax. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable and give the ability to developp quickly.  
+
+
+<a name="batch"/>
+<h2>Batch processing</h2>
+<div align="right"><a href="#top">[top]</a></div>
+If you need to batch process a lot of data and don't want to buy the parser, we can batch process your address. the price depends of the ammount of data.  
+
+
 
 <a name="lang"></a>
-<h2>Languages supported</h2>
+<h2>Spoken languages supported</h2>
 The parser is based on semantic analysis, it us some dictionary for street type, unit, ordinal number, etc...
 here is a list of already languages:
 <ul>
 <li>English</li>
 <li>French (francais)</li>
 <li>Spanish (Español)</li>
+<li>German (Deutsch)</li>
+<li>Italian</li>
 <li>Portuguese</li>
 <li>Catalan (Català)</li>
-<li>German (Deutsch)</li>
 <li>Flemish (belgium dutch)</li>
 <li>Estonian  (Eesti)</li>
 <li>Basque (Euskara) for France and Spain</li>
 <li>Russian (with Cyrillic alphabet)</li>
+<li>Polish</li>
+<li>Norwegian</li>
+<li>Turk</li>
+<li>Finnish</li>
+<li>Chinese</li>
 </ul>
 <br/>
 
@@ -1028,9 +1071,10 @@ See <a href="#nl">Netherlands</a>
 	<li class="rub">For all the pattern french and english are supported</li>
 	<li class="rub">Typical address :
 		<ul>
-			<li>Pattern : <span class="pattern">[houseNumber] [fraction] [predirection] streetName streetType [postdirection] [unit] city [state] [zip]</span>
+			<li>Pattern : <span class="pattern"> [unit] [houseNumber] [fraction] [predirection] streetName streetType [postdirection] [unit] city [state] [zip]</span>
 				<ul>
 					<li>Example : <span class="address">123 3/4 N name with space 1 number blvd south floor 2 Missouri CA 12345-4536</span></li>
+					<li>Example : <span class="address">apt 10 123 smith street N Missouri</span></li>
 					<li>Example : <span class="address">123 3/4 N name with space 1 number blvd south Missouri CA</span></li>
 				</ul>
 			</li>
@@ -2822,11 +2866,28 @@ See <a href="#it">Italy</a>
 <li>' (Simple quote) is not kept in parsing results (reason: serialisation in json ...)</li>
 </ul>
 
+<a name="output_formats"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h2>Webservice output Formats</h2>
+The following languages can be outputed by the webservices :
+<ul>
+<li>XML</li>
+<li>Json</li>
+<li>Php</li>
+<li>Ruby</li>
+<li>Python</li>
+<li>YAML</li>
+</ul>
+<br/><br/>
+
 <a name="links"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2>Links</h2>
 <ul>
-<li>http://en.wikipedia.org/wiki/Storey</li>
+<li>http://www.upu.int/</li>
+<li>http://auspost.com.au/business/address-matching-approval-system.html</li>
+<li>http://www.canadapost.ca/cpo/mc/business/productsservices/atoz/addressingsoftware.jsf</li>
+<li>http://www.envmgr.com/site/company/cass_cert.htm</li>
 </ul>
 
 </body>
