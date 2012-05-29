@@ -161,7 +161,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
 		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
 		Point location= GeolocHelper.createPoint(2F, 3F);
-		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(false).withPagination(Pagination.ONE_RESULT);
+		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true);
 		GeolocResultsDto resultsDto = new GeolocResultsDto() {
 			@Override
 			public List<GisFeatureDistance> getResult() {
@@ -186,6 +186,91 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
 		Assert.assertEquals(cityName, actual.getName());
 		Assert.assertEquals(population, actual.getPopulation());
+		EasyMock.verify(geolocSearchEngine);
+		
+	}
+	
+	@Test
+	public void testGetNearestCityName_for_FR(){
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(true);
+		importerConfig.setOpenStreetMapFillIsIn(true);
+		OpenStreetMapSimpleImporter openStreetMapImporter = new OpenStreetMapSimpleImporter();
+		openStreetMapImporter.setImporterConfig(importerConfig);
+		final String  cityName= "cityName";
+		final Integer population = 123;
+		final GisFeature city = new City();
+		
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setCountryCode("FR");
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		EasyMock.expect(geolocSearchEngine.executeQuery(query)).andReturn(resultsDto);
+		EasyMock.replay(geolocSearchEngine);
+		
+		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
+		Assert.assertEquals(cityName, actual.getName());
+		Assert.assertEquals(population, actual.getPopulation());
+		EasyMock.verify(geolocSearchEngine);
+		
+	}
+	
+	@Test
+	public void testGetNearestCityName_for_FR_population_is_0(){
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(true);
+		importerConfig.setOpenStreetMapFillIsIn(true);
+		OpenStreetMapSimpleImporter openStreetMapImporter = new OpenStreetMapSimpleImporter();
+		openStreetMapImporter.setImporterConfig(importerConfig);
+		final String  cityName= "cityName";
+		final Integer population = 0;
+		final GisFeature city = new City();
+		
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setCountryCode("FR");
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		EasyMock.expect(geolocSearchEngine.executeQuery(query)).andReturn(resultsDto);
+		EasyMock.replay(geolocSearchEngine);
+		
+		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
+		Assert.assertNull("city with population ==0 should not be considered as city",actual);
 		EasyMock.verify(geolocSearchEngine);
 		
 	}

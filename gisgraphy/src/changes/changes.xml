@@ -585,6 +585,10 @@
 				http://code.google.com/p/gisgraphy/issues/detail?id=24 : OR and AND in upper case cause fulltext engine to crash. 
 			</action>
 			
+			<action dev="David Masclet" type="update">
+				When we search for nearest city during osm import, we only consider french city with population >0
+			</action>
+			
 			
 			
 			
