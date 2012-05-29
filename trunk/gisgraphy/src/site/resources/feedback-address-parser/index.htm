@@ -1,7 +1,3 @@
-<?php
-
-require 'CaptchasDotNet.php';
-
 // Required Parameters
 // Replace the values you receive upon registration at http://captchas.net.
 //
@@ -36,25 +32,377 @@ require 'CaptchasDotNet.php';
 
 // Construct the captchas object.
 
+
 $captchas = new CaptchasDotNet ('demo', 'secret',
-                                '/tmp/captchasnet-random-strings','3600',
+                                '/tmp/captchasnet-random-strings2','3600',
                                 'abcdefghkmnopqrstuvwxyz','6',
                                 '240','80');
 
+
 ?>
-
   <h1>Address parser feedbacks and bug reports</h1>
-        Gisgraphy always try to improve the relevance of the address parser, please send us a report when the parsing is incorrect, it will automatically add a regression test, and it will be fixed if possible. Note that a mail will be send if you let your mail (we don't sell mail address :)).<br/><br/>
-  <form method="get" action="check.htm">
-            Your mail : </td><td><input name="mail" size="60" />
-            <form method="post" url="">
-                                <fieldset>
-                                        <legend>Address informations</legend>
-                                        Address : <br/> <input type="text" name="address"><br/>
-                                        country code  :<br/> Select a country :</b> </span><select name="country" id="addressform_country" style="width:180px;">
+<style>
+.fieldlabel{
+width:180px;
+display:inline-block;
+}
+input {
+size:50;
+}
+</style>
 
-    <option value=""
-    >Select</option>
+Gisgraphy always try to improve the relevance of the address parser, please send us a report when the parsing is incorrect, it will automatically add a regression test, and it will be fixed if possible. Note that a mail will be send if you let your mail (we don't sell mail address :)).<br/><br/>
+  <form method="get" action="check.htm">
+            <span class="fieldlabel"i>Your mail : </span><input type="text" name="mail" size="60" />
+				<fieldset>
+					<legend>Address informations</legend>
+					<span class="fieldlabel">Address : </span> <input type="text" name="address"><br/>
+					 <span class="fieldlabel"> Select a country :</span> </span><select name="country" id="addressform_country" style="width:180px;">
+
+    <option value="" >Select</option>
+    <option value="AF">Afghanistan</option>
+    <option value="AX">Aland Islands</option>
+    <option value="AL">Albania</option>
+    <option value="DZ">Algeria</option>
+    <option value="AS">American Samoa</option>
+
+    <option value="AD">Andorra</option>
+    <option value="AO">Angola</option>
+    <option value="AI">Anguilla</option>
+    <option value="AQ">Antarctica</option>
+    <option value="AG">Antigua and Barbuda</option>
+    <option value="AR">Argentina</option>
+
+    <option value="AM">Armenia</option>
+    <option value="AW">Aruba</option>
+    <option value="AU">Australia</option>
+    <option value="AT">Austria</option>
+    <option value="AZ">Azerbaijan</option>
+    <option value="BS">Bahamas</option>
+
+    <option value="BH">Bahrain</option>
+    <option value="BD">Bangladesh</option>
+    <option value="BB">Barbados</option>
+    <option value="BY">Belarus</option>
+    <option value="BE">Belgium</option>
+    <option value="BZ">Belize</option>
+
+    <option value="BJ">Benin</option>
+    <option value="BM">Bermuda</option>
+    <option value="BT">Bhutan</option>
+    <option value="BO">Bolivia</option>
+    <option value="BQ">Bonaire, Saint Eustatius and Saba</option>
+    <option value="BA">Bosnia and Herzegovina</option>
+
+    <option value="BW">Botswana</option>
+    <option value="BV">Bouvet Island</option>
+    <option value="BR">Brazil</option>
+    <option value="IO">British Indian Ocean Territory</option>
+    <option value="VG">British Virgin Islands</option>
+    <option value="BN">Brunei</option>
+
+    <option value="BG">Bulgaria</option>
+    <option value="BF">Burkina Faso</option>
+    <option value="BI">Burundi</option>
+    <option value="KH">Cambodia</option>
+    <option value="CM">Cameroon</option>
+    <option value="CA">Canada</option>
+
+    <option value="CV">Cape Verde</option>
+    <option value="KY">Cayman Islands</option>
+    <option value="CF">Central African Republic</option>
+    <option value="TD">Chad</option>
+    <option value="CL">Chile</option>
+    <option value="CN">China</option>
+
+    <option value="CX">Christmas Island</option>
+    <option value="CC">Cocos Islands</option>
+    <option value="CO">Colombia</option>
+    <option value="KM">Comoros</option>
+    <option value="CK">Cook Islands</option>
+    <option value="CR">Costa Rica</option>
+
+    <option value="HR">Croatia</option>
+    <option value="CU">Cuba</option>
+    <option value="CW">Curacao</option>
+    <option value="CY">Cyprus</option>
+    <option value="CZ">Czech Republic</option>
+    <option value="CD">Democratic Republic of the Congo</option>
+
+    <option value="DK">Denmark</option>
+    <option value="DJ">Djibouti</option>
+    <option value="DM">Dominica</option>
+    <option value="DO">Dominican Republic</option>
+    <option value="TL">East Timor</option>
+    <option value="EC">Ecuador</option>
+
+    <option value="EG">Egypt</option>
+    <option value="SV">El Salvador</option>
+    <option value="GQ">Equatorial Guinea</option>
+    <option value="ER">Eritrea</option>
+    <option value="EE">Estonia</option>
+    <option value="ET">Ethiopia</option>
+
+    <option value="FK">Falkland Islands</option>
+    <option value="FO">Faroe Islands</option>
+    <option value="FJ">Fiji</option>
+    <option value="FI">Finland</option>
+    <option value="FR">France</option>
+    <option value="GF">French Guiana</option>
+
+    <option value="PF">French Polynesia</option>
+    <option value="TF">French Southern Territories</option>
+    <option value="GA">Gabon</option>
+    <option value="GM">Gambia</option>
+    <option value="GE">Georgia</option>
+    <option value="DE">Germany</option>
+
+    <option value="GH">Ghana</option>
+    <option value="GI">Gibraltar</option>
+    <option value="GR">Greece</option>
+    <option value="GL">Greenland</option>
+    <option value="GD">Grenada</option>
+    <option value="GP">Guadeloupe</option>
+
+    <option value="GU">Guam</option>
+    <option value="GT">Guatemala</option>
+    <option value="GG">Guernsey</option>
+    <option value="GN">Guinea</option>
+    <option value="GW">Guinea-Bissau</option>
+    <option value="GY">Guyana</option>
+
+    <option value="HT">Haiti</option>
+    <option value="HM">Heard Island and McDonald Islands</option>
+    <option value="HN">Honduras</option>
+    <option value="HK">Hong Kong</option>
+    <option value="HU">Hungary</option>
+    <option value="IS">Iceland</option>
+
+    <option value="IN">India</option>
+    <option value="ID">Indonesia</option>
+    <option value="IR">Iran</option>
+    <option value="IQ">Iraq</option>
+    <option value="IE">Ireland</option>
+    <option value="IM">Isle of Man</option>
+
+    <option value="IL">Israel</option>
+    <option value="IT">Italy</option>
+    <option value="CI">Ivory Coast</option>
+    <option value="JM">Jamaica</option>
+    <option value="JP">Japan</option>
+    <option value="JE">Jersey</option>
+
+    <option value="JO">Jordan</option>
+    <option value="KZ">Kazakhstan</option>
+    <option value="KE">Kenya</option>
+    <option value="KI">Kiribati</option>
+    <option value="XK">Kosovo</option>
+    <option value="KW">Kuwait</option>
+
+    <option value="KG">Kyrgyzstan</option>
+    <option value="LA">Laos</option>
+    <option value="LV">Latvia</option>
+    <option value="LB">Lebanon</option>
+    <option value="LS">Lesotho</option>
+    <option value="LR">Liberia</option>
+
+    <option value="LY">Libya</option>
+    <option value="LI">Liechtenstein</option>
+    <option value="LT">Lithuania</option>
+    <option value="LU">Luxembourg</option>
+    <option value="MO">Macao</option>
+    <option value="MK">Macedonia</option>
+
+    <option value="MG">Madagascar</option>
+    <option value="MW">Malawi</option>
+    <option value="MY">Malaysia</option>
+    <option value="MV">Maldives</option>
+    <option value="ML">Mali</option>
+    <option value="MT">Malta</option>
+
+    <option value="MH">Marshall Islands</option>
+    <option value="MQ">Martinique</option>
+    <option value="MR">Mauritania</option>
+    <option value="MU">Mauritius</option>
+    <option value="YT">Mayotte</option>
+    <option value="MX">Mexico</option>
+
+    <option value="FM">Micronesia</option>
+    <option value="MD">Moldova</option>
+    <option value="MC">Monaco</option>
+    <option value="MN">Mongolia</option>
+    <option value="ME">Montenegro</option>
+    <option value="MS">Montserrat</option>
+
+    <option value="MA">Morocco</option>
+    <option value="MZ">Mozambique</option>
+    <option value="MM">Myanmar</option>
+    <option value="NA">Namibia</option>
+    <option value="NR">Nauru</option>
+    <option value="NP">Nepal</option>
+
+    <option value="NL">Netherlands</option>
+    <option value="AN">Netherlands Antilles</option>
+    <option value="NC">New Caledonia</option>
+    <option value="NZ">New Zealand</option>
+    <option value="NI">Nicaragua</option>
+    <option value="NE">Niger</option>
+
+    <option value="NG">Nigeria</option>
+    <option value="NU">Niue</option>
+    <option value="NF">Norfolk Island</option>
+    <option value="MP">Northern Mariana Islands</option>
+    <option value="KP">North Korea</option>
+    <option value="NO">Norway</option>
+
+    <option value="OM">Oman</option>
+    <option value="PK">Pakistan</option>
+    <option value="PW">Palau</option>
+    <option value="PS">Palestinian Territory</option>
+    <option value="PA">Panama</option>
+    <option value="PG">Papua New Guinea</option>
+
+    <option value="PY">Paraguay</option>
+    <option value="PE">Peru</option>
+    <option value="PH">Philippines</option>
+    <option value="PN">Pitcairn</option>
+    <option value="PL">Poland</option>
+    <option value="PT">Portugal</option>
+
+    <option value="PR">Puerto Rico</option>
+    <option value="QA">Qatar</option>
+    <option value="CG">Republic of the Congo</option>
+    <option value="RE">Reunion</option>
+    <option value="RO">Romania</option>
+    <option value="RU">Russia</option>
+
+    <option value="RW">Rwanda</option>
+    <option value="BL">Saint Barthélemy</option>
+    <option value="SH">Saint Helena</option>
+    <option value="KN">Saint Kitts and Nevis</option>
+    <option value="LC">Saint Lucia</option>
+    <option value="MF">Saint Martin</option>
+
+    <option value="PM">Saint Pierre and Miquelon</option>
+    <option value="VC">Saint Vincent and the Grenadines</option>
+    <option value="WS">Samoa</option>
+    <option value="SM">San Marino</option>
+    <option value="ST">Sao Tome and Principe</option>
+    <option value="SA">Saudi Arabia</option>
+
+    <option value="SN">Senegal</option>
+    <option value="RS">Serbia</option>
+    <option value="CS">Serbia and Montenegro</option>
+    <option value="SC">Seychelles</option>
+    <option value="SL">Sierra Leone</option>
+    <option value="SG">Singapore</option>
+
+    <option value="SX">Sint Maarten</option>
+    <option value="SK">Slovakia</option>
+    <option value="SI">Slovenia</option>
+    <option value="SB">Solomon Islands</option>
+    <option value="SO">Somalia</option>
+    <option value="ZA">South Africa</option>
+
+    <option value="GS">South Georgia and the South Sandwich Islands</option>
+    <option value="KR">South Korea</option>
+    <option value="ES">Spain</option>
+    <option value="LK">Sri Lanka</option>
+    <option value="SD">Sudan</option>
+    <option value="SR">Suriname</option>
+
+    <option value="SJ">Svalbard and Jan Mayen</option>
+    <option value="SZ">Swaziland</option>
+    <option value="SE">Sweden</option>
+    <option value="CH">Switzerland</option>
+    <option value="SY">Syria</option>
+    <option value="TW">Taiwan</option>
+
+    <option value="TJ">Tajikistan</option>
+    <option value="TZ">Tanzania</option>
+    <option value="TH">Thailand</option>
+    <option value="TG">Togo</option>
+    <option value="TK">Tokelau</option>
+    <option value="TO">Tonga</option>
+
+    <option value="TT">Trinidad and Tobago</option>
+    <option value="TN">Tunisia</option>
+    <option value="TR">Turkey</option>
+    <option value="TM">Turkmenistan</option>
+    <option value="TC">Turks and Caicos Islands</option>
+    <option value="TV">Tuvalu</option>
+
+    <option value="UG">Uganda</option>
+    <option value="UA">Ukraine</option>
+    <option value="AE">United Arab Emirates</option>
+    <option value="GB">United Kingdom</option>
+    <option value="US">United States</option>
+    <option value="UM">United States Minor Outlying Islands</option>
+
+    <option value="UY">Uruguay</option>
+    <option value="VI">U.S. Virgin Islands</option>
+    <option value="UZ">Uzbekistan</option>
+    <option value="VU">Vanuatu</option>
+    <option value="VA">Vatican</option>
+    <option value="VE">Venezuela</option>
+
+    <option value="VN">Vietnam</option>
+    <option value="WF">Wallis and Futuna</option>
+    <option value="EH">Western Sahara</option>
+    <option value="YE">Yemen</option>
+    <option value="ZM">Zambia</option>
+    <option value="ZW">Zimbabwe</option>
+
+
+</select>
+<br/>
+				</fieldset><br/>
+				<fieldset>
+					<legend>Expected fields</legend>
+					<span class="fieldlabel">Name : </span><input type="text" name="Name"></input><br/>
+					<span class="fieldlabel">RecipientName : </span><input type="text" name="RecipientName"></input><br/>
+					<span class="fieldlabel">HouseNumber : </span><input type="text" name="HouseNumber"></input><br/>
+					<span class="fieldlabel">HouseNumberInfo :</span><input type="text" name="HouseNumberInfo"></input><br/>
+					<span class="fieldlabel">StreetName : </span><input type="text" name="StreetName"></input><br/>
+					<span class="fieldlabel">StreetType : </span><input type="text" name="StreetType"></input><br/>
+					<span class="fieldlabel">City : </span><input type="text" name="City"></input><br/>
+					<span class="fieldlabel">DependentLocality : </span><input type="text" name="DependentLocality"></input><br/>
+					<span class="fieldlabel">PostTown : </span><input type="text" name="PostTown"></input><br/>
+					<span class="fieldlabel">State : </span><input type="text" name="State"></input><br/>
+					<span class="fieldlabel">District : </span><input type="text" name="District"></input><br/>
+					<span class="fieldlabel">Quarter : </span><input type="text" name="Quarter"></input><br/>
+					<span class="fieldlabel">ZipCode : </span><input type="text" name="ZipCode"></input><br/>
+					<span class="fieldlabel">ExtraInfo : </span><input type="text" name="ExtraInfo"></input><br/>
+					<span class="fieldlabel">POBox : </span><input type="text" name="POBox"></input><br/>
+					<span class="fieldlabel">POBoxInfo : </span><input type="text" name="POBoxInfo"></input><br/>
+					<span class="fieldlabel">POBoxAgency : </span><input type="text" name="POBoxAgency"></input><br/>
+					<span class="fieldlabel">PreDirection : </span><input type="text" name="PreDirection"></input><br/>
+					<span class="fieldlabel">PostDirection : </span><input type="text" name="PostDirection"></input><br/>
+					<span class="fieldlabel">StreetNameIntersection : </span><input type="text" name="StreetNameIntersection"></input><br/>
+					<span class="fieldlabel">StreetTypeIntersection : </span><input type="text" name="StreetTypeIntersection"></input><br/>
+					<span class="fieldlabel">PreDirectionIntersection : </span><input type="text" name="PreDirectionIntersection"></input><br/>
+					<span class="fieldlabel">PostDirectionIntersection  : </span><input type="text" name="PostDirectionIntersection"></input><br/>
+					<span class="fieldlabel">CivicNumberSuffix : </span><input type="text" name="CivicNumberSuffix"></input><br/>
+					<span class="fieldlabel">Floor : </span><input type="text" name="Floor"></input><br/>
+					<span class="fieldlabel">Sector : </span><input type="text" name="Sector"></input><br/>
+					<span class="fieldlabel">Quadrant : </span><input type="text" name="Quadrant"></input><br/>
+					<span class="fieldlabel">Block : </span><input type="text" name="Block"></input><br/>
+					<span class="fieldlabel">Country : </span><input type="text" name="Country"></input><br/>
+					<span class="fieldlabel">CountryCode : </span><input type="text" name="CountryCode"></input><br/>
+                                        <br/>
+					<span class="fieldlabel">Comment : </span>
+					<textarea name="comment" rows="4" cols="30"></textarea>
+				</fieldset>
+ 				<input type="hidden" name="random" value="<?= $captchas->random () ?>" />
+          			The CAPTCHA password : <input  type="text" name="password" size="6" /><br/>
+          			<?= $captchas->image() ?><br/>
+          			<br> <a href="<?= $captchas->audio_url () ?>">Phonetic spelling (mp3)</a><br/>
+          <input type="submit" value="Send feedback" >
+ </form>
+
+                                        <span class="fieldlabel"> Select a country :</span> </span><select name="country" id="addressform_country" style="width:180px;">
+
+    <option value="" >Select</option>
     <option value="AF">Afghanistan</option>
     <option value="AX">Aland Islands</option>
     <option value="AL">Albania</option>
@@ -352,39 +700,43 @@ $captchas = new CaptchasDotNet ('demo', 'secret',
 </select>
 <br/>
                                 </fieldset><br/>
-                                <fieldset>
+                                  <fieldset>
                                         <legend>Expected fields</legend>
-                                        Name : <br/><input type="text" name="Name"></input><br/>
-                                        RecipientName :<br/> <input type="text" name="RecipientName"></input><br/>
-                                        HouseNumber : <br/><input type="text" name="HouseNumber"></input><br/>
-                                        HouseNumberInfo :<br/> <input type="text" name="HouseNumberInfo"></input><br/>
-                                        StreetName : <br/><input type="text" name="StreetName"></input><br/>
-                                        StreetType : <br/><input type="text" name="StreetType"></input><br/>
-                                        City : <br/><input type="text" name="City"></input><br/>
-                                        DependentLocality : <br/><input type="text" name="DependentLocality"></input><br/>
-                                        PostTown : <br/><input type="text" name="PostTown"></input><br/>
-                                        State : <br/><input type="text" name="State"></input><br/>
-District : <br/><input type="text" name="District"></input><br/>
-                                        Quarter : <br/><input type="text" name="Quarter"></input><br/>
-                                        ZipCode : <br/><input type="text" name="ZipCode"></input><br/>
-                                        ExtraInfo : <br/><input type="text" name="ExtraInfo"></input><br/>
-                                        POBox : <br/><input type="text" name="POBox"></input><br/>
-                                        POBoxInfo : <br/><input type="text" name="POBoxInfo"></input><br/>
-                                        POBoxAgency : <br/><input type="text" name="POBoxAgency"></input><br/>
-                                        PreDirection : <br/><input type="text" name="PreDirection"></input><br/>
-                                        PostDirection : <br/><input type="text" name="PostDirection"></input><br/>
-                                        StreetNameIntersection : <br/><input type="text" name="StreetNameIntersection"></input><br/>
-                                        StreetTypeIntersection : <br/><input type="text" name="StreetTypeIntersection"></input><br/>
-                                        PreDirectionIntersection : <br/><input type="text" name="PreDirectionIntersection"></input><br/>
-                                        PostDirectionIntersection  : <br/><input type="text" name="PostDirectionIntersection"></input><br/>
-                                        CivicNumberSuffix : <br/><input type="text" name="CivicNumberSuffix"></input><br/>
-                                        Floor : <br/><input type="text" name="Floor"></input><br/>
-                                        Sector : <br/><input type="text" name="Sector"></input><br/>
-                                        Quadrant : <br/><input type="text" name="Quadrant"></input><br/>
-                                        Block : <br/><input type="text" name="Block"></input><br/>
-                                        Country : <br/><input type="text" name="Country"></input><br/>
-                                        CountryCode : <br/><input type="text" name="CountryCode"></input><br/>
+                                        <span class="fieldlabel">Name : </span><input type="text" name="Name"></input><br/>
+                                        <span class="fieldlabel">RecipientName : </span><input type="text" name="RecipientName"></input><br/>
+                                        <span class="fieldlabel">HouseNumber : </span><input type="text" name="HouseNumber"></input><br/>
+                                        <span class="fieldlabel">HouseNumberInfo :</span><input type="text" name="HouseNumberInfo"></input><br/>
+                                        <span class="fieldlabel">StreetName : </span><input type="text" name="StreetName"></input><br/>
+                                        <span class="fieldlabel">StreetType : </span><input type="text" name="StreetType"></input><br/>
+                                        <span class="fieldlabel">City : </span><input type="text" name="City"></input><br/>
+                                        <span class="fieldlabel">DependentLocality : </span><input type="text" name="DependentLocality"></input><br/>
+                                        <span class="fieldlabel">PostTown : </span><input type="text" name="PostTown"></input><br/>
+                                        <span class="fieldlabel">State : </span><input type="text" name="State"></input><br/>
+                                        <span class="fieldlabel">District : </span><input type="text" name="District"></input><br/>
+                                        <span class="fieldlabel">Quarter : </span><input type="text" name="Quarter"></input><br/>
+                                        <span class="fieldlabel">ZipCode : </span><input type="text" name="ZipCode"></input><br/>
+                                        <span class="fieldlabel">ExtraInfo : </span><input type="text" name="ExtraInfo"></input><br/>
+                                        <span class="fieldlabel">POBox : </span><input type="text" name="POBox"></input><br/>
+                                        <span class="fieldlabel">POBoxInfo : </span><input type="text" name="POBoxInfo"></input><br/>
+                                        <span class="fieldlabel">POBoxAgency : </span><input type="text" name="POBoxAgency"></input><br/>
+                                        <span class="fieldlabel">PreDirection : </span><input type="text" name="PreDirection"></input><br/>
+                                        <span class="fieldlabel">PostDirection : </span><input type="text" name="PostDirection"></input><br/>
+                                        <span class="fieldlabel">StreetNameIntersection : </span><input type="text" name="StreetNameIntersection"></input><br/>
+                                        <span class="fieldlabel">StreetTypeIntersection : </span><input type="text" name="StreetTypeIntersection"></input><br/>
+                                        <span class="fieldlabel">PreDirectionIntersection : </span><input type="text" name="PreDirectionIntersection"></input><br/>
+                                        <span class="fieldlabel">PostDirectionIntersection  : </span><input type="text" name="PostDirectionIntersection"></input><br/>
+                                        <span class="fieldlabel">CivicNumberSuffix : </span><input type="text" name="CivicNumberSuffix"></input><br/>
+                                        <span class="fieldlabel">Floor : </span><input type="text" name="Floor"></input><br/>
+                                        <span class="fieldlabel">Sector : </span><input type="text" name="Sector"></input><br/>
+                                        <span class="fieldlabel">Quadrant : </span><input type="text" name="Quadrant"></input><br/>
+                                        <span class="fieldlabel">Block : </span><input type="text" name="Block"></input><br/>
+                                        <span class="fieldlabel">Country : </span><input type="text" name="Country"></input><br/>
+                                        <span class="fieldlabel">CountryCode : </span><input type="text" name="CountryCode"></input><br/>
+                                        <br/>
+                                        <span class="fieldlabel">Comment : </span>
+                                        <textarea name="comment" rows="4" cols="30"></textarea>
                                 </fieldset>
+
                                 The CAPTCHA password : <input name="password" size="6" /><br/>
                                 <?= $captchas->image () ?><br/>
                                 <br> <a href="<?= $captchas->audio_url () ?>">Phonetic spelling (mp3)</a><br/>
