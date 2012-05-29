@@ -228,6 +228,18 @@ public class FulltextQueryTest {
 	Assert.assertEquals("foo", query.getQuery());
 	query.withQuery("\'foo\'");
 	Assert.assertEquals("foo", query.getQuery());
+	
+	query.withQuery("\'foo AND BOR OR BAND\'");
+	Assert.assertEquals("foo and BOR or BAND", query.getQuery());
+	
+	query.withQuery("\'foo AND BOR OR BAND\'");
+	Assert.assertEquals("foo and BOR or BAND", query.getQuery());
+	
+	query.withQuery("\'foo AND BOR OR AND\'");
+	Assert.assertEquals("foo and BOR or and", query.getQuery());
+	
+	query.withQuery("\'foo AND BOR OR OR\'");
+	Assert.assertEquals("foo and BOR or or", query.getQuery());
     }
     
     @Test

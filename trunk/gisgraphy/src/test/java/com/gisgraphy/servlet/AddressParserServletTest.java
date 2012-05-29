@@ -73,10 +73,10 @@ public class AddressParserServletTest {
 	    servletTester = new ServletTester();
 	    servletTester.setContextPath("/");
 	    ServletHolder holder = servletTester.addServlet(
-		    GeocodingServlet.class, SERVLET_CONTEXT + "/*");
+		    AddressParserServlet.class, SERVLET_CONTEXT + "/*");
 	    servletTester.createSocketConnector(true);
 	    servletTester.start();
-	    GeocodingServlet geocodingServlet = (GeocodingServlet) holder.getServlet();
+	    AddressParserServlet geocodingServlet = (AddressParserServlet) holder.getServlet();
 	    Assert.assertNotNull(geocodingServlet);
     }
     
