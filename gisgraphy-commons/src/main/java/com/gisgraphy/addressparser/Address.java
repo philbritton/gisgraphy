@@ -62,6 +62,11 @@ public class Address {
     private String postDirectionIntersection;
 
     private String extraInfo;
+    
+    private String suiteType;
+    private String suiteNumber;
+    
+    
     private String floor;
     private String quarter;
 
@@ -406,353 +411,250 @@ public class Address {
     }
 
     @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((POBox == null) ? 0 : POBox.hashCode());
-	result = prime * result + ((POBoxAgency == null) ? 0 : POBoxAgency.hashCode());
-	result = prime * result + ((POBoxInfo == null) ? 0 : POBoxInfo.hashCode());
-	result = prime * result + ((PostOfficeBox == null) ? 0 : PostOfficeBox.hashCode());
-	result = prime * result + ((StreetTypeIntersection == null) ? 0 : StreetTypeIntersection.hashCode());
-	result = prime * result + ((block == null) ? 0 : block.hashCode());
-	result = prime * result + ((city == null) ? 0 : city.hashCode());
-	result = prime * result + ((civicNumberSuffix == null) ? 0 : civicNumberSuffix.hashCode());
-	result = prime * result + ((dependentLocality == null) ? 0 : dependentLocality.hashCode());
-	result = prime * result + ((district == null) ? 0 : district.hashCode());
-	result = prime * result + ((extraInfo == null) ? 0 : extraInfo.hashCode());
-	result = prime * result + ((floor == null) ? 0 : floor.hashCode());
-	result = prime * result + ((houseNumber == null) ? 0 : houseNumber.hashCode());
-	result = prime * result + ((houseNumberInfo == null) ? 0 : houseNumberInfo.hashCode());
-	result = prime * result + ((postDirection == null) ? 0 : postDirection.hashCode());
-	result = prime * result + ((postDirectionIntersection == null) ? 0 : postDirectionIntersection.hashCode());
-	result = prime * result + ((postTown == null) ? 0 : postTown.hashCode());
-	result = prime * result + ((preDirection == null) ? 0 : preDirection.hashCode());
-	result = prime * result + ((preDirectionIntersection == null) ? 0 : preDirectionIntersection.hashCode());
-	result = prime * result + ((quadrant == null) ? 0 : quadrant.hashCode());
-	result = prime * result + ((quarter == null) ? 0 : quarter.hashCode());
-	result = prime * result + ((recipientName == null) ? 0 : recipientName.hashCode());
-	result = prime * result + ((sector == null) ? 0 : sector.hashCode());
-	result = prime * result + ((state == null) ? 0 : state.hashCode());
-	result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
-	result = prime * result + ((streetNameIntersection == null) ? 0 : streetNameIntersection.hashCode());
-	result = prime * result + ((streetType == null) ? 0 : streetType.hashCode());
-	result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
-	return result;
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((POBox == null) ? 0 : POBox.hashCode());
+		result = prime * result + ((POBoxAgency == null) ? 0 : POBoxAgency.hashCode());
+		result = prime * result + ((POBoxInfo == null) ? 0 : POBoxInfo.hashCode());
+		result = prime * result + ((PostOfficeBox == null) ? 0 : PostOfficeBox.hashCode());
+		result = prime * result + ((StreetTypeIntersection == null) ? 0 : StreetTypeIntersection.hashCode());
+		result = prime * result + ((block == null) ? 0 : block.hashCode());
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((civicNumberSuffix == null) ? 0 : civicNumberSuffix.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((countryCode == null) ? 0 : countryCode.hashCode());
+		result = prime * result + ((dependentLocality == null) ? 0 : dependentLocality.hashCode());
+		result = prime * result + ((district == null) ? 0 : district.hashCode());
+		result = prime * result + ((extraInfo == null) ? 0 : extraInfo.hashCode());
+		result = prime * result + ((floor == null) ? 0 : floor.hashCode());
+		result = prime * result + ((geocodingLevel == null) ? 0 : geocodingLevel.hashCode());
+		result = prime * result + ((houseNumber == null) ? 0 : houseNumber.hashCode());
+		result = prime * result + ((houseNumberInfo == null) ? 0 : houseNumberInfo.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lat == null) ? 0 : lat.hashCode());
+		result = prime * result + ((lng == null) ? 0 : lng.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((postDirection == null) ? 0 : postDirection.hashCode());
+		result = prime * result + ((postDirectionIntersection == null) ? 0 : postDirectionIntersection.hashCode());
+		result = prime * result + ((postTown == null) ? 0 : postTown.hashCode());
+		result = prime * result + ((preDirection == null) ? 0 : preDirection.hashCode());
+		result = prime * result + ((preDirectionIntersection == null) ? 0 : preDirectionIntersection.hashCode());
+		result = prime * result + ((quadrant == null) ? 0 : quadrant.hashCode());
+		result = prime * result + ((quarter == null) ? 0 : quarter.hashCode());
+		result = prime * result + ((recipientName == null) ? 0 : recipientName.hashCode());
+		result = prime * result + ((sector == null) ? 0 : sector.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
+		result = prime * result + ((streetNameIntersection == null) ? 0 : streetNameIntersection.hashCode());
+		result = prime * result + ((streetType == null) ? 0 : streetType.hashCode());
+		result = prime * result + ((suiteNumber == null) ? 0 : suiteNumber.hashCode());
+		result = prime * result + ((suiteType == null) ? 0 : suiteType.hashCode());
+		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
+		return result;
+	}
 
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	Address other = (Address) obj;
-	if (POBox == null) {
-	    if (other.POBox != null)
-		return false;
-	} else if (!POBox.equals(other.POBox))
-	    return false;
-	if (POBoxAgency == null) {
-	    if (other.POBoxAgency != null)
-		return false;
-	} else if (!POBoxAgency.equals(other.POBoxAgency))
-	    return false;
-	if (POBoxInfo == null) {
-	    if (other.POBoxInfo != null)
-		return false;
-	} else if (!POBoxInfo.equals(other.POBoxInfo))
-	    return false;
-	if (PostOfficeBox == null) {
-	    if (other.PostOfficeBox != null)
-		return false;
-	} else if (!PostOfficeBox.equals(other.PostOfficeBox))
-	    return false;
-	if (StreetTypeIntersection == null) {
-	    if (other.StreetTypeIntersection != null)
-		return false;
-	} else if (!StreetTypeIntersection.equals(other.StreetTypeIntersection))
-	    return false;
-	if (block == null) {
-	    if (other.block != null)
-		return false;
-	} else if (!block.equals(other.block))
-	    return false;
-	if (city == null) {
-	    if (other.city != null)
-		return false;
-	} else if (!city.equals(other.city))
-	    return false;
-	if (civicNumberSuffix == null) {
-	    if (other.civicNumberSuffix != null)
-		return false;
-	} else if (!civicNumberSuffix.equals(other.civicNumberSuffix))
-	    return false;
-	if (dependentLocality == null) {
-	    if (other.dependentLocality != null)
-		return false;
-	} else if (!dependentLocality.equals(other.dependentLocality))
-	    return false;
-	if (district == null) {
-	    if (other.district != null)
-		return false;
-	} else if (!district.equals(other.district))
-	    return false;
-	if (extraInfo == null) {
-	    if (other.extraInfo != null)
-		return false;
-	} else if (!extraInfo.equals(other.extraInfo))
-	    return false;
-	if (floor == null) {
-	    if (other.floor != null)
-		return false;
-	} else if (!floor.equals(other.floor))
-	    return false;
-	if (houseNumber == null) {
-	    if (other.houseNumber != null)
-		return false;
-	} else if (!houseNumber.equals(other.houseNumber))
-	    return false;
-	if (houseNumberInfo == null) {
-	    if (other.houseNumberInfo != null)
-		return false;
-	} else if (!houseNumberInfo.equals(other.houseNumberInfo))
-	    return false;
-	if (postDirection == null) {
-	    if (other.postDirection != null)
-		return false;
-	} else if (!postDirection.equals(other.postDirection))
-	    return false;
-	if (postDirectionIntersection == null) {
-	    if (other.postDirectionIntersection != null)
-		return false;
-	} else if (!postDirectionIntersection.equals(other.postDirectionIntersection))
-	    return false;
-	if (postTown == null) {
-	    if (other.postTown != null)
-		return false;
-	} else if (!postTown.equals(other.postTown))
-	    return false;
-	if (preDirection == null) {
-	    if (other.preDirection != null)
-		return false;
-	} else if (!preDirection.equals(other.preDirection))
-	    return false;
-	if (preDirectionIntersection == null) {
-	    if (other.preDirectionIntersection != null)
-		return false;
-	} else if (!preDirectionIntersection.equals(other.preDirectionIntersection))
-	    return false;
-	if (quadrant == null) {
-	    if (other.quadrant != null)
-		return false;
-	} else if (!quadrant.equals(other.quadrant))
-	    return false;
-	if (quarter == null) {
-	    if (other.quarter != null)
-		return false;
-	} else if (!quarter.equals(other.quarter))
-	    return false;
-	if (recipientName == null) {
-	    if (other.recipientName != null)
-		return false;
-	} else if (!recipientName.equals(other.recipientName))
-	    return false;
-	if (sector == null) {
-	    if (other.sector != null)
-		return false;
-	} else if (!sector.equals(other.sector))
-	    return false;
-	if (state == null) {
-	    if (other.state != null)
-		return false;
-	} else if (!state.equals(other.state))
-	    return false;
-	if (streetName == null) {
-	    if (other.streetName != null)
-		return false;
-	} else if (!streetName.equals(other.streetName))
-	    return false;
-	if (streetNameIntersection == null) {
-	    if (other.streetNameIntersection != null)
-		return false;
-	} else if (!streetNameIntersection.equals(other.streetNameIntersection))
-	    return false;
-	if (streetType == null) {
-	    if (other.streetType != null)
-		return false;
-	} else if (!streetType.equals(other.streetType))
-	    return false;
-	if (zipCode == null) {
-	    if (other.zipCode != null)
-		return false;
-	} else if (!zipCode.equals(other.zipCode))
-	    return false;
-	return true;
-    }
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (POBox == null) {
+			if (other.POBox != null)
+				return false;
+		} else if (!POBox.equals(other.POBox))
+			return false;
+		if (POBoxAgency == null) {
+			if (other.POBoxAgency != null)
+				return false;
+		} else if (!POBoxAgency.equals(other.POBoxAgency))
+			return false;
+		if (POBoxInfo == null) {
+			if (other.POBoxInfo != null)
+				return false;
+		} else if (!POBoxInfo.equals(other.POBoxInfo))
+			return false;
+		if (PostOfficeBox == null) {
+			if (other.PostOfficeBox != null)
+				return false;
+		} else if (!PostOfficeBox.equals(other.PostOfficeBox))
+			return false;
+		if (StreetTypeIntersection == null) {
+			if (other.StreetTypeIntersection != null)
+				return false;
+		} else if (!StreetTypeIntersection.equals(other.StreetTypeIntersection))
+			return false;
+		if (block == null) {
+			if (other.block != null)
+				return false;
+		} else if (!block.equals(other.block))
+			return false;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (civicNumberSuffix == null) {
+			if (other.civicNumberSuffix != null)
+				return false;
+		} else if (!civicNumberSuffix.equals(other.civicNumberSuffix))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (countryCode == null) {
+			if (other.countryCode != null)
+				return false;
+		} else if (!countryCode.equals(other.countryCode))
+			return false;
+		if (dependentLocality == null) {
+			if (other.dependentLocality != null)
+				return false;
+		} else if (!dependentLocality.equals(other.dependentLocality))
+			return false;
+		if (district == null) {
+			if (other.district != null)
+				return false;
+		} else if (!district.equals(other.district))
+			return false;
+		if (extraInfo == null) {
+			if (other.extraInfo != null)
+				return false;
+		} else if (!extraInfo.equals(other.extraInfo))
+			return false;
+		if (floor == null) {
+			if (other.floor != null)
+				return false;
+		} else if (!floor.equals(other.floor))
+			return false;
+		if (geocodingLevel != other.geocodingLevel)
+			return false;
+		if (houseNumber == null) {
+			if (other.houseNumber != null)
+				return false;
+		} else if (!houseNumber.equals(other.houseNumber))
+			return false;
+		if (houseNumberInfo == null) {
+			if (other.houseNumberInfo != null)
+				return false;
+		} else if (!houseNumberInfo.equals(other.houseNumberInfo))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (lat == null) {
+			if (other.lat != null)
+				return false;
+		} else if (!lat.equals(other.lat))
+			return false;
+		if (lng == null) {
+			if (other.lng != null)
+				return false;
+		} else if (!lng.equals(other.lng))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (postDirection == null) {
+			if (other.postDirection != null)
+				return false;
+		} else if (!postDirection.equals(other.postDirection))
+			return false;
+		if (postDirectionIntersection == null) {
+			if (other.postDirectionIntersection != null)
+				return false;
+		} else if (!postDirectionIntersection.equals(other.postDirectionIntersection))
+			return false;
+		if (postTown == null) {
+			if (other.postTown != null)
+				return false;
+		} else if (!postTown.equals(other.postTown))
+			return false;
+		if (preDirection == null) {
+			if (other.preDirection != null)
+				return false;
+		} else if (!preDirection.equals(other.preDirection))
+			return false;
+		if (preDirectionIntersection == null) {
+			if (other.preDirectionIntersection != null)
+				return false;
+		} else if (!preDirectionIntersection.equals(other.preDirectionIntersection))
+			return false;
+		if (quadrant == null) {
+			if (other.quadrant != null)
+				return false;
+		} else if (!quadrant.equals(other.quadrant))
+			return false;
+		if (quarter == null) {
+			if (other.quarter != null)
+				return false;
+		} else if (!quarter.equals(other.quarter))
+			return false;
+		if (recipientName == null) {
+			if (other.recipientName != null)
+				return false;
+		} else if (!recipientName.equals(other.recipientName))
+			return false;
+		if (sector == null) {
+			if (other.sector != null)
+				return false;
+		} else if (!sector.equals(other.sector))
+			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
+		if (streetName == null) {
+			if (other.streetName != null)
+				return false;
+		} else if (!streetName.equals(other.streetName))
+			return false;
+		if (streetNameIntersection == null) {
+			if (other.streetNameIntersection != null)
+				return false;
+		} else if (!streetNameIntersection.equals(other.streetNameIntersection))
+			return false;
+		if (streetType == null) {
+			if (other.streetType != null)
+				return false;
+		} else if (!streetType.equals(other.streetType))
+			return false;
+		if (suiteNumber == null) {
+			if (other.suiteNumber != null)
+				return false;
+		} else if (!suiteNumber.equals(other.suiteNumber))
+			return false;
+		if (suiteType == null) {
+			if (other.suiteType != null)
+				return false;
+		} else if (!suiteType.equals(other.suiteType))
+			return false;
+		if (zipCode == null) {
+			if (other.zipCode != null)
+				return false;
+		} else if (!zipCode.equals(other.zipCode))
+			return false;
+		return true;
+	}
 
     @Override
-    public String toString() {
-	StringBuilder builder = new StringBuilder();
-	builder.append("Address [");
-	if (lng != null) {
-	    builder.append("lng=");
-	    builder.append(lng);
-	    builder.append(", ");
+	public String toString() {
+		return String
+				.format("Address [id=%s, lng=%s, lat=%s, geocodingLevel=%s, name=%s, recipientName=%s, houseNumber=%s, houseNumberInfo=%s, POBox=%s, POBoxInfo=%s, POBoxAgency=%s, civicNumberSuffix=%s, preDirection=%s, streetName=%s, streetType=%s, postDirection=%s, preDirectionIntersection=%s, streetNameIntersection=%s, StreetTypeIntersection=%s, postDirectionIntersection=%s, extraInfo=%s, suiteType=%s, suiteNumber=%s, floor=%s, quarter=%s, zipCode=%s, district=%s, dependentLocality=%s, city=%s, postTown=%s, state=%s, country=%s, countryCode=%s, sector=%s, quadrant=%s, block=%s, PostOfficeBox=%s]",
+						id, lng, lat, geocodingLevel, name, recipientName, houseNumber, houseNumberInfo, POBox, POBoxInfo, POBoxAgency, civicNumberSuffix, preDirection, streetName, streetType, postDirection, preDirectionIntersection, streetNameIntersection, StreetTypeIntersection, postDirectionIntersection, extraInfo, suiteType, suiteNumber, floor, quarter, zipCode, district,
+						dependentLocality, city, postTown, state, country, countryCode, sector, quadrant, block, PostOfficeBox);
 	}
-	if (lat != null) {
-	    builder.append("lat=");
-	    builder.append(lat);
-	    builder.append(", ");
-	}
-	if (geocodingLevel != null) {
-	    builder.append("geocodingLevel=");
-	    builder.append(getGeocodingLevel());//call getter 
-	    builder.append(", ");
-	}
-	if (recipientName != null) {
-	    builder.append("recipientName=");
-	    builder.append(recipientName);
-	    builder.append(", ");
-	}
-	if (houseNumber != null) {
-	    builder.append("houseNumber=");
-	    builder.append(houseNumber);
-	    builder.append(", ");
-	}
-	if (houseNumberInfo != null) {
-	    builder.append("houseNumberInfo=");
-	    builder.append(houseNumberInfo);
-	    builder.append(", ");
-	}
-	if (POBox != null) {
-	    builder.append("POBox=");
-	    builder.append(POBox);
-	    builder.append(", ");
-	}
-	if (POBoxInfo != null) {
-	    builder.append("POBoxInfo=");
-	    builder.append(POBoxInfo);
-	    builder.append(", ");
-	}
-	if (POBoxAgency != null) {
-	    builder.append("POBoxAgency=");
-	    builder.append(POBoxAgency);
-	    builder.append(", ");
-	}
-	if (civicNumberSuffix != null) {
-	    builder.append("civicNumberSuffix=");
-	    builder.append(civicNumberSuffix);
-	    builder.append(", ");
-	}
-	if (preDirection != null) {
-	    builder.append("preDirection=");
-	    builder.append(preDirection);
-	    builder.append(", ");
-	}
-	if (streetName != null) {
-	    builder.append("streetName=");
-	    builder.append(streetName);
-	    builder.append(", ");
-	}
-	if (streetType != null) {
-	    builder.append("streetType=");
-	    builder.append(streetType);
-	    builder.append(", ");
-	}
-	if (postDirection != null) {
-	    builder.append("postDirection=");
-	    builder.append(postDirection);
-	    builder.append(", ");
-	}
-	if (preDirectionIntersection != null) {
-	    builder.append("preDirectionIntersection=");
-	    builder.append(preDirectionIntersection);
-	    builder.append(", ");
-	}
-	if (streetNameIntersection != null) {
-	    builder.append("streetNameIntersection=");
-	    builder.append(streetNameIntersection);
-	    builder.append(", ");
-	}
-	if (StreetTypeIntersection != null) {
-	    builder.append("StreetTypeIntersection=");
-	    builder.append(StreetTypeIntersection);
-	    builder.append(", ");
-	}
-	if (postDirectionIntersection != null) {
-	    builder.append("postDirectionIntersection=");
-	    builder.append(postDirectionIntersection);
-	    builder.append(", ");
-	}
-	if (extraInfo != null) {
-	    builder.append("extraInfo=");
-	    builder.append(extraInfo);
-	    builder.append(", ");
-	}
-	if (floor != null) {
-	    builder.append("floor=");
-	    builder.append(floor);
-	    builder.append(", ");
-	}
-	if (quarter != null) {
-	    builder.append("quarter=");
-	    builder.append(quarter);
-	    builder.append(", ");
-	}
-	if (zipCode != null) {
-	    builder.append("zipCode=");
-	    builder.append(zipCode);
-	    builder.append(", ");
-	}
-	if (district != null) {
-	    builder.append("district=");
-	    builder.append(district);
-	    builder.append(", ");
-	}
-	if (dependentLocality != null) {
-	    builder.append("dependentLocality=");
-	    builder.append(dependentLocality);
-	    builder.append(", ");
-	}
-	if (city != null) {
-	    builder.append("city=");
-	    builder.append(city);
-	    builder.append(", ");
-	}
-	if (postTown != null) {
-	    builder.append("postTown=");
-	    builder.append(postTown);
-	    builder.append(", ");
-	}
-	if (state != null) {
-	    builder.append("state=");
-	    builder.append(state);
-	    builder.append(", ");
-	}
-	if (sector != null) {
-	    builder.append("sector=");
-	    builder.append(sector);
-	    builder.append(", ");
-	}
-	if (quadrant != null) {
-	    builder.append("quadrant=");
-	    builder.append(quadrant);
-	    builder.append(", ");
-	}
-	if (block != null) {
-	    builder.append("block=");
-	    builder.append(block);
-	    builder.append(", ");
-	}
-	if (PostOfficeBox != null) {
-	    builder.append("PostOfficeBox=");
-	    builder.append(PostOfficeBox);
-	}
-	builder.append("]");
-	return builder.toString();
-    }
 
 	public String getName() {
 		return name;
@@ -760,6 +662,22 @@ public class Address {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getSuiteType() {
+		return suiteType;
+	}
+
+	public void setSuiteType(String suiteType) {
+		this.suiteType = suiteType;
+	}
+
+	public String getSuiteNumber() {
+		return suiteNumber;
+	}
+
+	public void setSuiteNumber(String suiteNumber) {
+		this.suiteNumber = suiteNumber;
 	}
 
 }
