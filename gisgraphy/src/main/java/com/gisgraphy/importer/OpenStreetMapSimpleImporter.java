@@ -213,11 +213,21 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
    
     
     protected GisFeatureDistance getNearestCityName(Point location) {
-		GeolocQuery query = (GeolocQuery)new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class).withPagination(Pagination.ONE_RESULT);
+		GeolocQuery query = (GeolocQuery)new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class);
     	GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
-    	if (results.getNumFound()>=1){
+    	if (results.getNumFound()==1){
     		return results.getResult().get(0);
     	} else {
+    		for(GisFeatureDistance gisFeatureDistance:results.getResult()){
+    			//because some pplx are considered as city in geonames i have to do that : 
+    			if ("FR".equalsIgnoreCase(gisFeatureDistance.getCountryCode())){
+    				if (gisFeatureDistance.getPopulation()!=null && gisFeatureDistance.getPopulation()>=0){
+    					return gisFeatureDistance;
+    				} 
+    			} else {
+    				return gisFeatureDistance;
+    			}
+    		}
     		return null;
     	}
 	}
