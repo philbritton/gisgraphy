@@ -4,7 +4,7 @@ require 'CaptchasDotNet.php';
 
 
 $captchas = new CaptchasDotNet ('demo', 'secret',
-                                '/tmp/captchasnet-random-strings','3600',
+                                '/tmp/captchasnet-random-strings2','3600',
                                 'abcdefghkmnopqrstuvwxyz','6',
                                 '240','80');
 
@@ -38,14 +38,14 @@ $random_string = $_REQUEST['random'];
    $myFile = "tests.htm";
     $fh = fopen($myFile, 'a');
     $date=date("YmGi");
-    $testFeedback="@Test \r\npublic void testFeedback".$date."(){\r\n     Address address = parser.parse(\"".$_REQUEST["address"]."\",\"".$_REQUEST["countrycode"]."\");\r\n";
+    $testFeedback="/*".$_REQUEST["comment"]."*/\r\n@Test \r\npublic void testFeedback".$date."(){\r\n     Address address = parser.parse(\"".$_REQUEST["address"]."\",\"".$_REQUEST["countrycode"]."\");\r\n";
     foreach($_REQUEST as $vblname => $value){
-        if ($value != "" && $vblname != "address" && $vblname!="mail" && $vblname!= "password" && $vblname !="random" && $vblname != "countrycode"){
-             $testFeedback= $testFeedback."     assertEquals(\"".$value."\", address.get".$vblname."());\r\n";
-        }
+    	if ($value != "" && $vblname != "address" && $vblname!="mail" && $vblname!= "password" && $vblname !="random" && $vblname != "countrycode" && $vblname!="comment"){
+       	     $testFeedback= $testFeedback."     assertEquals(\"".$value."\", address.get".$vblname."());\r\n";
+    	}
     }
     $testFeedback= $testFeedback."}";
-    //echo $testFeedback;
+    //echo $testFeedback;   
    fwrite($fh,"<pre>".$testFeedback."</pre><hr/>");
    fclose($fh);
     echo 'THANKS! Your report has been sent. We will fix as soon as possible.';
@@ -53,4 +53,3 @@ $random_string = $_REQUEST['random'];
 ?>
 
 </html>
-  
