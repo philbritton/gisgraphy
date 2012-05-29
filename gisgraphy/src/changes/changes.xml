@@ -581,6 +581,10 @@
 				We link streets no nearest city that have no number in names (some city subdivision are consider as city but should not) 
 			</action>
 			
+			<action dev="David Masclet" type="fix">
+				http://code.google.com/p/gisgraphy/issues/detail?id=24 : OR and AND in upper case cause fulltext engine to crash. 
+			</action>
+			
 			
 			
 			
