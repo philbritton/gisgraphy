@@ -589,7 +589,9 @@
 				When we search for nearest city during osm import, we only consider french city with population >0
 			</action>
 			
-			
+			<action dev="David Masclet" type="update">
+				Add a new, more userfriendly UI to edit street/point
+			</action>
 			
 			
 			</release>
