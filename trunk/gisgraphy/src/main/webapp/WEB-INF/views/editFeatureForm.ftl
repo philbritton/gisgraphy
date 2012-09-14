@@ -11,6 +11,100 @@
 </title>
 </head>
 <body>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="/scripts/v3_epoly.js"></script>
+<script type="text/javascript">
+
+function gob(e){if(typeof(e)=='object')return(e);if(document.getElementById)return(document.getElementById(e));return(eval(e))}
+var map;
+var marker;
+//var tmpPolyLine;
+var toolID = 1;
+newplace=true;
+
+function initmap(){
+    var latlng = new google.maps.LatLng(59.913820, 10.738741);
+    var myOptions = {
+        zoom: 11,
+        center: latlng,
+        draggableCursor: 'default',
+        draggingCursor: 'pointer',
+        mapTypeControl: true,
+        mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        mapTypeId: google.maps.MapTypeId.HYBRID};
+    map = new google.maps.Map(gob('map_canvas'),myOptions);
+    mylistener = google.maps.event.addListener(map, 'click', setPointFromClick);
+    resetPoint();
+}
+
+
+function resetPoint(){
+	deletePoint();
+<#if gisfeature?? && gisfeature.location?? >
+	gob("latitude").value=${gisfeature.location.y?c};
+	gob("longitude").value=${gisfeature.location.x?c};
+	var latlng = new google.maps.LatLng(${gisfeature.location.y?c}, ${gisfeature.location.x?c});
+	newplace=false;
+<#else>
+	gob("latitude").value=44;
+	gob("longitude").value=12;
+	var latlng = new google.maps.LatLng(44, 12);
+	newplace=true;
+</#if>
+	marker = new google.maps.Marker({
+        position: latlng,
+        map: map});
+	map.setCenter(latlng);
+}
+
+function deletePoint(){
+	if(marker) marker.setMap(null);
+}
+
+function setPointFromClick(point){
+   deletePoint();
+   gob("latitude").value=point.latLng.lat().toFixed(9);
+   gob("longitude").value=point.latLng.lng().toFixed(9);
+   marker = new google.maps.Marker({
+        position: point.latLng,
+        map: map});
+   marker.setTitle("location");
+};
+
+function updatePointOnMap(){
+   deletePoint();
+   var lat = gob("latitude").value;
+   var lng =gob("longitude").value;
+   var latlng = new google.maps.LatLng(lng, lat);
+	marker = new google.maps.Marker({
+        position: latlng,
+        map: map});
+   map.setCenter(latlng);
+}
+
+
+//]]>
+</script>
+
+<style type="text/css">
+#map_canvas {
+    /*position: absolute;
+    top: 70px;
+    left: 0px;*/
+    width: 400px;
+    height: 400px;
+    background-color: #ffffff;
+}
+
+#presenter{
+	display:none;
+}
+.editShape {
+    width:500px;
+    float:left;
+}
+
+</style>
 <div class="clear"><br/></div>
 <h1>
 <#if !gisfeature?? > 
@@ -74,18 +168,21 @@
 			<span class="searchfieldlabel"><@s.text name="global.asciiName"/> : </span><@s.textfield name="gisfeature.asciiName" value="%{gisfeature.asciiName}" theme="simple" size="35"/>
 		</span>
 		<div class="clear"></div>
+<!-- ui editing-->
 
-  <span class="searchfield">
-			<span class="searchfieldlabel"><img src="/images/required_field.png"/ alt="" style="vertical-align:middle;"/><@s.text name="global.latitude"/> : </span>  <@s.textfield name="latitude" value="%{gisfeature.location.y}" theme="simple" size="35" required="true"/>
-  </span>
-  <div class="clear"></div>
+<div class="editShape">
+	<div id="map_canvas"></div>
+	   <input type="button" onclick="resetPoint();" value="Reset the initial shape"/>
+<div id="info"></div>
+</div>
 
-<span class="searchfield">
-			<span class="searchfieldlabel"><img src="/images/required_field.png"/ alt="" style="vertical-align:middle;"/><@s.text name="global.longitude"/> : </span><@s.textfield name="longitude" value="%{gisfeature.location.x}" theme="simple" size="35" required="true"/>
-		</span>
-		<div class="clear"></div>
+<div id="presenter">
+    lat : <input type="text" name="latitude" id="latitude" onchange="updatePointOnMap()" />; lng : <input type="text" id="longitude" name="longitude" onchange="updatePointOnMap()" /><br/>
+</div>
+<div class="clear"></div>
 
 
+<!-- end of editing-->
 		<span class="searchfield">
 			<span class="searchfieldlabel"><@s.text name="global.adm1Code"/> : </span><@s.textfield name="gisfeature.adm1Code" value="%{gisfeature.adm1Code}" theme="simple" size="35"/>
 		</span>
@@ -144,7 +241,7 @@
 		<div class="clear"></div>
 
 		<span class="searchfield">
-			<span class="searchfieldlabel"><@s.text name="global.FeatureClass"/> / <@s.text name="global.FeatureCode"/>: </span><@s.select listKey="name()" listValue="getObject().getClass().getSimpleName()+' ('+name()+')'" name="classcode" list="placetypes" headerValue="--I Don't know--" headerKey="" multiple="false"  theme="simple" value="gisfeature.getFeatureClass()+'_'+gisfeature.getFeatureCode()"/> <br/><img src="/images/help.png"/ alt="help" style="vertical-align:middle;padding-left:150px;padding-right:5px;"/><@s.text name="featureclasscode.explanation"/>. <@s.text name="featureclasscode.let.it.blank"/>
+			<span class="searchfieldlabel"><@s.text name="global.FeatureClass"/> / <@s.text name="global.FeatureCode"/>: </span><@s.select listKey="name()" listValue="getObject().getClass().getSimpleName()+' ('+name()+')'" name="classcode" list="placetypes" headerValue="--I Don't know--" headerKey="" multiple="false"  theme="simple" value="gisfeature.getFeatureClass()+'_'+gisfeature.getFeatureCode()"/> <br/> <div style="width:500px;"><img src="/images/help.png"/ alt="help" style="vertical-align:middle;padding-left:150px;padding-right:5px;"/><@s.text name="featureclasscode.explanation"/>.<@s.text name="featureclasscode.let.it.blank"/></div>
 		</span>
 		<div class="clear"></div>
 		<br/>
@@ -273,6 +370,14 @@ function AjaxAdd(form,elementId){
 	}
 	return false;
 }
+
+initmap();
+if(newplace){
+map.setZoom(1);
+} else {
+map.setZoom(12);
+}
+
 </script>
 <br/>
 </body>
