@@ -3,11 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>International Address Parser documentation</title>
  <style type="text/css" media="all">
-@import url("./css/maven-base.css");
-
-@import url("./css/maven-theme.css");
-
-@import url("./css/site.css");
+	@import url("./css/site.css");
 
 .rub{
 text-indent: 0px;
@@ -115,28 +111,33 @@ h4:before {
 }
 </style>
 </head>
-<body>
+<body style="background-color:#FFF;">
+<a name="top"></a>
 <h1>International Address Parser documentation</h1>
 <div class="indexlevel2"><a href="#description" />Description</a></div>
-<div class="indexlevel2"><a href="#access" />Free access</a></div>
-<div class="indexlevel2"><a href="#offlineaccess" />Offline access</a></div>
-<div class="indexlevel2"><a href="#webservice" />Webservice</a></div>
-<div class="indexlevel2"><a href="#javaapi" />Java API</a></div>
 <div class="indexlevel2"><a href="#howitworks" />How it works</a></div>
-<div class="indexlevel2"><a href="#batch" />batch processing</a></div>
+<div class="indexlevel2"><a href="#access" />Free access</a></div>
+<div class="indexlevel2"><a href="#packaging" />Availables packaging</a></div>
+<div class="indexlevel2"><a href="#buy" />How to buy</a></div>
+<div class="indexlevel2"><a href="#samplecode" />Sample code</a></div>
+<div class="indexlevel2"><a href="#performance" />Performance</a></div>
+<div class="indexlevel2"><a href="#bugreport" />Bug report</a></div>
+<div class="indexlevel2"><a href="#Output_fields" />Output fields</a></div>
+<div class="indexlevel2"><a href="#batch" />Batch processing</a></div>
 <div class="indexlevel2"><a href="#lang" />Spoken languages supported</a></div>
 <div class="indexlevel2"><a href="#implemetedcountries" />Implemented countries</a></div>
 <div class="indexlevel2"><a href="#uniplemetedcountries" />Countries not yet implemented</a></div>
+<div class="indexlevel2"><a href="#wontbeimplemented" />Countries won't be implemented</a></div>
 <div class="indexlevel2"><a href="#formatsbycountry" />Supported formats by country</a></div>
-<div class="indexlevel2"><a href="#output_fields" />Output fields</a></div>
-<div class="indexlevel2"><a href="#output_formats" />Output formats</a></div>
-<div class="indexlevel2"><a href="#bug" />Known issues</a></div>
+
+<div class="indexlevel2"><a href="#issues" />Known issues</a></div>
 <div class="indexlevel2"><a href="#links" />Links</a></div>
-<a name="top"></a>
+
 <a name="description"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2>Description</h2>
-The address parser and address standardizer, are part of the <a href="http://www.gisgraphy.com">gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
+<h3>Address Parser</h3>
+The address parser and address standardizer, are part of the <a href="http://www.gisgraphy.com">Gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
 <ul>
 <li>house number</li>
 <li>street type (bd, street, ..)</li>
@@ -154,14 +155,14 @@ Here is a non exhaustive list of functionalities :
 <li>Manage several spoken languages</li>
 <li>Handle several alphabets (not only ASCII characters are accepted)</li>
 <li>Accept address on single or multiples lines</li>
-<li>Manage abbreviations, synonyms. number can be as digit, letter, or Roman.</li>
+<li>Manage abbreviations, synonyms. Numbers can be as digit, letter, or Roman.</li>
 <li>Street intersections are also supported via '@' and '&' separator.</li>
 <li>...</li>
 </ul>
 <br/>
-It implements all the <a href="http://www.upu.int/" target="_blank">Universal Postal Union</a> Specifications and the common usage rules, PObox, frequently used in each country (street intersection, workarounds,...)
-it is based on semantic processing and dictionary.
+It implements all the <a href="http://www.upu.int/" target="_blank">Universal Postal Union</a> Specifications, PObox, common usages frequently used in each country (street intersection, workarounds,...).It is based on semantic processing and dictionary.
 <br/><br/>
+<h3>Address standardizer</h3>
 Address standardization is the process that takes an address and converts it to a standard format by correcting the address (if possible). The standardization is currently implemented for 3 countries, each country has its own certification :
 <ul>
 <li>USA : CASS (Coding Accuracy Support System), delivered by the USPS - Unites States Postal Service</li>
@@ -169,81 +170,82 @@ Address standardization is the process that takes an address and converts it to 
 <li>Australia : AMAS (Address Matching Approval System), delivered by Australia Post</li>
 </ul>
 
-Actually Gisgraphy is not certified because it does not yet implements Spelling Correction and completion. It currently normalize street number, unit, directions, ordinal number,...
-The next versions of the standardizer will probably implement the missing requirements but it actually allows to identify address and detect duplicates (useful for CRM, mailing,...) 
+It currently normalize street number, unit, pre and post directions, ordinal number, city aliasing, spelling Correction for streets names (US only in current version but can be done, on demand, for other countries if you need it).
+The standardizer provides an easy way to correct address and detect duplicates. this can be useful for CRM, mailing,... 
+
+<h3>Address formater</h3>
+While Address parsing is the process of dividing a single address string into its individual component parts, Formater do the oposite : It takes an address and format the address to be displayed as if it was writen on an enveloppe. It puts the components in the right way, according the Country specifications. 
+<br/>
+Several mode are available :
+<ul>
+<li>SINGLE_LINE : concatenate the individual components of the address on a single line</li>
+<li>HTML : Give an address that can be display in a web page (with HTML tag)</li>
+<li>ENVELOPPE : Produce an address with cariage Return (\r\n)</li>
+</ul> 
+
+in addition it can produce address writen from left to right or right to left, according the language (e.g : if writen in arabic, or in chinese, an address is not writen the same way as in roman)
+<a name="howitworks"/>
+<h2>How it works</h2>
+<div align="right"><a href="#top">[top]</a></div>
+The International address and standardizer are based on a modular engine, and use <a href="http://dsdl.org/">Document Schema Definition Languages</a> and <a href="http://en.wikipedia.org/wiki/Definite_clause_grammar">Definite clause grammar</a>. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable.  
+
 
 <a name="access"></a>
 <div align="right"><a href="#top">[top]</a></div>
-<h3>Free access</h3>
+<h2>Free access</h2>
 
-The address parser web service is available for free but with a number of request limitation, depending on the traffic :
+The address parser web service is available for free but with a limitation of the number of requests, depending on the server load :
 <ul>
 <li>On the Gisgraphy site <a href="" target="addressparser">http://address-parser.gisgraphy.com/addressparser</a>.</li>
-<li>with a cloud version on Google App Engine (Appspot) :  <a href="http://addressparser.appspot.com/" target="addressparser">http://addressparser.appspot.com/</a></li>
+<li>With a cloud version on Google App Engine (Appspot) :  <a href="http://addressparser.appspot.com/" target="addressparser">http://addressparser.appspot.com/</a></li>
 <li>A graphical user interface : <a href="http://services.gisgraphy.com/public/addressparser.html" target="addressparser">http://services.gisgraphy.com/public/addressparser.html</a></li>
 </ul>
-If you need dedicated access for address parser or standardizer , please <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a>
+If you need dedicated access for address parser or standardizer , consult the <a href="mailto:davidmasclet@gisgraphy.com">How to buy</a> section.
 <br/><br/>
-The address standardizer is not yet available online. please consult the <a href="#offlineaccess">offline section</>
+The address standardizer is not yet available online, only the parser is. It is plan to make the standardizer available in 2012. if you need to standardize address, consult the <a href="mailto:davidmasclet@gisgraphy.com">How to buy</a> section
 <br/>
 
+<a name="packaging"></a>
+<h2>Availables packaging</h2>
+The address parser and the address standardizer are available in 3 packaging :
+<ul>
+<li>A <a href="#java">Java jar</a> with no other dependencies.</li>
+<li>A <a href="#dotnet">.NET DLL</a></li>
+<li>A <a href="#webservice">webservice</a> with a lot of output availables (XML, JSON, PHP, Python, Ruby, YAML)</li>
+</ul>
+<br/>
+Java or .NET use exactly the same API and allow offline use with no limitation of number of requests. you can use the parser in any language that is supported by .NET : C#, C++, F#, VB (visual basic). The webservice allow you to always have the latest version, with the new countries added and bug corrections. There is no software installation needed.
 
-<a name="offlineaccess"></a>
+<a name="buy"></a>
 <div align="right"><a href="#top">[top]</a></div>
-<h3>Offline access</h3>
-The address parser and standardizer can be buy to do offline processing. it is available as a java JAR or a .net DLL. if you are interested, please <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a>.
-
-<a name="webservice"></a>
-<div align="right"><a href="#top">[top]</a></div>
-<h3>Webservice</h3>
-<div class="tip yellowtip">
- All the parameters should be encoded in <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a>.
-</div><br/>
-<span style="color:#FF0000">Don't put the adressee, it is not supported</span>
+<h2>How to buy</h2>
+If you are interested in address parsing and standardization (offline or online), you can aquire a license : <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a> to get further informations. 
 <br/><br/>
-Here is a summary of the Web parameters that address parser accepts : <br/>
-<table class="smallsizetable smartborder">
-<th>Parameter name</th><th>required</th><th>Default value</th><th>description</th>
-<tr><td>address</td><td>yes</td><td>none</td><td>The address to parse</td></tr>
-<tr><td>country</td><td>yes</td><td>none</td><td>The <a href="http://en.wikipedia.org/wiki/ISO_3166"> ISO 3166 </a> country code of the country of the address</td></tr>
-<tr><td>format</td><td>no</td><td>XML</td><td>Output format of the response : XML, JSON, PHP, PYTHON, RUBY, PHP</td></tr>
-<tr><td>callback</td><td>no</td><td>none</td><td>The callback method name, used to wrap the content into a method name, <b>must be alphanumeric</b> and operate only for script outputformat (json,php,ruby,python)</td></tr>
-<tr><td>indent</td><td>no</td><td>XML</td><td>Wether the feed should be indented, the value can be 'true','false', or 'on' (this is usefull if you use a checkbox in a form) </td></tr>
 
+The parser and standardizer are not open source, you buy a compiled versions that is royaltee free. you can test the relevance by using the online version. If you're satasified, we can go further, and we send you a pack with the jar <u>OR</u> the DLL, with some code samples. when you buy the offline version, you  can receive, for free, the bug fixed version within a period of 6 months.
 
-</table>
-<br/>
-<div class="code">
-Examples : <br/>
-http://services.gisgraphy.com/addressparser/?address=123 3/4 N name with space 1 number blvd south floor 2 Missouri CA 12345-4536&country=us&indent=true&format=json<br/><br/>
-</div>
-<br/>
-
-
-
-
-<a name="javaapi"></a>
+<a name="samplecode"></a>
 <div align="right"><a href="#top">[top]</a></div>
-<h3>Java API</h3>
+<h2>Sample code</h2>
+<span style="color:#FF0000">Don't put an address with an adressee, it is not supported</span>
+<a name="java"></a>
+<h3>In Java</h3>
+There is two ways to access the parser in Java : 
+<ul>
+<li>The offline way, when you have bought the Jar and you want to access the parser / standardizer directly. You need Java at least java 1.5, but get greater performance with 1.6 and above. We strongly recomand sun/oracle JRE (avoid openJdk,and so on). No external dependencies are needed.
 <pre>
-	AddressParserClient addressParser = new AddressParserClient();
+	//Instanciate parser and standardizer, only once
+	AddressParserClient addressParser = AddressParser.getInstance();
+	AddressStandardizer standardizer = new AddrressStandardizer();
+
 	String rawAddress = "101 Avenue des Champs-Elysées 75008 Paris";
-	AddressQuery query =new AddressQuery("101 Avenue des Champs-Elysées 75008 Paris", "FR");
-	AddressResultsDto results =addressParser.geocode(query);
-	/* or 
-	Address address=new Address();
-	address.setCity("Paris");
-	address.setZipCode("75008");
-	address.setHouseNumber("101");
-	address.setStreetType("Avenue")
-	address.setStreetName("des Champs-Elysées");
-	AddressResultsDto result = addressParser.execute(address,"FR");
 	
-	*/
-	System.out.println("Query tooks "+result.getQTime()+" ms and"+
-		" return "+result.getNumFound()+" result(s)");
+	Address address = addressParser.parse(rawAddress,"FR");
+	//note that the country code can be omited. This way, country will be autodetected.
+        //if country can not be detected, the parsing will fail.
+
+
 	for (Address address : results.getResult()){
-		address = standardizer.
 		System.out.println("housenumber : "+address.getHouseNumber());
 		System.out.println("streetType : "+address.getStreetType());
 		System.out.println("streetname : "+address.getStreetName());
@@ -252,10 +254,129 @@ http://services.gisgraphy.com/addressparser/?address=123 3/4 N name with space 1
 		System.out.println("district : "+address.getDistrict());
 		System.out.println("state : "+address.getState());
 		//see all fields description above...
-		
 	}
+	address = standardizer.standardize(address);
 
+	// do what ever you want with the result, (e.g : print the result on the console) 
+	System.out.println(address);
 </pre>
+<br/><br/>
+The java packaging can be run on every OS that support Java (mac windows linux). If an OS support Java and .NET (e.g : linux with <a href="http://monodevelop.com/">Mono develop</a>), The Java packaging should always be prefered to the .NET one.
+</li>
+<li>The onLine way, when you want to use the webservice. In this case, you use the addressparser client library (provided when you have subscribed to the webservice, or use the free access), you can also use a code of your own.
+<pre>
+	
+	//Instanciate client, only once
+	String URL = "http://The.URL.given.when.I.have.subscribe/";
+	AddressParserClient addressParser = new AddressParserClient(URL);
+	String rawAddress = "101 Avenue des Champs-Elysées 75008 Paris";
+	AddressQuery query =new AddressQuery(rawAddress, "FR");
+	
+        //When using the Premium access,you need to sepcify an apiKey (not required when using the free access).
+	query.setApikey("KEY_PROVIDED_WHEN_I_HAVE_SUBSCRIBED_TO_PREMIUM");
+	
+	
+	AddressResultsDto result = addressParser.execute(query);
+	System.out.println("Query tooks "+result.getQTime()+" ms and"+
+		" return "+result.getNumFound()+" result(s)");
+	for (Address address : results.getResult()){
+		System.out.println("housenumber : "+address.getHouseNumber());
+		System.out.println("streetType : "+address.getStreetType());
+		System.out.println("streetname : "+address.getStreetName());
+		System.out.println("PObox : "+address.getPOBox());
+		System.out.println("city : "+address.getCity());
+		System.out.println("district : "+address.getDistrict());
+		System.out.println("state : "+address.getState());
+		//see all fields description above...
+	}
+</pre>
+</li>
+</ul>
+<div class="tip greentip">
+ All the parameters should be encoded in <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a>.
+</div><br/>
+Note that the standardizer is not yet available by webService, premium or free. It is for the moment, only available in offline mode with the JAR or DLL. that will be implemented in 2012
+</div>
+
+
+<a name="dotnet"></a>
+<h3>In C# .NET API</h3>
+Here is a sample code in C#, that show how to use the parser/standardizer. An external library is required and provided in the packaging.
+The .NET packaging is supported by Windows (of course) and Linux with <a href="http://monodevelop.com/">Mono develop</a>. If you plan to use address parser/standardizer on Linux/Unix, it is strongly recomanded to use the java packaging.
+If you interested in .NET packaging, you should tell us what is the the .NET framework you will use. we will give you an optimized version.
+<pre>
+	    //instanciate parser and standardizer, only once
+            AddressParser ap = new AddressParser();
+            AddressStandardizer standardizer = new AddressStandardizer();
+
+               
+            Address address= ap.parse("123 main street northwest,apartment 22", "US");
+            Console.WriteLine("parsed address : " +address);
+            Console.WriteLine("standardized address : "+standardizer.standardize(ad));
+
+	    //other example but without countrycode provided. This way, country will be autodetected.
+            //if country can not be detected, the parsing will fail
+            address = ap.parse("265 Boulevard Hymus #1900", null);
+            Console.WriteLine("parsed address : " +address);
+            Console.WriteLine("standardized address : " + standardizer.standardize(ad));
+</pre>
+
+There is no client library in C# to access the webservice. It will be probably available in 2012
+
+<a name="webservice"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Webservice</h3>
+Webservice is, for people that always want the latest version, or want to use the parser or the standardizer in other languages than java or dotnet. the webservice is load balanced and can accept as many request as needed.
+<div class="tip yellowtip">
+ All the parameters should be <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> Encoded and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a> too.
+</div>
+<br/>
+Here is a summary of the Web parameters that address parser accepts : <br/>
+<table class="smallsizetable smartborder">
+<th>Parameter name</th><th>required</th><th>Default value</th><th>description</th>
+<tr><td>address</td><td>yes</td><td>none</td><td>The address to parse</td></tr>
+<tr><td>country</td><td>yes</td><td>none</td><td>The <a href="http://en.wikipedia.org/wiki/ISO_3166"> ISO 3166 </a> country code of the country of the address</td></tr>
+<tr><td>format</td><td>no</td><td>XML</td><td>Output format of the response : XML, JSON, PHP, PYTHON, RUBY, PHP</td></tr>
+<tr><td>callback</td><td>no</td><td>none</td><td>The callback method name, used to wrap the content into a method name, <b>must be alphanumeric</b> and operate only for script outputformat (json,php,ruby,python)</td></tr>
+<tr><td>indent</td><td>no</td><td>true</td><td>Wether the feed should be indented, the value can be 'true','false', or 'on' (this is usefull if you use a checkbox in a form) </td></tr>
+</table>
+<br/>
+
+<a name="output_formats"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h4>Webservice output Formats</h4>
+The following languages can be outputed by the webservices :
+<ul>
+<li>XML</li>
+<li>Json</li>
+<li>Php</li>
+<li>Ruby</li>
+<li>Python</li>
+<li>YAML</li>
+</ul>
+<br/><br/>
+
+<div class="code">
+Examples : <br/>
+http://services.gisgraphy.com/addressparser/?address=123 3/4 N name with space 1 number blvd south floor 2 Missouri CA 12345-4536&country=us&indent=true&format=json<br/><br/>
+</div>
+<br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<a name="performance"></a>
+<h2>Performance</h2>
+The parser and standardizer are not a compromise between relevance and performance. A minimum of memory is needed to handle the knowledge database, but the performance depends on the CPU. A recent personal computer can parse between 100 and 130 addresses/seconds/thread. on a good core i7 you can parse nearly 1000 adresses/seconds.
+<br/> <br/>
+
+
+<div align="right"><a href="#top">[top]</a></div>
+<a name="bugreport"></a>
+<h2>Bug report</h2>
+Relevance and performance are very important for us. We have a lot of unit and integration tests to assure a good quality to the final users.
+<br/> <br/>
+
+There is a dedicated page that allows anyone to do bug reporting. Simply fill the web form and it automatically create a unit test that will be added, after verification, to the test suite.
+This way, the test suite (more than 1200 tests, when this documentation was writen) grows with feedbacks, and avoid regressions when modifications are made.
 
 <div align="right"><a href="#top">[top]</a></div>
 <a name="output_fields"></a>
@@ -264,10 +385,9 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 <table class="mediumsizetable smartborder">
 <th>field</th><th>description</th><th>Examples of value</th><th>Examples in address</th>
 <tr><td>id</td><td>id that identify a feature</td><td>123456</td><td>N/A</td></tr>
+<tr><td>confidence</td><td>An indicator that mesure how the parser is confident for the result</td><td>MAX,MEDIUM,MIN</td><td><a href="confidence">Learn More about confidence</a></td></tr>
 <tr><td>name</td><td>Name of the place, it is null in case of address but filled if common place. Name is different than recipient name.</td><td>Tour eiffel</td><td><span class="redtext">Tour eiffel</span> Paris</td></tr>
 <tr><td>recipientName</td><td>Name of the organisation or person at the given address</td><td>Jack bauer</td><td><span class="redtext">Jack Bauer</span> street of philadelphia city, apt 5A, Washington</td></tr>
-
-
 <tr><td>houseNumber</td><td>Official number assigned to an address by the municipality, several languages supported</td><td>3;151-125;eight</td><td><span class="redtext">123</span> street of philadelphia city, apt 5A, Washington</td></tr>
 <tr><td>houseNumberInfo</td><td>All informations that give extra informations on the house number</td><td>bis, ter, quater,</td><td>125 <span class="redtext">bis</span> rue de la france 75000 Paris</td></tr>
 <tr><td>streetName</td><td>The official name of the street or the ordinal number</td><td>Main, 8TH</td><td>100 <span class="redtext">MAIN</span> ST POB 1022 SEATTLE WA 98104</td></tr>
@@ -293,7 +413,6 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 <tr><td>preDirectionIntersection</td><td>The cardinal direction before the name of the intersection street</td><td>N,NE;North</td><td>N street of philadelhia & <span class="redtext">W</span> boulevard of liberty Washington</td></tr>
 <tr><td>postDirectionIntersection</td><td>The cardinal direction after the name of the intersection street </td><td>N,NE;North</td><td>N street of philadelhia & boulevard of liberty <span class="redtext">SOUTH</span> Washington</td></tr>
 <tr><td>civicNumberSuffix</td><td>The number that follow the house number (Canada only)</td><td>1/2</td><td>10-123 <span class="redtext">1/2</span> main street NW MONTREAL QC H3Z 2Y7</td></tr>
-<!-- <tr><td>unitNumber</td><td>The number of the unit when without unit member (e.g :apt),(frequently used in Canada), see unit above</td><td>5</td><td><span class="redtext">10</span>-123 1/2 main street NW MONTREAL QC H3Z 2Y7</td></tr>-->
  <tr><td>floor</td><td>The floor in an address, not a floor number in a unit (Brasilia only)</td><td>8o andar</td><td>SBN - Quadra 13 - Bloca B - <span class="redtext">8o andar</span> BRASILIA-DF 70002-900</td></tr>
  <tr><td>sector</td><td>The sector in an address (Brasilia only)</td><td>SBN</td><td><span class="redtext">SBN</span> - Quadra 13 - Bloca B - 8o andar BRASILIA-DF 70002-900</td></tr>
  <tr><td>quadrant</td><td>The quadrant in an address (Brasilia only)</td><td>Quadra 13</td><td>SBN - <span class="redtext">Quadra 13</span> - Bloca B - 8o andar BRASILIA-DF 70002-900</td></tr>
@@ -311,22 +430,39 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 
 </table>
 
+<div align="right"><a href="#top">[top]</a></div>
+<a name="confidence"></a>
+<h3>Confidence</h3>
+Parsing is a complex process. an address can be sometimes be intrepreted in many ways and it is the parser job to find the best one.
+e.g : 'street of foo bar'=> we can not guess if foo bar is a city, or foo is a streetname and bar is a city<br/>
+e.g : 'california st john'=> it can be california street at john city, or saint john in california.<br/>
+e.g : 'rue de la gare de paris'=> it can be rue de la gare at paris, or rue 'de la gare de paris'<br><br/>
+
+The parser is designed to disambiguate address. The confidence just give an indicator on how the parser has got difficulties to parse the address.The confidence can take several values :
+<ul>
+<li>MAX : the address has been parse without difficulties</li>
+<li>MEDIUM : some difficulties has been found but the parser found how to disambiguate </li>
+<li>MIN : some difficulties has been found and the parser failed to disambiguate </li>
+</ul>
+
 <br/>
 Note that only unit is supported, not company, gender, firstname, lastname.
 <span class="address">Mozilla Corporation, 1981 second street building K Mountain View CA 94043-0801</span> is not a parsable address, but <span class="address">1981 second street building K Mountain View CA 94043-0801</span>. A support is planed to split the first part of the address (to the first comma)
 
 
-<a name="howitworks"/>
-<h2>How it works</h2>
-<div align="right"><a href="#top">[top]</a></div>
-The International address and standardizer are based on a modular engine, where each country has a list of syntax. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable and give the ability to developp quickly.  
-
 
 <a name="batch"/>
 <h2>Batch processing</h2>
 <div align="right"><a href="#top">[top]</a></div>
-If you need to batch process a lot of data and don't want to buy the parser, we can batch process your address. the price depends of the ammount of data.  
+If you need to batch process a lot of data and don't want to buy the parser, we can batch process your address. The price depends of the ammount of data.
+<br><br/>
+Some facilities are offer in the jar or the DLL. you can specify an AddressInput (file, memory, console,database,...) and an AddressOutput (file, memory, console,database,...). it allows to read address from many sources and write them to other sources. 
+<br/>
+Examples : read addresses from a csv file, and add a column to the same (or different) file with the parsed address;Read addresses from a database and put in the paresed addresses in memory (Map, List, whatever). 
 
+<div class="tip greentip">
+you can run several batch at once because AddressProcessor batch is multithreaded
+</div>
 
 
 <a name="lang"></a>
@@ -350,6 +486,7 @@ here is a list of already languages:
 <li>Turk</li>
 <li>Finnish</li>
 <li>Chinese</li>
+<li>Hungarian</li>
 </ul>
 <br/>
 
@@ -387,6 +524,7 @@ If the dictionnary is not pertinent, the parser will fail for some parsing. if y
 <a href="#gi">Gibraltar</a>,&nbsp;
 <a href="#gl">Greenland</a>,&nbsp;
 <a href="#hk">Hong Kong</a>,&nbsp;
+<a href="#hu">Hungary</a>,&nbsp;
 <a href="#in">India</a>,&nbsp;
 <a href="#id">Indonesia</a>,&nbsp;
 <a href="#ir">Iran</a>,&nbsp;
@@ -424,7 +562,7 @@ If the dictionnary is not pertinent, the parser will fail for some parsing. if y
 <a href="#ua">Ukraine</a>,&nbsp;
 <a href="#um">United States Minor Outlying Islands</a>,&nbsp;
 <a href="#gb">United Kingdom</a>,&nbsp;
-<a href="#us">United States</a>
+<a href="#us">United States</a>,&nbsp;
 <a href="#vi">U.S. Virgin Islands</a>,&nbsp;
 <a href="#va">Vatican</a>,&nbsp;
 <br/><br/>
@@ -434,7 +572,7 @@ If the dictionnary is not pertinent, the parser will fail for some parsing. if y
 <br/>By continent :&nbsp;<a href="javascript:displayMap('world')">world</a>&nbsp;|&nbsp;<a href="javascript:displayMap('africa')">Africa</a>&nbsp;|&nbsp;<a href="javascript:displayMap('asia')">Asia</a>&nbsp;|&nbsp;<a href="javascript:displayMap('europe')">europe</a>&nbsp;|&nbsp;<a href="javascript:displayMap('middle_east')">middle east</a>&nbsp;|&nbsp;<a href="javascript:displayMap('south_america')">south america</a>
 </center>
 <script type="text/javascript">
-var implementedCountriesList= "AO|CM|CD|HK|SD|ID|IR|SA|TR|SX|BQ|CW|NL|AN|AR|AU|AT|BE|BR|CA|CN|FR|GF|DE|IN|IM|JE|RU|ES|GB|US|SN|AS|KZ|GG|SH|PR|RE|MF|PM|GS|TC|UM|VI|GI|MQ|MP|DK|GL|FO|IT|SM|VA|DZ|MA|CH|TN|PL|SE|NO|UA|FI|SG|PT";
+var implementedCountriesList= "AO|CM|CD|HK|SD|ID|IR|SA|TR|SX|BQ|CW|NL|AN|AR|AU|AT|BE|BR|CA|CN|FR|GF|DE|IN|IM|JE|RU|ES|GB|US|SN|AS|KZ|GG|SH|PR|RE|MF|PM|GS|TC|UM|VI|GI|MQ|MP|DK|GL|FO|IT|SM|VA|DZ|MA|CH|TN|PL|SE|NO|UA|FI|SG|PT|HU";
 function displayMap(subset){
 	element = document.getElementById("implementedCountries");
 	element["src"]="http://chart.apis.google.com/chart?&cht=t&chf=bg,s,EAF7FE&chdl=Implemented%20countries&chs=440x220&chco=B3BCC0|006400&chld=SG&chd=s:B&chtm="+subset+"&chld="+implementedCountriesList;
@@ -521,7 +659,6 @@ it can be implmented very quickly but it depends on the address complexity.<br/>
 <a href="#ht">Haiti</a>,&nbsp;
 <a href="#hm">Heard Island and McDonald Islands</a>,&nbsp;
 <a href="#hn">Honduras</a>,&nbsp;
-<a href="#hu">Hungary</a>,&nbsp;
 <a href="#is">Iceland</a>,&nbsp;
 <a href="#iq">Iraq</a>,&nbsp;
 <a href="#ie">Ireland</a>,&nbsp;
@@ -634,6 +771,7 @@ it can be implmented very quickly but it depends on the address complexity.<br/>
 <a href="#zw">Zimbabwe</a>,&nbsp;
 <br/><br/>
 
+<a name="wontbeimplemented">
 <h2>Countries won't be implemented</h2>
 Due to lack of informations, the following countries won't be implemented. it can be done with help of people living in this country : <br/>
 
@@ -684,8 +822,9 @@ words beetween comma are necessary : e.g :
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : boite postale / PO Box
+			<li>Type : boite postale (POBOX)
 				<ul>
+					<li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city [CEDEX [(number)]]</span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 95190 Alger</span></li>
 					</ul>
@@ -697,6 +836,8 @@ words beetween comma are necessary : e.g :
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+					<li>
+					<li>Synonyms of boite postale are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -748,6 +889,7 @@ See <a href="#us">United States</a>
 				<ul>
 					<li>pattern : <span class="pattern">Apartado (number) city</span></li>
 					<li>Example : <span class="address">Apartado 42024 LUANDA</span></li>
+					<li>Synonyms of APARTADO are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -788,6 +930,7 @@ See <a href="#us">United States</a>
 			<li>Type : Casilla de Correo (POBOX)
 				<ul>
 					<li>Example : <span class="address">Casilla de Correo 432 Correo Central C1000WAM Capital Federal</span></li>
+					<li>Synonyms of Casilla de Correo are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -846,11 +989,7 @@ See <a href="#nl">Netherlands</a>
 					<li>Example : <span class="address">PO BOX 37, SPRINGVALE VIC 3171</span></li>
 			    </ul>
 	   		</li>
-	   		<li>Synonyms for PO BOX are supported
-				<ul>
-					<li>CMB(Community mail bag),GPO BOX (General Post Box),MS (Mail service),RSD (Roadside delivery),RMS (Roadside mail service), and  more</li>
-			    </ul>
-	   		</li>
+	   		<li>Synonyms for PO BOX are supported</li>
 	   	</ul>
 	</li>
 </ul>
@@ -894,16 +1033,13 @@ See <a href="#nl">Netherlands</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : Postfach (PO BOX)
+			<li>Type : Postfach (POBOX)
 				<ul>
 					<li>Example : <span class="address">Postfach 100 1011 WIEN</span></li>
-			    </ul>
-	   		</li>
-	   		<li>type : Postlagernd
-				<ul>
 					<li>Example : <span class="address">Postlagernd	53131 Bonn</span></li>
 			    </ul>
 	   		</li>
+	   		<li>Synonyms for Postfach are supported</li>
 	   	</ul>
 	</li>
 	
@@ -993,9 +1129,10 @@ See <a href="#nl">Netherlands</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : APARTADO (POBOX)
+			<li>Type : Caixa Postal (POBOX)
 				<ul>
 					<li>Example : <span class="address">APARTADO 1238 São Paulo - SP 04642-000</span></li>
+					<li>Synonyms of Caixa Postal are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1044,8 +1181,9 @@ See <a href="#nl">Netherlands</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>type : boite postale
+			<li>type : boite postale (POBOX)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName pobox [unit]  city </span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 YAOUNDE</span></li>
 					</ul>
@@ -1057,6 +1195,7 @@ See <a href="#nl">Netherlands</a>
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+					</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1127,7 +1266,7 @@ See <a href="#nl">Netherlands</a>
 			<li>Street type before name : <span class="pattern">[houseNumber] [fraction] [predirection] streetType streetName  [postdirection] [unit] city [state] [zip]</span>
 				<ul>
 					<li>Example : <span class="address">500 E street of america SUITE 5A TUCSON AZ 85705</span></li>
-					<li>tips : it will help the parser to have a comma before city,because we can not spearate streetname and city acuratly</li>
+					<li>Tips : it will help the parser to have a comma before city,because we can not spearate streetname and city acuratly</li>
 				</ul>
 			</li>
 		</ul>
@@ -1175,6 +1314,7 @@ See <a href="#nl">Netherlands</a>
 			    </ul>
 	   		</li>
 	   		<li>Rural route and General delivery (poste restante) are not supported</li>
+			<li>We can not list all the possible patterns, but many others are supported</li>
 	   	</ul>
 	</li>
 </ul>
@@ -1187,7 +1327,7 @@ See <a href="#nl">Netherlands</a>
 <ul>
 	<li class="rub">Typical address :
 		<ul>
-			<li>Pattern : <span class="pattern">[unit]  [houseNumber] streetName (,) city [zip] [province] </span>
+			<li>Pattern : <span class="pattern">[unit]  [houseNumber] streetName [streetType] city [zip] [province] </span>
 				<ul>
 					<li>Example : <span class="address">ROOM 305 63 RENMIN LU, QINGDAO SHI 266033 SHANDONG </span></li>
 					<li>Example : <span class="address">87/F Jiu Shi Fu Xin Mansion 36 BAOSHAN JIUCUN, BAOSHAN DISTRICT 201900 SHANGHAI</span></li>
@@ -1201,23 +1341,32 @@ See <a href="#nl">Netherlands</a>
 			<ul>
 			<li><a href="http://en.wikipedia.org/wiki/Direct-controlled_municipality" target="_blank">Direct controlled municipality</a>
 				<ul>
-						<li>Pattern : <span class="pattern">[unit]  [houseNumber] streetName (,) District|County [zip] [Direct controlled municipality] </span>
+				
+						<li>Pattern : <span class="pattern">[unit]  [houseNumber] streetName [streetType] District|County [zip] [Direct controlled municipality] </span>
 						<li>Example : <span class="address">36 BAOSHAN JIUCUN, BAOSHAN DISTRICT 201900 SHANGHAI</span></li>
-						<li>Note : a comma is necessary to separate streetname and district, if not we can not separate the district of the street name</li>
+						
 						<li>Note : The Direct controlled municipality will be fill in the <a href="#output_fields">state and city field</a></li>
 						<li>Note: defunct municipalities are managed as state</li>
-					</li>
 				</ul>
+	   		</li>
+	   		<li>Other patterns
+	   			<ul>
+	   					<li>Pattern : <span class="pattern">  [houseNumber] [unit] streetName [streetType] District|County [city] [zip]  </span>
+						<li>Example : <span class="address">1 BUILDING TIME MALL YIHUA ROAD  MEIZHOU  514021</span></li>
+						<li>Pattern : <span class="pattern">  [unit] [houseNumber] streetName [streetType] District|County [city] [zip]  </span>
+						<li>Example : <span class="address">BUILDING 15 5 RENMIN W RD FUXING DISTRICT HANDAN 056003</span></li>
+	   			</ul>
 	   		</li>
 	   	</ul>
 
 	</li>
 	<li class="rub">Special notes : 
 	<ul>
-			<li>Chinese symbols are not supported. even if it is supprted, the address are very different :
+			<li>Chinese symbols can be supported (on demand, at compilation time) for district and county, and Direct controlled municipality. Even if it is supprted, the address are very different :
 				<ul>
-					 <li>An address written in Chinese will start with the biggest geographical component (the province) and end with the smallest one (the addressee)</li>
-						<li> The same Chinese address written in the Roman (Latin) alphabet, the format will be used from the smallest geographical component at the top to the biggest at the bottom.</li>
+					<li> An address written in Chinese will start with the biggest geographical component (the province) and end with the smallest one (the addressee)</li>
+					<li> The same Chinese address written in the Roman (Latin) alphabet, the format will be used from the smallest geographical component at the top to the biggest at the bottom.</li>
+					<li> Even if the postal system is based on <a href="http://en.wikipedia.org/wiki/Wade%E2%80%93Giles">Wade–Giles romanization</a>, Complete diacritic, accent marks and special characters are supported : Yáohǎi or Yaohai will both be detected. Learn more on <a href="http://en.wikipedia.org/wiki/Chinese_Postal_Map_Romanization">Chinese Postal Map Romanization</a></li>
 				</ul>
 			</li>
 	   		<li>Rural route and General delivery (poste restante) are not supported</li>
@@ -1265,8 +1414,9 @@ See <a href="#nl">Netherlands</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>type : boite postale
+			<li>type : boite postale (POBOX)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName pobox [unit]  city </span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 BRAZZAVILLE</span></li>
 					</ul>
@@ -1278,6 +1428,8 @@ See <a href="#nl">Netherlands</a>
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+				</li>
+				<li>Synonyms of POBOX are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1322,11 +1474,12 @@ See <a href="#nl">Netherlands</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : PO BOX (Postboks)
+			<li>Type : Postboks (POBOX)
 				<ul>
 					<li>Pattern : <span class="pattern">Postboks (digit) zip [city]</span></li>
 					<li>Example : <span class="address">Postboks 321 8660 SKANDERBORG</span></li>
 					<li>Note : It is a basic pattern that can be improved, but due to lack of informations,for now, only the pattern above is implemented</li>
+					<li>Synonyms of Postboks are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1379,11 +1532,13 @@ See <a href="#dk">Denmark</a>
 		<ul>
 			<li>Type : PL (Pobox)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">POBOX [POBOX AGENCY] zip city </span></li>
 					<li>Example :<span class="address">PL 447 Sentrum FI-00550 HELSINKI</span></li>
 					<li>Example :<span class="address">PL 447 FI-00550 HELSINKI</span></li>
-					<li>Synonyms of POBOX are supported</li>
 					</ul>
+				</li>
+				<li>Synonyms of POBOX are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1428,8 +1583,8 @@ See <a href="#dk">Denmark</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>type : boite postale
-				<ul>
+			<li>type : boite postale (POBOX)
+				<ul><li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city [CEDEX [(number)]]</span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 95190 saint jean de luz cedex</span></li>
 					</ul>
@@ -1441,6 +1596,8 @@ See <a href="#dk">Denmark</a>
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+					</li>
+					<li>Synonyms of boite postale are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1499,9 +1656,10 @@ See <a href="#fr">France</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : Postfach (PO BOX)
+			<li>Type : Postfach (POBOX)
 				<ul>
 					<li>Example : <span class="address">Postfach 3 41 41 10724 Berlin</span></li>
+					<li>Synonyms of Postfach are supported</li>
 			    </ul>
 	   		</li>
 	   		<li>number/block/flat
@@ -1535,7 +1693,7 @@ See <a href="#gb">United Kingdom</a>
 <a name="in"></a>
 <h3>India</h3>
 <div class="importantinfo">As the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IND.pdf" target="_blank">Universal postal union</a> says : "There is no clear advice on how to format an address correctly
-". So a specific implementation has been made for india</div>
+". So a specific implementation has been made for india. The confidence is always 'MIN' for india</div>
 <ul>
 <li class="rub">Special notes : 
 		<ul>
@@ -1571,7 +1729,7 @@ See <a href="#gb">United Kingdom</a>
 <ul>
 	<li class="rub">Typical address :
 		<ul>
-			<li>Pattern : <span class="pattern">[HouseNumber] streetName streetType [houseNumber|(,)] city|regencies [zip] province/state</span>
+			<li>Pattern : <span class="pattern">[HouseNumber] streetName streetType [houseNumber] city|regencies [zip] province/state</span>
 				<ul>
 					<li>Example : <span class="address">73 Jalan Cilaki, BANDUNG 40115 Sulbar</span></li>
 					<li>Example : <span class="address">Jalan Cilaki 73 BANDUNG 40115 Sulbar</span></li>
@@ -1583,7 +1741,7 @@ See <a href="#gb">United Kingdom</a>
 		<ul>
 		<li>Indonesian provinces is a defined list (in indonesian,sundanese, english, abbreviation,...) the parsing can fail if a state is not present in this list. <a href="mailto:davidmasclet@gisgraphy.com">Contact me</a> if you think a province is missing</li>
 		<li>HouseNumber can be before (as <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IDN.pdf" target="_blank">Universal postal union</a>  says) or after street name (as <a href="http://en.wikipedia.org/wiki/Address_%28geography%29#Indonesia" target="_blank">Wikipedia</a> and a lot of site says)</li>
-			<li>if house number is before streettype, a comma is necessary to distinguish streetname from cities</span>
+			<li>if house number is before streettype, a comma can help to distinguish streetname from cities, but is not required</span>
 				<ul>
 					<li>Example : <span class="address">73 Jalan Cilaki<b>,</b> BANDUNG 40115 Sulbar</span></li>
 			    </ul>
@@ -1667,7 +1825,7 @@ See <a href="#gb">United Kingdom</a>
 			</li>
 		</ul>
 	</li>
-	<li class="rub">Special notes : 
+	<li class="rub">Special notes : for All patterns, zip can be before or after city, state is optional. 
 			<li>HouseNumber can be a range or slashed or numbers+letter
 				<ul>
 					<li>Example :<span class="address">125-132, 125/3</span></li>
@@ -1692,6 +1850,15 @@ See <a href="#gb">United Kingdom</a>
 				<ul>
 					<li>Pattern :<span class="pattern">[unit] POBOX [zip] city [state]</span></li>
 					<li>Example :<span class="address">UFFICIO ROMA TRULLO CASELLA POSTALE 1234 00149 ROMA RM</span></li>
+			    </ul>
+	   		</li>
+	   		<li>Synonyms of CASELLA POSTALE are supported</li>
+	   		<li>type : CASELLA POSTALE (POBOX)
+				<ul>
+					<li>Pattern :<span class="pattern">[unit] [streetType] streetName [houseNumber] [zip] city [state]</span></li>
+					<li>Example :<span class="address">appartamento 2 CORSO SEMPIONE 94 MILANO 20154</span></li>
+					<li>Pattern :<span class="pattern">[unit] [houseNumber] [streetType] streetName  [zip] city [state]</span></li>
+					<li>Example :<span class="address">appartamento 2 94 CORSO SEMPIONE  MILANO  20154</span></li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1775,6 +1942,51 @@ See <a href="#fr">France</a>
 </ul>
 
 
+<div align="right"><a href="#top">[top]</a></div>
+<a name="tc"></a>
+<h3>Turks and Caicos Islands</h3>
+See <a href="#gb">United Kingdom</a>
+<br/><br/>
+
+
+<div align="right"><a href="#top">[top]</a></div>
+<a name="hu"></a>
+<h3>Hungary</h3>
+<ul>
+	<li class="rub">Typical address :
+		<ul>
+			<li>Pattern : <span class="pattern">city streetName [streettype] [houseNumber] [unit] [zip] </span>
+				<ul>
+					<li>Example : <span class="address">BUDAPEST VIRÁG TÉR 3. IV. 61 1037</span></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="rub">Special notes : 
+		<ul>
+		<li>Special characters are supported</li>
+	   		<li>HouseNumber can be a range or a number with a letter or slashed
+				<ul>
+					<li>Example :<span class="address">125-126</span></li>
+					<li>Example :<span class="address">125/126</span></li>
+					<li>Example :<span class="address">125c</span></li>
+			    </ul>
+	   		</li>
+	   	</ul>
+	</li>
+	<li class="rub">Variant : 
+		<ul>
+			<li>Type : postafiók (PO BOX)
+				<ul>
+					<li>Pattern : <span class="pattern">[city] postafiók [zip]</span></li>
+					<li>Example : <span class="address">Budapest Pf. 184 2806</span></li>
+					<li>Synonyms of postafiók are supported</li>
+			    </ul>
+	   		</li>
+	   	</ul>
+	</li>
+</ul>
+
 
 <div align="right"><a href="#top">[top]</a></div>
 <a name="Je"></a>
@@ -1835,8 +2047,9 @@ See <a href="#fr">France</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : boite postale / PoBox
+			<li>Type : boite postale (PoBox)
 				<ul>
+					<li>
 					<ul><li>Pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city [CEDEX [(number)]]</span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 52000 ERRACHIDIA cedex</span></li>
 					</ul>
@@ -1848,6 +2061,8 @@ See <a href="#fr">France</a>
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+					</li>
+					<li>Synonyms of boite postale are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1900,6 +2115,7 @@ See <a href="#gb">United Kingdom</a>
 				<ul>
 					<li>Example : <span class="address">P.O. Box 24024 2490 AA THE HAGUE</span></li>
 					<li>Example : <span class="address">postbus 24024 2554 FG  's-GRAVENHAAG</span></li>
+					<li>Synonyms of Postbus are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -1954,11 +2170,13 @@ See <a href="#us">United States</a>
 		<ul>
 			<li>Type : Postboks (Pobox)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">POBOX [POBOX AGENCY] zip city </span></li>
 					<li>Example :<span class="address">Postboks 447 Sentrum 0104 OSLO</span></li>
 					<li>Example :<span class="address">Postboks 447 0104 OSLO</span></li>
-					<li>Synonyms of POBOX are supported</li>
 					</ul>
+				</li>
+					<li>Synonyms of Postboks are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -2006,11 +2224,15 @@ See <a href="#us">United States</a>
 			<li>type : Skrytka pocztowa (POBOX)
 				<ul>
 					<ul><li>pattern :<span class="pattern">pobox zip city </span></li>
-					<li>Example :<span class="address">157 bd du 3 février boite postale 52 95190 saint jean de luz</span></li>
+					<li>Example :<span class="address">Skrytka pocztowa 115 48–300 NYSA</span></li>
 					</ul>
 					<ul>
 					<li>Poste restante:<span class="pattern">(poste restante) zip city</span></li>
 					<li>Example :<span class="address">Poste restante 32–015 KLAJ</span></li>
+					<li>Synonyms of Skrytka pocztowa are supported</li>
+					</ul>
+					<ul><li>pattern :<span class="pattern">[houseNumber] [streetType] streetName city [zip] </span></li>
+					<li>Example :<span class="address">4 STANISLAWA DOMARASIEWICZA SKIERNIEWICE  96-106</span></li>
 					</ul>
 			    </ul>
 	   		</li>
@@ -2070,6 +2292,7 @@ See <a href="#us">United States</a>
 					<li>Example : <span class="address">Apartado 42024 1201–950 LISBOA</span></li>
 			    </ul>
 	   		</li>
+	   		<li>Synonyms of POBOX are supported</li>
 	   	</ul>
 	</li>
 </ul>
@@ -2106,6 +2329,7 @@ See <a href="#fr">france</a>
 				</ul>
 			</li>
 			<li>Country can be before or after zipcode</li>
+			<li>both alphabet are supported</li>
 			<li>Country can be "RUSSIAN FEDERATION" or "РОССИЙСКАЯ ФЕДЕРАЦИЯ" or "RUSSIA"</li>
 			<li>The <a href="http://www.upu.int" target="_blank">universal postal union</a> recommand to reserve the last line for country, but we support the recommandation from the The russian Post)</li>
 			<li>Street type before name : <span class="pattern"> streetName [StreetType] HouseNumber [unit]  City [District] [OBLAST|KRAY|RESPUBLIKA] [country] [zip] [country]</span>
@@ -2125,8 +2349,7 @@ See <a href="#fr">france</a>
 					<li>Example : <span class="address">Абон.ящ. № 3749, Днепропетровск, 01055</span></li>
 				</ul>
 				<ul>
-					<li>Synonyms for PO BOX are supported</li>
-					<li>Абоне́нтский я́щик,ящик почтовогоотделения, а/я...</li>
+					<li>Synonyms for POBOX are supported in both alhabet (Абоне́нтский я́щик,...)</li>
 			    </ul>
 	   		</li>
 	</li>
@@ -2187,6 +2410,7 @@ See <a href="#it">Italy</a>
 					<li>Example : <span class="address">P.O. Box 56577 RIYADH 11564</span></li>
 				</ul>
 			</li>
+			<li>Synonyms of POBOX are supported</li>
 		</ul>
 	</li>
 	<li class="rub">Special notes : 
@@ -2284,7 +2508,7 @@ See <a href="#uk">United Kingdom</a>
 <ul>
 	<li class="rub">Typical address :
 		<ul>
-			<li>Pattern : <span class="pattern">[streetType] streetName [No] houseNumber [unit] zip city state</span>
+			<li>Pattern : <span class="pattern">[streetType] streetName [No] houseNumber [unit] zip city [state]</span>
 				<ul>
 					<li>Example : <span class="address">Calle Sarmiento 151 Piso 3 Oficina 311 BIS 39012 Palma de Majorque (Baleares)</span></li>
 				</ul>
@@ -2310,6 +2534,34 @@ See <a href="#uk">United Kingdom</a>
 					<li>Example : <span class="address">Apartado Correos 396, 08013 Barcelona</span></li>
 			    </ul>
 	   		</li>
+	   		<li>Synonyms of POBOX are supported</li>
+	   		
+	   		<li>Type : [unit] [houseNumber] [streettype] streetname city [zip] [state]
+				<ul>
+					<li>Example : <span class="address">piso 4 82 Avenida de Canillejas a Vicalvaro MADRID 28022</span></li>
+			    </ul>
+	   		</li>
+	   		
+	   		<li>Type : [unit] [houseNumber] [streettype] streetname zip city [state]
+				<ul>
+					<li>Example : <span class="address">piso 4 82 Avenida de Canillejas a Vicalvaro 2802 MADRID</span></li>
+			    </ul>
+	   		</li>
+	   		
+	   		<li>Type : [streettype] streetname [houseNumber] [unit] city [zip] [state]
+				<ul>
+					<li>Example : <span class="address">Avenida de Canillejas a Vicalvaro 82 apt 2 MADRID 2802</span></li>
+			    </ul>
+	   		</li>
+	   		
+	   		<li>Type : [streettype] streetname [houseNumber] [unit] zip city [state]
+				<ul>
+					<li>Example : <span class="address">Avenida de Canillejas a Vicalvaro 82 apt 2 2802 MADRID</span></li>
+			    </ul>
+	   		</li>
+	   		<li>S/N (aka sin número) is supported</li>
+	   		<li> City, state and zip can be specified in any order. Unit can be specified at the beginning or after houseNumber</li>
+	   		
 	   	</ul>
 	</li>
 </ul>
@@ -2353,8 +2605,9 @@ See <a href="#uk">United Kingdom</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>type : boite postale
+			<li>type : boite postale (POBOX)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city [CEDEX [(number)]]</span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 95190 saint jean de luz cedex</span></li>
 					</ul>
@@ -2367,6 +2620,8 @@ See <a href="#uk">United Kingdom</a>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
 			    </ul>
+			    </li>
+			    <li>Synonyms of boite postale are supported</li>
 	   		</li>
 	   	</ul>
 	</li>
@@ -2407,8 +2662,9 @@ See <a href="#uk">United Kingdom</a>
 	
 	<li class="rub">Variant : 
 		<ul>
-			<li>type : boite postale
+			<li>type : boite postale (POBOX)
 				<ul>
+				<li>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city </span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 11111 KHARTOUM</span></li>
 					</ul>
@@ -2420,7 +2676,9 @@ See <a href="#uk">United Kingdom</a>
 					</ul>
 					<ul><li>Note : it might exist some 'boite postale' patterns that are not managed, feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a></span></li>
 					</ul>
+					</li>
 			    </ul>
+			    <li>Synonyms of boite postale are supported</li>
 	   		</li>
 	   	</ul>
 	</li>
@@ -2457,12 +2715,14 @@ See <a href="#uk">United Kingdom</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : POBOX (Box)
-				<ul>
-					<ul><li>pattern :<span class="pattern">POBOX zip city </span></li>
+			<li>Type : POBOX 
+				<ul><li>
+					<ul><li>pattern :<span class="pattern">POBOX [zip] [city] </span></li>
 					<li>Example :<span class="address">Box 1237, 131 28 Nacka Strand</span></li>
-					<li>Synonyms of POBOX are supported</li>
+					<li>Example :<span class="address">Box 1237</li>
 					</ul>
+					</li>
+					<li>Synonyms of POBOX are supported</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -2485,7 +2745,7 @@ See <a href="#uk">United Kingdom</a>
 			</li>
 		</ul>
 		<ul>
-			<li>Pattern in French: <span class="pattern">streettype streetName houseNumber[/number|letter] [(,)unit] zip city</span>
+			<li>Pattern in French: <span class="pattern">streettype streetName houseNumber[/number|letter] [unit] zip city</span>
 				<ul>
 					<li>Example : <span class="address">Rue de bourgogne 665, Appartement 47 9876 Tihidorf</span></li>
 				</ul>
@@ -2499,7 +2759,7 @@ See <a href="#uk">United Kingdom</a>
 					<li>Example : <span class="address">ß(es-zett),ä,é,ü, ö, ...</span></li>
 			    </ul>
 	   		</li>
-			<li>Packstation is not supported
+			<li>Packstation is not yet supported
 				<ul>
 					<li>Example : <span class="address">1234567 Packstation 101 53113 Bonn</span></li>
 			    </ul>
@@ -2525,13 +2785,15 @@ See <a href="#uk">United Kingdom</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-			<li>Type : Postfach, Case postale (PO BOX)
+			<li>Type : Postfach, Case postale (PO BOX). In german, french and english.
 				<ul>
 					<li>Example : <span class="address">Postfach 3 41 41 10724 Berlin</span></li>
 					<li>Example : <span class="address">Rue de Bourgogne 15 Case postale 230 9876 Tihidorf</span></li>
 					<li>Example : <span class="address">Zichzachweg 15 Case postale 230 9876 Tihidorf</span></li>
+					<li>Example : <span class="address">P.O. Box 21</span></li>
 			    </ul>
 	   		</li>
+	   		<li>Synonyms for PO BOX are supported in both alhabet</li>
 	   	</ul>
 	</li>
 	
@@ -2556,6 +2818,7 @@ See <a href="#uk">United Kingdom</a>
 		<ul>
 					<li>pattern :<span class="address">[POBOX INFO] POBOX zip [district] city</span></li>
 					<li>Example :<span class="address">ULUS PTT MERKEZİ PK 543 06040 ULUS/ANKARA</span></li>
+					<li>Synonyms of POSTA ABONE KUTUSU are supported</li>
 					
 		</ul>
 	</li>
@@ -2608,7 +2871,7 @@ See <a href="#uk">United Kingdom</a>
 	</li>
 	<li class="rub">Variant : 
 		<ul>
-	   		<li>Type : boite postale
+	   		<li>Type : boite postale (POBOX)
 				<ul>
 					<ul><li>pattern :<span class="pattern">[unit] streetType streetName POBOX [unit] zip city [CEDEX [(number)]]</span></li>
 					<li>Example :<span class="address">la poste de ma ville bd du 3 février boite postale 52 box 3 8129 AIN DRAHAM cedex</span></li>
@@ -2623,6 +2886,7 @@ See <a href="#uk">United Kingdom</a>
 					</ul>
 			    </ul>
 	   		</li>
+	   		<li>Synonyms of boite postale are supported</li>
 	   	</ul>
 	</li>
 </ul>
@@ -2666,9 +2930,7 @@ See <a href="#uk">United Kingdom</a>
 			    </ul>
 			   
 	   		<ul>
-	   		<li>Synonyms for PO BOX are supported in both alphabet
-				<ul>
-					<li>Абоне́нтский я́щик,ящик почтовогоотделения, а/я...</li>
+	   		<li>Synonyms for PO BOX are supported in both alphabet (Абоне́нтский я́щик,...)</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -2701,6 +2963,9 @@ See <a href="#us">United States</a>
 <div align="right"><a href="#top">[top]</a></div>
 <a name="gb"></a>
 <h3>United Kingdom</h3>
+<div class="tip greentip">
+the iso-3166 code for United Kingdom is GB but 'UK' is also supported
+</div>
 <ul>
 	<li class="rub">Typical address :
 		<ul>
@@ -2737,6 +3002,16 @@ See <a href="#us">United States</a>
 			    </ul>
 	   		</li>
 	   	</ul>
+	   	<li class="rub">Variant : 
+		<ul>
+			<li>Type : POBOX
+				<ul>
+					<li>Example : <span class="address">100 MAIN ST P.O.Box 136</span></li>
+					<li>Synonyms of POBOX are supported</li>
+			    </ul>
+	   		</li>
+	   	</ul>
+	</li>
 	</li>
 </ul>
 
@@ -2756,6 +3031,9 @@ See <a href="#us">United States</a>
 				</ul>
 			</li>
 		</ul>
+		<ul>
+			<li>Zip and zip+4, street type abbreviation, number as letter, direction abbreviation, many common usages are supported</li>
+		</ul>
 		</ul>
 			<ul>
 			<li>Basic search are supported : streetName [streetType] City [state] [zip]
@@ -2763,7 +3041,7 @@ See <a href="#us">United States</a>
 					<li>Example : <span class="address">art avenue new york</span></li>
 			    </ul>
 	   		</li>
-	   		<li>If street type is before streetname (e.g : street of amercia), A comma is necessary before city</li>
+	   		<li>If street type is before streetname (e.g : street of amercia), A comma before city can give better confidence</li>
 	   		<li>Streettype is optional but STRONGLY recommended</li>
 	   	</ul>
 		<ul>
@@ -2788,7 +3066,7 @@ See <a href="#us">United States</a>
 					<li>Example : <span class="address">8th, saint louis al 63101</span></li>
 			    </ul>
 	   		</li>
-	   		<li>tips : it will help, (but not necessary) the parser to have a comma before city if street type is not provided.</li>
+	   		<li>Tips : it will help, (but not necessary) the parser to have a comma before city if street type is not provided.</li>
 	   	</ul>
 		<ul>
 			<li>Street intersection : <span class="pattern">[houseNumber] [predirection] streetName streetType [postdirection] [unit] city [state] [zip] & [houseNumber] [predirection] streetName streetType [postdirection] [unit] city [state] [zip]</span>
@@ -2800,22 +3078,28 @@ See <a href="#us">United States</a>
 			</li>
 		</ul>
 		<ul>
-			<li>Street type before name : <span class="pattern">[houseNumber] [fraction] [predirection] streetType streetName  [postdirection] [unit] city [state] [zip] [&] [houseNumber] [predirection] streetName streetType [postdirection] [unit] city [state] [zip]</span>
+			<li>Street type before name : <span class="pattern">[houseNumber] [fraction] [predirection] streetType streetName  [postdirection] [unit] city [state] [zip] 
 				<ul>
 					<li>Example : <span class="address">500 E street of america SUITE 5A TUCSON AZ 85705</span></li>
-					<li>tips : it will help the parser to have a comma before city, because we can not spearate streetname and city acuratly</li>
+					<li>Tips : it will help the parser to have a comma before city, because we can not spearate streetname and city acuratly</li>
 				</ul>
 			</li>
+		</ul>
+		
+		<ul>
+			<li>We can not list all the possible patterns, but many others are supported</li>
 		</ul>
 		<ul>
 			<li>Type : PO BOX
 				<ul>
 					<li>Example : <span class="address">100 MAIN ST PO BOX 1022 SEATTLE WA 98104</span></li>
+					<li>Example : <span class="address">P.O. Box 36647 - 1CR</span></li>
+					<li>Example : <span class="address">P.O. Box 21</span></li>
 			    </ul>
 	   		</li>
 	   		<li>Synonyms for PO BOX are supported
 				<ul>
-					<li>POB,POBX,POBX,...</li>
+					<li>POB,POBX,POBX,PMB...</li>
 			    </ul>
 	   		</li>
 	   	</ul>
@@ -2858,7 +3142,7 @@ See <a href="#us">United States</a>
 See <a href="#it">Italy</a>
 
 
-<a name="issue"></a>
+<a name="issues"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2>known issues</h2>
 <ul>
@@ -2866,19 +3150,7 @@ See <a href="#it">Italy</a>
 <li>' (Simple quote) is not kept in parsing results (reason: serialisation in json ...)</li>
 </ul>
 
-<a name="output_formats"></a>
-<div align="right"><a href="#top">[top]</a></div>
-<h2>Webservice output Formats</h2>
-The following languages can be outputed by the webservices :
-<ul>
-<li>XML</li>
-<li>Json</li>
-<li>Php</li>
-<li>Ruby</li>
-<li>Python</li>
-<li>YAML</li>
-</ul>
-<br/><br/>
+
 
 <a name="links"></a>
 <div align="right"><a href="#top">[top]</a></div>
