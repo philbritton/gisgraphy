@@ -412,8 +412,8 @@ function createPolylinesFromWKT(wkt){
     /*position: absolute;
     top: 70px;
     left: 0px;*/
-    width: 400px;
-    height: 400px;
+    width: 800px;
+    height: 600px;
     background-color: #ffffff;
 }
 #presenter{
