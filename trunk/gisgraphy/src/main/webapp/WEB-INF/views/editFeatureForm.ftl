@@ -172,7 +172,7 @@ function updatePointOnMap(){
 
 <div class="editShape">
 	<div id="map_canvas"></div>
-	   <input type="button" onclick="resetPoint();" value="Reset the initial shape"/>
+	   <input type="button" onclick="resetPoint();" value="Reset the initial point"/>
 <div id="info"></div>
 </div>
 
