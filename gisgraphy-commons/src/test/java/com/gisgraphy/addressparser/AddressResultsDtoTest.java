@@ -36,7 +36,6 @@ import javax.xml.bind.PropertyException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gisgraphy.domain.Constants;
 import com.gisgraphy.test.FeedChecker;
 
 
@@ -116,7 +115,7 @@ public class AddressResultsDtoTest {
 		    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		    
 		    m.marshal(dto, outputStream);
-		    String dtoSerializeed = outputStream.toString(Constants.CHARSET);
+		    String dtoSerializeed = outputStream.toString("UTF-8");
 		    FeedChecker.assertQ("AddressResultDtoTest is not correctly serialized", dtoSerializeed, 
 		    		"/"+com.gisgraphy.addressparser.Constants.ADDRESS_RESULT_ROOT_JAXB_NAME+"/result/name[.='"+name+"']"
 		    		,"/"+com.gisgraphy.addressparser.Constants.ADDRESS_RESULT_ROOT_JAXB_NAME+"/result/streetName[.='"+streetName+"']"

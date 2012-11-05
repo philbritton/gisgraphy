@@ -25,6 +25,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.gisgraphy.addressparser.commons.GeocodingLevels;
+
 @XmlRootElement(name = Constants.ADDRESS_ROOT_JAXB_NAME)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address {
@@ -32,7 +34,6 @@ public class Address {
     private Long id;
     private Double lng;
     private Double lat;
-    private GeocodingLevels geocodingLevel = GeocodingLevels.NONE;
     private String name;
     private String recipientName;
 
@@ -61,11 +62,10 @@ public class Address {
     private String StreetTypeIntersection;
     private String postDirectionIntersection;
 
-    private String extraInfo;
     
+    private String extraInfo;
     private String suiteType;
     private String suiteNumber;
-    
     
     private String floor;
     private String quarter;
@@ -79,6 +79,10 @@ public class Address {
     private String country;
     private String countryCode;
 
+    private GeocodingLevels geocodingLevel = GeocodingLevels.NONE;
+    
+    private String confidence;
+    
     public String getCountry() {
         return country;
     }
@@ -306,7 +310,9 @@ public class Address {
     }
 
     public void setPOBoxInfo(String boxInfo) {
-	this.POBoxInfo = boxInfo;
+    	if (!"".equals(boxInfo)){
+    		this.POBoxInfo = boxInfo;
+    	}
     }
 
     public void setPreDirection(String preDirection) {
@@ -650,10 +656,200 @@ public class Address {
 
     @Override
 	public String toString() {
-		return String
-				.format("Address [id=%s, lng=%s, lat=%s, geocodingLevel=%s, name=%s, recipientName=%s, houseNumber=%s, houseNumberInfo=%s, POBox=%s, POBoxInfo=%s, POBoxAgency=%s, civicNumberSuffix=%s, preDirection=%s, streetName=%s, streetType=%s, postDirection=%s, preDirectionIntersection=%s, streetNameIntersection=%s, StreetTypeIntersection=%s, postDirectionIntersection=%s, extraInfo=%s, suiteType=%s, suiteNumber=%s, floor=%s, quarter=%s, zipCode=%s, district=%s, dependentLocality=%s, city=%s, postTown=%s, state=%s, country=%s, countryCode=%s, sector=%s, quadrant=%s, block=%s, PostOfficeBox=%s]",
-						id, lng, lat, geocodingLevel, name, recipientName, houseNumber, houseNumberInfo, POBox, POBoxInfo, POBoxAgency, civicNumberSuffix, preDirection, streetName, streetType, postDirection, preDirectionIntersection, streetNameIntersection, StreetTypeIntersection, postDirectionIntersection, extraInfo, suiteType, suiteNumber, floor, quarter, zipCode, district,
-						dependentLocality, city, postTown, state, country, countryCode, sector, quadrant, block, PostOfficeBox);
+		StringBuilder builder = new StringBuilder();
+		builder.append("Address [");
+		if (id != null) {
+			builder.append("id=");
+			builder.append(id);
+			builder.append(", ");
+		}
+		if (lng != null) {
+			builder.append("lng=");
+			builder.append(lng);
+			builder.append(", ");
+		}
+		if (lat != null) {
+			builder.append("lat=");
+			builder.append(lat);
+			builder.append(", ");
+		}
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (recipientName != null) {
+			builder.append("recipientName=");
+			builder.append(recipientName);
+			builder.append(", ");
+		}
+		if (extraInfo != null) {
+			builder.append("extraInfo=");
+			builder.append(extraInfo);
+			builder.append(", ");
+		}
+		if (suiteType != null) {
+			builder.append("suiteType=");
+			builder.append(suiteType);
+			builder.append(", ");
+		}
+		if (suiteNumber != null) {
+			builder.append("suiteNumber=");
+			builder.append(suiteNumber);
+			builder.append(", ");
+		}
+		if (floor != null) {
+			builder.append("floor=");
+			builder.append(floor);
+			builder.append(", ");
+		}
+		if (houseNumber != null) {
+			builder.append("houseNumber=");
+			builder.append(houseNumber);
+			builder.append(", ");
+		}
+		if (houseNumberInfo != null) {
+			builder.append("houseNumberInfo=");
+			builder.append(houseNumberInfo);
+			builder.append(", ");
+		}
+		if (POBox != null) {
+			builder.append("POBox=");
+			builder.append(POBox);
+			builder.append(", ");
+		}
+		if (POBoxInfo != null) {
+			builder.append("POBoxInfo=");
+			builder.append(POBoxInfo);
+			builder.append(", ");
+		}
+		if (POBoxAgency != null) {
+			builder.append("POBoxAgency=");
+			builder.append(POBoxAgency);
+			builder.append(", ");
+		}
+		if (civicNumberSuffix != null) {
+			builder.append("civicNumberSuffix=");
+			builder.append(civicNumberSuffix);
+			builder.append(", ");
+		}
+		if (preDirection != null) {
+			builder.append("preDirection=");
+			builder.append(preDirection);
+			builder.append(", ");
+		}
+		if (streetName != null) {
+			builder.append("streetName=");
+			builder.append(streetName);
+			builder.append(", ");
+		}
+		if (streetType != null) {
+			builder.append("streetType=");
+			builder.append(streetType);
+			builder.append(", ");
+		}
+		if (postDirection != null) {
+			builder.append("postDirection=");
+			builder.append(postDirection);
+			builder.append(", ");
+		}
+		if (preDirectionIntersection != null) {
+			builder.append("preDirectionIntersection=");
+			builder.append(preDirectionIntersection);
+			builder.append(", ");
+		}
+		if (streetNameIntersection != null) {
+			builder.append("streetNameIntersection=");
+			builder.append(streetNameIntersection);
+			builder.append(", ");
+		}
+		if (StreetTypeIntersection != null) {
+			builder.append("StreetTypeIntersection=");
+			builder.append(StreetTypeIntersection);
+			builder.append(", ");
+		}
+		if (postDirectionIntersection != null) {
+			builder.append("postDirectionIntersection=");
+			builder.append(postDirectionIntersection);
+			builder.append(", ");
+		}
+		
+		if (quarter != null) {
+			builder.append("quarter=");
+			builder.append(quarter);
+			builder.append(", ");
+		}
+		if (zipCode != null) {
+			builder.append("zipCode=");
+			builder.append(zipCode);
+			builder.append(", ");
+		}
+		if (district != null) {
+			builder.append("district=");
+			builder.append(district);
+			builder.append(", ");
+		}
+		if (dependentLocality != null) {
+			builder.append("dependentLocality=");
+			builder.append(dependentLocality);
+			builder.append(", ");
+		}
+		if (city != null) {
+			builder.append("city=");
+			builder.append(city);
+			builder.append(", ");
+		}
+		if (postTown != null) {
+			builder.append("postTown=");
+			builder.append(postTown);
+			builder.append(", ");
+		}
+		if (state != null) {
+			builder.append("state=");
+			builder.append(state);
+			builder.append(", ");
+		}
+		if (country != null) {
+			builder.append("country=");
+			builder.append(country);
+			builder.append(", ");
+		}
+		if (countryCode != null) {
+			builder.append("countryCode=");
+			builder.append(countryCode);
+			builder.append(", ");
+		}
+		if (sector != null) {
+			builder.append("sector=");
+			builder.append(sector);
+			builder.append(", ");
+		}
+		if (quadrant != null) {
+			builder.append("quadrant=");
+			builder.append(quadrant);
+			builder.append(", ");
+		}
+		if (block != null) {
+			builder.append("block=");
+			builder.append(block);
+			builder.append(", ");
+		}
+		if (PostOfficeBox != null) {
+			builder.append("PostOfficeBox=");
+			builder.append(PostOfficeBox);
+			builder.append(", ");
+		}
+		if (getGeocodingLevel() != null) {
+			builder.append("geocodingLevel=");
+			builder.append(getGeocodingLevel());
+			builder.append(", ");
+		}
+		if (confidence!= null) {
+			builder.append("confidence=");
+			builder.append(confidence);
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
 	public String getName() {
@@ -664,6 +860,14 @@ public class Address {
 		this.name = name;
 	}
 
+	public String getSuiteNumber() {
+		return suiteNumber;
+	}
+
+	public void setSuiteNumber(String suiteNumber) {
+		this.suiteNumber = suiteNumber;
+	}
+
 	public String getSuiteType() {
 		return suiteType;
 	}
@@ -672,12 +876,12 @@ public class Address {
 		this.suiteType = suiteType;
 	}
 
-	public String getSuiteNumber() {
-		return suiteNumber;
+	public String getConfidence() {
+		return confidence;
 	}
 
-	public void setSuiteNumber(String suiteNumber) {
-		this.suiteNumber = suiteNumber;
+	public void setConfidence(String confidence) {
+		this.confidence = confidence;
 	}
 
 }
