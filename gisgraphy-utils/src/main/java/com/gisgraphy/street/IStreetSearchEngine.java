@@ -26,7 +26,6 @@ package com.gisgraphy.street;
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
 import com.gisgraphy.service.IQueryProcessor;
 import com.gisgraphy.service.ServiceException;
-import com.gisgraphy.street.StreetSearchQuery;
 
 /**
  * Execute a {@linkplain StreetSearchQuery} and returns the results in a specific

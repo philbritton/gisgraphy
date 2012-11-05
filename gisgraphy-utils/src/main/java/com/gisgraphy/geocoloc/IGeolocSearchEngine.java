@@ -24,8 +24,8 @@ package com.gisgraphy.geocoloc;
 
 
 
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.geoloc.GeolocQuery;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.service.IQueryProcessor;
 import com.gisgraphy.service.ServiceException;
 

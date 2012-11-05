@@ -4,8 +4,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.geoloc.GeolocQuery;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.rest.IRestClient;
 import com.gisgraphy.rest.RestClient;
 import com.gisgraphy.serializer.common.OutputFormat;
