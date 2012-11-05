@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.gisgraphy</groupId>
-	<artifactId>addressParser-commons</artifactId>
+	<artifactId>gisgraphy-commons</artifactId>
 	<version>3.0</version>
 	<packaging>jar</packaging>
 
-	<name>addressParser-commons</name>
+	<name>gisgraphy-commons</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -42,13 +42,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.gisgraphy</groupId>
-			<artifactId>universalserialiser-commons</artifactId>
-			<version>3.0</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 		<groupId>org.easymock</groupId>
 		<artifactId>easymock</artifactId>
 		<version>3.0</version>
@@ -59,6 +52,19 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.3</version>
 			<scope>test</scope>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.0.5</version>
+			<type>jar</type>
+		</dependency>-->
+		<dependency>
+			<groupId>com.gisgraphy</groupId>
+			<artifactId>universalserialiser-commons</artifactId>
+			<version>3.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

@@ -61,7 +61,7 @@ public class CountriesStaticDataTest {
 	
 	@Test
 	public void getNumberOfCountries(){
-		Assert.assertEquals(248, CountriesStaticData.getNumberOfCountries());
+		Assert.assertEquals(246, CountriesStaticData.getNumberOfCountries());
 	}
 	
 	

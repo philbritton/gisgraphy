@@ -27,9 +27,6 @@ package com.gisgraphy.service;
 
 import java.io.OutputStream;
 
-
-import com.gisgraphy.service.AbstractGisQuery;
-
 /**
  * Interface that execute {@link AbstractGisQuery}s
  * 
