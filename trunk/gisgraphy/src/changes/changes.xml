@@ -593,6 +593,10 @@
 				Add a new, more userfriendly UI to edit street/point
 			</action>
 			
+			<action dev="David Masclet" type="update">
+				Refactor jar dependencies and packages (gisgraphy-commons,gisgraphy-utils,addressparser-commons)
+			</action>
+			
 			
 			</release>
 			
