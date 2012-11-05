@@ -27,8 +27,8 @@ package com.gisgraphy.addressparser.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;

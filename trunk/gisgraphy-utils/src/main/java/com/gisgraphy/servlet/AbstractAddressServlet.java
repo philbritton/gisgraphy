@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.exception.AddressParserErrorVisitor;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.addressparser.web.AddressQueryHttpBuilder;
 import com.gisgraphy.domain.Constants;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;

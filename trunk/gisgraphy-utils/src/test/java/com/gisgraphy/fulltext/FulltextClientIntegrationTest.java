@@ -54,7 +54,7 @@ public class FulltextClientIntegrationTest {
 		Assert.assertNotNull(doc.getCountry_flag_url());
 		Assert.assertNotNull(doc.getGoogle_map_url());
 		Assert.assertNotNull(doc.getYahoo_map_url());
-		Assert.assertNotNull(doc.getOpenstreetmap_map_url());
+		//Assert.assertNotNull(doc.getOpenstreetmap_map_url());
 		// Assert.assertNotNull(doc.getContinent());
 		Assert.assertNotNull(doc.getCurrency_code());
 		Assert.assertNotNull(doc.getCurrency_name());
@@ -112,7 +112,6 @@ public class FulltextClientIntegrationTest {
 		Assert.assertNotNull(doc.getCountry_flag_url());
 		Assert.assertNotNull(doc.getGoogle_map_url());
 		Assert.assertNotNull(doc.getYahoo_map_url());
-		Assert.assertNotNull(doc.getOpenstreetmap_map_url());
 		// Assert.assertNotNull(doc.getContinent());
 		// Assert.assertNotNull(doc.getCurrency_code());
 		// Assert.assertNotNull(doc.getCurrency_name());
@@ -188,7 +187,7 @@ public class FulltextClientIntegrationTest {
 		Assert.assertNotNull(doc.getCountry_flag_url());
 		Assert.assertNotNull(doc.getGoogle_map_url());
 		Assert.assertNotNull(doc.getYahoo_map_url());
-		Assert.assertNotNull(doc.getOpenstreetmap_map_url());
+		//Assert.assertNotNull(doc.getOpenstreetmap_map_url());
 		// Assert.assertNotNull(doc.getContinent());
 		// Assert.assertNotNull(doc.getCurrency_code());
 		// Assert.assertNotNull(doc.getCurrency_name());

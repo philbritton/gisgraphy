@@ -1,6 +1,5 @@
 package com.gisgraphy.fulltext;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import org.junit.Assert;
