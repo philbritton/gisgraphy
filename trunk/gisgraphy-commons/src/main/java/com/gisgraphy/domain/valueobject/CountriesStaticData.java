@@ -1,8 +1,17 @@
 package com.gisgraphy.domain.valueobject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,6 +20,63 @@ import java.util.Map.Entry;
  * 
  */
 public class CountriesStaticData {
+    
+    public static Map<String, List<String>> countryAlternateNames = new HashMap<String, List<String>>();
+    
+    public static void loadCountryNamesMap(){
+	File file = new File("alternatenames.txt");
+	BufferedReader br = null;
+	InputStream bis = null;
+	try {
+		if (file.exists()){
+			bis = new BufferedInputStream(new FileInputStream(file));
+		} else {
+			bis = Thread.currentThread().getContextClassLoader().getResourceAsStream(file.getName());
+			if (bis==null){
+				throw new RuntimeException("file " + file.getAbsolutePath() + " does not exists or is not present in classpath");
+			}
+		}
+		br = new BufferedReader(new InputStreamReader(bis, "UTF-8"));
+		String line ;
+		while ((line=br.readLine())!=null){
+		    String[] fields = line.split("\t");
+		    if (fields.length<=1){
+			continue;
+		    }
+		    String countrycode = fields[0];
+		    List<String> alternateNames = new ArrayList<String>();
+		    for (int i=1;i<fields.length;i++){
+			
+			String alternateName = fields[i].replaceAll("\\s+", " ").trim();
+			alternateNames.add(alternateName);
+		    }
+		    countryAlternateNames.put(countrycode, alternateNames);
+		}
+	} catch (Exception e) {
+		throw new RuntimeException(e.getMessage(),e);
+	} finally {
+		if (bis != null) {
+			try {
+				bis.close();
+			} catch (IOException e) {
+
+			}
+		}
+		if (br != null) {
+			try {
+				br.close();
+			} catch (IOException e) {
+
+			}
+		}
+	}
+    }
+    
+    static{
+	loadCountryNamesMap();
+    }
+    
+    
 	public final static Map<String, String> countriesnameToCountryCodeMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 4762318033721437587L;
 
@@ -169,7 +235,7 @@ public class CountriesStaticData {
 			put("Nauru", "NR");
 			put("Nepal", "NP");
 			put("Netherlands", "NL");
-			put("Netherlands Antilles", "AN");
+			//put("Netherlands Antilles", "AN");
 			put("New Caledonia", "NC");
 			put("New Zealand", "NZ");
 			put("Nicaragua", "NI");
@@ -199,7 +265,7 @@ public class CountriesStaticData {
 			put("Romania", "RO");
 			put("Russia", "RU");
 			put("Rwanda", "RW");
-			put("Saint Barthélemy", "BL");
+			put("Saint BarthÃ©lemy", "BL");
 			put("Saint Helena", "SH");
 			put("Saint Kitts and Nevis", "KN");
 			put("Saint Lucia", "LC");
@@ -212,7 +278,7 @@ public class CountriesStaticData {
 			put("Saudi Arabia", "SA");
 			put("Senegal", "SN");
 			put("Serbia", "RS");
-			put("Serbia and Montenegro", "CS");
+			//put("Serbia and Montenegro", "CS");
 			put("Seychelles", "SC");
 			put("Sierra Leone", "SL");
 			put("Singapore", "SG");
@@ -266,6 +332,10 @@ public class CountriesStaticData {
 
 		}
 	};
+	
+	public static Collection<String> getCountryCodes(){
+	    return countriesnameToCountryCodeMap.values();
+	}
 
 	public static ArrayList<String> sortedCountriesName = new ArrayList<String>(CountriesStaticData.countriesnameToCountryCodeMap.keySet()) {
 		private static final long serialVersionUID = 1671688713929233996L;
