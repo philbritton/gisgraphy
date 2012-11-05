@@ -36,15 +36,13 @@ import org.mortbay.jetty.testing.ServletTester;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.IAddressParserService;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.addressparser.web.AddressQueryHttpBuilder;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
-import com.gisgraphy.servlet.AbstractAddressServlet;
-import com.gisgraphy.servlet.GisgraphyServlet;
 
 public class AbstractAddressServletTest {
 

@@ -4,12 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.gisgraphy.domain.placetype.City;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.geoloc.GeolocQuery;
-import com.gisgraphy.rest.IRestClient;
-import com.gisgraphy.rest.RestClient;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 

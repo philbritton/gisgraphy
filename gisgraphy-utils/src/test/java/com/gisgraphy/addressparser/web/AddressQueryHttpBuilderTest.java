@@ -31,8 +31,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.AbstractAddressServlet;
 import com.gisgraphy.servlet.GisgraphyServlet;

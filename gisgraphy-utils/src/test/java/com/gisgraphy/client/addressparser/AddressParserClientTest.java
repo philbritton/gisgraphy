@@ -29,9 +29,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.gisgraphy.addressparser.AddressParserClient;
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.AddressResultsDto;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.rest.IRestClient;
 import com.gisgraphy.serializer.common.OutputFormat;
 

@@ -29,6 +29,7 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.rest.BeanToRestParameter;
 import com.gisgraphy.rest.IRestClient;
 import com.gisgraphy.rest.RestClient;
