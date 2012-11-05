@@ -40,6 +40,7 @@ import javax.xml.bind.PropertyException;
 import org.junit.Test;
 
 import com.gisgraphy.domain.Constants;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.test.FeedChecker;
 import com.gisgraphy.test.GisgraphyCommonsTestHelper;
 

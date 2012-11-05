@@ -43,11 +43,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.gisgraphy.domain.valueobject.Constants;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.URLUtils;
 
 public class FeedChecker {
