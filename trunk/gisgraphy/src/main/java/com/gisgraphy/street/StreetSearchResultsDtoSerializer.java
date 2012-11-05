@@ -35,11 +35,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gisgraphy.domain.valueobject.Constants;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.UniversalSerializer;
 import com.gisgraphy.serializer.common.OutputFormat;

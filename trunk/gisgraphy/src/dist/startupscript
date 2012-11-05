@@ -2,7 +2,7 @@
 
 # Starts, stops, and restarts solr
 
-SOLR_DIR="/home/dmasclet/Bureau/gisgraphy-3.0-beta2"
+GISGRAPHY_DIR="/home/user/gisgraphy"
 JAVA_OPTIONS="-Xmx1024m -DSTOP.PORT=8081 -DSTOP.KEY=stopkey -jar start.jar"
 LOG_FILE="/var/log/gisgraphy.log"
 JAVA="/usr/bin/java"
@@ -10,12 +10,12 @@ JAVA="/usr/bin/java"
 case $1 in
     start)
         echo "Starting Gisgraphy"
-        cd $SOLR_DIR
+        cd $GISGRAPHY_DIR
         ./launch.sh
         ;;
     stop)
         echo "Stopping Gisgraphy"
-        cd $SOLR_DIR
+        cd $GISGRAPHY_DIR
         ./stop.sh
         ;;
     restart)

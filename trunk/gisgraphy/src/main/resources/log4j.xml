@@ -47,6 +47,14 @@
 			<param name="ConversionPattern" value="[%p] [%d] [%c] (%t,%x) : %m%n" />
 		</layout>
 	</appender>
+	
+	<appender name="RollingFileExtra" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="./logs/ws-billing.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="[%p] [%c] [%d{dd MMM yyyy HH:mm:ss,SSS}] (%t,%x) : %m%n" />
+		</layout>
+	</appender>
 
 	<!-- gisgraphy -->
 	<logger name="com.gisgraphy">
@@ -136,6 +144,11 @@
 	<logger name="com.gisgraphy.importer.ImporterHelper">
 		<level value="INFO" />
 		<appender-ref ref="RollingFileImporter" />
+	</logger>
+	
+	<logger name="com.gisgraphy.billing.web.BillingFilter">
+		<level value="DEBUG" />
+		<appender-ref ref="RollingFileExtra" />
 	</logger>
 
 

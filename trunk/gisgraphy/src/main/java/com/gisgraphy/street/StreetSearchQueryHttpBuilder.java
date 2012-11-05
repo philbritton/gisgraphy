@@ -26,9 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.gisgraphy.geoloc.GeolocQueryHttpBuilder;
 import com.gisgraphy.servlet.StreetServlet;
-import com.gisgraphy.street.StreetSearchMode;
-import com.gisgraphy.street.StreetSearchQuery;
-import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.Point;
 
 /**

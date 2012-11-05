@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
-import com.gisgraphy.servlet.StreetServlet;
 import com.gisgraphy.street.IStreetSearchEngine;
 import com.gisgraphy.street.StreetSearchQuery;
 import com.gisgraphy.street.StreetSearchQueryHttpBuilder;

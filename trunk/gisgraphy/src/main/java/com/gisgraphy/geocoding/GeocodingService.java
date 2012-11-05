@@ -39,10 +39,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gisgraphy.addressparser.Address;
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.AddressResultsDto;
 import com.gisgraphy.addressparser.IAddressParserService;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.CitySubdivision;

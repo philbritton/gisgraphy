@@ -25,7 +25,6 @@ package com.gisgraphy.geoloc;
 import java.io.OutputStream;
 import java.util.Map;
 
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.serializer.common.OutputFormat;
 
 public interface IGeolocResultsDtoSerializer {
