@@ -23,13 +23,16 @@
 /**
  *
  */
-package com.gisgraphy.domain.valueobject;
+package com.gisgraphy.geoloc;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.gisgraphy.domain.valueobject.Constants;
+import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 
 /**
  * DTO (data transfer object) for a list of {@link GisFeatureDistance} The node
