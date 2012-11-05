@@ -42,7 +42,6 @@ import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.IGisDao;
 import com.gisgraphy.domain.repository.IRepositoryStrategy;
 import com.gisgraphy.domain.valueobject.Constants;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.serializer.common.UniversalSerializerConstant;

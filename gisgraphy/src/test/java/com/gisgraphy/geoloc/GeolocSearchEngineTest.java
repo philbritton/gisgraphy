@@ -38,7 +38,6 @@ import org.junit.Test;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.ICityDao;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;

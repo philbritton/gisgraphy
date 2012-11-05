@@ -33,7 +33,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.gisgraphy.domain.valueobject.Constants;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.serializer.exception.UnsupportedFormatException;
 import com.gisgraphy.test.FeedChecker;

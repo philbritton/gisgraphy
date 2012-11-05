@@ -27,12 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocQueryHttpBuilder;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
 

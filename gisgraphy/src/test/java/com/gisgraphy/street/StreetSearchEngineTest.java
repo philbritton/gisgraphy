@@ -38,13 +38,13 @@ import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
 import com.gisgraphy.fulltext.AbstractIntegrationHttpSolrTestCase;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.FileHelper;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.serializer.common.OutputFormat;

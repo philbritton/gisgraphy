@@ -38,12 +38,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import com.gisgraphy.domain.valueobject.GeolocResultsDto;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocQuery;
+import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.OutputFormatHelper;
 
 public class GeolocSearchActionTest {

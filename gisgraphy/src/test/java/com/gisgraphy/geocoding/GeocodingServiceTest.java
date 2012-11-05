@@ -33,11 +33,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.gisgraphy.addressparser.Address;
-import com.gisgraphy.addressparser.AddressParserException;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.AddressResultsDto;
-import com.gisgraphy.addressparser.GeocodingLevels;
 import com.gisgraphy.addressparser.IAddressParserService;
+import com.gisgraphy.addressparser.commons.GeocodingLevels;
+import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.fulltext.FulltextQuery;
