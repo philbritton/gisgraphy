@@ -24,6 +24,8 @@ package com.gisgraphy.addressparser;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.addressparser.commons.GeocodingLevels;
+
 
 public class AddressTest {
 

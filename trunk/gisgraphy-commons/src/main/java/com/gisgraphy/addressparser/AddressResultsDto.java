@@ -32,8 +32,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.gisgraphy.domain.valueobject.GisFeatureDistance;
-
 /**
  * DTO (data transfer object) for a list of {@link Address} The node
  * name is {@link Constants#ADDRESS_RESULT_ROOT_JAXB_NAME}

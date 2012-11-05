@@ -19,23 +19,16 @@
  * 
  *   David Masclet <davidmasclet@gisgraphy.com>
  ******************************************************************************/
-package com.gisgraphy.geocoding;
+package com.gisgraphy.addressparser.commons;
 
-public class GeocodingException extends RuntimeException {
-
-    public GeocodingException() {
-    }
-
-    public GeocodingException(String message) {
-	super(message);
-    }
-
-    public GeocodingException(Throwable cause) {
-	super(cause);
-    }
-
-    public GeocodingException(String message, Throwable cause) {
-	super(message, cause);
-    }
+/**
+ * 
+ * Define the finest level the geocoder have foud for a particular address
+ * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
+ *
+ */
+public enum GeocodingLevels {
+	
+	NONE,HOUSE_NUMBER,STREET,CITY,STATE,COUNTRY
 
 }

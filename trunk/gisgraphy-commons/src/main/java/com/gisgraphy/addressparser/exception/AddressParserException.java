@@ -19,7 +19,7 @@
  * 
  *   David Masclet <davidmasclet@gisgraphy.com>
  ******************************************************************************/
-package com.gisgraphy.addressparser;
+package com.gisgraphy.addressparser.exception;
 
 public class AddressParserException extends RuntimeException {
 
