@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testResults version="1.2">
+<httpSample t="15407" lt="0" ts="1351675854924" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-3" dt="text" by="2283"/>
+<httpSample t="17012" lt="0" ts="1351675853325" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-2" dt="text" by="2187"/>
+<httpSample t="13815" lt="0" ts="1351675856526" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-4" dt="text" by="2187"/>
+<httpSample t="18620" lt="0" ts="1351675851724" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-1" dt="text" by="2187"/>
+<httpSample t="12217" lt="0" ts="1351675858126" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-5" dt="text" by="2187"/>
+
+<httpSample t="17368" lt="0" ts="1351675884994" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-4" dt="text" by="2187"/>
+<httpSample t="22178" lt="0" ts="1351675880187" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-1" dt="text" by="2187"/>
+<httpSample t="15770" lt="0" ts="1351675886595" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-5" dt="text" by="2187"/>
+<httpSample t="18975" lt="0" ts="1351675883390" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-3" dt="text" by="2187"/>
+<httpSample t="20577" lt="0" ts="1351675881789" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-2" dt="text" by="2187"/>
+
+<httpSample t="34563" lt="34563" ts="1351675969402" s="false" lb="fulltext ws" rc="500" rm="Internal Server Error" tn="Scenario 1-5" dt="text" by="266"/>
+<httpSample t="41455" lt="0" ts="1351675966201" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-3" dt="text" by="2187"/>
+<httpSample t="44659" lt="0" ts="1351675963001" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-1" dt="text" by="2187"/>
+<httpSample t="43060" lt="0" ts="1351675964600" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-2" dt="text" by="2187"/>
+<httpSample t="39860" lt="0" ts="1351675967801" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-4" dt="text" by="2187"/>
+<httpSample t="3690" lt="0" ts="1351676003968" s="false" lb="fulltext ws" rc="Non HTTP response code: java.net.SocketException" rm="Non HTTP response message: Socket closed" tn="Scenario 1-5" dt="text" by="2187"/>
+
+</testResults>
