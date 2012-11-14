@@ -108,13 +108,13 @@ public class GisFeatureDistance {
 
     private String placeType;
     
-    private boolean oneWay;
+    private Boolean oneWay;
 
     private StreetType streetType;
     
     private Long openstreetmapId;
 
-    private double length;
+    private Double length;
    
     @XmlElementWrapper(name="zipCodes")
     @XmlElements({
