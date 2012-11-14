@@ -30,6 +30,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.gisgraphy.helper.IntrospectionIgnoredField;
+
 /**
  * Represents a city Object
  * 
@@ -39,8 +41,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class City extends GisFeature implements ZipCodesAware {
 
+	/**
+	 * This fields indicates that the city has some properties(admCode, population that make the city a municipality. 
+	 * This is necessary because some place in geonames are marked as popular places and can be quater or common place.
+	 * by identifing city we can restrict the search to city.
+	 */
+	@IntrospectionIgnoredField
+	private boolean municipality=false;
 	
-
 	/**
 	 * Constructor that populate the {@link City} with the gisFeature fields<br>
 	 * 
@@ -119,6 +127,14 @@ public class City extends GisFeature implements ZipCodesAware {
 		}
 
 		return completeCityName.toString();
+	}
+
+	public boolean isMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(boolean isMunicipality) {
+		this.municipality = isMunicipality;
 	}
 
 	
