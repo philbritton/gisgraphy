@@ -75,6 +75,8 @@ public class GisFeatureDistance {
     private String adm3Code;
 
     private String adm4Code;
+    
+    private String adm5Code;
 
     private String adm1Name;
 
@@ -83,6 +85,8 @@ public class GisFeatureDistance {
     private String adm3Name;
 
     private String adm4Name;
+    
+    private String adm5Name;
 
     private String asciiName;
 
@@ -542,7 +546,7 @@ public class GisFeatureDistance {
 	    return length;
 	}
 
-	public boolean isOneWay() {
+	public Boolean isOneWay() {
 	    return oneWay;
 	}
 
@@ -713,7 +717,7 @@ public class GisFeatureDistance {
 
 
 
-	public void setOneWay(boolean oneWay) {
+	public void setOneWay(Boolean oneWay) {
 	    this.oneWay = oneWay;
 	}
 
@@ -849,6 +853,42 @@ public class GisFeatureDistance {
 
 	public void setIsIn(String isIn) {
 	    this.isIn = isIn;
+	}
+
+
+
+	public String getAdm5Code() {
+		return adm5Code;
+	}
+
+
+
+	public void setAdm5Code(String adm5Code) {
+		this.adm5Code = adm5Code;
+	}
+
+
+
+	public String getAdm5Name() {
+		return adm5Name;
+	}
+
+
+
+	public void setAdm5Name(String adm5Name) {
+		this.adm5Name = adm5Name;
+	}
+
+
+
+	public String getOpenstreetmap_map_url() {
+		return openstreetmap_map_url;
+	}
+
+
+
+	public void setLength(Double length) {
+		this.length = length;
 	}
 	
 	/**

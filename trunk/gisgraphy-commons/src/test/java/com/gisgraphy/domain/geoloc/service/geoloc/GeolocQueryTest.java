@@ -228,6 +228,14 @@ public class GeolocQueryTest {
     }
     
     @Test
+    public void testMunicipalityFilter(){
+	GeolocQuery query = new GeolocQuery(GENERIC_POINT);
+	Assert.assertFalse("by default municipality should be false", query.hasMunicipalityFilter());
+	query.withMunicipalityFilter(true);
+	assertTrue("distance field setter is broken", query.hasMunicipalityFilter());
+    }
+    
+    @Test
     public void testCallbackOk() {
 	GeolocQuery query = new GeolocQuery(GENERIC_POINT);
 	String callback ="doit";

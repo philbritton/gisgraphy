@@ -45,6 +45,7 @@ public class GeolocQuery extends AbstractGisQuery {
 	    public static final String RADIUS_PARAMETER = "radius";
 	    public static final String DISTANCE_PARAMETER = "distance";
 	    public static final String CALLBACK_PARAMETER = "callback";
+	    public static final String MUNICIPALITY_PARAMETER = "municipality";
 
     public static final int DEFAULT_MAX_RESULTS = 10;
    
@@ -117,6 +118,7 @@ public class GeolocQuery extends AbstractGisQuery {
     protected Point point;
     private double radius = DEFAULT_RADIUS;
     private boolean distanceField = true;
+    private boolean municipality = false;
 
     
 
@@ -291,6 +293,22 @@ public class GeolocQuery extends AbstractGisQuery {
      */
     public GeolocQuery withDistanceField(boolean distanceField) {
         this.distanceField = distanceField;
+        return this;
+    }
+    
+    /**
+     * @return true if we should filter city that are flagged as 'municipality'
+     */
+    public boolean hasMunicipalityFilter() {
+        return municipality;
+    }
+
+    /**
+     * @param distanceField If the distance should be include or not
+     * @return Whether the distance field should be output 
+     */
+    public GeolocQuery withMunicipalityFilter(boolean municipality) {
+        this.municipality = municipality;
         return this;
     }
   
