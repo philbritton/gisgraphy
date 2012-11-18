@@ -35,8 +35,10 @@ import javax.annotation.Resource;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.Output;
@@ -61,6 +63,9 @@ public class GeolocSearchEngineTest extends AbstractIntegrationHttpSolrTestCase 
 
     @Resource
     ICityDao cityDao;
+    
+    @Resource
+    IAdmDao admDao;
 
     @Resource
     IStatsUsageService statsUsageService;
@@ -204,8 +209,53 @@ public class GeolocSearchEngineTest extends AbstractIntegrationHttpSolrTestCase 
 	assertNull("Distance should not be null if withDistance is false", results.getResult().get(1).getDistance());
 	assertNull("Distance should not be null if withDistance is false", results.getResult().get(2).getDistance());
     }
-
+    
     @Test
+    public void testExecuteQueryShouldfilterMunicipalityIfMunicipalityFilterIsTrue() {
+	City p1 = GisgraphyTestHelper.createCity("paris", 48.86667F, 2.3333F, 1L);
+	// N 48° 52' 0'' 2° 20' 0'' E
+	City p2 = GisgraphyTestHelper.createCity("bordeaux", 44.83333F, -0.56667F,
+		3L);
+	p2.setMunicipality(true);
+	// N 44 50 0 ; 0 34 0 W
+	City p3 = GisgraphyTestHelper.createCity("goussainville", 49.01667F,
+		2.46667F, 2L);
+	
+	
+	// N49° 1' 0'' E 2° 28' 0''
+
+	this.cityDao.save(p1);
+	this.cityDao.save(p2);
+	this.cityDao.save(p3);
+	Adm adm1 = GisgraphyTestHelper.createAdm("name", "FR", "A1", "B2", "C3", "D4", p2, 4);
+	this.admDao.save(adm1);
+
+	//true
+	Pagination pagination = paginate().from(1).to(15);
+	Output output = Output.withFormat(OutputFormat.XML).withIndentation();
+	GeolocQuery query = new GeolocQuery(p1.getLocation(), 1000001,
+		pagination, output, City.class);
+	query.withMunicipalityFilter(true);
+	GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
+	assertEquals(1, results.getResult().size());
+	assertEquals("bordeaux",results.getResult().get(0).getName());
+	
+	//false
+	query = new GeolocQuery(p1.getLocation(), 1000001, pagination, output, City.class);
+	query.withMunicipalityFilter(false);
+	results = geolocSearchEngine.executeQuery(query);
+	assertEquals(3, results.getResult().size());
+
+	// with gisfeature placetype
+	query = new GeolocQuery(p1.getLocation(), 1000001, pagination, output, GisFeature.class);
+	query.withMunicipalityFilter(true);
+	results = geolocSearchEngine.executeQuery(query);
+	assertEquals(1, results.getResult().size());
+	assertEquals("bordeaux", results.getResult().get(0).getName());
+
+	
+    }
+   @Test
     public void testExecuteQueryShouldReturnsAnEmptyListIfThereIsNoResults() {
 	City p1 = GisgraphyTestHelper.createCity("paris", 48.86667F, 2.3333F, 1L);
 

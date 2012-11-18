@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.util.Assert;
 
+import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.geoloc.entity.ZipCodesAware;
@@ -82,6 +83,11 @@ import com.vividsolutions.jts.geom.Point;
  * @param <T>
  *                the type of the object the Gis Dao apply
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
+ */
+/**
+ * @author gisgraphy
+ *
+ * @param <T>
  */
 public class GenericGisDao<T extends GisFeature> extends
 	GenericDao<T, java.lang.Long> implements IGisDao<T> {
@@ -117,7 +123,7 @@ public class GenericGisDao<T extends GisFeature> extends
 	    final GisFeature gisFeature, final double distance,
 	    final int firstResult, final int maxResults, boolean includeDistanceField) {
 	return getNearestAndDistanceFrom(gisFeature.getLocation(), gisFeature
-		.getId(), distance, firstResult, maxResults, includeDistanceField, persistentClass);
+		.getId(), distance, firstResult, maxResults, includeDistanceField, persistentClass, false);
     }
 
     /*
@@ -129,7 +135,7 @@ public class GenericGisDao<T extends GisFeature> extends
     public List<GisFeatureDistance> getNearestAndDistanceFromGisFeature(
 	    GisFeature gisFeature, double distance, boolean includeDistanceField) {
 	return getNearestAndDistanceFrom(gisFeature.getLocation(), gisFeature
-		.getId(), distance, -1, -1, includeDistanceField, persistentClass);
+		.getId(), distance, -1, -1, includeDistanceField, persistentClass, false);
     }
 
     /*
@@ -141,19 +147,17 @@ public class GenericGisDao<T extends GisFeature> extends
     public List<GisFeatureDistance> getNearestAndDistanceFrom(Point point,
 	    double distance) {
 	return getNearestAndDistanceFrom(point, 0L, distance, -1, -1, true,
-		persistentClass);
+		persistentClass, false);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.gisgraphy.domain.repository.IGisDao#getNearestAndDistanceFrom(com.vividsolutions.jts.geom.Point,
-     *      double, int, int)
+    
+    /* (non-Javadoc)
+     * @see com.gisgraphy.domain.repository.IGisDao#getNearestAndDistanceFrom(com.vividsolutions.jts.geom.Point, double, int, int, boolean, boolean)
      */
     public List<GisFeatureDistance> getNearestAndDistanceFrom(Point point,
-	    double distance, int firstResult, int maxResults, boolean includeDistanceField) {
+	    double distance, int firstResult, int maxResults, boolean includeDistanceField, boolean isMunicipality) {
 	return getNearestAndDistanceFrom(point, 0L, distance, firstResult,
-		maxResults,includeDistanceField, persistentClass);
+		maxResults,includeDistanceField, persistentClass, isMunicipality);
     }
 
     /**
@@ -161,12 +165,12 @@ public class GenericGisDao<T extends GisFeature> extends
      * 
      * @param point
      *                The point from which we want to find GIS Object
-     * @param distance
-     *                distance The radius in meters
      * @param pointId
      *                the id of the point that we don't want to be include, it
      *                is used to not include the gisFeature from which we want
      *                to find the nearest
+     * @param distance
+     *                distance The radius in meters
      * @param firstResult
      *                the firstResult index (for pagination), numbered from 1,
      *                if < 1 : it will not be taken into account
@@ -175,6 +179,8 @@ public class GenericGisDao<T extends GisFeature> extends
      *                pagination), if <= 0 : it will not be taken into acount
      * @param requiredClass
      *                the class of the object to be retireved
+     * @param isMunicipality whether we should filter on city that are flag as 'municipality'.
+						act as a filter, if false it doesn't filters( false doesn't mean that we return non municipality)
      * @return A List of GisFeatureDistance with the nearest elements or an
      *         emptylist (never return null), ordered by distance.<u>note</u>
      *         the specified gisFeature will not be included into results
@@ -186,7 +192,7 @@ public class GenericGisDao<T extends GisFeature> extends
 	    final Point point, final Long pointId, final double distance,
 	    final int firstResult, final int maxResults,
 	    final boolean includeDistanceField,
-	    final Class<? extends GisFeature> requiredClass) {
+	    final Class<? extends GisFeature> requiredClass, final boolean isMunicipality) {
 	Assert.notNull(point);
 	return (List<GisFeatureDistance>) this.getHibernateTemplate().execute(
 		new HibernateCallback() {
@@ -220,6 +226,9 @@ public class GenericGisDao<T extends GisFeature> extends
 			}
 			if (includeDistanceField){
 			    criteria.addOrder(new ProjectionOrder("distance"));
+			}
+			if (isMunicipality && (requiredClass == City.class || requiredClass == GisFeature.class)){
+				criteria.add(Restrictions.eq(City.MUNICIPALITY_FIELD_NAME, isMunicipality));
 			}
 			
 			criteria.setCacheable(true);

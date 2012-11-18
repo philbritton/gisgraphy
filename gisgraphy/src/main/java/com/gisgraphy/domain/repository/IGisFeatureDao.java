@@ -69,6 +69,8 @@ public interface IGisFeatureDao extends IGisDao<GisFeature> {
      *                pagination), if <= 0 : it will not be taken into acount
      * @param requiredClass
      *                the class of the object to be retireved
+     * @param isMunicipality whether we should filter on city that are flag as 'municipality'.
+						act as a filter, if false it doesn't filters( false doesn't mean that we return non municipality)
      * @return A List of GisFeatureDistance with the nearest elements or an
      *         emptylist (never return null), ordered by distance.<u>note</u>
      *         the specified gisFeature will not be included into results
@@ -78,7 +80,7 @@ public interface IGisFeatureDao extends IGisDao<GisFeature> {
 	    final GisFeature gisFeature, final double distance,
 	    final int firstResult, final int maxResults,
 	    boolean includeDistanceField,
-	    final Class<? extends GisFeature> requiredClass);
+	    final Class<? extends GisFeature> requiredClass, boolean isMunicipality);
 
     /**
      * 
