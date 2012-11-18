@@ -35,7 +35,7 @@ public enum FeatureClassCodeHelper {
     /**
      * The city feature Code
      */
-    P_PPL, P_PPLA, P_PPLA2, P_PPLA3, P_PPLA4, P_PPLC, P_PPLG, P_PPLL, P_PPLR, P_PPLS, P_STLMT, P_PPLQ, P_PPLW;
+    P_PPL, P_PPLA, P_PPLA2, P_PPLA3, P_PPLA4,P_PPLA5, P_PPLC, P_PPLG, P_PPLL, P_PPLR, P_PPLS, P_STLMT, P_PPLQ, P_PPLW;
 
     /**
      * Whether the feature code and the feature class are for {@link City}

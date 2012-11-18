@@ -22,8 +22,23 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_AND_ADM1CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_AND_ADM2CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_AND_ADM3CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_AND_ADM4CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_AND_ADM5CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_OR_ADM1CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_OR_ADM2CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_OR_ADM3CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_OR_ADM4CODE;
+import static com.gisgraphy.importer.CityDetector.cityDetectionStrategy.POPULATION_OR_ADM5CODE;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 
 /**
  * @author david masclet
@@ -36,6 +51,7 @@ import java.util.Map;
  * when we fill the is_in fields,we have a city and not a quater)
  *
  */
+@Service
 public class CityDetector {
 	
 	public enum cityDetectionStrategy{
@@ -82,9 +98,65 @@ public class CityDetector {
 			put("",cityDetectionStrategy.POPULATION);
 			put("",cityDetectionStrategy.POPULATION);
 			put("",cityDetectionStrategy.POPULATION);*/
-			
 		}
-		
 	};
 
+	public boolean isMunicipality(String countrycode,GisFeature gisFeature ){
+		if (countrycode==null || "".equals(countrycode) || gisFeature ==null){
+			return false;
+		}
+		cityDetectionStrategy strategy = countrycodeToCityDetectionStrategy.get(countrycode.toUpperCase());
+		if (strategy == null){
+			return false;
+		}
+		else {
+			return isMunicipality_internal(strategy, gisFeature.getPopulation(), gisFeature.getAdm1Code(), gisFeature.getAdm2Code(), gisFeature.getAdm3Code(), gisFeature.getAdm4Code(), gisFeature.getAdm5Code());
+		}
+	}
+
+	protected boolean isMunicipality_internal(cityDetectionStrategy strategy, Integer population, String adm1code, String adm2code, String adm3code, String adm4code, String adm5code) {
+		if (population != null && population!=0){//population is not null
+			if (strategy==cityDetectionStrategy.POPULATION || strategy ==POPULATION_OR_ADM1CODE ||  strategy == POPULATION_OR_ADM2CODE || strategy == POPULATION_OR_ADM3CODE || strategy == POPULATION_OR_ADM4CODE || strategy == POPULATION_OR_ADM5CODE){
+				return true;
+			} else if ((strategy== POPULATION_AND_ADM1CODE || strategy== cityDetectionStrategy.ADM1CODE ) && !isNullOrEmpty(adm1code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_AND_ADM2CODE || strategy== cityDetectionStrategy.ADM2CODE ) && !isNullOrEmpty(adm2code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_AND_ADM3CODE || strategy== cityDetectionStrategy.ADM3CODE ) && !isNullOrEmpty(adm3code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_AND_ADM4CODE || strategy== cityDetectionStrategy.ADM4CODE ) && !isNullOrEmpty(adm4code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_AND_ADM5CODE || strategy== cityDetectionStrategy.ADM5CODE ) && !isNullOrEmpty(adm5code)){
+				return true;
+			}
+		} else {//population is null 
+			if (strategy==POPULATION_AND_ADM1CODE || strategy ==POPULATION_AND_ADM2CODE || strategy== POPULATION_AND_ADM3CODE ||strategy==POPULATION_AND_ADM4CODE || strategy ==POPULATION_AND_ADM5CODE){
+				return false;
+			} else if ((strategy== POPULATION_OR_ADM1CODE || strategy== cityDetectionStrategy.ADM1CODE )&& !isNullOrEmpty(adm1code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_OR_ADM2CODE || strategy== cityDetectionStrategy.ADM2CODE ) && !isNullOrEmpty(adm2code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_OR_ADM3CODE || strategy== cityDetectionStrategy.ADM3CODE ) && !isNullOrEmpty(adm3code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_OR_ADM4CODE || strategy== cityDetectionStrategy.ADM4CODE )&& !isNullOrEmpty(adm4code)){
+				return true;
+			}
+			else if ((strategy== POPULATION_OR_ADM5CODE|| strategy== cityDetectionStrategy.ADM5CODE ) && !isNullOrEmpty(adm5code)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isNullOrEmpty(String str){
+		return str==null || "".equals(str);
+	}
+	
 }

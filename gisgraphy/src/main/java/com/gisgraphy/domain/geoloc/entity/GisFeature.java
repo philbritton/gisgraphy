@@ -135,6 +135,8 @@ public class GisFeature{
     private String adm3Code;
 
     private String adm4Code;
+    
+    private String adm5Code;
 
     private String adm1Name;
 
@@ -143,6 +145,8 @@ public class GisFeature{
     private String adm3Name;
 
     private String adm4Name;
+    
+    private String adm5Name;
 
     private String featureClass;
 
@@ -168,6 +172,10 @@ public class GisFeature{
     private GISSource source;
     
     private List<ZipCode> zipCodes;
+
+	
+
+	
 
     /**
      * The datastore id
@@ -354,6 +362,29 @@ public class GisFeature{
     public void setAdm4Code(String adm4Code) {
 	this.adm4Code = adm4Code;
     }
+    
+    /**
+     * Returns the Adm4Code for this feature. The only goal to have the Adm4Code
+     * directly in the GisFeature is for performance reasons :<br>
+     * It allows to have the adm4Code without loading the all Adm tree. See
+     * Important Notes for admXcode for {@link GisFeature}
+     * 
+     * @return The Adm4Code for this Feature
+     */
+    //@Index(name = "adm4codeIndex")
+    @Column(length = 20)
+    public String getAdm5Code() {
+	return adm5Code;
+    }
+
+    /**
+     * @see #getAdm4Code()
+     * @param adm4Code
+     *                the adm4code to set
+     */
+    public void setAdm5Code(String adm5Code) {
+	this.adm5Code = adm5Code;
+    }
 
     /**
      * Returns the name of the Adm of level 1 that this GisFeature is linked to.
@@ -457,6 +488,32 @@ public class GisFeature{
      */
     public void setAdm4Name(String adm4Name) {
 	this.adm4Name = adm4Name;
+    }
+    
+    /**
+     * Returns the name of the Adm of level 5 that this GisFeature is linked to.
+     * The only goal to have it directly in the gisFeature is for performance
+     * reasons :<br>
+     * It allows to have it without loading all the Adm tree
+     * 
+     * @return The name of the Adm of level 5 that this GisFeature is linked to
+     */
+  //  @Index(name = "adm4NameIndex")
+    @Column(length = 200)
+    public String getAdm5Name() {
+	return adm5Name;
+    }
+
+    /**
+     * Set The name of the adm of level 5 that the GisFeature is linked to
+     * 
+     * @param adm4Name
+     *                The name of the adm of level 5 that the GisFeature is
+     *                linked to
+     * @see #getAdm4Name()
+     */
+    public void setAdm5Name(String adm5Name) {
+	this.adm5Name = adm5Name;
     }
 
     /**
