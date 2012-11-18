@@ -99,7 +99,7 @@ public class GeolocSearchEngine implements IGeolocSearchEngine {
 	}
 	List<GisFeatureDistance> results = dao.getNearestAndDistanceFrom(query
 		.getPoint(), query.getRadius(),
-		query.getFirstPaginationIndex(), query.getMaxNumberOfResults(),query.hasDistanceField());
+		query.getFirstPaginationIndex(), query.getMaxNumberOfResults(),query.hasDistanceField(), query.hasMunicipalityFilter());
 
 	long end = System.currentTimeMillis();
 	long qTime = end - start;

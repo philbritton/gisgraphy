@@ -73,10 +73,10 @@ public class GisFeatureDao extends GenericGisDao<GisFeature> implements
 	    GisFeature gisFeature, double distance, int firstResult,
 	    int maxResults,
 	    boolean includeDistanceField,
-	    Class<? extends GisFeature> requiredClass) {
+	    Class<? extends GisFeature> requiredClass, boolean isMunicipality) {
 	Assert.notNull(gisFeature, "can not get nearest for a null gisFeature");
 	return getNearestAndDistanceFrom(gisFeature.getLocation(), gisFeature
-		.getId(), distance, firstResult, maxResults, includeDistanceField, requiredClass);
+		.getId(), distance, firstResult, maxResults, includeDistanceField, requiredClass, isMunicipality);
     }
 
     /*
@@ -91,7 +91,7 @@ public class GisFeatureDao extends GenericGisDao<GisFeature> implements
 	    Class<? extends GisFeature> requiredClass) {
 	Assert.notNull(gisFeature, "can not get nearest for a null gisFeature");
 	return getNearestAndDistanceFromGisFeature(gisFeature, distance, -1,
-		-1, includeDistanceField,requiredClass);
+		-1, includeDistanceField,requiredClass, false);
     }
 
     /*
@@ -105,7 +105,7 @@ public class GisFeatureDao extends GenericGisDao<GisFeature> implements
 	    boolean includeDistanceField,
 	    Class<? extends GisFeature> requiredClass) {
 	return getNearestAndDistanceFrom(point, 0L, distance, firstResult,
-		maxResults, includeDistanceField, requiredClass);
+		maxResults, includeDistanceField, requiredClass, false);
     }
 
     /*

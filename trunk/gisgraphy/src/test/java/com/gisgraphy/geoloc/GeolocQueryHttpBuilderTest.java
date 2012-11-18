@@ -22,6 +22,7 @@
 package com.gisgraphy.geoloc;
 
 import static com.gisgraphy.geoloc.GeolocQuery.DEFAULT_MAX_RESULTS;
+import static com.gisgraphy.geoloc.GeolocQuery.MUNICIPALITY_PARAMETER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -176,6 +177,38 @@ public class GeolocQueryHttpBuilderTest {
 			    GisgraphyServlet.INDENT_PARAMETER
 				    + " should be true for 'on' value (case insensitive and on value)  ",
 			    query.isOutputIndented());
+		    
+		    
+		    
+		 // test municipality
+		    // with no value specified
+		    request = GisgraphyTestHelper.createMockHttpServletRequestForGeoloc();
+		    request.removeParameter(MUNICIPALITY_PARAMETER);
+		    query = buildQuery(request);
+		    assertEquals("When no " + MUNICIPALITY_PARAMETER
+			    + " is specified, the  parameter should be set to default",false,
+			    query.hasMunicipalityFilter());
+		    // with wrong value
+		    request = GisgraphyTestHelper.createMockHttpServletRequestForGeoloc();
+		    request.setParameter(MUNICIPALITY_PARAMETER, "UNK");
+		    query = buildQuery(request);
+		    assertEquals("When wrong " + MUNICIPALITY_PARAMETER
+			    + " is specified, the  parameter should be set to default",false,
+			    query.hasMunicipalityFilter());
+		    // test case sensitive
+		    request = GisgraphyTestHelper.createMockHttpServletRequestForGeoloc();
+		    request.setParameter(MUNICIPALITY_PARAMETER, "tRue");
+		    query = buildQuery(request);
+		    assertTrue(MUNICIPALITY_PARAMETER
+			    + " should be case insensitive  ", query.hasMunicipalityFilter());
+		    // test 'on' value
+		    request = GisgraphyTestHelper.createMockHttpServletRequestForGeoloc();
+		    request.setParameter(MUNICIPALITY_PARAMETER, "oN");
+		    query = buildQuery(request);
+		    assertTrue(
+		    		MUNICIPALITY_PARAMETER
+				    + " should be true for 'on' value (case insensitive and on value)  ",
+			    query.hasMunicipalityFilter());
 
 		    // test outputFormat
 		    // with no value specified

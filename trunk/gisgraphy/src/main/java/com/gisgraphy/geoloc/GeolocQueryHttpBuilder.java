@@ -145,6 +145,14 @@ public class GeolocQueryHttpBuilder {
 			.getParameter(GisgraphyServlet.INDENT_PARAMETER))) {
 	    output.withIndentation();
 	}
+	
+	// municipality
+		if ("true".equalsIgnoreCase(req
+			.getParameter(GeolocQuery.MUNICIPALITY_PARAMETER))
+			|| "on".equalsIgnoreCase(req
+				.getParameter(GeolocQuery.MUNICIPALITY_PARAMETER))) {
+		    geolocQuery.withMunicipalityFilter(true);
+		}
 
 	//placetype
 	Class<? extends GisFeature> clazz = GeolocHelper

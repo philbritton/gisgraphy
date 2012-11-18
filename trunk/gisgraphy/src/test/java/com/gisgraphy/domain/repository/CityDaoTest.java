@@ -376,7 +376,7 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 	this.cityDao.save(p2);
 	this.cityDao.save(p3);
 	List<GisFeatureDistance> results = this.cityDao
-		.getNearestAndDistanceFrom(p1.getLocation(), 1000000, 1, 2,true);
+		.getNearestAndDistanceFrom(p1.getLocation(), 1000000, 1, 2,true, false);
 	assertEquals(2, results.size());
 	// check values and sorted
 	assertEquals(p1.getName(), results.get(0).getName());
@@ -395,7 +395,7 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 	this.cityDao.save(p2);
 	this.cityDao.save(p3);
 	List<GisFeatureDistance> results = this.cityDao
-		.getNearestAndDistanceFrom(p1.getLocation(), 1000000, 2, 5,true);
+		.getNearestAndDistanceFrom(p1.getLocation(), 1000000, 2, 5,true, false);
 	assertEquals(2, results.size());
 	// check values and sorted
 	assertEquals(p3.getName(), results.get(0).getName());

@@ -147,6 +147,8 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
      *                pagination), if <= 0 : it will not be taken into acount
      * @param includeDistanceField 
      * 				Field whether or not we should process calculate the distance
+     * @param isMunicipality whether we should filter on city that are flag as 'municipality'.
+						act as a filter, if false it doesn't filters( false doesn't mean that we return non municipality)
      * @return A List of GisFeatureDistance with the nearest elements or an
      *         emptylist (never return null), ordered by distance. <u>note</u>
      *         the specified gisFeature will not be included into results the
@@ -156,7 +158,7 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
      */
     public List<GisFeatureDistance> getNearestAndDistanceFrom(
 	    final Point point, final double distance, final int firstResult,
-	    final int maxResults,final boolean includeDistanceField );
+	    final int maxResults,final boolean includeDistanceField, boolean isMunicipality );
 
     /**
      * retrieve the Objects with the specified name (not the ASCII one)

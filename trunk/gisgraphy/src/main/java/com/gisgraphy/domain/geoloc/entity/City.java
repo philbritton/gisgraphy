@@ -41,6 +41,8 @@ import com.gisgraphy.helper.IntrospectionIgnoredField;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class City extends GisFeature implements ZipCodesAware {
 
+	public final static String MUNICIPALITY_FIELD_NAME = "municipality";
+	
 	/**
 	 * This fields indicates that the city has some properties(admCode, population that make the city a municipality. 
 	 * This is necessary because some place in geonames are marked as popular places and can be quater or common place.
