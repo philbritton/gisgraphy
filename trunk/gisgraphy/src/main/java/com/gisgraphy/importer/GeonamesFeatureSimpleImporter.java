@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
@@ -79,6 +80,9 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 
     @Autowired
     protected IGisDao<? extends GisFeature>[] iDaos;
+    
+    @Autowired
+    protected CityDetector cityDetector;
 
     /**
      * Default constructor
@@ -327,6 +331,9 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 		    + " have an entry in " + FeatureCode.class.getSimpleName()
 		    + " : " + featureObject.getClass().getSimpleName());
 	    featureObject.populate(gisFeature);
+	    if (gisFeature instanceof City){
+	    	((City)gisFeature).setMunicipality(cityDetector.isMunicipality(gisFeature.getCountryCode(), gisFeature));
+	    }
 		// zipcode
 		String foundZipCode = findZipCode(fields);
 		if (foundZipCode != null){
