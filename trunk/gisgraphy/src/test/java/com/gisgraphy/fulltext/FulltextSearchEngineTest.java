@@ -226,7 +226,13 @@ public class FulltextSearchEngineTest extends
 		Float longitude=3.9F;
 		Point location = GeolocHelper.createPoint(longitude, latitude);
 		LineString shape = GeolocHelper.createLineString("LINESTRING (30.001 30.001, 40 40)");
-    	
+    	String isIn= "is_in";
+    	String isInPlace="is_in_place";
+    	String isInZip="is_in_zip";
+    	String isInAdm="is_in_adm";
+    	String fullyQualifiedAddress="FQA";
+		
+		
 		OpenStreetMap street = new OpenStreetMap();
     	street.setName(name);
     	street.setLength(length);
@@ -237,6 +243,11 @@ public class FulltextSearchEngineTest extends
     	street.setOpenstreetmapId(1234L);
     	street.setLocation(location);
     	street.setShape(shape);
+    	street.setIsIn(isIn);
+    	street.setIsInZip(isInZip);
+    	street.setIsInAdm(isInAdm);
+    	street.setIsInPlace(isInPlace);
+    	street.setFullyQualifiedAddress(fullyQualifiedAddress);
    
 
     	openStreetMapDao.save(street);
@@ -297,7 +308,17 @@ public class FulltextSearchEngineTest extends
 			"//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
 			+ "'][.='"+URLUtils.createCountryFlagUrl(street.getCountryCode())+"']",
 			"//*[@name='" + FullTextFields.PLACETYPE.getValue()
-			+ "'][.='"+Street.class.getSimpleName()+"']"
+			+ "'][.='"+Street.class.getSimpleName()+"']",
+			"//*[@name='" + FullTextFields.IS_IN.getValue()
+			+ "'][.='"+street.getIsIn()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ADM.getValue()
+			+ "'][.='"+street.getIsInAdm()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_PLACE.getValue()
+			+ "'][.='"+street.getIsInPlace()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
+			+ "'][.='"+street.getIsInZip()+"']",
+			"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
+			+ "'][.='"+street.getFullyQualifiedAddress()+"']"
 		
 	);
 
@@ -1118,8 +1139,16 @@ public class FulltextSearchEngineTest extends
 		    results.getResults().get(0).getStreet_type());
 	    Assert.assertEquals("The street type is not correct", street.getOpenstreetmapId(),
 			    results.getResults().get(0).getOpenstreetmap_id());
-	    Assert.assertEquals("The street type is not correct", street.getIsIn(),
+	    Assert.assertEquals("is_in is not correct", street.getIsIn(),
 			    results.getResults().get(0).getIs_in());
+	    Assert.assertEquals("is_in_place is not correct", street.getIsInPlace(),
+			    results.getResults().get(0).getIs_in_place());
+	    Assert.assertEquals("is_in_zip is not correct", street.getIsInZip(),
+			    results.getResults().get(0).getIs_in_zip());
+	    Assert.assertEquals("is_in_adm is not correct", street.getIsInAdm(),
+			    results.getResults().get(0).getIs_in_adm());
+	    Assert.assertEquals("fully_qualified_address is not correct", street.getFullyQualifiedAddress(),
+			    results.getResults().get(0).getFully_qualified_address());
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
 	}

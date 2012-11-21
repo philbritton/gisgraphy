@@ -130,6 +130,10 @@ public class solrResponseDtoBuilder {
 		    FullTextFields.STREET_TYPE.getValue());
 	    solrResponseDto.openstreetmap_id = getFieldAsLong(solrDocument, FullTextFields.OPENSTREETMAP_ID.getValue());
 	    solrResponseDto.is_in = getFieldAsString(solrDocument, FullTextFields.IS_IN.getValue());
+	    solrResponseDto.is_in_place = getFieldAsString(solrDocument, FullTextFields.IS_IN_PLACE.getValue());
+	    solrResponseDto.is_in_zip = getFieldAsString(solrDocument, FullTextFields.IS_IN_ZIP.getValue());
+	    solrResponseDto.is_in_adm = getFieldAsString(solrDocument, FullTextFields.IS_IN_ADM.getValue());
+	    solrResponseDto.fully_qualified_address = getFieldAsString(solrDocument, FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue());
 	}
 	return solrResponseDto;
     }

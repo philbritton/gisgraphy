@@ -1136,7 +1136,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
     	Assert.assertNull(results.getResults().get(0).getName());
     }
     
-    public void testsynchronizeStreetShouldNotSendIsInIfItIsEmpty() {
+    public void testSynchronizeStreetShouldNotSendIsInIfItIsEmpty() {
     	Double length = 3.5D;
     	boolean oneWay = true;
     	StreetType streetType = StreetType.PATH;
@@ -1183,6 +1183,10 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		Point location = GeolocHelper.createPoint(longitude, latitude);
 		LineString shape = GeolocHelper.createLineString("LINESTRING (30.001 30.001, 40 40)");
 		String isIn = "los angeles";
+		String isInPlace = "french quarter";
+		String isInAdm = "california";
+		String isInZip = "90001";
+		String fullyQualifiedAddress = "fullyQualifiedAddress";
     	
 		OpenStreetMap street = new OpenStreetMap();
     	street.setName(name);
@@ -1196,6 +1200,10 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
     	street.setLocation(location);
     	street.setShape(shape);
     	street.setIsIn(isIn);
+    	street.setIsInAdm(isInAdm);
+    	street.setIsInZip(isInZip);
+    	street.setIsInPlace(isInPlace);
+		street.setFullyQualifiedAddress(fullyQualifiedAddress);
    
 
     	openStreetMapDao.save(street);
@@ -1260,7 +1268,15 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			"//*[@name='" + FullTextFields.PLACETYPE.getValue()
 			+ "'][.='"+Street.class.getSimpleName()+"']",
 			"//*[@name='" + FullTextFields.IS_IN.getValue()
-			+ "'][.='"+street.getIsIn()+"']"
+			+ "'][.='"+street.getIsIn()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ADM.getValue()
+			+ "'][.='"+street.getIsInAdm()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_PLACE.getValue()
+			+ "'][.='"+street.getIsInPlace()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
+			+ "'][.='"+street.getIsInZip()+"']",
+			"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
+			+ "'][.='"+street.getFullyQualifiedAddress()+"']"
 		
 	);
 

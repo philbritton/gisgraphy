@@ -277,6 +277,10 @@ public class GisgraphyTestHelper {
 	street.setSource(GISSource.PERSONAL);
 	street.setTimezone("gmt+1");
 	street.setIsIn("los angeles");
+	street.setIsInPlace("los angeles quarter");
+	street.setIsInZip("zip LA");
+	street.setIsInAdm("los angeles ADM");
+	street.setFullyQualifiedAddress("los angeles FQA");
 	
 	street.setOneWay(true);
 	street.setLength(3.56D);
@@ -614,6 +618,10 @@ public class GisgraphyTestHelper {
 	streetOSM.setName("John Kénedy");
 	streetOSM.setOpenstreetmapId(12345L);
 	streetOSM.setIsIn("los angeles");
+	streetOSM.setIsInPlace("los angeles quater");
+	streetOSM.setIsInAdm("adm LA");
+	streetOSM.setIsInZip("zip LA");
+	streetOSM.setFullyQualifiedAddress("fullyqulified address LA");
 	return StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM);
 
     }
@@ -626,6 +634,10 @@ public class GisgraphyTestHelper {
     	streetOSM.setOneWay(false);
     	streetOSM.setStreetType(StreetType.FOOTWAY);
     	streetOSM.setIsIn("chicago");
+    	streetOSM.setIsInPlace("foo quater");
+    	streetOSM.setIsInZip("zip PM");
+    	streetOSM.setIsInAdm("adm PM");
+    	streetOSM.setFullyQualifiedAddress("fullyQualifiedAddress");
     	streetOSM.setName("peter martin");
     	streetOSM.setOpenstreetmapId(12346L);
     	streetOSM.setLocation(GeolocHelper.createPoint(30.001F, 40F));

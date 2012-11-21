@@ -317,6 +317,18 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 		    	if (((Street) gisFeature).getIsIn()!=null && !((Street) gisFeature).getIsIn().trim().equals("")){
 		    	    ex.setField(FullTextFields.IS_IN.getValue(), ((Street) gisFeature).getIsIn());
 		    	}
+		    	if (((Street) gisFeature).getIsInPlace()!=null && !((Street) gisFeature).getIsInPlace().trim().equals("")){
+		    	    ex.setField(FullTextFields.IS_IN_PLACE.getValue(), ((Street) gisFeature).getIsInPlace());
+		    	}
+		    	if (((Street) gisFeature).getIsInAdm()!=null && !((Street) gisFeature).getIsInAdm().trim().equals("")){
+		    	    ex.setField(FullTextFields.IS_IN_ADM.getValue(), ((Street) gisFeature).getIsInAdm());
+		    	}
+		    	if (((Street) gisFeature).getIsInZip()!=null && !((Street) gisFeature).getIsInZip().trim().equals("")){
+		    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), ((Street) gisFeature).getIsInZip());
+		    	}
+		    	if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
+		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
+		    	}
 		    } else {
 			
 			ex.setField(FullTextFields.FEATURECLASS.getValue(), gisFeature
