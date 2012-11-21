@@ -605,6 +605,10 @@
 				add the ability filter populated place as municipality in geolocsearch engine
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				add is_in_place,is_in_adm_is_in_zip,fully_qualified_address to streets
+			</action>
+			
 			</release>
 			
 	</body>
