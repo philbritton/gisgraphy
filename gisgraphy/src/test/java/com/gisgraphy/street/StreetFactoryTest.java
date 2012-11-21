@@ -40,6 +40,10 @@ public class StreetFactoryTest {
 	Double length = 5.6D;
 	boolean oneWay = true;
 	String isIn = "los angeles";
+	String isInPlace = "french quater";
+	String isInAdm = "adm";
+	String isInZip = "zip";
+	String fullyQualifiedAddress ="fullyQualifiedAddress";
 	StreetType streetType = StreetType.SECONDARY_LINK;
 	String countryCode = "FR";
 	Point location = GeolocHelper.createPoint(10.2F, 9.5F);
@@ -53,6 +57,10 @@ public class StreetFactoryTest {
 	openStreetMap.setOneWay(oneWay);
 	openStreetMap.setOpenstreetmapId(openstreetmapId);
 	openStreetMap.setIsIn(isIn);
+	openStreetMap.setIsInAdm(isInAdm);
+	openStreetMap.setIsInPlace(isInPlace);
+	openStreetMap.setIsInZip(isInZip);
+	openStreetMap.setFullyQualifiedAddress(fullyQualifiedAddress);
 	
 	StreetFactory factory = new StreetFactory();
 	Street street = factory.create(openStreetMap);
@@ -66,6 +74,10 @@ public class StreetFactoryTest {
 	Assert.assertEquals(oneWay, street.isOneWay());
 	Assert.assertEquals(countryCode, street.getCountryCode());
 	Assert.assertEquals(isIn, street.getIsIn());
+	Assert.assertEquals(isInPlace, street.getIsInPlace());
+	Assert.assertEquals(isInAdm, street.getIsInAdm());
+	Assert.assertEquals(isInZip, street.getIsInZip());
+	Assert.assertEquals(fullyQualifiedAddress, street.getFullyQualifiedAddress());
 	
 	
     }

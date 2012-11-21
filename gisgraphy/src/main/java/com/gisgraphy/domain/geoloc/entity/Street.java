@@ -44,6 +44,14 @@ public class Street extends GisFeature {
     private Double length;
     private Long openstreetmapId;
     private String isIn;
+    private String isInPlace;
+    
+    private String isInAdm;
+    
+    private String isInZip;
+    
+    private String fullyQualifiedAddress;
+
 
     public Long getOpenstreetmapId() {
 	return openstreetmapId;
@@ -122,4 +130,58 @@ public class Street extends GisFeature {
     public void setIsIn(String isIn) {
 	this.isIn = isIn;
     }
+    
+    /**
+	 * @return the place where the street is located, 
+	 * this field is filled when {@link OpenStreetMap#isIn}
+	 *  is filled and we got more specific details (generally quarter, neighborhood)
+	 */
+	public String getIsInPlace() {
+		return isInPlace;
+	}
+
+	/**
+	 * @param isInPlace the most precise information on where the street is located,
+	 * generally quarter neighborhood
+	 */
+	public void setIsInPlace(String isInPlace) {
+		this.isInPlace = isInPlace;
+	}
+
+	/**
+	 * @return the adm (aka administrative division) where the street is located.
+	 */
+	public String getIsInAdm() {
+		return isInAdm;
+	}
+
+	/**
+	 * @param isInAdm  the adm (aka administrative division) where the street is located
+	 */
+	public void setIsInAdm(String isInAdm) {
+		this.isInAdm = isInAdm;
+	}
+
+	/**
+	 * @return the zipcode where the street is located
+	 */
+	public String getIsInZip() {
+		return isInZip;
+	}
+
+	/**
+	 * @param isInZip the zipcode where the street is located.
+	 */
+	public void setIsInZip(String isInZip) {
+		this.isInZip = isInZip;
+	}
+
+
+	public String getFullyQualifiedAddress() {
+		return fullyQualifiedAddress;
+	}
+
+	public void setFullyQualifiedAddress(String fullyQualifiedAddress) {
+		this.fullyQualifiedAddress = fullyQualifiedAddress;
+	}
 }

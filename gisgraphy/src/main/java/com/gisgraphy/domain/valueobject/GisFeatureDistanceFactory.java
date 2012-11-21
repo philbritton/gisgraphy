@@ -76,6 +76,10 @@ public class GisFeatureDistanceFactory {
 	gisFeatureDistance.setStreetType(street.getStreetType());
 	gisFeatureDistance.setOpenstreetmapId(street.getOpenstreetmapId());
 	gisFeatureDistance.setIsIn(street.getIsIn());
+	gisFeatureDistance.setIsInAdm(street.getIsInAdm());
+	gisFeatureDistance.setIsInZip(street.getIsInZip());
+	gisFeatureDistance.setIsInPlace(street.getIsInPlace());
+	gisFeatureDistance.setFullyQualifiedAddress(street.getFullyQualifiedAddress());
 	return gisFeatureDistance;
     }
     

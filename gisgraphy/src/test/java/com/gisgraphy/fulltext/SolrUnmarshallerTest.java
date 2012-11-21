@@ -345,6 +345,14 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		    result.getStreet_type().toString());
 	    Assert.assertEquals("The is_in is not correct", street.getIsIn(),
 			    result.getIs_in());
+	    Assert.assertEquals("The is_in_place is not correct", street.getIsInPlace(),
+			    result.getIs_in_place());
+	    Assert.assertEquals("The is_in_zip is not correct", street.getIsInZip(),
+			    result.getIs_in_zip());
+	    Assert.assertEquals("The is_in_adm is not correct", street.getIsInAdm(),
+			    result.getIs_in_adm());
+	    Assert.assertEquals("The fullyqualified address is not correct", street.getFullyQualifiedAddress(),
+			    result.getFully_qualified_address());
 	    Assert.assertEquals("The openstreetmap id is not correct", street.getOpenstreetmapId(),
 			    result.getOpenstreetmap_id());
 	

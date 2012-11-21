@@ -1,16 +1,35 @@
-add a field to openstreetmap
-=>add the same fields to street.
-modify streetfactory +test
-modify solr shema +fulltextfields+solrsynchronizer+test
+ #Fields
+ add a field to openstreetmap
+ =>add the same fields to street.
+ modify streetfactory +test
+ modify solr shema +fulltextfields+solrsynchronizer+test
+ modify OutputStyleHelper
+ 
 doc
-openstreetmap importer +test
-modify streetdistance and gisfeaturedistance +test service return the field
-modify OutputStyleHelper
-modify constructor of GisFeatureDistance(street) and createFullFilledGisFeatureDistanceForStreet in geolotesthelper
-createOpenStreetMapForJohnKenedyStreet et createOpenStreetMapForPeterMartinStreet et tout les endroits ou c'est utilisé
-solrresponsedto =>solrunmarshallertest
-streetresultdto
-fulltextsearchengine#testExecuteQueryForStreet
 
+#Importer
+openstreetmap importer +test
+
+#WS
++service return the field
+
+ #fulltext dto 
+ solrresponsedto =>solrunmarshallertest
+ 
+ #geoloc dto
+ gisfeaturedistance
+ GisFeatureDistanceFactory
+ 
+ #street dto
+ StreetSearchResultsDto
+ modify streetdistance
+ 
+ #test
+ modify constructor of GisFeatureDistance(street) and createFullFilledGisFeatureDistanceForStreet in geolotesthelper
+ createOpenStreetMapForJohnKenedyStreet et createOpenStreetMapForPeterMartinStreet et tout les endroits ou c'est utilisé
+ fulltextsearchenginetest#testExecuteQueryForStreet
+ fulltextsearchenginetest#testExecuteAndSerializeForStreet
+ 
+# display
 add the field to macro displaystreet et display fulltextresultdto 
 add fields to client

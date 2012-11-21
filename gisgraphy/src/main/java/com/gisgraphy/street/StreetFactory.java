@@ -49,6 +49,10 @@ public Street create(OpenStreetMap openstreetmap){
 	   street.setLength(openstreetmap.getLength());
 	   street.setOneWay(openstreetmap.isOneWay());
 	   street.setIsIn(openstreetmap.getIsIn());
+	   street.setIsInPlace(openstreetmap.getIsInPlace());
+	   street.setIsInZip(openstreetmap.getIsInZip());
+	   street.setIsInAdm(openstreetmap.getIsInAdm());
+	   street.setFullyQualifiedAddress(openstreetmap.getFullyQualifiedAddress());
 	   street.setPopulation(openstreetmap.getPopulation());
 	   return street;
        }
