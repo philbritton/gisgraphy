@@ -52,7 +52,7 @@ import com.gisgraphy.domain.geoloc.entity.GisFeature;
  *
  */
 @Service
-public class CityDetector {
+public class CityDetector implements IcityDetector {
 	
 	public enum cityDetectionStrategy{
 		//0
@@ -101,6 +101,18 @@ public class CityDetector {
 		}
 	};
 
+	/* (non-Javadoc)
+	 * @see com.gisgraphy.importer.IcityDetector#isCountryHasMunicipality(java.lang.String)
+	 */
+	public boolean isCountryHasMunicipality(String countryCode){
+		if (countryCode!=null && countrycodeToCityDetectionStrategy.get(countryCode.toUpperCase())!=null){
+			return true;
+		} return false;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.gisgraphy.importer.IcityDetector#isMunicipality(java.lang.String, com.gisgraphy.domain.geoloc.entity.GisFeature)
+	 */
 	public boolean isMunicipality(String countrycode,GisFeature gisFeature ){
 		if (countrycode==null || "".equals(countrycode) || gisFeature ==null){
 			return false;

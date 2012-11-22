@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
@@ -148,7 +149,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 	}
 	
 	@Test
-	public void testGetNearestCityName(){
+	public void testGetNearestCity(){
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setGeonamesImporterEnabled(true);
 		importerConfig.setOpenStreetMapFillIsIn(true);
@@ -182,7 +183,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
 		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
 		
-		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
+		GisFeatureDistance actual = openStreetMapImporter.getNearestCity(location,false);
 		Assert.assertEquals(cityName, actual.getName());
 		Assert.assertEquals(population, actual.getPopulation());
 		EasyMock.verify(geolocSearchEngine);
@@ -190,7 +191,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 	}
 	
 	@Test
-	public void testGetNearestCityName_for_FR(){
+	public void testGetNearestCity_filterMunicipality(){
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setGeonamesImporterEnabled(true);
 		importerConfig.setOpenStreetMapFillIsIn(true);
@@ -198,18 +199,22 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		openStreetMapImporter.setImporterConfig(importerConfig);
 		final String  cityName= "cityName";
 		final Integer population = 123;
-		final GisFeature city = new City();
-		
+		final String adm2name= "adm2name";
+		final City city = new City();
+		city.setMunicipality(false);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
 		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
 		Point location= GeolocHelper.createPoint(2F, 3F);
-		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true);
+		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
 		GeolocResultsDto resultsDto = new GeolocResultsDto() {
 			@Override
 			public List<GisFeatureDistance> getResult() {
 				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
 				city.setName(cityName);
 				city.setPopulation(population);
-				city.setCountryCode("FR");
+				city.setAdm2Name(adm2name);
+				city.setZipCodes(zipCodes);
 				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
 				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
 				list.add(gisFeatureDistance);
@@ -225,7 +230,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
 		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
 		
-		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
+		GisFeatureDistance actual = openStreetMapImporter.getNearestCity(location,true);
 		Assert.assertEquals(cityName, actual.getName());
 		Assert.assertEquals(population, actual.getPopulation());
 		EasyMock.verify(geolocSearchEngine);
@@ -233,48 +238,40 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 	}
 	
 	@Test
-	public void testGetNearestCityName_for_FR_population_is_0(){
-		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setGeonamesImporterEnabled(true);
-		importerConfig.setOpenStreetMapFillIsIn(true);
+	public void getDeeperAdmName(){
 		OpenStreetMapSimpleImporter openStreetMapImporter = new OpenStreetMapSimpleImporter();
-		openStreetMapImporter.setImporterConfig(importerConfig);
-		final String  cityName= "cityName";
-		final Integer population = 0;
-		final GisFeature city = new City();
+		City city = new City();
+		city.setAdm5Name("adm5Name");
+		city.setAdm4Name("adm4Name");
+		city.setAdm3Name("adm3Name");
+		city.setAdm2Name("adm2Name");
+		city.setAdm1Name("adm1Name");
+		GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+		GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertEquals("adm5Name",openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
 		
-		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
-		Point location= GeolocHelper.createPoint(2F, 3F);
-		GeolocQuery query  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true);
-		GeolocResultsDto resultsDto = new GeolocResultsDto() {
-			@Override
-			public List<GisFeatureDistance> getResult() {
-				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
-				city.setName(cityName);
-				city.setPopulation(population);
-				city.setCountryCode("FR");
-				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
-				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
-				list.add(gisFeatureDistance);
-				return list;
-			}
-			@Override
-			public int getNumFound() {
-				return 1;
-			}
-		};
-		EasyMock.expect(geolocSearchEngine.executeQuery(query)).andReturn(resultsDto);
-		EasyMock.replay(geolocSearchEngine);
+		city.setAdm5Name(null);
+		gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertEquals("adm4Name",openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
 		
-		openStreetMapImporter.setGeolocSearchEngine(geolocSearchEngine);
+		city.setAdm4Name(null);
+		gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertEquals("adm3Name",openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
 		
-		GisFeatureDistance actual = openStreetMapImporter.getNearestCityName(location);
-		Assert.assertNull("city with population ==0 should not be considered as city",actual);
-		EasyMock.verify(geolocSearchEngine);
+		city.setAdm3Name(null);
+		gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertEquals("adm2Name",openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
+		
+		city.setAdm2Name(null);
+		gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertEquals("adm1Name",openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
+		
+		city.setAdm1Name(null);
+		gisFeatureDistance = factory.fromGisFeature(city,1D);
+		Assert.assertNull(openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
 		
 	}
-    
-   
+	
     
     @Test
     public void testProcessLineWithBadShapeShouldNotTryToSaveLine(){
@@ -382,15 +379,338 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	assertTrue(OpenStreetMapSimpleImporterTest.setupIsCalled);
     }
     
-    
-    @Required
-    public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
-        this.openStreetMapDao = openStreetMapDao;
+    @Test
+    public void testSetIsInFields_first_null_second_ok(){
+    	OpenStreetMapSimpleImporter openStreetMapSimpleImporter = new OpenStreetMapSimpleImporter();
+    	
+    	final String  cityName= "cityName";
+		final Integer population = 123;
+		final String adm2name= "adm2name";
+		final City city = new City();
+		city.setFeatureId(1L);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery queryWithFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
+		GeolocQuery queryWithoutFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(false);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setAdm2Name(adm2name);
+				city.setZipCodes(zipCodes);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithFilter)).andReturn(null);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithoutFilter)).andReturn(resultsDto);
+		EasyMock.replay(geolocSearchEngine);
+		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		IcityDetector cityDetector = EasyMock.createMock(IcityDetector.class);
+    	String countryCode = "FR";
+		EasyMock.expect(cityDetector.isCountryHasMunicipality(countryCode)).andStubReturn(true);
+    	EasyMock.replay(cityDetector);
+    	openStreetMapSimpleImporter.setCityDetector(cityDetector);
+    	
+    	OpenStreetMap street = new OpenStreetMap();
+    	street.setCountryCode(countryCode);
+    	street.setLocation(location);
+    	openStreetMapSimpleImporter.setIsInFields(street);
+    	
+    	Assert.assertEquals("ZIP1", street.getIsInZip());
+    	Assert.assertEquals("adm2name", street.getIsInAdm());
+    	Assert.assertEquals("cityName", street.getIsIn());
+    	Assert.assertEquals(null, street.getIsInPlace());
+    	
+    	EasyMock.verify(cityDetector);
+    	
     }
-
-    @Required
-    public void setOpenStreetMapImporter(IImporterProcessor openStreetMapImporter) {
-        this.openStreetMapImporter = openStreetMapImporter;
+    
+    @Test
+    public void testSetIsInFields_both_ok_same_id(){
+    	OpenStreetMapSimpleImporter openStreetMapSimpleImporter = new OpenStreetMapSimpleImporter();
+    	
+    	final String  cityName= "cityName";
+		final Integer population = 123;
+		final String adm2name= "adm2name";
+		final City city = new City();
+		city.setFeatureId(1L);
+		city.setMunicipality(false);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
+		
+		final String  cityName2= "cityName2";
+		final Integer population2 = 456;
+		final String adm2name2= "adm2name2";
+		final City city2 = new City();
+		city2.setFeatureId(1L);
+		final List<ZipCode> zipCodes2 = new ArrayList<ZipCode>();
+		zipCodes2.add(new ZipCode("zip2"));
+		
+		
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery queryWithFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
+		GeolocQuery queryWithoutFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(false);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setAdm2Name(adm2name);
+				city.setZipCodes(zipCodes);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		
+		GeolocResultsDto resultsDto2 = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city2.setName(cityName2);
+				city2.setPopulation(population2);
+				city2.setAdm2Name(adm2name2);
+				city2.setZipCodes(zipCodes2);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city2,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithFilter)).andReturn(resultsDto);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithoutFilter)).andReturn(resultsDto2);
+		EasyMock.replay(geolocSearchEngine);
+		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		IcityDetector cityDetector = EasyMock.createMock(IcityDetector.class);
+    	String countryCode = "FR";
+		EasyMock.expect(cityDetector.isCountryHasMunicipality(countryCode)).andStubReturn(true);
+    	EasyMock.replay(cityDetector);
+    	openStreetMapSimpleImporter.setCityDetector(cityDetector);
+    	
+    	OpenStreetMap street = new OpenStreetMap();
+    	street.setCountryCode(countryCode);
+    	street.setLocation(location);
+    	openStreetMapSimpleImporter.setIsInFields(street);
+    	
+    	Assert.assertEquals("ZIP1", street.getIsInZip());
+    	Assert.assertEquals("adm2name", street.getIsInAdm());
+    	Assert.assertEquals("cityName", street.getIsIn());
+    	Assert.assertEquals(null, street.getIsInPlace());
+    	
+    	EasyMock.verify(cityDetector);
+    	
+    }
+    
+    
+    @Test
+    public void testSetIsInFields_both_ok_different_id(){
+    	OpenStreetMapSimpleImporter openStreetMapSimpleImporter = new OpenStreetMapSimpleImporter();
+    	
+    	final String  cityName= "cityName";
+		final Integer population = 123;
+		final String adm2name= "adm2name";
+		final City city = new City();
+		city.setFeatureId(1L);
+		city.setMunicipality(false);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
+		
+		final String  cityName2= "cityName2";
+		final Integer population2 = 456;
+		final String adm2name2= "adm2name2";
+		final City city2 = new City();
+		city2.setFeatureId(2L);
+		final List<ZipCode> zipCodes2 = new ArrayList<ZipCode>();
+		zipCodes2.add(new ZipCode("zip2"));
+		
+		
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery queryWithFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
+		GeolocQuery queryWithoutFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(false);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setAdm2Name(adm2name);
+				city.setZipCodes(zipCodes);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		
+		GeolocResultsDto resultsDto2 = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city2.setName(cityName2);
+				city2.setPopulation(population2);
+				city2.setAdm2Name(adm2name2);
+				city2.setZipCodes(zipCodes2);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city2,2D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithFilter)).andReturn(resultsDto);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithoutFilter)).andReturn(resultsDto2);
+		EasyMock.replay(geolocSearchEngine);
+		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		IcityDetector cityDetector = EasyMock.createMock(IcityDetector.class);
+    	String countryCode = "FR";
+		EasyMock.expect(cityDetector.isCountryHasMunicipality(countryCode)).andStubReturn(true);
+    	EasyMock.replay(cityDetector);
+    	openStreetMapSimpleImporter.setCityDetector(cityDetector);
+    	
+    	OpenStreetMap street = new OpenStreetMap();
+    	street.setCountryCode(countryCode);
+    	street.setLocation(location);
+    	openStreetMapSimpleImporter.setIsInFields(street);
+    	
+    	Assert.assertEquals("ZIP1", street.getIsInZip());
+    	Assert.assertEquals("adm2name", street.getIsInAdm());
+    	Assert.assertEquals("cityName", street.getIsIn());
+    	Assert.assertEquals("isIn place should not be filled if both result return the same place",cityName2, street.getIsInPlace());
+    	
+    	EasyMock.verify(cityDetector);
+    	
+    }
+    
+    
+    @Test
+    public void testSetIsInFields_first_ok_second_null(){
+    	OpenStreetMapSimpleImporter openStreetMapSimpleImporter = new OpenStreetMapSimpleImporter();
+    	
+    	final String  cityName= "cityName";
+		final Integer population = 123;
+		final String adm2name= "adm2name";
+		final City city = new City();
+		city.setMunicipality(false);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery queryWithFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
+		GeolocQuery queryWithoutFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(false);
+		GeolocResultsDto resultsDto = new GeolocResultsDto() {
+			@Override
+			public List<GisFeatureDistance> getResult() {
+				List<GisFeatureDistance> list = new ArrayList<GisFeatureDistance>();
+				city.setName(cityName);
+				city.setPopulation(population);
+				city.setAdm2Name(adm2name);
+				city.setZipCodes(zipCodes);
+				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
+				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
+				list.add(gisFeatureDistance);
+				return list;
+			}
+			@Override
+			public int getNumFound() {
+				return 1;
+			}
+		};
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithFilter)).andReturn(resultsDto);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithoutFilter)).andReturn(null);
+		EasyMock.replay(geolocSearchEngine);
+		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		IcityDetector cityDetector = EasyMock.createMock(IcityDetector.class);
+    	String countryCode = "FR";
+		EasyMock.expect(cityDetector.isCountryHasMunicipality(countryCode)).andStubReturn(true);
+    	EasyMock.replay(cityDetector);
+    	openStreetMapSimpleImporter.setCityDetector(cityDetector);
+    	
+    	OpenStreetMap street = new OpenStreetMap();
+    	street.setCountryCode(countryCode);
+    	street.setLocation(location);
+    	openStreetMapSimpleImporter.setIsInFields(street);
+    	
+    	Assert.assertEquals("ZIP1", street.getIsInZip());
+    	Assert.assertEquals("adm2name", street.getIsInAdm());
+    	Assert.assertEquals("cityName", street.getIsIn());
+    	Assert.assertEquals(null, street.getIsInPlace());
+    	
+    	EasyMock.verify(cityDetector);
+    	
+    }
+    
+    
+    @Test
+    public void testSetIsInFields_both_null(){
+    	OpenStreetMapSimpleImporter openStreetMapSimpleImporter = new OpenStreetMapSimpleImporter();
+    	
+		final City city = new City();
+		city.setMunicipality(false);
+		final List<ZipCode> zipCodes = new ArrayList<ZipCode>();
+		zipCodes.add(new ZipCode("zip1"));
+		IGeolocSearchEngine geolocSearchEngine = EasyMock.createMock(IGeolocSearchEngine.class);
+		Point location= GeolocHelper.createPoint(2F, 3F);
+		GeolocQuery queryWithFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(true);
+		GeolocQuery queryWithoutFilter  = (GeolocQuery) new GeolocQuery(location).withPlaceType(City.class).withDistanceField(true).withMunicipalityFilter(false);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithFilter)).andReturn(null);
+		EasyMock.expect(geolocSearchEngine.executeQuery(queryWithoutFilter)).andReturn(null);
+		EasyMock.replay(geolocSearchEngine);
+		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
+		
+		IcityDetector cityDetector = EasyMock.createMock(IcityDetector.class);
+    	String countryCode = "FR";
+		EasyMock.expect(cityDetector.isCountryHasMunicipality(countryCode)).andStubReturn(true);
+    	EasyMock.replay(cityDetector);
+    	openStreetMapSimpleImporter.setCityDetector(cityDetector);
+    	
+    	OpenStreetMap street = new OpenStreetMap();
+    	street.setCountryCode(countryCode);
+    	street.setLocation(location);
+    	openStreetMapSimpleImporter.setIsInFields(street);
+    	
+    	Assert.assertEquals(null, street.getIsInZip());
+    	Assert.assertEquals(null, street.getIsInAdm());
+    	Assert.assertEquals(null, street.getIsIn());
+    	Assert.assertEquals(null, street.getIsInPlace());
+    	
+    	EasyMock.verify(cityDetector);
+    	
     }
     
     @Test
@@ -443,4 +763,17 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     public void setIdGenerator(IIdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
+    
+    
+    @Required
+    public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
+        this.openStreetMapDao = openStreetMapDao;
+    }
+
+    @Required
+    public void setOpenStreetMapImporter(IImporterProcessor openStreetMapImporter) {
+        this.openStreetMapImporter = openStreetMapImporter;
+    }
+    
+  
 }

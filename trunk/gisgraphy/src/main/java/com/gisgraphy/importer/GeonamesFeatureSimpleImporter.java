@@ -82,7 +82,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
     protected IGisDao<? extends GisFeature>[] iDaos;
     
     @Autowired
-    protected CityDetector cityDetector;
+    protected IcityDetector cityDetector;
 
     /**
      * Default constructor
