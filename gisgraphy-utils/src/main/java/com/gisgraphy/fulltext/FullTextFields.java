@@ -95,7 +95,11 @@ public enum FullTextFields {
 	ONE_WAY("one_way"),
 	STREET_TYPE("street_type"),
 	OPENSTREETMAP_ID("openstreetmap_id"),
-	IS_IN("is_in");
+	IS_IN_PLACE("is_in_place"),
+	IS_IN_ADM("is_in_adm"),
+	IS_IN_ZIP("is_in_zip"),
+	IS_IN("is_in"),
+	FULLY_QUALIFIED_ADDRESS("fully_qualified_address");
 	//end of street only
 	
 	/** The value of the fulltext field in the schema.xml */
