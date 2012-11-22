@@ -147,6 +147,8 @@
 		class="com.gisgraphy.importer.OpenStreetMapFileRetriever" parent="abstractFileRetriever" >
 	</bean>
 	
+	<bean id="cityDetector"	class="com.gisgraphy.importer.CityDetector" ></bean>
+	
 	
 	<bean id="openStreetMapImporter" class="com.gisgraphy.importer.OpenStreetMap${classifier}Importer"
 	parent="abstract${classifier}ImporterProcessor">
@@ -154,6 +156,7 @@
 		<property name="importerConfig" ref="importerConfig" />
 		<property name="solRSynchroniser" ref="solRSynchroniser"/>
 		<property name="geolocSearchEngine" ref="geolocSearchEngine"/>
+		<property name="cityDetector" ref="cityDetector" />
 	</bean>
 	
 	<bean id="geonamesZipCodeFileRetriever"

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Required;
@@ -64,6 +65,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     protected ISolRSynchroniser solRSynchroniser;
     
     protected IGeolocSearchEngine geolocSearchEngine;
+    
+    protected IcityDetector cityDetector;
     
     private Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
@@ -152,16 +155,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 		if (!isEmptyField(fields, 5, false)) {
 			street.setIsIn(fields[5].trim());
 		} else if (shouldFillIsInField()) {
-			GisFeatureDistance city = getNearestCityName(street.getLocation());
-			if (city != null) {
-				street.setPopulation(city.getPopulation());
-				if (city.getName() != null){
-						// tests if city is a paris district, if so it is
-						// probably a pplx that is newly considered as ppl
-						// http://forum.geonames.org/gforum/posts/list/2063.page
-						street.setIsIn(pplxToPPL(city.getName()));
-					}
-			}
+			setIsInFields(street);
 		}
 	
 		long generatedId= idGenerator.getNextGId();
@@ -208,25 +202,88 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	}
 
     }
-    
-   
-    
-    protected GisFeatureDistance getNearestCityName(Point location) {
-		GeolocQuery query = (GeolocQuery)new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class);
-    	GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
-    	for(GisFeatureDistance gisFeatureDistance:results.getResult()){
-    			//because some pplx are considered as city in geonames i have to do that : 
-    			if ("FR".equalsIgnoreCase(gisFeatureDistance.getCountryCode())){
-    				if (gisFeatureDistance.getPopulation()!=null && gisFeatureDistance.getPopulation()>0){
-    					return gisFeatureDistance;
-    				} 
-    			} else {
-    				return gisFeatureDistance;
-    			}
-    		}
-    		return null;
+
+	protected void setIsInFields(OpenStreetMap street) {
+		if (street != null && street.getLocation() != null) {
+			boolean filterMunicipality = cityDetector.isCountryHasMunicipality(street.getCountryCode());
+			GisFeatureDistance city = getNearestCity(street.getLocation(), filterMunicipality);
+			if (city != null) {
+				street.setPopulation(city.getPopulation());
+				street.setIsInAdm(getDeeperAdmName(city));
+				if (city.getZipCodes() != null && city.getZipCodes().size() == 1) {
+					street.setIsInZip(city.getZipCodes().get(0));
+				}
+				if (city.getName() != null) {
+					street.setIsIn(pplxToPPL(city.getName()));
+				}
+			}
+			if (filterMunicipality) {
+				GisFeatureDistance city2 = getNearestCity(street.getLocation(), false);
+				if (city2 != null) {
+					if (city != null && city.getFeatureId() == city2.getFeatureId()) {
+						return;
+					}
+					if (city2.getPopulation() != null && city2.getPopulation() != 0 && (street.getPopulation() == null || street.getPopulation() == 0)) {
+						street.setPopulation(city2.getPopulation());
+					}
+
+					if (street.getIsIn() == null) {
+						street.setIsIn(pplxToPPL(city2.getName()));
+					} else {
+						street.setIsInPlace(pplxToPPL(city2.getName()));
+					}
+					if (street.getIsInAdm() == null) {
+						street.setIsInAdm(getDeeperAdmName(city2));
+					}
+					if (street.getIsInZip() == null && city2.getZipCodes() != null && city2.getZipCodes().size() == 1) {
+						street.setIsInZip(city2.getZipCodes().get(0));
+					}
+				}
+			}
+		}
+	}
+
+	//todo test
+	protected String getDeeperAdmName(GisFeatureDistance city) {
+		if (city != null) {
+			if (city.getAdm5Name() != null) {
+				return city.getAdm5Name();
+			} else if (city.getAdm4Name() != null) {
+				return city.getAdm4Name();
+			} else if (city.getAdm3Name() != null) {
+				return city.getAdm3Name();
+			} else if (city.getAdm2Name() != null) {
+				return city.getAdm2Name();
+			} else if (city.getAdm1Name() != null) {
+				return city.getAdm1Name();
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
     
+   
+	protected GisFeatureDistance getNearestCity(Point location, boolean filterMunicipality) {
+		if (location ==null){
+			return null;
+		}
+		GeolocQuery query = (GeolocQuery) new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class).withMunicipalityFilter(filterMunicipality);
+		GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
+		if (results != null){
+			for (GisFeatureDistance gisFeatureDistance : results.getResult()) {
+				return gisFeatureDistance;
+			}
+		}
+		return null;
+	}
+    
+    /**
+     *  tests if city is a paris district, if so it is
+		probably a pplx that is newly considered as ppl
+		http://forum.geonames.org/gforum/posts/list/2063.page
+     */
     protected String pplxToPPL(String cityName){
     	if (cityName!=null){
     		Matcher matcher = pattern.matcher(cityName);
@@ -339,6 +396,11 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     @Required
 	public void setGeolocSearchEngine(IGeolocSearchEngine geolocSearchEngine) {
 		this.geolocSearchEngine = geolocSearchEngine;
+	}
+
+    @Required
+    public void setCityDetector(IcityDetector cityDetector) {
+		this.cityDetector = cityDetector;
 	}
     
 }

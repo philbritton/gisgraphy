@@ -12,7 +12,7 @@ public class CityDetectorTest {
 
 	@Test
 	public void testIsMunicipality() {
-		CityDetector d = new CityDetector();
+		IcityDetector d = new CityDetector();
 		GisFeature gisFeature = new GisFeature();
 		gisFeature.setAdm1Code("a");
 		gisFeature.setAdm2Code("a");
