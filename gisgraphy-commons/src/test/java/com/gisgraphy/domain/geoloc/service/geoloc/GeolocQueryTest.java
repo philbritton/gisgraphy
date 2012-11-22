@@ -154,6 +154,10 @@ public class GeolocQueryTest {
 		output, TestEntity.class);
 	assertFalse("query should not be considered equals if latitude is not the same",query.equals(queryWithDifferentLat));
 	
+	GeolocQuery queryWithDifferentMunicipalityFilter = new GeolocQuery(createPoint(3.2F, 2.6F), 5, pagination,
+			output, TestEntity.class).withMunicipalityFilter(true);
+		assertFalse("query should not be considered equals if municipalityfilter is not the same",query.equals(queryWithDifferentMunicipalityFilter));
+	
 	GeolocQuery queryEquals = new GeolocQuery(createPoint(3.2F, 2.5F), 5, pagination,
 		output, TestEntity.class);
 	assertEquals(query, queryEquals);

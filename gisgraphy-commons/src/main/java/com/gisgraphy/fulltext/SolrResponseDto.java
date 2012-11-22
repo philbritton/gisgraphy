@@ -113,6 +113,10 @@ public class SolrResponseDto {
     protected String  street_type;
     protected Long openstreetmap_id;
     protected String is_in;
+    protected String is_in_place;
+    protected String is_in_adm;
+    protected String is_in_zip;
+    protected String fully_qualified_address;
 
     /**
      * @return the name
@@ -484,7 +488,37 @@ public class SolrResponseDto {
 	return is_in;
     }
 
-  //  @Transient
+    
+    
+  /**
+	 * @return the is_in_place
+	 */
+	public String getIs_in_place() {
+		return is_in_place;
+	}
+
+	/**
+	 * @return the is_in_adm
+	 */
+	public String getIs_in_adm() {
+		return is_in_adm;
+	}
+
+	/**
+	 * @return the is_in_zip
+	 */
+	public String getIs_in_zip() {
+		return is_in_zip;
+	}
+
+	/**
+	 * @return the fully_qualified_address
+	 */
+	public String getFully_qualified_address() {
+		return fully_qualified_address;
+	}
+
+	//  @Transient
     public Double getDistance() {
 	return distance;
     }
