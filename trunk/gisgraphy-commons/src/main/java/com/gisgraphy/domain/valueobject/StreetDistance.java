@@ -112,6 +112,27 @@ public class StreetDistance {
 		streetDistance.isIn = isIn;
 	    return this;
 	}
+	
+	public StreetDistanceBuilder withIsInPlace(String isInPlace) {
+		streetDistance.isInPlace = isInPlace;
+	    return this;
+	}
+	
+	
+	public StreetDistanceBuilder withIsInAdm(String isInAdm) {
+		streetDistance.isInAdm = isInAdm;
+	    return this;
+	}
+	
+	public StreetDistanceBuilder withIsInZip(String isInZip) {
+		streetDistance.isInZip = isInZip;
+	    return this;
+	}
+	
+	public StreetDistanceBuilder withFullyQualifiedAddress(String fullyQualifiedAddress) {
+		streetDistance.fullyQualifiedAddress = fullyQualifiedAddress;
+	    return this;
+	}
 
     }
 
@@ -143,6 +164,14 @@ public class StreetDistance {
     private Double lng;
     
     private String isIn;
+    
+    private String isInPlace;
+    
+    private String isInAdm;
+    
+    private String isInZip;
+    
+    private String fullyQualifiedAddress;
 
    
 
@@ -245,6 +274,36 @@ public class StreetDistance {
 	public String getIsIn() {
 		return isIn;
 	}
+
+	/**
+	 * @return the isInPlace
+	 */
+	public String getIsInPlace() {
+		return isInPlace;
+	}
+
+	/**
+	 * @return the isInAdm
+	 */
+	public String getIsInAdm() {
+		return isInAdm;
+	}
+
+	/**
+	 * @return the isInZip
+	 */
+	public String getIsInZip() {
+		return isInZip;
+	}
+
+	/**
+	 * @return the fullyQualifiedAddress
+	 */
+	public String getFullyQualifiedAddress() {
+		return fullyQualifiedAddress;
+	}
+	
+	
 
 	
 

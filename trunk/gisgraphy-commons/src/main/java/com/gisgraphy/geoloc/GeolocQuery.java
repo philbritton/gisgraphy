@@ -45,7 +45,7 @@ public class GeolocQuery extends AbstractGisQuery {
 	    public static final String RADIUS_PARAMETER = "radius";
 	    public static final String DISTANCE_PARAMETER = "distance";
 	    public static final String CALLBACK_PARAMETER = "callback";
-	    public static final String MUNICIPALITY_PARAMETER = "municipality";
+	    public static final String MUNICIPALITY_PARAMETER = "municipalityFilter";
 
     public static final int DEFAULT_MAX_RESULTS = 10;
    
@@ -92,6 +92,9 @@ public class GeolocQuery extends AbstractGisQuery {
 	else if (point.getY() != (other.point.getY())){
 	    return false;
 	}
+	else if (municipalityFilter != (other.municipalityFilter)){
+	    return false;
+	}
 	if (Double.doubleToLongBits(radius) != Double
 		.doubleToLongBits(other.radius))
 	    return false;
@@ -118,7 +121,7 @@ public class GeolocQuery extends AbstractGisQuery {
     protected Point point;
     private double radius = DEFAULT_RADIUS;
     private boolean distanceField = true;
-    private boolean municipality = false;
+    private boolean municipalityFilter = false;
 
     
 
@@ -253,7 +256,7 @@ public class GeolocQuery extends AbstractGisQuery {
 	} else {
 	    asString += this.placeType.getSimpleName();
 	}
-	asString += " with " + getOutput() + " and " + pagination +" and distance = "+distanceField;
+	asString += " with " + getOutput() + " and " + pagination +" and distance = "+distanceField + " and municipalityFilter="+municipalityFilter;
 	return asString;
     }
 
@@ -297,10 +300,10 @@ public class GeolocQuery extends AbstractGisQuery {
     }
     
     /**
-     * @return true if we should filter city that are flagged as 'municipality'
+     * @return true if we should filter city that are flagged as 'municipalityFilter'
      */
     public boolean hasMunicipalityFilter() {
-        return municipality;
+        return municipalityFilter;
     }
 
     /**
@@ -308,7 +311,7 @@ public class GeolocQuery extends AbstractGisQuery {
      * @return Whether the distance field should be output 
      */
     public GeolocQuery withMunicipalityFilter(boolean municipality) {
-        this.municipality = municipality;
+        this.municipalityFilter = municipality;
         return this;
     }
   
