@@ -988,6 +988,11 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(street.getFeature_id()).andStubReturn(123564L);
     	EasyMock.expect(street.getStreet_type()).andStubReturn("street type");
     	EasyMock.expect(street.getCountry_code()).andStubReturn("FR");
+    	
+    	EasyMock.expect(street.getIs_in_adm()).andStubReturn("isinadm");
+    	EasyMock.expect(street.getIs_in_place()).andStubReturn("isinplace");
+    	EasyMock.expect(street.getIs_in_zip()).andStubReturn("isinzip");
+    	
     	EasyMock.replay(street);
     	return street;
 	}
