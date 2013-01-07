@@ -381,6 +381,9 @@ public class GeocodingService implements IGeocodingService {
 				String is_in = street.getIs_in();
 				if (!isEmptyString(is_in)) {
 					address.setCity(is_in);
+					address.setState(street.getIs_in_adm());
+					address.setZipCode(street.getIs_in_zip());
+					address.setDependentLocality(street.getIs_in_place());
 				} else {
 					// TODO : if we are not in is_in mode, we got more
 					// information,
@@ -440,6 +443,9 @@ public class GeocodingService implements IGeocodingService {
 					address.setStreetName(solrResponseDto.getName());
 					address.setStreetType(solrResponseDto.getStreet_type());
 					address.setCity(solrResponseDto.getIs_in());
+					address.setState(solrResponseDto.getIs_in_adm());
+					address.setZipCode(solrResponseDto.getIs_in_zip());
+					address.setDependentLocality(solrResponseDto.getIs_in_place());
 
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(City.class.getSimpleName())){
 					address.setCity(solrResponseDto.getName());

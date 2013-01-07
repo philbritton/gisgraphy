@@ -168,6 +168,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 		street.setStreetType(type);
 	    } catch (Exception e) {
 		logger.warn("can not determine streetType for "+fields[1]+" : "+e);
+		street.setStreetType(StreetType.UNCLASSIFIED);
 	    }
 	    
 	}
