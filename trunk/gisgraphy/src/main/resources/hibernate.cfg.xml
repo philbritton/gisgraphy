@@ -140,6 +140,8 @@
 		<mapping class="com.gisgraphy.domain.geoloc.entity.ZipCode" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Zoo" />
 		<mapping class="com.gisgraphy.stats.StatsUsage" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.HouseNumber" />
+		
 
 	</session-factory>
 </hibernate-configuration>

@@ -25,6 +25,8 @@
  */
 package com.gisgraphy.test;
 
+import static com.gisgraphy.domain.valueobject.HouseNumberType.ASSOCIATED;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -55,6 +57,7 @@ import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
@@ -1050,6 +1053,15 @@ public class GisgraphyTestHelper {
 	    }
 	}
 	return count;
+    }
+    
+    public static HouseNumber createHouseNumber(){
+    	HouseNumber houseNumber = new HouseNumber();
+    	houseNumber.setNumber(10);
+    	houseNumber.setLocation(GeolocHelper.createPoint(3F, 4F));
+    	houseNumber.setOpenstreetmapId(1L);
+    	houseNumber.setType(ASSOCIATED);
+    	return houseNumber;
     }
     
 }
