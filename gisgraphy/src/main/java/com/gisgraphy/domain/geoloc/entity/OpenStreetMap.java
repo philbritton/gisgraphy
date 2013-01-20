@@ -22,6 +22,10 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,11 +33,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
@@ -150,6 +157,8 @@ public class OpenStreetMap {
     private String countryCode;
 
     private Double length;
+    
+    private List<HouseNumber> houseNumbers;
 
     @IntrospectionIgnoredField
     private String partialSearchName;
@@ -548,5 +557,55 @@ public class OpenStreetMap {
 	public void setPopulation(Integer population) {
 		this.population = population;
 	}
+
+	/**
+	 * @return the houseNumbers associated to that street
+	 */
+	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "street")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Fetch(FetchMode.SELECT)
+	public List<HouseNumber> getHouseNumbers() {
+		return houseNumbers;
+	}
+
+	/**
+	 * @param houseNumbers the houseNumbers to set
+	 */
+	public void setHouseNumbers(List<HouseNumber> houseNumbers) {
+		this.houseNumbers = houseNumbers;
+	}
+	
+	/**
+     * Do a double set : add the alternate name to the current GisFeature and set
+     * this GisFeature as the GisFeature of the specified AlternateName
+     * 
+     * @param alternateName
+     *                the alternateName to add
+     */
+    public void addHouseNumber(HouseNumber houseNumber) {
+	List<HouseNumber> currentHouseNumbers = getHouseNumbers();
+	if (currentHouseNumbers == null) {
+		currentHouseNumbers = new ArrayList<HouseNumber>();
+	}
+	currentHouseNumbers.add(houseNumber);
+	this.setHouseNumbers(currentHouseNumbers);
+	houseNumber.setStreet(this);
+    }
+
+    /**
+     * Do a double set : add (not replace !) the AlternateNames to the current
+     * GisFeature and for each alternatenames : set the current GisFeature as
+     * the GisFeature of the Alternate Names
+     * 
+     * @param alternateNames
+     *                The alternateNames list to add
+     */
+    public void addHouseNumbers(List<HouseNumber> HouseNumbers) {
+	if (HouseNumbers != null) {
+	    for (HouseNumber houseNumber : HouseNumbers) {
+	    	addHouseNumber(houseNumber);
+	    }
+	}
+    }
 
 }
