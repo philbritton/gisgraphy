@@ -38,6 +38,7 @@ import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
+import com.gisgraphy.domain.repository.IhouseNumberDao;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
@@ -62,6 +63,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
     
     protected IOpenStreetMapDao openStreetMapDao;
     
+    protected IhouseNumberDao houseNumberDao;
+    
     protected ISolRSynchroniser solRSynchroniser;
     
     protected IGeolocSearchEngine geolocSearchEngine;
@@ -77,14 +80,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
     @Override
     protected void flushAndClear() {
 	openStreetMapDao.flushAndClear();
+	houseNumberDao.flushAndClear();
 
     }
     
     @Override
     protected void setup() {
         super.setup();
-        logger.info("reseting Openstreetmap generatedId");
-        idGenerator.sync();
     }
     
 
