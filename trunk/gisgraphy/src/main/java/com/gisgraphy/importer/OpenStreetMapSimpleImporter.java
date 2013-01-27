@@ -68,7 +68,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
     protected IcityDetector cityDetector;
     
-    private Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
 
     /* (non-Javadoc)

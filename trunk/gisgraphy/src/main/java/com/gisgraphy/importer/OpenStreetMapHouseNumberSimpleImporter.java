@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Required;
@@ -47,6 +46,10 @@ import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.StringHelper;
+import com.gisgraphy.importer.dto.AssociatedStreetHouseNumber;
+import com.gisgraphy.importer.dto.AssociatedStreetMember;
+import com.gisgraphy.importer.dto.InterpolationHouseNumber;
+import com.gisgraphy.importer.dto.NodeHouseNumber;
 import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
@@ -71,7 +74,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
     
     protected IcityDetector cityDetector;
     
-    private Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    private static final String ASSOCIATED_HOUSE_NUMBER_REGEXP = "([0-9]+)___([^_]*)___((?:(?!___).)*)___((?:(?!___).)*)___([NW])___([^_;]*)(?:;?)";
+    
+    private static final String INTERPOLATION_HOUSE_NUMBER_REGEXP = "([0-9]+)___([0-9]+)___([^_]*)___((?:(?!___).)*)___([^_;]*)(?:;?)";
+    
+    private static final Pattern pattern = Pattern.compile(ASSOCIATED_HOUSE_NUMBER_REGEXP,Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    
+    
     
 
     /* (non-Javadoc)
@@ -95,7 +104,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
      */
     @Override
     protected File[] getFiles() {
-	return ImporterHelper.listCountryFilesToImport(importerConfig.getOpenStreetMapDir());
+	return ImporterHelper.listCountryFilesToImport(importerConfig.getOpenStreetMapHouseNumberDir());
     }
 
     /* (non-Javadoc)
@@ -106,6 +115,96 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	return 9;
     }
 
+    protected AssociatedStreetHouseNumber parseAssociatedStreetHouseNumber(String line){
+    	/*A	1264114	
+    	 * "{""47129758___0101000020E61000005CCBD3C231E76240AA6514FE5BF440C0___Bowral Street___Bowral Street___W___street"",
+    	 * ""84623507___0101000020E6100000546690CC36E76240A417D5545AF440C0___71___Bowral Street___W___house""}"
+    	 * */
+    	if (line==null || "".equals(line.trim())){
+    		return null;
+    	}
+    	String[] fields = line.split("\t");
+    	if (fields.length != 3){
+    		logger.warn("wrong number of fields for line "+line+" expected 3 but was "+fields.length);
+    		return null;
+    	}
+    	if (!"A".equals(fields[0])){
+    		logger.warn("wrong house Number Type for line "+line+" expected 'A' but was "+fields[0]);
+    		return null;
+    	}
+    	AssociatedStreetHouseNumber houseNumber = new AssociatedStreetHouseNumber();
+    	if (!isEmptyField(fields, 1, false)) {
+    		houseNumber.setRelationID(fields[1].trim());
+    	}
+    	if (!isEmptyField(fields, 2, false)) {
+    		Matcher matcher = pattern.matcher(fields[2].trim());
+    		int i = 0;
+    		while (matcher.find()) {
+    			AssociatedStreetMember member = new AssociatedStreetMember();
+    			if (matcher.groupCount()!= 6){
+    				logger.warn("wrong number of fields for AssociatedStreetMember n"+ i+"for line "+line);
+    				continue;
+    			}
+    			member.setId(matcher.group(1));
+    		    Point point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(matcher.group(2));
+    		    if (point==null){
+    		    	logger.warn("wrong number of fields for point n"+ i+"for line "+line);
+    		    	continue;
+    		    }
+				member.setLocation(point);
+    		    String role = matcher.group(6);
+    		    member.setRole(role);
+    		    member.setType(matcher.group(5));
+    		    if ("street".equalsIgnoreCase(role)){
+    		    	if (matcher.group(3)!=null){
+    		    		member.setName(matcher.group(3));
+    		    	}else {
+    		    		member.setName(matcher.group(4));
+    		    	}
+    		    } else if ("house".equalsIgnoreCase(role)){
+	    			member.setHouseNumber(matcher.group(3));
+    		    }
+    		    
+    		    houseNumber.addMember(member);
+    		    i++;
+    		}
+    		
+    	} else {
+    		return null;
+    	}
+    	return houseNumber;
+    }
+    
+    protected InterpolationHouseNumber parseInterpolationHouseNumber(String line){
+    	/*
+    	 * I	168365171	1796478450___0___0101000020E61000009A023EE4525350C0959C137B682F38C0______;
+    	 * 1366275082___1___0101000020E610000068661CD94B5350C0B055270C6F2F38C0______;
+    	 * 1796453793___2___0101000020E610000038691A144D5350C023ADE75A6A2F38C0___600___;
+    	 * 1796453794___3___0101000020E6100000F38F6390605350C028A6666A6D2F38C0___698___		even
+    	 */
+    	if (line==null || "".equals(line.trim())){
+    		return null;
+    	}
+    	String[] fields = line.split("\t");
+    	if (fields.length != 3){
+    		logger.warn("wrong number of fields for line "+line+" expected 3 but was "+fields.length);
+    		return null;
+    	}
+    	if (!"A".equals(fields[0])){
+    		logger.warn("wrong house Number Type for line "+line+" expected 'A' but was "+fields[0]);
+    		return null;
+    	}
+    	InterpolationHouseNumber houseNumber = new InterpolationHouseNumber();
+    	if (!isEmptyField(fields, 1, false)) {
+    		houseNumber.setWayID(fields[1].trim());
+    	}
+    	return null;
+    }
+    
+    protected NodeHouseNumber parseNodeHouseNumber(String line){
+    	return null;
+    }
+    
     /* (non-Javadoc)
      * @see com.gisgraphy.domain.geoloc.importer.AbstractImporterProcessor#processData(java.lang.String)
      */

@@ -116,6 +116,7 @@ h4:before {
 <h1>International Address Parser documentation</h1>
 <div class="indexlevel2"><a href="#description" />Description</a></div>
 <div class="indexlevel2"><a href="#howitworks" />How it works</a></div>
+<div class="indexlevel2"><a href="#relevance" />Relevance</a></div>
 <div class="indexlevel2"><a href="#access" />Free access</a></div>
 <div class="indexlevel2"><a href="#packaging" />Availables packaging</a></div>
 <div class="indexlevel2"><a href="#buy" />How to buy</a></div>
@@ -137,7 +138,7 @@ h4:before {
 <div align="right"><a href="#top">[top]</a></div>
 <h2>Description</h2>
 <h3>Address Parser</h3>
-The address parser and address standardizer, are part of the <a href="http://www.gisgraphy.com">Gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
+The address parser and address standardizer, are part of the <a href="http://www.gisgraphy.com" target="addressparser">Gisgraphy project</a> (free open source worldwide geocoder). Address parsing is the process of dividing a single address string into its individual component parts : 
 <ul>
 <li>house number</li>
 <li>street type (bd, street, ..)</li>
@@ -154,41 +155,64 @@ Here is a non exhaustive list of functionalities :
 <li>Case insensitive</li>
 <li>Manage several spoken languages</li>
 <li>Handle several alphabets (not only ASCII characters are accepted)</li>
-<li>Accept address on single or multiples lines</li>
+<li>Accept addresses on single or multiple lines</li>
 <li>Manage abbreviations, synonyms. Numbers can be as digit, letter, or Roman.</li>
-<li>Street intersections are also supported via '@' and '&' separator.</li>
+<li>Street intersections are also supported via '@' and '&' separator (for United States and Canada).</li>
+<li>PO box</li>
 <li>...</li>
 </ul>
 <br/>
-It implements all the <a href="http://www.upu.int/" target="_blank">Universal Postal Union</a> Specifications, PObox, common usages frequently used in each country (street intersection, workarounds,...).It is based on semantic processing and dictionary.
+It implements all the <a href="http://www.upu.int/" target="addressparser">Universal Postal Union</a> Specifications, PObox, common usages frequently used in each country (street intersection, workarounds,...). It is based on semantic processing and dictionaries.
 <br/><br/>
 <h3>Address standardizer</h3>
-Address standardization is the process that takes an address and converts it to a standard format by correcting the address (if possible). The standardization is currently implemented for 3 countries, each country has its own certification :
+Address standardization is the process that takes an address and converts it to a standard format by analyzing the several components. Standardization is not correction ! standardization is based on syntax correction (dictionnaries, spellchecking, synonyms), while correction is based on location informations(city, street, state).
+
+The standardization is currently implemented for 2 countries, each country has its own certification :
 <ul>
 <li>USA : CASS (Coding Accuracy Support System), delivered by the USPS - Unites States Postal Service</li>
 <li>Canada : SERP (Software Evaluation and Recognition Program),  delivered by Canada Post</li>
-<li>Australia : AMAS (Address Matching Approval System), delivered by Australia Post</li>
+<!--<li>Australia : AMAS (Address Matching Approval System), delivered by Australia Post</li>-->
 </ul>
 
-It currently normalize street number, unit, pre and post directions, ordinal number, city aliasing, spelling Correction for streets names (US only in current version but can be done, on demand, for other countries if you need it).
-The standardizer provides an easy way to correct address and detect duplicates. this can be useful for CRM, mailing,... 
+It currently normalize street number, unit, pre and post directions, ordinal number, city aliasing, spell correction for streets names (US only in current version but can be done, on demand, for other countries if you need it).
+The standardizer provides an easy way to correct addresses and detect duplicates. This can be useful for CRM, mailing,...it offers the possibility to check that 2 addresses are the same :
+
+<ul>
+<li>1600 N Amphitheatre Parkway Mountain View, CA 94043</li>
+<li>1600 north Amphiteatre Pwy Mountain View Califorina USA</li>
+</ul>
+<br/><br/>
+
+<font color="#ff0000">The standardizer is given as is, and with any warranty. As said, there is no consistent checking. it doesn't check if a street is in a city, if a zipcode is in this state, an so on. It should be seen as an helper to find duplicates entry</font>
 
 <h3>Address formater</h3>
-While Address parsing is the process of dividing a single address string into its individual component parts, Formater do the oposite : It takes an address and format the address to be displayed as if it was writen on an enveloppe. It puts the components in the right way, according the Country specifications. 
+While Address parsing is the process of dividing a single address string into its individual component parts, Formater do the oposite : It takes an structured address and returns a string as if it was writen on an enveloppe. It puts the components in the right way, according the country specifications. 
 <br/>
-Several mode are available :
+Several modes are available :
 <ul>
 <li>SINGLE_LINE : concatenate the individual components of the address on a single line</li>
-<li>HTML : Give an address that can be display in a web page (with HTML tag)</li>
+<li>HTML : Give an address that can be display in a web page (with &lt;br/&gt; HTML tag)</li>
 <li>ENVELOPPE : Produce an address with cariage Return (\r\n)</li>
 </ul> 
 
 in addition it can produce address writen from left to right or right to left, according the language (e.g : if writen in arabic, or in chinese, an address is not writen the same way as in roman)
+
 <a name="howitworks"/>
 <h2>How it works</h2>
 <div align="right"><a href="#top">[top]</a></div>
-The International address and standardizer are based on a modular engine, and use <a href="http://dsdl.org/">Document Schema Definition Languages</a> and <a href="http://en.wikipedia.org/wiki/Definite_clause_grammar">Definite clause grammar</a>. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable.  
+The International address and standardizer are based on a modular engine, it use <a href="http://dsdl.org/" target="addressparser">Document Schema Definition Languages</a> and <a href="http://en.wikipedia.org/wiki/Definite_clause_grammar" target="addressparser">Definite clause grammar</a>. So we can add a new country or add a new syntax for a country very simply. Some librairies and dictionary make the engine very customisable.  
 
+
+<div align="right"><a href="#top">[top]</a></div>
+<a name="relevance"></a>
+<h2>Relevance</h2>
+User often ask : "Does the parser is relevant". There is, unfortunatly no good response but some elements that can give an overall idea. We have a quality process that ensure that the relevance can never decrease : The parser is always improved with user <a href="http://www.gisgraphy.com/feedback-address-parser/" target="addressparser">feedbacks</a> and logs analysis : We check why some parsing was unsuccessfull. if a parsing has failed, it is rarely due to the engine, but often due to data : 
+<ul>
+<li>Missing information : we do some minor fix, we fix it by adding the information.</li>
+<li>Missing format : if the format of the address is unknow for the parser, we check if it is a commonly used format and if so we add it.</li>
+</ul>
+
+<b><u>In each case</u></b>, We add an automated unit test, to avoid regressions due to further modifications. This way, we know that the relevance stay stable. Since the parser was written, Thousands of tests has been written, hundred <a href="http://www.gisgraphy.com/feedback-address-parser/" target="addressparser">feedbacks</a> taken into account, and we note that the relevance is now good and stable, even if there is some differences beetween countries due to difference on the number of feedbacks.
 
 <a name="access"></a>
 <div align="right"><a href="#top">[top]</a></div>
@@ -196,13 +220,13 @@ The International address and standardizer are based on a modular engine, and us
 
 The address parser web service is available for free but with a limitation of the number of requests, depending on the server load :
 <ul>
-<li>On the Gisgraphy site <a href="" target="addressparser">http://address-parser.gisgraphy.com/addressparser</a>.</li>
+<li>On the Gisgraphy site <a href="http://services.gisgraphy.com/addressparser" target="addressparser">http://services.gisgraphy.com/addressparser</a>.</li>
 <li>With a cloud version on Google App Engine (Appspot) :  <a href="http://addressparser.appspot.com/" target="addressparser">http://addressparser.appspot.com/</a></li>
 <li>A graphical user interface : <a href="http://services.gisgraphy.com/public/addressparser.html" target="addressparser">http://services.gisgraphy.com/public/addressparser.html</a></li>
 </ul>
 If you need dedicated access for address parser or standardizer , consult the <a href="mailto:davidmasclet@gisgraphy.com">How to buy</a> section.
 <br/><br/>
-The address standardizer is not yet available online, only the parser is. It is plan to make the standardizer available in 2012. if you need to standardize address, consult the <a href="mailto:davidmasclet@gisgraphy.com">How to buy</a> section
+The address standardizer is not yet available online, only the parser is. It is plan to make the standardizer available on line, but no timeline given. If you need to standardize address, consult the <a href="mailto:davidmasclet@gisgraphy.com">How to buy</a> section
 <br/>
 
 <a name="packaging"></a>
@@ -214,7 +238,8 @@ The address parser and the address standardizer are available in 3 packaging :
 <li>A <a href="#webservice">webservice</a> with a lot of output availables (XML, JSON, PHP, Python, Ruby, YAML)</li>
 </ul>
 <br/>
-Java or .NET use exactly the same API and allow offline use with no limitation of number of requests. you can use the parser in any language that is supported by .NET : C#, C++, F#, VB (visual basic). The webservice allow you to always have the latest version, with the new countries added and bug corrections. There is no software installation needed.
+Java or .NET use exactly the same API and allow offline use with no limitation of number of requests. you can use the parser in any language that is supported by .NET : C#, C++, F#, VB (visual basic).<br/><br/>
+The webservice allow you to always have the latest version, with the new countries added and bug corrections. There is no software installation needed.
 
 <a name="buy"></a>
 <div align="right"><a href="#top">[top]</a></div>
@@ -222,7 +247,7 @@ Java or .NET use exactly the same API and allow offline use with no limitation o
 If you are interested in address parsing and standardization (offline or online), you can aquire a license : <a href="mailto:davidmasclet@gisgraphy.com">send a mail</a> to get further informations. 
 <br/><br/>
 
-The parser and standardizer are not open source, you buy a compiled versions that is royaltee free. you can test the relevance by using the online version. If you're satasified, we can go further, and we send you a pack with the jar <u>OR</u> the DLL, with some code samples. when you buy the offline version, you  can receive, for free, the bug fixed version within a period of 6 months.
+The parser and standardizer are not open source, you buy a compiled versions that is royaltee free. you can test the relevance by using the online version. If you're satisfied, we can go further, and we send you a pack with the jar <u>OR</u> the DLL, with some code samples.
 
 <a name="samplecode"></a>
 <div align="right"><a href="#top">[top]</a></div>
@@ -232,7 +257,7 @@ The parser and standardizer are not open source, you buy a compiled versions tha
 <h3>In Java</h3>
 There is two ways to access the parser in Java : 
 <ul>
-<li>The offline way, when you have bought the Jar and you want to access the parser / standardizer directly. You need Java at least java 1.5, but get greater performance with 1.6 and above. We strongly recomand sun/oracle JRE (avoid openJdk,and so on). No external dependencies are needed.
+<li>The offline way, when you have bought the Jar and you want to access the parser / standardizer directly. You need Java at least java 1.5, but get greater performance with 1.6 and above. We strongly recomand sun/oracle JRE (avoid openJdk, and so on). No external dependencies are needed.
 <pre>
 	//Instanciate parser and standardizer, only once
 	AddressParserClient addressParser = AddressParser.getInstance();
@@ -261,7 +286,7 @@ There is two ways to access the parser in Java :
 	System.out.println(address);
 </pre>
 <br/><br/>
-The java packaging can be run on every OS that support Java (mac windows linux). If an OS support Java and .NET (e.g : linux with <a href="http://monodevelop.com/">Mono develop</a>), The Java packaging should always be prefered to the .NET one.
+The java packaging can be run on every OS that support Java (mac, windows, linux, solaris, Sun,...). If an OS support Java AND .NET (e.g : linux with <a href="http://monodevelop.com/">Mono develop</a>), The Java packaging should always be prefered to the .NET one.
 </li>
 <li>The onLine way, when you want to use the webservice. In this case, you use the addressparser client library (provided when you have subscribed to the webservice, or use the free access), you can also use a code of your own.
 <pre>
@@ -295,7 +320,7 @@ The java packaging can be run on every OS that support Java (mac windows linux).
 <div class="tip greentip">
  All the parameters should be encoded in <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a>.
 </div><br/>
-Note that the standardizer is not yet available by webService, premium or free. It is for the moment, only available in offline mode with the JAR or DLL. that will be implemented in 2012
+Note that the standardizer is not yet available by webService, premium or free. It is for the moment, only available in offline mode with the JAR or DLL. We plan to do it but no timeline given.
 </div>
 
 
@@ -303,7 +328,7 @@ Note that the standardizer is not yet available by webService, premium or free. 
 <h3>In C# .NET API</h3>
 Here is a sample code in C#, that show how to use the parser/standardizer. An external library is required and provided in the packaging.
 The .NET packaging is supported by Windows (of course) and Linux with <a href="http://monodevelop.com/">Mono develop</a>. If you plan to use address parser/standardizer on Linux/Unix, it is strongly recomanded to use the java packaging.
-If you interested in .NET packaging, you should tell us what is the the .NET framework you will use. we will give you an optimized version.
+If you interested in .NET packaging, you should tell us what is the the .NET framework you will use, We will give you an optimized version.
 <pre>
 	    //instanciate parser and standardizer, only once
             AddressParser ap = new AddressParser();
@@ -321,12 +346,12 @@ If you interested in .NET packaging, you should tell us what is the the .NET fra
             Console.WriteLine("standardized address : " + standardizer.standardize(ad));
 </pre>
 
-There is no client library in C# to access the webservice. It will be probably available in 2012
+Note that actually, There is no client library in C# to access the webservice.
 
 <a name="webservice"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Webservice</h3>
-Webservice is, for people that always want the latest version, or want to use the parser or the standardizer in other languages than java or dotnet. the webservice is load balanced and can accept as many request as needed.
+Webservice is, for people that always want the latest version, or want to use the parser or the standardizer in other languages than java or c#. The webservice is load balanced and can accept as many request as needed.
 <div class="tip yellowtip">
  All the parameters should be <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> Encoded and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a> too.
 </div>
@@ -365,7 +390,7 @@ http://services.gisgraphy.com/addressparser/?address=123 3/4 N name with space 1
 <div align="right"><a href="#top">[top]</a></div>
 <a name="performance"></a>
 <h2>Performance</h2>
-The parser and standardizer are not a compromise between relevance and performance. A minimum of memory is needed to handle the knowledge database, but the performance depends on the CPU. A recent personal computer can parse between 100 and 130 addresses/seconds/thread. on a good core i7 you can parse nearly 1000 adresses/seconds.
+The parser and standardizer are not a compromise between relevance and performance. A minimum of memory is needed to handle the knowledge database, but the performance depends on the CPU (CPU-bounds). A recent personal computer can parse between 100 and 130 addresses/seconds/thread. On a good core i7 you can parse nearly 1000 adresses/seconds.
 <br/> <br/>
 
 
@@ -375,7 +400,7 @@ The parser and standardizer are not a compromise between relevance and performan
 Relevance and performance are very important for us. We have a lot of unit and integration tests to assure a good quality to the final users.
 <br/> <br/>
 
-There is a dedicated page that allows anyone to do bug reporting. Simply fill the web form and it automatically create a unit test that will be added, after verification, to the test suite.
+There is a <a href="http://www.gisgraphy.com/feedback-address-parser/" target="addressparser" >dedicated page</a> that allows anyone to do bug reporting. Simply fill the web form and it automatically create a unit test that will be added, after verification, to the test suite.
 This way, the test suite (more than 1200 tests, when this documentation was writen) grows with feedbacks, and avoid regressions when modifications are made.
 
 <div align="right"><a href="#top">[top]</a></div>
@@ -385,7 +410,8 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 <table class="mediumsizetable smartborder">
 <th>field</th><th>description</th><th>Examples of value</th><th>Examples in address</th>
 <tr><td>id</td><td>id that identify a feature</td><td>123456</td><td>N/A</td></tr>
-<tr><td>confidence</td><td>An indicator that mesure how the parser is confident for the result</td><td>MAX,MEDIUM,MIN</td><td><a href="confidence">Learn More about confidence</a></td></tr>
+<tr><td>
+dence</td><td>An indicator that mesure how the parser is confident for the result</td><td>MAX,MEDIUM,MIN</td><td><a href="#confidence">Learn More about confidence</a></td></tr>
 <tr><td>name</td><td>Name of the place, it is null in case of address but filled if common place. Name is different than recipient name.</td><td>Tour eiffel</td><td><span class="redtext">Tour eiffel</span> Paris</td></tr>
 <tr><td>recipientName</td><td>Name of the organisation or person at the given address</td><td>Jack bauer</td><td><span class="redtext">Jack Bauer</span> street of philadelphia city, apt 5A, Washington</td></tr>
 <tr><td>houseNumber</td><td>Official number assigned to an address by the municipality, several languages supported</td><td>3;151-125;eight</td><td><span class="redtext">123</span> street of philadelphia city, apt 5A, Washington</td></tr>
@@ -432,13 +458,13 @@ Here are an exhaustive list of all the fields that the address parser can extrac
 
 <div align="right"><a href="#top">[top]</a></div>
 <a name="confidence"></a>
-<h3>Confidence</h3>
-Parsing is a complex process. an address can be sometimes be intrepreted in many ways and it is the parser job to find the best one.
+<h2>Confidence field</h2>
+Parsing is a complex process. An address can sometimes be intrepreted in many ways and it is the parser job to find the best one.
 e.g : 'street of foo bar'=> we can not guess if foo bar is a city, or foo is a streetname and bar is a city<br/>
 e.g : 'california st john'=> it can be california street at john city, or saint john in california.<br/>
-e.g : 'rue de la gare de paris'=> it can be rue de la gare at paris, or rue 'de la gare de paris'<br><br/>
+e.g : 'rue de la gare de paris'=> it can be rue de la gare at Paris, or rue 'de la gare de paris'<br><br/>
 
-The parser is designed to disambiguate address. The confidence just give an indicator on how the parser has got difficulties to parse the address.The confidence can take several values :
+The parser is designed to disambiguate address. The confidence just give an indicator on how the parser has got difficulties to parse the address. The confidence can take several values :
 <ul>
 <li>MAX : the address has been parse without difficulties</li>
 <li>MEDIUM : some difficulties has been found but the parser found how to disambiguate </li>
@@ -450,18 +476,21 @@ Note that only unit is supported, not company, gender, firstname, lastname.
 <span class="address">Mozilla Corporation, 1981 second street building K Mountain View CA 94043-0801</span> is not a parsable address, but <span class="address">1981 second street building K Mountain View CA 94043-0801</span>. A support is planed to split the first part of the address (to the first comma)
 
 
-
 <a name="batch"/>
 <h2>Batch processing</h2>
 <div align="right"><a href="#top">[top]</a></div>
 If you need to batch process a lot of data and don't want to buy the parser, we can batch process your address. The price depends of the ammount of data.
 <br><br/>
-Some facilities are offer in the jar or the DLL. you can specify an AddressInput (file, memory, console,database,...) and an AddressOutput (file, memory, console,database,...). it allows to read address from many sources and write them to other sources. 
+Some facilities are offered in the jar or the DLL. You can specify an AddressInput (file, memory, console, database,...) and an AddressOutput (file, memory, console,database,...). It allows to read address from many sources and write them to other sources. 
 <br/>
-Examples : read addresses from a csv file, and add a column to the same (or different) file with the parsed address;Read addresses from a database and put in the paresed addresses in memory (Map, List, whatever). 
+Examples : 
+<ul>
+<li>read addresses from a csv file, add a column to the same (or different) file with the parsed address</li>
+<li>Read addresses from a database and put in the paresed addresses in memory (Map, List, whatever).</li>
+</ul>
 
 <div class="tip greentip">
-you can run several batch at once because AddressProcessor batch is multithreaded
+You can run several batch at once because AddressProcessor is multithreaded
 </div>
 
 
@@ -871,7 +900,7 @@ See <a href="#us">United States</a>
 		<li>There is no zipcode for Angola</li>
 		<li>if housenumber is not present a comma is necessary to separate streetname from city</li>
 		<li>side is optional and can be 'esq' or 'dto'</li>
-			<li>floor can be in various format (learn more <a href="http://en.wikipedia.org/wiki/Storey" target="_blank"></a>
+			<li>floor can be in various format (learn more <a href="http://en.wikipedia.org/wiki/Storey" target="addressparser"></a>
 				<ul>
 					<li><span class="address">13</span></li>
 					<li><span class="address">13º</span></li>
@@ -1339,7 +1368,7 @@ See <a href="#nl">Netherlands</a>
 		</li>
 		<li class="rub">Variant</li>
 			<ul>
-			<li><a href="http://en.wikipedia.org/wiki/Direct-controlled_municipality" target="_blank">Direct controlled municipality</a>
+			<li><a href="http://en.wikipedia.org/wiki/Direct-controlled_municipality" target="addressparser">Direct controlled municipality</a>
 				<ul>
 				
 						<li>Pattern : <span class="pattern">[unit]  [houseNumber] streetName [streetType] District|County [zip] [Direct controlled municipality] </span>
@@ -1692,7 +1721,7 @@ See <a href="#gb">United Kingdom</a>
 <div align="right"><a href="#top">[top]</a></div>
 <a name="in"></a>
 <h3>India</h3>
-<div class="importantinfo">As the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IND.pdf" target="_blank">Universal postal union</a> says : "There is no clear advice on how to format an address correctly
+<div class="importantinfo">As the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IND.pdf" target="addressparser">Universal postal union</a> says : "There is no clear advice on how to format an address correctly
 ". So a specific implementation has been made for india. The confidence is always 'MIN' for india</div>
 <ul>
 <li class="rub">Special notes : 
@@ -1725,7 +1754,7 @@ See <a href="#gb">United Kingdom</a>
 <div align="right"><a href="#top">[top]</a></div>
 <a name="id"></a>
 <h3>Indonesia</h3>
-<div class="importantinfo">I have implemented the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IDN.pdf" target="_blank">Universal postal union</a> specifications and the specifications found on <a href="http://en.wikipedia.org/wiki/Address_%28geography%29#Indonesia" target="_blank">Wikipedia</a>. it is not easy to find THE pattern on indonesian address format, so feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a> if you got more informations on indonesian address format</div>
+<div class="importantinfo">I have implemented the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IDN.pdf" target="addressparser">Universal postal union</a> specifications and the specifications found on <a href="http://en.wikipedia.org/wiki/Address_%28geography%29#Indonesia" target="addressparser">Wikipedia</a>. it is not easy to find THE pattern on indonesian address format, so feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a> if you got more informations on indonesian address format</div>
 <ul>
 	<li class="rub">Typical address :
 		<ul>
@@ -1740,7 +1769,7 @@ See <a href="#gb">United Kingdom</a>
 	<li class="rub">Special notes : 
 		<ul>
 		<li>Indonesian provinces is a defined list (in indonesian,sundanese, english, abbreviation,...) the parsing can fail if a state is not present in this list. <a href="mailto:davidmasclet@gisgraphy.com">Contact me</a> if you think a province is missing</li>
-		<li>HouseNumber can be before (as <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IDN.pdf" target="_blank">Universal postal union</a>  says) or after street name (as <a href="http://en.wikipedia.org/wiki/Address_%28geography%29#Indonesia" target="_blank">Wikipedia</a> and a lot of site says)</li>
+		<li>HouseNumber can be before (as <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IDN.pdf" target="addressparser">Universal postal union</a>  says) or after street name (as <a href="http://en.wikipedia.org/wiki/Address_%28geography%29#Indonesia" target="addressparser">Wikipedia</a> and a lot of site says)</li>
 			<li>if house number is before streettype, a comma can help to distinguish streetname from cities, but is not required</span>
 				<ul>
 					<li>Example : <span class="address">73 Jalan Cilaki<b>,</b> BANDUNG 40115 Sulbar</span></li>
@@ -1761,7 +1790,7 @@ See <a href="#gb">United Kingdom</a>
 <div align="right"><a href="#top">[top]</a></div>
 <a name="ir"></a>
 <h3>Iran</h3>
-<div class="importantinfo">I have implemented the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IRN.pdf" target="_blank">Universal postal union</a> specifications but no information are available on the <a href="www.irpost.com" target="_blank">Iran site</a> and a lot of site gives alternative patterns
+<div class="importantinfo">I have implemented the <a href="http://www.upu.int/fileadmin/userUpload/damFileSystem/universalPostalUnion/activities/addressing/postalAddressingSystemsInMemberCountries/sheetsEn/IRN.pdf" target="addressparser">Universal postal union</a> specifications but no information are available on the <a href="www.irpost.com" target="addressparser">Iran site</a> and a lot of site gives alternative patterns
 , so feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact me</a> if you got more informations on Iran address format</div>
 <ul>
 	<li class="rub">Typical address :
@@ -2271,7 +2300,7 @@ See <a href="#us">United States</a>
 		<ul>
 		<li>if housenumber and zip is not present a comma is necessary to separate streetname from city</li>
 		<li>side is optional and can be 'esq' or 'dto'</li>
-			<li>floor can be in various format (learn more <a href="http://en.wikipedia.org/wiki/Storey" target="_blank"></a>
+			<li>floor can be in various format (learn more <a href="http://en.wikipedia.org/wiki/Storey" target="addressparser"></a>
 				<ul>
 					<li><span class="address">13</span></li>
 					<li><span class="address">13º</span></li>
@@ -2331,7 +2360,7 @@ See <a href="#fr">france</a>
 			<li>Country can be before or after zipcode</li>
 			<li>both alphabet are supported</li>
 			<li>Country can be "RUSSIAN FEDERATION" or "РОССИЙСКАЯ ФЕДЕРАЦИЯ" or "RUSSIA"</li>
-			<li>The <a href="http://www.upu.int" target="_blank">universal postal union</a> recommand to reserve the last line for country, but we support the recommandation from the The russian Post)</li>
+			<li>The <a href="http://www.upu.int" target="addressparser">universal postal union</a> recommand to reserve the last line for country, but we support the recommandation from the The russian Post)</li>
 			<li>Street type before name : <span class="pattern"> streetName [StreetType] HouseNumber [unit]  City [District] [OBLAST|KRAY|RESPUBLIKA] [country] [zip] [country]</span>
 				<ul>
 					<li>Example : <span class="address">Большая Никитская улица, д. 25 пос. Лесное Лесное АЛЕКСЕЕВСКИЙ р-н ВОРОНЕЖСКАЯ обл. РОССИЙСКАЯ ФЕДЕРАЦИЯ 247112</span></li>
