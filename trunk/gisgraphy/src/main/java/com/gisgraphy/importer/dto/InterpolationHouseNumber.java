@@ -39,31 +39,37 @@ public class InterpolationHouseNumber {
 	/**
 	 * the id ow the way
 	 */
-	private String wayID;
+	private String wayId;
 	
 	/**
 	 * the nodes of the way
 	 */
 	private List<InterpolationMember> members = new ArrayList<InterpolationMember>();
 
+	/**
+	 *  the name of the street associated to the way, not to the node
+	 */
+	private String streetName;
 	
 	/**
 	 * The type of interpolation (even,odd,...)
 	 */
-	private String interpolationType;
+	private InterpolationType interpolationType = InterpolationType.all;
+	
+	private AddressInclusion AddressInclusion;
 	
 	/**
 	 * @return the wayID
 	 */
-	public String getWayID() {
-		return wayID;
+	public String getWayId() {
+		return wayId;
 	}
 
 	/**
 	 * @param wayID the wayID to set
 	 */
-	public void setWayID(String wayID) {
-		this.wayID = wayID;
+	public void setWayId(String wayId) {
+		this.wayId = wayId;
 	}
 
 	/**
@@ -90,14 +96,42 @@ public class InterpolationHouseNumber {
 	/**
 	 * @return the interpolationType
 	 */
-	public String getInterpolationType() {
+	public InterpolationType getInterpolationType() {
 		return interpolationType;
 	}
 
 	/**
 	 * @param interpolationType the interpolationType to set
 	 */
-	public void setInterpolationType(String interpolationType) {
+	public void setInterpolationType(InterpolationType interpolationType) {
 		this.interpolationType = interpolationType;
+	}
+
+	/**
+	 * @return the streetName
+	 */
+	public String getStreetName() {
+		return streetName;
+	}
+
+	/**
+	 * @param streetName the streetName to set
+	 */
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
+
+	/**
+	 * @return the addressInclusion
+	 */
+	public AddressInclusion getAddressInclusion() {
+		return AddressInclusion;
+	}
+
+	/**
+	 * @param addressInclusion the addressInclusion to set
+	 */
+	public void setAddressInclusion(AddressInclusion addressInclusion) {
+		AddressInclusion = addressInclusion;
 	}
 }
