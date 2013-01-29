@@ -1,5 +1,8 @@
 package com.gisgraphy.importer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.sf.jstester.util.Assert;
 
 import org.junit.Test;
@@ -171,6 +174,39 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		NodeHouseNumber actual = importer.parseNodeHouseNumber(line);
 		NodeHouseNumber expected = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
 		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void segmentize(){
+		/*
+		0     5           15
+		|------|------|------|------|-----|
+		0      6     12      18     24     30
+		*/
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		Point p1 = GeolocHelper.createPoint(1f, 1f);
+		Point p2 = GeolocHelper.createPoint(1f, 1.045225f);
+		Point p3 = GeolocHelper.createPoint(1f, 1.13567f);
+		Point p4 = GeolocHelper.createPoint(1f, 1.27133f);
+		/*
+		System.out.println(GeolocHelper.distance(p1, p2));
+		System.out.println(GeolocHelper.distance(p2, p3));
+		System.out.println(GeolocHelper.distance(p3, p4));*/
+		List<Point> points = new ArrayList<Point>();
+		points.add(p1);
+		points.add(p2);
+		points.add(p3);
+		points.add(p4);
+		
+		List<Point> result = importer.segmentize(points, 4);
+		Assert.assertEquals(6, result.size());
+		for (int i =0; i<5;i++){
+			double distance = GeolocHelper.distance(result.get(i), result.get(i+1));
+			System.out.println(distance);
+			Assert.assertTrue(Math.abs(distance-6000)<10);
+		}
+		
+		
 	}
 	
 

@@ -331,8 +331,12 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		if (points==null || nbInnerPoint==0 || points.size()==0){
 			return result;
 		}
+		if (points.size()>=1){
+			result.add(points.get(0));
+			
+		}
 		if (points.size()==1){
-			return points;
+			return result;
 		}
 		List<Double> distances = new ArrayList<Double>();//5/10/15
 		double totalDistance = 0;//30
@@ -342,20 +346,20 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			totalDistance+=distance;
 		}
 		int nbSegment = nbInnerPoint+1;//4+1
-		int nbpoints = nbInnerPoint+2;//4+2
+		int nbpoints = nbInnerPoint+1;//4+1
 		double segmentLength = totalDistance/nbSegment;//30/5=6
 		int currentSubSegment =1;
 		double currentSubLength=0;
-		for (int i=0;i<nbpoints;i++){
-			while(currentSubLength+distances.get(currentSubSegment) <i*segmentLength){
+		for (int i=1;i<=nbpoints;i++){
+			while(currentSubLength+distances.get(currentSubSegment-1) <i*segmentLength){
+				currentSubLength+=distances.get(currentSubSegment-1);
 				currentSubSegment++;
-				currentSubLength+=+distances.get(currentSubSegment);
-				if (currentSubSegment>nbSegment){
+				if (currentSubSegment>distances.size()){
 					return result;
 				}
 			}
-			double distanceLeft = (nbpoints*segmentLength)-currentSubLength;
-			double ratio = distanceLeft/(distances.get(currentSubSegment));
+			double distanceLeft = (i*segmentLength)-currentSubLength;
+			double ratio = distanceLeft/(distances.get(currentSubSegment-1));
 			if (ratio <= 0){
 				//it is the last point
 				result.add(points.get(points.size()-1));
