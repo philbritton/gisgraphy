@@ -64,4 +64,26 @@ public class AssociatedStreetHouseNumber {
 	public void addMember(AssociatedStreetMember member){
 		associatedStreetMember.add(member);
 	}
+	
+	public List<AssociatedStreetMember> getStreetMembers(){
+		List<AssociatedStreetMember> streets = new ArrayList<AssociatedStreetMember>();
+		for (AssociatedStreetMember member:associatedStreetMember){
+			if (member.isStreet()){
+				streets.add(member);
+			}
+		}
+		return streets;
+	}
+	
+	
+	
+	public List<AssociatedStreetMember> getHouseMembers(){
+		List<AssociatedStreetMember> house = new ArrayList<AssociatedStreetMember>();
+		for (AssociatedStreetMember member:associatedStreetMember){
+			if (member.isHouse()){
+				house.add(member);
+			}
+		}
+		return house;
+	}
 }
