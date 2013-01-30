@@ -160,15 +160,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				String role = matcher.group(6);
 				member.setRole(role);
 				member.setType(matcher.group(5));
-				if ("street".equalsIgnoreCase(role)) {
-					if (matcher.group(3) != null) {
-						member.setName(matcher.group(3));
-					} else {
-						member.setName(matcher.group(4));
-					}
-				} else if ("house".equalsIgnoreCase(role)) {
-					member.setHouseNumber(matcher.group(3));
-				}
+				member.setHouseNumber(matcher.group(3));
+				member.setStreetName(matcher.group(4));
 
 				houseNumber.addMember(member);
 				i++;

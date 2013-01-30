@@ -31,9 +31,9 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 			Assert.assertEquals("2069647", actual.getRelationID());
 			Assert.assertNotNull(actual.getAssociatedStreetMember());
 			Assert.assertEquals(3,actual.getAssociatedStreetMember().size());
-			AssociatedStreetMember m1 = new AssociatedStreetMember("1661205474", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540"),"24",null,"N","house");
-			AssociatedStreetMember m2 = new AssociatedStreetMember("158189815", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000002AA4070C99A81D40227F492749DD4540"),null,"Avenue de Fontvieille","W","street");
-			AssociatedStreetMember m3 = new AssociatedStreetMember("176577460", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000004522EE9504A81D4081BAA66957DD4540"),null,"Avenue de Fontvieille","W","street");
+			AssociatedStreetMember m1 = new AssociatedStreetMember("1661205474", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540"),"24","Avenue de Fontvieille","N","house");
+			AssociatedStreetMember m2 = new AssociatedStreetMember("158189815", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000002AA4070C99A81D40227F492749DD4540"),"Avenue de Fontvieille","Avenue de Fontvieille","W","street");
+			AssociatedStreetMember m3 = new AssociatedStreetMember("176577460", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000004522EE9504A81D4081BAA66957DD4540"),"Avenue de Fontvieille","Avenue de Fontvieille","W","street");
 			
 			Assert.assertTrue(actual.getAssociatedStreetMember().contains(m1));
 			Assert.assertTrue(actual.getAssociatedStreetMember().contains(m2));
@@ -61,8 +61,8 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 			Assert.assertEquals("2069647", actual.getRelationID());
 			Assert.assertNotNull(actual.getAssociatedStreetMember());
 			Assert.assertEquals(2,actual.getAssociatedStreetMember().size());
-			AssociatedStreetMember m1 = new AssociatedStreetMember("1661205474", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540"),"24",null,"N","house");
-			AssociatedStreetMember m2 = new AssociatedStreetMember("176577460", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000004522EE9504A81D4081BAA66957DD4540"),null,"Avenue de Fontvieil_le","W","street");
+			AssociatedStreetMember m1 = new AssociatedStreetMember("1661205474", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540"),"24","Ave_nue de Fontvieille","N","house");
+			AssociatedStreetMember m2 = new AssociatedStreetMember("176577460", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000004522EE9504A81D4081BAA66957DD4540"),"Avenue de Fontvieil_le","Avenue_ de Fontvieille","W","street");
 			
 			Assert.assertTrue(actual.getAssociatedStreetMember().contains(m1));
 			Assert.assertTrue(actual.getAssociatedStreetMember().contains(m2));

@@ -47,7 +47,7 @@ public class AssociatedStreetMember {
 		this.role = role;
 		this.type = type;
 		this.houseNumber = houseNumber;
-		this.name = name;
+		this.streetName = name;
 	}
 
 	/**
@@ -73,9 +73,9 @@ public class AssociatedStreetMember {
 	private String houseNumber;
 	
 	/**
-	 * the name of the street or house
+	 * the streetName of the street
 	 */
-	private String name;
+	private String streetName;
 
 	/**
 	 * @return the id
@@ -148,17 +148,22 @@ public class AssociatedStreetMember {
 	}
 
 	/**
-	 * @return the name
+	 * @return the streetName
 	 */
-	public String getName() {
-		return name;
+	public String getStreetName() {
+		return streetName;
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param streetName the streetName to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setStreetName(String name) {
+		this.streetName = name;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("AssociatedStreetMember [id=%s, location=%s, role=%s, type=%s, houseNumber=%s, streetName=%s]", id, location, role, type, houseNumber, streetName);
 	}
 
 	/* (non-Javadoc)
@@ -171,7 +176,7 @@ public class AssociatedStreetMember {
 		result = prime * result + ((houseNumber == null) ? 0 : houseNumber.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -204,10 +209,10 @@ public class AssociatedStreetMember {
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
-		if (name == null) {
-			if (other.name != null)
+		if (streetName == null) {
+			if (other.streetName != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!streetName.equals(other.streetName))
 			return false;
 		if (role == null) {
 			if (other.role != null)
@@ -220,5 +225,35 @@ public class AssociatedStreetMember {
 		} else if (!type.equals(other.type))
 			return false;
 		return true;
+	}
+	
+	public boolean isStreet(){
+		if ("street".equalsIgnoreCase(role)||
+				("way".equalsIgnoreCase(role)) && !isNumeric(houseNumber)||
+				(streetName!=null && streetName.equalsIgnoreCase(houseNumber))
+				){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isHouse(){
+		if ("house".equalsIgnoreCase(role)||
+				("node".equalsIgnoreCase(role)) && isNumeric(houseNumber)||
+				(houseNumber!=null && !houseNumber.equalsIgnoreCase(streetName))
+				){
+			return true;
+		}
+		return false;
+	}
+	
+	
+	private static boolean isNumeric(String houseNumber) {
+		try {
+			Integer.parseInt(houseNumber);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }
