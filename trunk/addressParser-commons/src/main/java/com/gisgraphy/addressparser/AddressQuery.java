@@ -44,8 +44,10 @@ public class AddressQuery {
     private String callback;
     private boolean postal = false;
     private boolean indent = DEFAULT_INDENTATION;
+    private boolean standardize = false;
+    private boolean geocode = false;
 
-    public OutputFormat getFormat() {
+	public OutputFormat getFormat() {
 	return format;
     }
 
@@ -127,6 +129,22 @@ public class AddressQuery {
 
 	public void setPostal(boolean postal) {
 		this.postal = postal;
+	}
+	
+	public boolean isStandardize() {
+			return standardize;
+	}
+
+	public void setStandardize(boolean standardize) {
+			this.standardize = standardize;
+	}
+
+	public boolean isGeocode() {
+		return geocode;
+	}
+
+	public void setGeocode(boolean geocode) {
+		this.geocode = geocode;
 	}
 
 }
