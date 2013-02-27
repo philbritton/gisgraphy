@@ -74,7 +74,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -97,7 +97,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -119,7 +119,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -144,7 +144,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -168,7 +168,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -191,7 +191,7 @@ public class AddressParserClientTest {
 	    }
 	    
 	    @Override
-	    protected String getUrl(AddressQuery query) {
+	    public String getUrl(AddressQuery query) {
 	    return url;
 	    }
 	};
@@ -223,6 +223,21 @@ public class AddressParserClientTest {
     public void executeToStringWithNullQuery(){
 	AddressParserClient service = new AddressParserClient();
 	service.executeToString(null);
+    }
+    
+    @Test
+    public void getUrl(){
+    	AddressParserClient service = new AddressParserClient();
+    	AddressQuery query =new AddressQuery("foo", "fr");
+    	query.setStandardize(true);
+    	String url = service.getUrl(query);
+    	Assert.assertTrue(url.contains("address=foo"));
+    	Assert.assertTrue(url.contains("country=fr"));
+    	Assert.assertTrue(url.contains("format=XML"));
+    	Assert.assertTrue(url.contains("geocode=false"));
+    	Assert.assertTrue(url.contains("indent=false"));
+    	Assert.assertTrue(url.contains("postal=false"));
+    	Assert.assertTrue(url.contains("standardize=true"));
     }
     
 }

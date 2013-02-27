@@ -30,7 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.helper.EncodingHelper;
@@ -88,7 +89,7 @@ public abstract class  GisgraphyServlet extends HttpServlet {
     /**
      * The logger
      */
-    protected static final Logger logger = Logger
+    protected static final Logger logger = LoggerFactory
 	    .getLogger(GisgraphyServlet.class);
     
     protected OutputFormat setResponseContentType(HttpServletRequest req,

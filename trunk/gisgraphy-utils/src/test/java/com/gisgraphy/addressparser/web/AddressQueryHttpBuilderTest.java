@@ -248,6 +248,71 @@ public class AddressQueryHttpBuilderTest {
 		    + " should be true for 'on' value (case insensitive and on value)  ",
 	    query.isPostal());
     
+    
+    //test standardize
+    // with no value specified
+    request = new MockHttpServletRequest();
+	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
+	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
+	query =builder.buildFromRequest(request);
+    assertFalse("When no " + AbstractAddressServlet.STANDARDIZE_PARAMETER
+	    + " is specified, the  parameter should be set to false",query.isStandardize());
+    // with wrong value
+    request = new MockHttpServletRequest();
+	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
+	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
+	request.setParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER, "unk");
+	query =builder.buildFromRequest(request);
+    assertFalse("When wrong " + AbstractAddressServlet.STANDARDIZE_PARAMETER
+	    + " is specified, the  parameter should be set to false", query.isStandardize());
+    // test case sensitive
+    request = new MockHttpServletRequest();
+	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
+	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
+	request.setParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER, "TrUe");
+	query =builder.buildFromRequest(request);
+    assertTrue(AbstractAddressServlet.STANDARDIZE_PARAMETER
+	    + " should be case insensitive  ", query.isStandardize());
+    // test 'on' value
+    request = new MockHttpServletRequest();
+	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
+	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
+	request.setParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER, "On");
+	query =builder.buildFromRequest(request);
+    assertTrue(
+    		AbstractAddressServlet.STANDARDIZE_PARAMETER
+		    + " should be true for 'on' value (case insensitive and on value)  ",
+	    query.isStandardize());
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //callback not set
     request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");

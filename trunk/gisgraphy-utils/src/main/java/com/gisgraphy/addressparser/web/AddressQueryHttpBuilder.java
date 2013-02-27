@@ -88,6 +88,11 @@ public class AddressQueryHttpBuilder {
 		if ("true".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.POSTAL_PARAMETER)) || "on".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.POSTAL_PARAMETER))) {
 			query.setPostal(true);
 		}
+		
+		// Postal
+		if ("true".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER)) || "on".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER))) {
+			query.setStandardize(true);
+		}
 
 		return query;
 	}
