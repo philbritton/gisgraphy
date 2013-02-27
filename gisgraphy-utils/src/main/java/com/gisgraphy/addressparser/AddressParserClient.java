@@ -119,7 +119,7 @@ public class AddressParserClient implements IAddressParserService {
 		}
 	}
 
-	protected String getUrl(AddressQuery query) {
+	public String getUrl(AddressQuery query) {
 		return baseURL + BeanToRestParameter.toQueryString(query);
 	}
 

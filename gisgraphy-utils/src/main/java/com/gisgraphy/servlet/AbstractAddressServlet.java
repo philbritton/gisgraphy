@@ -52,6 +52,7 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
     public final static String CALLBACK_PARAMETER = "callback";
     public final static String INDENT_PARAMETER = "indent";
     public final static String POSTAL_PARAMETER = "postal";
+    public final static String STANDARDIZE_PARAMETER = "standardize";
     
     public static final int QUERY_MAX_LENGTH = 400;
 
@@ -81,7 +82,7 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 	    
 		AddressQuery query = getAddressQueryHttpBuilder().buildFromRequest(req);
 	    if (logger.isDebugEnabled()){
-		logger.debug("query=" + query);
+	    	logger.debug("query=" + query);
 	    }
 	    String UA = req.getHeader(Constants.HTTP_USER_AGENT_HEADER_NAME);
 	    String referer = req.getHeader(Constants.HTTP_REFERER_HEADER_NAME);
