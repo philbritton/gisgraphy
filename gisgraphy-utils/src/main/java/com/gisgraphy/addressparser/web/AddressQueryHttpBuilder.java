@@ -89,7 +89,7 @@ public class AddressQueryHttpBuilder {
 			query.setPostal(true);
 		}
 		
-		// Postal
+		// standardize
 		if ("true".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER)) || "on".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER))) {
 			query.setStandardize(true);
 		}
