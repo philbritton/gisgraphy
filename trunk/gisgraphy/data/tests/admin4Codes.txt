@@ -1,8 +1,3 @@
-6613135	Vanves	Vanves		48.8196	2.2895	A	ADM4	FR		A8	92	921	92075	0		62	Europe/Paris	2007-09-21
-6613136	Vaucresson	Vaucresson		48.8333333	2.1666667	A	ADM4	FR		A8	92	923	92076	0		144	Europe/Paris	2007-08-02
-6673136	Duplicate adm4	Vaucresson		48.8333333	2.1666667	A	ADM4	FR		A8	92	923	92076	0		144	Europe/Paris	2007-08-02
-6614115	Bois-Colombes	Bois-Colombes	92270	48.9166667	2.2666667	A	ADM4	FR		A8	92	922	92009	0		30	Europe/Paris	2007-08-03
-645689	Adm4 with last missing field	Adm4 with last missing field		48.9	2.3	A	ADM4	FR		AA	92	922	645689	0		33	Europe/Paris	2007-04-01
 6451962	Boulogne-Billancourt	Boulogne-Billancourt		48.8333333	2.25	A	ADM4	FR		A8	92	923	92012	0		30	Europe/Paris	2007-03-22
 6451963	Bourg-la-Reine	Bourg-la-Reine		48.7833333	2.3166667	A	ADM4	FR		A8	92	921	92014	0		49	Europe/Paris	2007-03-22
 6451966	Clamart	Clamart		48.8	2.2666667	A	ADM4	FR		A8	92	921	92023	0		149	Europe/Paris	2007-03-22
@@ -36,3 +31,8 @@
 6457182	Le Plessis-Robinson	Le Plessis-Robinson		48.7833333	2.2666667	A	ADM4	FR		A8	92	921	92060	0		97	Europe/Paris	2007-04-01
 6613133	Châtenay-Malabry	 Chatenay-Malabry 		48.7666667	2.2666667	A	ADM4	FR		A8	92	921	92019	0		92	Europe/Paris	2007-08-02
 6613134	Marnes-la-Coquette	Marnes-la-Coquette		48.8333333	2.1666667	A	ADM4	FR		A8	92	923	92047	0		144	Europe/Paris	2007-08-02
+6613135	Vanves	Vanves		48.8196	2.2895	A	ADM4	FR		A8	92	921	92075	0		62	Europe/Paris	2007-09-21
+6613136	Vaucresson	Vaucresson		48.8333333	2.1666667	A	ADM4	FR		A8	92	923	92076	0		144	Europe/Paris	2007-08-02
+6673136	Duplicate adm4	Vaucresson		48.8333333	2.1666667	A	ADM4	FR		A8	92	923	92076	0		144	Europe/Paris	2007-08-02
+6614115	Bois-Colombes	Bois-Colombes	92270	48.9166667	2.2666667	A	ADM4	FR		A8	92	922	92009	0		30	Europe/Paris	2007-08-03
+645689	Adm4 with last missing field	Adm4 with last missing field		48.9	2.3	A	ADM4	FR		AA	92	922	645689	0		33	Europe/Paris	2007-04-01

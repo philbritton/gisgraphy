@@ -35,6 +35,8 @@ public class AssociatedStreetHouseNumber {
 
 	private String relationID;
 	private List<AssociatedStreetMember> associatedStreetMember = new ArrayList<AssociatedStreetMember>();
+	List<AssociatedStreetMember> streets = null;
+	List<AssociatedStreetMember> house =null;
 	
 	/**
 	 * @return the associatedStreetMember
@@ -78,12 +80,12 @@ public class AssociatedStreetHouseNumber {
 	
 	
 	public List<AssociatedStreetMember> getHouseMembers(){
-		List<AssociatedStreetMember> house = new ArrayList<AssociatedStreetMember>();
+		List<AssociatedStreetMember> houses = new ArrayList<AssociatedStreetMember>();
 		for (AssociatedStreetMember member:associatedStreetMember){
 			if (member.isHouse()){
-				house.add(member);
+				houses.add(member);
 			}
 		}
-		return house;
+		return houses;
 	}
 }

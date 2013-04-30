@@ -32,11 +32,14 @@ import java.util.regex.Pattern;
 import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
+import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.repository.IhouseNumberDao;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
+import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
@@ -309,6 +312,67 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		
 		if (line.startsWith("A")){
 			AssociatedStreetHouseNumber house = parseAssociatedStreetHouseNumber(line);
+			if (house==null){
+				return;
+			}
+			List<AssociatedStreetMember> streetMembers = house.getStreetMembers();
+			List<AssociatedStreetMember> houseMembers = house.getHouseMembers();
+			if (houseMembers.size()==0 ){
+				//no streets or no house
+				return;
+			} 
+			if (streetMembers.size()==0){
+				//TODO treet as node
+			}
+			if (streetMembers.size()==1){
+				AssociatedStreetMember associatedStreetMember = streetMembers.get(0);
+				if (associatedStreetMember.getId()==null){
+					logger.warn("associated street "+associatedStreetMember+" has no id");
+					return;
+				}
+				Long idAsLong = null;
+				try {
+					idAsLong = Long.valueOf(associatedStreetMember.getId());
+				} catch (NumberFormatException e) {
+					logger.warn(idAsLong+" is not a valid id for associated street");
+					return;
+				}
+				OpenStreetMap associatedStreet = openStreetMapDao.getByOpenStreetMapId(idAsLong);
+				if (associatedStreet==null){
+					logger.warn("no street can be found for associated street "+associatedStreetMember);
+					return;
+				}
+				for (AssociatedStreetMember houseMember : houseMembers){
+					HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+					associatedStreet.addHouseNumber(houseNumber);
+				}
+				openStreetMapDao.save(associatedStreet);
+			}
+			if (streetMembers.size()>1){
+				//for each house, search the nearest street
+				//getStreetIds
+				List<Long>  streetIds = new ArrayList<Long>();
+				for (AssociatedStreetMember street : streetMembers){
+					Long id;
+					try {
+						id = Long.valueOf(street.getId());
+						streetIds.add(id);
+					} catch (NumberFormatException e) {
+						logger.warn(street+" has no id");
+					}
+				}
+				for (AssociatedStreetMember houseMember : houseMembers){
+					if (houseMember!=null && houseMember.getLocation()!=null){
+					HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+					OpenStreetMap associatedStreet = openStreetMapDao.getNearestByosmIds(houseMember.getLocation(), streetIds);
+					if (associatedStreet!=null){
+						associatedStreet.addHouseNumber(houseNumber);
+						openStreetMapDao.save(associatedStreet);
+					}
+					}
+				}
+				
+			}
 		} else if (line.startsWith("N")){
 			NodeHouseNumber house = parseNodeHouseNumber(line);
 		} else if (line.startsWith("I")){
@@ -318,7 +382,34 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 
 	}
+
+	private HouseNumber buildHouseNumberFromAssociatedHouseNumber(
+			AssociatedStreetMember houseMember) {
+		HouseNumber houseNumber = new HouseNumber();
+		Integer numberAsInteger = null;
+		try {
+			numberAsInteger = Integer.valueOf(houseMember.getHouseNumber());
+			houseNumber.setNumber(numberAsInteger);
+			//TODO if not a number maybe a  separeated by -?
+		} catch (NumberFormatException e) {
+			logger.warn(numberAsInteger+" is not a valid numeric house number");
+			if (houseMember.getHouseNumber()!=null && !"".equals(houseMember.getHouseNumber().trim())){
+					houseNumber.setName(houseMember.getHouseNumber());//housenumber of the member is probably a housename
+			}
+		}
+		houseNumber.setLocation(houseMember.getLocation());
+		Long osmId = null;
+		try {
+			osmId = Long.valueOf(houseMember.getId());
+			houseNumber.setOpenstreetmapId(osmId);
+		} catch (NumberFormatException e) {
+			logger.warn(osmId+" is not a valid openstreetmapId");
+		}
+		houseNumber.setType(HouseNumberType.ASSOCIATED);
+		return houseNumber;
+	}
 	
+		
 	protected List<Point> segmentize(List<Point> points,int nbInnerPoint){
 		List<Point> result = new ArrayList<Point>();
 		if (points==null || nbInnerPoint==0 || points.size()==0){
