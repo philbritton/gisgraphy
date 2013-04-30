@@ -22,6 +22,10 @@
  *******************************************************************************/
 package com.gisgraphy.domain.repository;
 
+import static com.gisgraphy.hibernate.projection.SpatialProjection.DISTANCE_SPHERE_FUNCTION;
+import static com.gisgraphy.hibernate.projection.SpatialProjection.ST_LINE_INTERPOLATE_POINT_FUNCTION;
+import static com.gisgraphy.hibernate.projection.SpatialProjection.ST_LINE_LOCATE_POINT_FUNCTION;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +53,7 @@ import com.gisgraphy.domain.geoloc.entity.event.GisFeatureDeletedEvent;
 import com.gisgraphy.domain.geoloc.entity.event.GisFeatureStoredEvent;
 import com.gisgraphy.domain.geoloc.entity.event.PlaceTypeDeleteAllEvent;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
+import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.IntrospectionHelper;
@@ -389,7 +394,7 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
     }
     
 
-	/*public OpenStreetMap getByOpenStreetMapId(final Long openstreetmapId) {
+	public OpenStreetMap getByOpenStreetMapId(final Long openstreetmapId) {
 		Assert.notNull(openstreetmapId);
 		return (OpenStreetMap) this.getHibernateTemplate().execute(
 			new HibernateCallback() {
@@ -405,11 +410,11 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 
 				qry.setParameter(0, openstreetmapId);
 
-				OpenStreetMap result = (OpenStreetMap) qry.list();
+				OpenStreetMap result = (OpenStreetMap) qry.uniqueResult();
 				return result;
 			    }
 			});
-	}*/
+	}
 
 
 	/* (non-Javadoc)
@@ -431,6 +436,47 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 				    }
 				});
 	}
+	
+	public OpenStreetMap getNearestByosmIds(final Point point,final List<Long> ids) {
+		if (ids==null || ids.size()==0){
+			return null;
+		}
+		return (OpenStreetMap) this.getHibernateTemplate().execute(
+			new HibernateCallback() {
+
+			    public Object doInHibernate(Session session)
+				    throws PersistenceException {
+			    	String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+			    	String sqlString = new StringBuffer()
+					.append(DISTANCE_SPHERE_FUNCTION)
+					.append("(")
+						.append(pointAsString)
+						.append(",")
+						.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
+						.append("(")
+							.append("o.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+							.append(",")
+							.append(ST_LINE_LOCATE_POINT_FUNCTION)
+							.append("(")
+								.append("o.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+								.append(",")
+								.append(pointAsString)
+							.append(")")
+						.append(")")
+					.append(")")
+					.toString();
+				String queryString = "from "
+					+ OpenStreetMap.class.getSimpleName()+ " o where openstreetmapid in (:ids) "
+					+" order by "+sqlString
+					;  
+
+				Query qry = session.createQuery(queryString);
+				qry.setParameterList("ids", ids);
+				qry.setMaxResults(1);
+				return ((OpenStreetMap) qry.uniqueResult());
+			    }
+			});
+}
 	
 	/* (non-Javadoc)
 	 * @see com.gisgraphy.domain.repository.IOpenStreetMapDao#getMaxOpenstreetMapId()

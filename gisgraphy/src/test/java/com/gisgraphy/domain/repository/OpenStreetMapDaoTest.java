@@ -22,6 +22,7 @@
  *******************************************************************************/
 package com.gisgraphy.domain.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -33,6 +34,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.domain.geoloc.entity.event.EventManager;
@@ -105,6 +107,56 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	  
 	  long actual = openStreetMapDao.getMaxGid();
 	  Assert.assertEquals(gid, actual);
+  }
+  
+  @Test
+  public void testGetNearestByosmIds(){
+	  LineString shape = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.99999)");
+	    shape.setSRID(SRID.WGS84_SRID.getSRID());
+	    Long id1= 10L;		
+	    Long id2=20L;
+		OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+		streetOSM.setShape(shape);
+		streetOSM.setGid(1L);
+		streetOSM.setOpenstreetmapId(id1);
+		openStreetMapDao.save(streetOSM);
+		assertNotNull(openStreetMapDao.get(streetOSM.getId()));
+		
+		//we create a multilineString a little bit closest than the first one 
+		OpenStreetMap streetOSM2 = new OpenStreetMap();
+		LineString shape2 = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.9154734)");
+		shape2.setSRID(SRID.WGS84_SRID.getSRID());
+		
+		
+		streetOSM2.setShape(shape2);
+		streetOSM2.setOpenstreetmapId(id2);
+		streetOSM2.setGid(2L);
+		//Simulate middle point
+		streetOSM2.setLocation(GeolocHelper.createPoint(6.94130445F , 50.91544865F));
+		streetOSM2.setOneWay(false);
+		streetOSM2.setStreetType(StreetType.FOOTWAY);
+		streetOSM2.setName("John Kenedy");
+		StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM2);
+		openStreetMapDao.save(streetOSM2);
+		assertNotNull(openStreetMapDao.get(streetOSM2.getId()));
+		
+		ArrayList<Long> ids = new ArrayList<Long>();
+		ids.add(id1);
+		ids.add(id2);
+		
+		Point searchPoint = GeolocHelper.createPoint(6.9412748F, 50.9155829F);
+		OpenStreetMap actual = openStreetMapDao.getNearestByosmIds(searchPoint,ids);
+		Assert.assertEquals(id2, actual.getOpenstreetmapId());
+		
+		//no ids found
+		actual = openStreetMapDao.getNearestByosmIds(searchPoint,new ArrayList<Long>());
+		Assert.assertNull(actual);
+		
+		ArrayList<Long> fakeIds = new ArrayList<Long>();
+		fakeIds.add(333L);
+		actual = openStreetMapDao.getNearestByosmIds(searchPoint,fakeIds);
+		Assert.assertNull(actual);
+	  
   }
  
     @Test
@@ -259,6 +311,20 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	OpenStreetMap retrieveOSM = openStreetMapDao.getByGid(streetOSM.getGid());
 	assertNotNull("getByGid should not return null if the entity exists",retrieveOSM);
 	assertEquals("getByGid should return the entity if the entity exists",streetOSM, retrieveOSM);
+	
+    }
+    
+    @Test
+    public void testGetByOpenstreetMapId(){
+	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+	Long openstreetmapId = 12345678L;
+	streetOSM.setOpenstreetmapId(openstreetmapId );
+	openStreetMapDao.save(streetOSM);
+	assertNotNull(openStreetMapDao.get(streetOSM.getId()));
+	
+	OpenStreetMap retrieveOSM = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
+	assertNotNull("getByOpenStreetMapId should not return null if the entity exists",retrieveOSM);
+	assertEquals("getByOpenStreetMapId should return the entity if the entity exists",streetOSM.getId(), retrieveOSM.getId());
 	
     }
     
@@ -447,6 +513,22 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	    // OK
 	}
 
+    }
+    
+    @Test
+    public void testSaveCascadeHousenumber(){
+    	HouseNumber houseNumber = GisgraphyTestHelper.createHouseNumber();
+    	OpenStreetMap street = GisgraphyTestHelper.createOpenStreetMapForJohnKenedyStreet();
+    	//houseNumber.setStreet(street);
+    	street.addHouseNumber(houseNumber);
+    	street = openStreetMapDao.save(street);
+    	Assert.assertNotNull(houseNumber.getId());
+    	
+    	
+    	OpenStreetMap retrievedStreet = openStreetMapDao.get(street.getId());
+    	List<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
+		Assert.assertNotNull(houseNumbers);
+    	Assert.assertEquals("the street should have the housenumber associated",1, houseNumbers.size());
     }
 
     

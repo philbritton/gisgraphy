@@ -73,6 +73,28 @@ public class HouseNumberDaoTest extends AbstractIntegrationHttpSolrTestCase {
     public void testSave(){
     	HouseNumber houseNumber = GisgraphyTestHelper.createHouseNumber();
     	OpenStreetMap street = GisgraphyTestHelper.createOpenStreetMapForJohnKenedyStreet();
+    	street = openStreetMapDao.save(street);
+    	//houseNumber.setStreet(street);
+    	street.addHouseNumber(houseNumber);
+    	houseNumberDao.save(houseNumber);
+    	Assert.assertNotNull(houseNumber.getId());
+    	
+    	HouseNumber retrieved = houseNumberDao.get(houseNumber.getId());
+    	Assert.assertNotNull(retrieved);
+    	
+    	OpenStreetMap retrievedStreet = openStreetMapDao.get(street.getId());
+    	List<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
+		Assert.assertNotNull(houseNumbers);
+    	Assert.assertEquals("the street should have the housenumber associated",1, houseNumbers.size());
+    	Assert.assertEquals(retrieved.getId(), houseNumbers.get(0).getId());
+    	
+    }
+    
+    @Test
+    public void testSaveWithNullNumber(){
+    	HouseNumber houseNumber = GisgraphyTestHelper.createHouseNumber();
+    	houseNumber.setNumber(null);
+    	OpenStreetMap street = GisgraphyTestHelper.createOpenStreetMapForJohnKenedyStreet();
     	openStreetMapDao.save(street);
     	houseNumber.setStreet(street);
     	houseNumberDao.save(houseNumber);

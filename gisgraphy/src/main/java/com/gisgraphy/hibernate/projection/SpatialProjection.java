@@ -51,11 +51,11 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class SpatialProjection {
     
-    private static final String DISTANCE_FUNCTION = "distance";
-    private static final String DISTANCE_SPHERE_FUNCTION = "distance_sphere";
-    private static String ST_LINE_INTERPOLATE_POINT_FUNCTION = "ST_line_interpolate_point";
-    private static String ST_LINE_LOCATE_POINT_FUNCTION = "st_line_locate_point";
-    private static String LINEMERGE_FUNCTION = "linemerge";
+    public static final String DISTANCE_FUNCTION = "distance";
+    public static final String DISTANCE_SPHERE_FUNCTION = "distance_sphere";
+    public static String ST_LINE_INTERPOLATE_POINT_FUNCTION = "ST_line_interpolate_point";
+    public static String ST_LINE_LOCATE_POINT_FUNCTION = "st_line_locate_point";
+    public static String LINEMERGE_FUNCTION = "linemerge";
 
     /**
 	 * projection to get the distance_sphere between a point and a LineString
@@ -117,6 +117,7 @@ public class SpatialProjection {
 			.append(")")
 			.append("as y").append(position).append("_")
 			.toString();
+			
 			
 			 
 			return sqlString;

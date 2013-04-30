@@ -191,6 +191,7 @@ public class HouseNumber {
 	 * @return the number of the house.
 	 * it can be null if the house has only a name. but it is typically filled
 	 */
+    @Column(nullable=true)
 	public Integer getNumber() {
 		return number;
 	}
