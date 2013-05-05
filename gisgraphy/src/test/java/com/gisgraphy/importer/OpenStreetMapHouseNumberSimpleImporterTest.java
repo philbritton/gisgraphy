@@ -7,6 +7,8 @@ import net.sf.jstester.util.Assert;
 
 import org.junit.Test;
 
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
+import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.importer.dto.AddressInclusion;
 import com.gisgraphy.importer.dto.AssociatedStreetHouseNumber;
@@ -206,6 +208,33 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 			Assert.assertTrue(Math.abs(distance-6000)<10);
 		}
 		
+		
+	}
+	
+	@Test
+	public void testBuildHouseNumberFromAssociatedHouseNumber(){
+		AssociatedStreetMember houseMember = new AssociatedStreetMember();
+		String number = "3";
+		String id = "234";
+		String type = "house";
+		Point point = GeolocHelper.createPoint(3F, 2F);
+		houseMember.setHouseNumber(number);
+		houseMember.setLocation(point);
+		houseMember.setId(id);
+		houseMember.setType(type);
+		
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		HouseNumber houseNumber = importer.buildHouseNumberFromAssociatedHouseNumber(houseMember);
+		
+		Assert.assertEquals(3,houseNumber.getNumber().intValue() );
+		Assert.assertEquals(234, houseNumber.getOpenstreetmapId().intValue());
+		Assert.assertEquals(HouseNumberType.ASSOCIATED, houseNumber.getType());
+		
+		//let's try with non numeric houseNumber
+		houseMember.setHouseNumber("foo");
+		houseNumber = importer.buildHouseNumberFromAssociatedHouseNumber(houseMember);
+		Assert.assertEquals("foo",houseNumber.getName());
+		Assert.assertNull(houseNumber.getNumber());
 		
 	}
 	

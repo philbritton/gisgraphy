@@ -162,9 +162,9 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				member.setLocation(point);
 				String role = matcher.group(6);
 				member.setRole(role);
-				member.setType(matcher.group(5));
 				member.setHouseNumber(matcher.group(3));
 				member.setStreetName(matcher.group(4));
+				member.setType(matcher.group(5));
 
 				houseNumber.addMember(member);
 				i++;
@@ -383,7 +383,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	}
 
-	private HouseNumber buildHouseNumberFromAssociatedHouseNumber(
+	protected HouseNumber buildHouseNumberFromAssociatedHouseNumber(
 			AssociatedStreetMember houseMember) {
 		HouseNumber houseNumber = new HouseNumber();
 		Integer numberAsInteger = null;
