@@ -30,6 +30,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
@@ -41,6 +42,13 @@ import com.gisgraphy.domain.repository.IhouseNumberDao;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
+import com.gisgraphy.domain.valueobject.Output;
+import com.gisgraphy.domain.valueobject.Output.OutputStyle;
+import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.FulltextQuery;
+import com.gisgraphy.fulltext.FulltextResultsDto;
+import com.gisgraphy.fulltext.IFullTextSearchEngine;
+import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.importer.dto.AddressInclusion;
@@ -57,6 +65,10 @@ import com.vividsolutions.jts.geom.Point;
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
+/**
+ * @author gisgraphy
+ *
+ */
 public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImporterProcessor {
 
 	protected IIdGenerator idGenerator;
@@ -68,6 +80,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	protected ISolRSynchroniser solRSynchroniser;
 
 	protected IGeolocSearchEngine geolocSearchEngine;
+	
+	protected IFullTextSearchEngine fullTextSearchEngine;
 
 	protected IcityDetector cityDetector;
 
@@ -78,6 +92,10 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	private static final Pattern ASSOCIATED_HOUSE_NUMBER_PATTERN = Pattern.compile(ASSOCIATED_HOUSE_NUMBER_REGEXP, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
 	private static final Pattern INTERPOLATION_HOUSE_NUMBER_PATTERN = Pattern.compile(INTERPOLATION_HOUSE_NUMBER_REGEXP, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+	
+	protected final static Output MEDIUM_OUTPUT = Output.withDefaultFormat().withStyle(OutputStyle.MEDIUM);
+
+	protected static final double SEARCH_DISTANCE = 6000;
 
 	/*
 	 * (non-Javadoc)
@@ -322,7 +340,19 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				return;
 			} 
 			if (streetMembers.size()==0){
-				//TODO treet as node
+				//treet as node
+				for (AssociatedStreetMember houseMember : houseMembers){
+					if (houseMember.getStreetName()!=null && !"".equals(houseMember.getStreetName().trim()) && houseMember.getLocation()!=null){
+						SolrResponseDto street = findNearestStreet(houseMember.getStreetName(),houseMember.getLocation());
+						if (street!=null){
+							Long openstreetmapId = street.getOpenstreetmap_id();
+							OpenStreetMap osm = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
+							HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+							osm.addHouseNumber(houseNumber);
+							openStreetMapDao.save(osm);
+						}
+					}
+				}
 			}
 			if (streetMembers.size()==1){
 				AssociatedStreetMember associatedStreetMember = streetMembers.get(0);
@@ -375,29 +405,172 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			}
 		} else if (line.startsWith("N")){
 			NodeHouseNumber house = parseNodeHouseNumber(line);
-		} else if (line.startsWith("I")){
+			HouseNumber houseNumber = new HouseNumber();
+			houseNumber.setNumber(house.getHouseNumber());
+			houseNumber.setName(house.getName());
+			String streetName = house.getStreetName();
+			Point location = house.getLocation();
+			SolrResponseDto street = findNearestStreet(streetName,location);
+			if (street!=null){
+				Long openstreetmapId = street.getOpenstreetmap_id();
+				OpenStreetMap osm = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
+				osm.addHouseNumber(houseNumber);
+				openStreetMapDao.save(osm);
+			}
+		} else if (line.startsWith("I")) {
 			InterpolationHouseNumber house = parseInterpolationHouseNumber(line);
-		} else {
-			logger.warn("unknow node type for line "+line);
+			List<InterpolationMember> members = house.getMembers();
+			if (members.size() <= 1) {
+				return;
+			}
+			OpenStreetMap osm = null;
+			if (house.getStreetName() != null) {
+				SolrResponseDto street = findNearestStreet(
+						house.getStreetName(), members.get(0).getLocation());
+				if (street != null) {
+					Long openstreetmapId = street.getOpenstreetmap_id();
+					osm = openStreetMapDao
+							.getByOpenStreetMapId(openstreetmapId);
+					if (osm == null) {
+						return;
+					}
+				} else {
+					return;// we don't know which street to add the numbers
+				}
+				List<InterpolationMember> membersForSegmentation = new ArrayList<InterpolationMember>();
+				if (members != null) {
+					for (InterpolationMember member : members) {
+						if (member.getHouseNumber() != null
+								|| !"".equals(member.getHouseNumber().trim())) {
+							// got HN in the member
+							membersForSegmentation.add(member);
+							if (membersForSegmentation.size() == 1) {
+								continue;// we only have one point and need at
+											// least one other
+							} else {
+								int nbInnerPoint = 0;
+								if (house.getInterpolationType() == InterpolationType.alphabetic) {
+
+								} else {// odd,even,all=>should be numeric
+									String firstNumberAsString = membersForSegmentation
+											.get(0).getHouseNumber();
+									String lastNumberAsString = membersForSegmentation
+											.get(0).getHouseNumber();
+									int firstNumberAsInt = 0;
+									int lastNumberAsInt = 0;
+									try {
+										firstNumberAsInt = Integer
+												.parseInt(firstNumberAsString);
+										lastNumberAsInt = Integer
+												.parseInt(lastNumberAsString);
+									} catch (NumberFormatException e) {
+										// todo
+									}
+									if (house.getInterpolationType() == InterpolationType.even) {// pair
+										if (firstNumberAsInt % 2 == 1) {
+											firstNumberAsInt++;
+										}
+										if (lastNumberAsInt % 2 == 1) {
+											lastNumberAsInt++;
+										}
+										nbInnerPoint = Math
+												.abs((firstNumberAsInt - lastNumberAsInt) / 2) - 1;// two
+																									// even
+																									// number
+																									// substracts
+																									// always
+																									// give
+																									// an
+																									// odd
+																									// one
+
+									} else if (house.getInterpolationType() == InterpolationType.odd) {// impair
+										if (firstNumberAsInt % 2 == 0) {
+											firstNumberAsInt++;
+										}
+										if (lastNumberAsInt % 2 == 0) {
+											lastNumberAsInt++;
+										}
+										nbInnerPoint = Math
+												.abs((firstNumberAsInt - lastNumberAsInt) / 2) - 1;
+
+									} else if (house.getInterpolationType() == InterpolationType.all) {
+										nbInnerPoint = Math
+												.abs((firstNumberAsInt - lastNumberAsInt)) - 1;
+
+									}
+								}
+								List<Point> points = new ArrayList<Point>();
+								for (InterpolationMember memberForSegmentation : membersForSegmentation) {
+									points.add(memberForSegmentation
+											.getLocation());
+								}
+								List<Point> segmentizedPoint = segmentize(
+										points, nbInnerPoint);
+								// todo reconstruct housenumber and see if we
+								// increase or decrease (firstNumberAsInt < or
+								// >lastNumberAsInt)
+
+								membersForSegmentation = new ArrayList<InterpolationMember>();
+								membersForSegmentation.add(member);// restart
+																	// the
+																	// process
+																	// with the
+																	// last
+																	// point;
+							}
+						} else {
+							// no housenumber in the member, it is a drawn point
+							if (membersForSegmentation.size() == 0) {
+								continue;// we go to the next point to search
+											// for a point with HN
+							} else {
+								membersForSegmentation.add(member);// we add the
+																	// member
+																	// and
+																	// continue
+																	// to search
+																	// for a
+																	// point
+																	// with HN
+								continue;
+							}
+						}
+
+						InterpolationType type = house.getInterpolationType();
+					}
+				}
+			} else {
+				logger.warn("unknow node type for line " + line);
+			}
 		}
 
+	}
+
+	protected SolrResponseDto findNearestStreet(String streetName, Point location) {
+		if (streetName!=null && ! "".equals(streetName) && location != null){
+			return null;
+		}
+		Output output;
+			output = MEDIUM_OUTPUT;
+		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, output, 
+				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		query.withAllWordsRequired(false).withoutSpellChecking();
+		query.around(location);
+			query.withRadius(SEARCH_DISTANCE);
+		FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
+		if (results.getResultsSize() >= 1) {
+			return results.getResults().get(0);
+		} else {
+			return null;
+		}
 	}
 
 	protected HouseNumber buildHouseNumberFromAssociatedHouseNumber(
 			AssociatedStreetMember houseMember) {
 		HouseNumber houseNumber = new HouseNumber();
-		Integer numberAsInteger = null;
-		try {
-			numberAsInteger = Integer.valueOf(houseMember.getHouseNumber());
-			houseNumber.setNumber(numberAsInteger);
-			//TODO if not a number maybe a  separeated by -?
-		} catch (NumberFormatException e) {
-			logger.warn(numberAsInteger+" is not a valid numeric house number");
-			if (houseMember.getHouseNumber()!=null && !"".equals(houseMember.getHouseNumber().trim())){
-					houseNumber.setName(houseMember.getHouseNumber());//housenumber of the member is probably a housename
-			}
-		}
 		houseNumber.setLocation(houseMember.getLocation());
+		houseNumber.setNumber(houseMember.getHouseNumber());//todo normalize 11 d
 		Long osmId = null;
 		try {
 			osmId = Long.valueOf(houseMember.getId());
@@ -410,9 +583,15 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	}
 	
 		
+	/**
+	 * @param points a list of point, typically a list of point that represent a street
+	 * @param nbInnerPoint the number of point to add beetween the startpoint and the endpoint
+	 * @return the intermediate points that represents segments of same size, if nbInnerPoint=4, 
+	 * we will get 6 points back
+	 */
 	protected List<Point> segmentize(List<Point> points,int nbInnerPoint){
 		List<Point> result = new ArrayList<Point>();
-		if (points==null || nbInnerPoint==0 || points.size()==0){
+		if (points==null || nbInnerPoint<=0 || points.size()==0){
 			return result;
 		}
 		if (points.size()>=1){
@@ -557,6 +736,11 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	@Required
 	public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
 		this.openStreetMapDao = openStreetMapDao;
+	}
+	
+	@Autowired
+	public void setFullTextSearchEngine(IFullTextSearchEngine fullTextSearchEngine) {
+		this.fullTextSearchEngine = fullTextSearchEngine;
 	}
 
 

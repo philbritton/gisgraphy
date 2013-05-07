@@ -5,10 +5,16 @@ import java.util.List;
 
 import net.sf.jstester.util.Assert;
 
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.valueobject.HouseNumberType;
+import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.FulltextQuery;
+import com.gisgraphy.fulltext.FulltextResultsDto;
+import com.gisgraphy.fulltext.IFullTextSearchEngine;
+import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.importer.dto.AddressInclusion;
 import com.gisgraphy.importer.dto.AssociatedStreetHouseNumber;
@@ -212,6 +218,39 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
+	public void segmentize_onePoint(){
+		/*
+		0     5           15			  30
+		|------|------|------|------|-----|
+		0      6     12      18     24     30
+		*/
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		Point p1 = GeolocHelper.createPoint(1f, 1f);
+		Point p2 = GeolocHelper.createPoint(1f, 1.045225f);
+		Point p3 = GeolocHelper.createPoint(1f, 1.13567f);
+		Point p4 = GeolocHelper.createPoint(1f, 1.27133f);
+		/*
+		System.out.println(GeolocHelper.distance(p1, p2));
+		System.out.println(GeolocHelper.distance(p2, p3));
+		System.out.println(GeolocHelper.distance(p3, p4));*/
+		List<Point> points = new ArrayList<Point>();
+		points.add(p1);
+		points.add(p2);
+		points.add(p3);
+		points.add(p4);
+		
+		List<Point> result = importer.segmentize(points, 1);
+		Assert.assertEquals(3, result.size());
+		for (int i =0; i<2;i++){
+			double distance = GeolocHelper.distance(result.get(i), result.get(i+1));
+			System.out.println(distance);
+			Assert.assertTrue(Math.abs(distance-15000)<10);
+		}
+		
+		
+	}
+	
+	@Test
 	public void testBuildHouseNumberFromAssociatedHouseNumber(){
 		AssociatedStreetMember houseMember = new AssociatedStreetMember();
 		String number = "3";
@@ -226,15 +265,40 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		HouseNumber houseNumber = importer.buildHouseNumberFromAssociatedHouseNumber(houseMember);
 		
-		Assert.assertEquals(3,houseNumber.getNumber().intValue() );
+		Assert.assertEquals(number,houseNumber.getNumber() );
 		Assert.assertEquals(234, houseNumber.getOpenstreetmapId().intValue());
 		Assert.assertEquals(HouseNumberType.ASSOCIATED, houseNumber.getType());
 		
-		//let's try with non numeric houseNumber
-		houseMember.setHouseNumber("foo");
-		houseNumber = importer.buildHouseNumberFromAssociatedHouseNumber(houseMember);
-		Assert.assertEquals("foo",houseNumber.getName());
-		Assert.assertNull(houseNumber.getNumber());
+		
+	}
+	
+	
+	@Test
+	public void findNearestStreet(){
+		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
+		SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
+		results.add(solrResponseDto);
+		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
+		EasyMock.expect(mockResultDTO.getResultsSize()).andReturn(1);
+		EasyMock.expect(mockResultDTO.getResults()).andReturn(results);
+		EasyMock.replay(mockResultDTO);
+		
+		String streetName="streetname";
+		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, OpenStreetMapHouseNumberSimpleImporter.MEDIUM_OUTPUT, 
+				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		Point point = GeolocHelper.createPoint(2F,	3F);
+		query.around(point);
+		query.withRadius(OpenStreetMapHouseNumberSimpleImporter.SEARCH_DISTANCE);
+
+		IFullTextSearchEngine fulltextEngine = EasyMock.createMock(IFullTextSearchEngine.class);
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		EasyMock.expect(fulltextEngine.executeQuery(query)).andStubReturn(mockResultDTO);
+		EasyMock.replay(fulltextEngine);
+		importer.setFullTextSearchEngine(fulltextEngine);
+		
+		importer.findNearestStreet(streetName, point);
+		EasyMock.verify(fulltextEngine);
+		
 		
 	}
 	
