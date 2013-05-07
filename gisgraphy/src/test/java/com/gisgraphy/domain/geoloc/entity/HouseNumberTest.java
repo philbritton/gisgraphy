@@ -13,32 +13,32 @@ public class HouseNumberTest {
 		HouseNumber hn1 = new HouseNumber();
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
-		hn1.setNumber(1);
+		hn1.setNumber("1");
 		hn1.setStreet(street);
 		
 		HouseNumber hn2 = new HouseNumber();
 		hn2.setStreet(street);
-		hn2.setNumber(1);
+		hn2.setNumber("1");
 		
 		HouseNumber hnNotSameNumber = new HouseNumber();
 		hn2.setStreet(street);
-		hn2.setNumber(2);
+		hn2.setNumber("2");
 		
 		Assert.assertFalse("not same number=>not equals",hn1.equals(hnNotSameNumber));
 
 		HouseNumber hnNotSameStreet = new HouseNumber();
-		hn2.setNumber(1);
+		hn2.setNumber("1");
 		
 		Assert.assertFalse("not same street=>not equals",hn1.equals(hnNotSameStreet));
 		
 		//test when name is not the same and number is not null
 		HouseNumber hn3 = new HouseNumber();
-		hn3.setNumber(1);
+		hn3.setNumber("1");
 		hn3.setName("name");
 		hn3.setStreet(street);
 		
 		HouseNumber hn4 = new HouseNumber();
-		hn4.setNumber(1);
+		hn4.setNumber("1");
 		hn4.setStreet(street);
 		
 		Assert.assertEquals("name should not impact equals when number is not null",hn4, hn3);

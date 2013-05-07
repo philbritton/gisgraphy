@@ -1057,7 +1057,7 @@ public class GisgraphyTestHelper {
     
     public static HouseNumber createHouseNumber(){
     	HouseNumber houseNumber = new HouseNumber();
-    	houseNumber.setNumber(10);
+    	houseNumber.setNumber("10");
     	houseNumber.setLocation(GeolocHelper.createPoint(3F, 4F));
     	houseNumber.setOpenstreetmapId(1L);
     	houseNumber.setType(ASSOCIATED);

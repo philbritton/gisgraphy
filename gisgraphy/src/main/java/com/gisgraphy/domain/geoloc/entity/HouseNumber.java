@@ -69,7 +69,7 @@ public class HouseNumber {
 
     private Long openstreetmapId;
     
-    private Integer number;
+    private String number;
     
     @IntrospectionIgnoredField
     private HouseNumberType type;
@@ -192,14 +192,14 @@ public class HouseNumber {
 	 * it can be null if the house has only a name. but it is typically filled
 	 */
     @Column(nullable=true)
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
 	/**
 	 * @param number the number to set
 	 */
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 
