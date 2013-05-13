@@ -330,95 +330,129 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		
 		if (line.startsWith("A")){
 			AssociatedStreetHouseNumber house = parseAssociatedStreetHouseNumber(line);
-			if (house==null){
-				return;
-			}
-			List<AssociatedStreetMember> streetMembers = house.getStreetMembers();
-			List<AssociatedStreetMember> houseMembers = house.getHouseMembers();
-			if (houseMembers.size()==0 ){
-				//no streets or no house
-				return;
-			} 
-			if (streetMembers.size()==0){
-				//treet as node
-				for (AssociatedStreetMember houseMember : houseMembers){
-					if (houseMember.getStreetName()!=null && !"".equals(houseMember.getStreetName().trim()) && houseMember.getLocation()!=null){
-						SolrResponseDto street = findNearestStreet(houseMember.getStreetName(),houseMember.getLocation());
-						if (street!=null){
-							Long openstreetmapId = street.getOpenstreetmap_id();
-							OpenStreetMap osm = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
-							HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
-							osm.addHouseNumber(houseNumber);
-							openStreetMapDao.save(osm);
-						}
-					}
-				}
-			}
-			if (streetMembers.size()==1){
-				AssociatedStreetMember associatedStreetMember = streetMembers.get(0);
-				if (associatedStreetMember.getId()==null){
-					logger.warn("associated street "+associatedStreetMember+" has no id");
-					return;
-				}
-				Long idAsLong = null;
-				try {
-					idAsLong = Long.valueOf(associatedStreetMember.getId());
-				} catch (NumberFormatException e) {
-					logger.warn(idAsLong+" is not a valid id for associated street");
-					return;
-				}
-				OpenStreetMap associatedStreet = openStreetMapDao.getByOpenStreetMapId(idAsLong);
-				if (associatedStreet==null){
-					logger.warn("no street can be found for associated street "+associatedStreetMember);
-					return;
-				}
-				for (AssociatedStreetMember houseMember : houseMembers){
-					HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
-					associatedStreet.addHouseNumber(houseNumber);
-				}
-				openStreetMapDao.save(associatedStreet);
-			}
-			if (streetMembers.size()>1){
-				//for each house, search the nearest street
-				//getStreetIds
-				List<Long>  streetIds = new ArrayList<Long>();
-				for (AssociatedStreetMember street : streetMembers){
-					Long id;
-					try {
-						id = Long.valueOf(street.getId());
-						streetIds.add(id);
-					} catch (NumberFormatException e) {
-						logger.warn(street+" has no id");
-					}
-				}
-				for (AssociatedStreetMember houseMember : houseMembers){
-					if (houseMember!=null && houseMember.getLocation()!=null){
-					HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
-					OpenStreetMap associatedStreet = openStreetMapDao.getNearestByosmIds(houseMember.getLocation(), streetIds);
-					if (associatedStreet!=null){
-						associatedStreet.addHouseNumber(houseNumber);
-						openStreetMapDao.save(associatedStreet);
-					}
-					}
-				}
-				
-			}
+			processAssociatedStreet(house);
 		} else if (line.startsWith("N")){
 			NodeHouseNumber house = parseNodeHouseNumber(line);
 			processNodeHouseNumber(house);
 		} else if (line.startsWith("I")) {
 			InterpolationHouseNumber house = parseInterpolationHouseNumber(line);
-			processInterpolation(house);
+			if(house==null){
+				return;
+			}
+			List<InterpolationMember> members = house.getMembers();
+			if (members.size() <= 1) {
+				//we can not interpolate if there is less than 2 points
+				return;
+			}
+			OpenStreetMap osm = null;
+			if (house.getStreetName() != null) {
+				SolrResponseDto street = findNearestStreet(house.getStreetName(), members.get(0).getLocation());
+				if (street != null) {
+					Long openstreetmapId = street.getOpenstreetmap_id();
+					osm = openStreetMapDao
+							.getByOpenStreetMapId(openstreetmapId);
+					if (osm == null) {
+						return;
+					}
+				} else {
+					return;// we don't know which street to add the numbers
+				}
+			}
+			List<HouseNumber> houseNumbers = processInterpolation(house);
+			if (houseNumbers!=null){
+				osm.addHouseNumbers(houseNumbers);
+				openStreetMapDao.save(osm);
+			}
 		} else {
 			logger.warn("unknow node type for line " + line);
 		}
 
 	}
 
-	private void processNodeHouseNumber(NodeHouseNumber house) {
+	protected void processAssociatedStreet(AssociatedStreetHouseNumber house) {
+		if (house==null){
+			return;
+		}
+		List<AssociatedStreetMember> streetMembers = house.getStreetMembers();
+		List<AssociatedStreetMember> houseMembers = house.getHouseMembers();
+		if (houseMembers.size()==0 ){
+			//no streets or no house
+			return;
+		} 
+		if (streetMembers.size()==0){
+			//treet as node
+			for (AssociatedStreetMember houseMember : houseMembers){
+				if (houseMember.getStreetName()!=null && !"".equals(houseMember.getStreetName().trim()) && houseMember.getLocation()!=null){
+					SolrResponseDto street = findNearestStreet(houseMember.getStreetName(),houseMember.getLocation());
+					if (street!=null){
+						Long openstreetmapId = street.getOpenstreetmap_id();
+						OpenStreetMap osm = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
+						HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+						osm.addHouseNumber(houseNumber);
+						openStreetMapDao.save(osm);
+					}
+				}
+			}
+		}
+		if (streetMembers.size()==1){
+			AssociatedStreetMember associatedStreetMember = streetMembers.get(0);
+			if (associatedStreetMember.getId()==null){
+				logger.warn("associated street "+associatedStreetMember+" has no id");
+				return;
+			}
+			Long idAsLong = null;
+			try {
+				idAsLong = Long.valueOf(associatedStreetMember.getId());
+			} catch (NumberFormatException e) {
+				logger.warn(idAsLong+" is not a valid id for associated street");
+				return;
+			}
+			OpenStreetMap associatedStreet = openStreetMapDao.getByOpenStreetMapId(idAsLong);
+			if (associatedStreet==null){
+				logger.warn("no street can be found for associated street "+associatedStreetMember);
+				return;
+			}
+			for (AssociatedStreetMember houseMember : houseMembers){
+				HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+				associatedStreet.addHouseNumber(houseNumber);
+			}
+			openStreetMapDao.save(associatedStreet);
+		}
+		if (streetMembers.size()>1){
+			//for each house, search the nearest street
+			//getStreetIds
+			List<Long>  streetIds = new ArrayList<Long>();
+			for (AssociatedStreetMember street : streetMembers){
+				Long id;
+				try {
+					id = Long.valueOf(street.getId());
+					streetIds.add(id);
+				} catch (NumberFormatException e) {
+					logger.warn(street+" has no id");
+				}
+			}
+			for (AssociatedStreetMember houseMember : houseMembers){
+				if (houseMember!=null && houseMember.getLocation()!=null){
+				HouseNumber houseNumber = buildHouseNumberFromAssociatedHouseNumber(houseMember);
+				OpenStreetMap associatedStreet = openStreetMapDao.getNearestByosmIds(houseMember.getLocation(), streetIds);
+				if (associatedStreet!=null){
+					associatedStreet.addHouseNumber(houseNumber);
+					openStreetMapDao.save(associatedStreet);
+				}
+				}
+			}
+			
+		}
+	}
+
+	protected void processNodeHouseNumber(NodeHouseNumber house) {
+		if(house==null || house.getLocation()==null){
+			return;
+		}
 		HouseNumber houseNumber = new HouseNumber();
 		houseNumber.setNumber(house.getHouseNumber());
 		houseNumber.setName(house.getName());
+		houseNumber.setType(HouseNumberType.NODE);
 		String streetName = house.getStreetName();
 		Point location = house.getLocation();
 		SolrResponseDto street = findNearestStreet(streetName,location);
@@ -430,26 +464,9 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 	}
 
-	private void processInterpolation(InterpolationHouseNumber house) {
-		List<InterpolationMember> members = house.getMembers();
-		if (members.size() <= 1) {
-			//we can not interpolate if there is less than 2 points
-			return;
-		}
-		OpenStreetMap osm = null;
-		if (house.getStreetName() != null) {
-			SolrResponseDto street = findNearestStreet(house.getStreetName(), members.get(0).getLocation());
-			if (street != null) {
-				Long openstreetmapId = street.getOpenstreetmap_id();
-				osm = openStreetMapDao
-						.getByOpenStreetMapId(openstreetmapId);
-				if (osm == null) {
-					return;
-				}
-			} else {
-				return;// we don't know which street to add the numbers
-			}
+	protected List<HouseNumber> processInterpolation(InterpolationHouseNumber house) {
 			List<InterpolationMember> membersForSegmentation = new ArrayList<InterpolationMember>();
+			List<InterpolationMember> members = house.getMembers();
 			if (members != null) {
 				for (InterpolationMember member : members) {
 					if (member.getHouseNumber() != null
@@ -533,12 +550,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 								for (int i =0;i<segmentizedPoint.size();i++){
 									Point p = segmentizedPoint.get(i);
 									HouseNumber houseNumberToAdd = new HouseNumber();
+									houseNumberToAdd.setType(HouseNumberType.INTERPOLATION);
 									houseNumberToAdd.setLocation(p);
 									houseNumberToAdd.setNumber(firstNumberAsInt+(increment*i)+"");
 									houseNumbers.add(houseNumberToAdd);
 								}
-								osm.addHouseNumbers(houseNumbers);
-								openStreetMapDao.save(osm);
+								return houseNumbers;
+								
 							}
 							
 
@@ -557,11 +575,11 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 						}
 					}
 
-					InterpolationType type = house.getInterpolationType();
+					InterpolationType type = house.getInterpolationType();//todo
 				}
 			}
+			return null;
 		}
-	}
 
 	protected SolrResponseDto findNearestStreet(String streetName, Point location) {
 		if (streetName!=null && ! "".equals(streetName) && location != null){
