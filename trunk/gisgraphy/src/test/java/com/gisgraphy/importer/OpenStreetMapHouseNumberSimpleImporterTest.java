@@ -9,6 +9,8 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
+import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
+import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.fulltext.FulltextQuery;
@@ -26,6 +28,9 @@ import com.gisgraphy.importer.dto.NodeHouseNumber;
 import com.vividsolutions.jts.geom.Point;
 
 public class OpenStreetMapHouseNumberSimpleImporterTest {
+	
+		boolean findNearestStreetCalled=false;
+		boolean buildHouseNumberFromAssociatedHouseNumberCalled=false;
 
 	@Test
 	public void parseAssociatedStreetHouseNumber() {
@@ -298,9 +303,269 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		
 		importer.findNearestStreet(streetName, point);
 		EasyMock.verify(fulltextEngine);
+	}
+	
+	@Test
+	public void testprocessAssociatedStreet_nohouse(){
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
+		importer.processAssociatedStreet(associatedStreetHouseNumber);
+		
+	}
+	
+	@Test
+	public void testprocessAssociatedStreet_noStreetMember(){
+		//setup
+		Long openstreetmapId =123L;
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.expect(osmDaoMock.getByOpenStreetMapId(openstreetmapId )).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		
+		final SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
+		EasyMock.replay(solrResponseDto);
+		
+		final Point point = (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540");
+		final AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
+		final AssociatedStreetMember number = new AssociatedStreetMember("1661205474", point,"24","Avenue de Fontvieille","N","house");
+		associatedStreetHouseNumber.addMember(number);
+		
+		findNearestStreetCalled=false;
+		buildHouseNumberFromAssociatedHouseNumberCalled=false;
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
+			@Override
+			protected SolrResponseDto findNearestStreet(String streetName,
+					Point location) {
+				if ("Avenue de Fontvieille".equals(streetName) && location==point){
+					findNearestStreetCalled=true;
+					return solrResponseDto;
+				} else {
+					Assert.fail("find nearest street is not called with the correct parameters");
+					return null;
+				}
+			}
+			
+			@Override
+			protected HouseNumber buildHouseNumberFromAssociatedHouseNumber(
+					AssociatedStreetMember houseMember) {
+				if (houseMember==number){
+					buildHouseNumberFromAssociatedHouseNumberCalled=true;
+					return new HouseNumber();
+				}else {
+					Assert.fail("buildHouseNumberFromAssociatedHouseNumber is not call with correct parameter");
+					return null;
+				}
+			}
+		};
+		
+		importer.setOpenStreetMapDao(osmDaoMock);
+		
+		//exercise
+		importer.processAssociatedStreet(associatedStreetHouseNumber);
+		
+		//verify
+		EasyMock.verify(osmDaoMock);
+		EasyMock.verify(solrResponseDto);
+		Assert.assertTrue(findNearestStreetCalled);
+		Assert.assertTrue(buildHouseNumberFromAssociatedHouseNumberCalled);
+	}
+	
+	
+	@Test
+	public void testprocessAssociatedStreet_noStreetMember_nostreetfound(){
+		//setup
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.replay(osmDaoMock);
+		
+		final Point point = (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540");
+		final AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
+		final AssociatedStreetMember number = new AssociatedStreetMember("1661205474", point,"24","Avenue de Fontvieille","N","house");
+		associatedStreetHouseNumber.addMember(number);
+		
+		findNearestStreetCalled=false;
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
+			@Override
+			protected SolrResponseDto findNearestStreet(String streetName,
+					Point location) {
+				if ("Avenue de Fontvieille".equals(streetName) && location==point){
+					findNearestStreetCalled=true;
+					return null;
+				} else {
+					Assert.fail("find nearest street is not called with the correct parameters");
+					return null;
+				}
+			}
+			
+			
+		};
+		
+		importer.setOpenStreetMapDao(osmDaoMock);
+		
+		//exercise
+		importer.processAssociatedStreet(associatedStreetHouseNumber);
+		
+		//verify
+		EasyMock.verify(osmDaoMock);
+		Assert.assertTrue(findNearestStreetCalled);
+	}
+	
+	@Test
+	public void testprocessAssociatedStreet_OneStreetMember(){
+		//setup
+		Long openstreetmapId =158189815L;
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.expect(osmDaoMock.getByOpenStreetMapId(openstreetmapId )).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		
+		
+		final AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
+		final AssociatedStreetMember number = new AssociatedStreetMember("1661205474", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540"),"24","Avenue de Fontvieille","N","house");
+		final AssociatedStreetMember street = new AssociatedStreetMember("158189815", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000002AA4070C99A81D40227F492749DD4540"),"Avenue de Fontvieille","Avenue de Fontvieille","W","street");
+		associatedStreetHouseNumber.addMember(number);
+		associatedStreetHouseNumber.addMember(street);
+		
+		buildHouseNumberFromAssociatedHouseNumberCalled=false;
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
+			
+			@Override
+			protected HouseNumber buildHouseNumberFromAssociatedHouseNumber(
+					AssociatedStreetMember houseMember) {
+				if (houseMember==number){
+					buildHouseNumberFromAssociatedHouseNumberCalled=true;
+					return new HouseNumber();
+				}else {
+					Assert.fail("buildHouseNumberFromAssociatedHouseNumber is not call with correct parameter");
+					return null;
+				}
+			}
+		};
+		
+		importer.setOpenStreetMapDao(osmDaoMock);
+		
+		//exercise
+		importer.processAssociatedStreet(associatedStreetHouseNumber);
+		
+		//verify
+		EasyMock.verify(osmDaoMock);
+		Assert.assertTrue(buildHouseNumberFromAssociatedHouseNumberCalled);
+	}
+	
+	@Test
+	public void testprocessAssociatedStreet_SeveralStreetMember(){
+		//setup
+		Long openstreetmapId =158189815L;
+		Long openstreetmapId2 =158189815L;
+		List<Long> ids = new ArrayList<Long>();
+		ids.add(openstreetmapId);
+		ids.add(openstreetmapId2);
+		
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		final AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
+		
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.expect(osmDaoMock.getNearestByosmIds(EasyMock.anyObject(Point.class),EasyMock.anyObject(List.class) )).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		
+		
+		Point point = (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540");
+		final AssociatedStreetMember number = new AssociatedStreetMember("1661205474", point,"24","Avenue de Fontvieille","N","house");
+		final AssociatedStreetMember street = new AssociatedStreetMember("158189815", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000002AA4070C99A81D40227F492749DD4540"),"Avenue de Fontvieille","Avenue de Fontvieille","W","street");
+		AssociatedStreetMember street2 = new AssociatedStreetMember("176577460", (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000004522EE9504A81D4081BAA66957DD4540"),"Avenue de Fontvieille","Avenue de Fontvieille","W","street");
+		associatedStreetHouseNumber.addMember(number);
+		associatedStreetHouseNumber.addMember(street);
+		associatedStreetHouseNumber.addMember(street2);
+		
+		buildHouseNumberFromAssociatedHouseNumberCalled=false;
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
+			
+			@Override
+			protected HouseNumber buildHouseNumberFromAssociatedHouseNumber(
+					AssociatedStreetMember houseMember) {
+				if (houseMember==number){
+					buildHouseNumberFromAssociatedHouseNumberCalled=true;
+					return new HouseNumber();
+				}else {
+					Assert.fail("buildHouseNumberFromAssociatedHouseNumber is not call with correct parameter");
+					return null;
+				}
+			}
+		};
+		
+		importer.setOpenStreetMapDao(osmDaoMock);
+		
+		//exercise
+		importer.processAssociatedStreet(associatedStreetHouseNumber);
+		
+		//verify
+		EasyMock.verify(osmDaoMock);
+		Assert.assertTrue(buildHouseNumberFromAssociatedHouseNumberCalled);
+	}
+	
+	
+
+	@Test
+	public void processNodeHouseNumber(){
+		
+		Long openstreetmapId =123L;
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		
+		final SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
+		EasyMock.replay(solrResponseDto);
+		
+		NodeHouseNumber house = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
+		house.setHouseNumber("12345");
+		house.setName("name");
+		house.setStreetName("streetName");
+		final Point point = GeolocHelper.createPoint(2F, 1F);
+		house.setLocation(point);
+		
+		findNearestStreetCalled=false;
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
+			@Override
+			protected SolrResponseDto findNearestStreet(String streetName,
+					Point location) {
+				if ("streetName".equals(streetName) && location==point){
+					findNearestStreetCalled=true;
+					return solrResponseDto;
+				} else {
+					Assert.fail("find nearest street is not called with the correct parameters");
+					return null;
+				}
+			}
+			
+			
+		};;
+		
+		
+		
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.expect(osmDaoMock.getByOpenStreetMapId(openstreetmapId )).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		importer.setOpenStreetMapDao(osmDaoMock);
+		
+		importer.processNodeHouseNumber(house);
+		
+		EasyMock.verify(osmDaoMock);
+		EasyMock.verify(solrResponseDto);
+		Assert.assertTrue(findNearestStreetCalled);
 		
 		
 	}
+	
+	
 	
 
 }
