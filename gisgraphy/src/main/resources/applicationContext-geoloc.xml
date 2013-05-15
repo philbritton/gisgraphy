@@ -159,6 +159,18 @@
 		<property name="cityDetector" ref="cityDetector" />
 	</bean>
 	
+	<bean id="openStreetMapHouseNumberFileRetriever"
+		class="com.gisgraphy.importer.OpenStreetMapHouseNumberFileRetriever" >
+	</bean>
+	
+	<bean id="openStreetMapHouseNumberSimpleImporter" class="com.gisgraphy.importer.OpenStreetMapHouseNumberSimpleImporter"
+	parent="abstract${classifier}ImporterProcessor">
+		<property name="openStreetMapDao" ref= "openStreetMapDao" />
+		<property name="solRSynchroniser" ref="solRSynchroniser"/>
+		<property name="houseNumberDao" ref="houseNumberDao"></property>
+		<property name="fullTextSearchEngine" ref="fullTextSearchEngine"></property>
+	</bean>
+	
 	<bean id="geonamesZipCodeFileRetriever"
 		class="com.gisgraphy.importer.GeonamesZipCodeFileRetriever" parent="abstractFileRetriever" >
 	</bean>
@@ -193,6 +205,8 @@
 				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="openstreetmapFileRetriever" />
 				<ref bean="openStreetMapImporter"/>
+				<ref bean="openStreetMapHouseNumberFileRetriever"/>
+				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
 				<!--<ref bean="openStreetMapFulltextBuilder"/>-->
 			</list>
 		</constructor-arg>
