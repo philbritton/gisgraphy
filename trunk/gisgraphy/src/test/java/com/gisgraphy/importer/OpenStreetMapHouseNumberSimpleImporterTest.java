@@ -256,7 +256,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
-	public void testBuildHouseNumberFromAssociatedHouseNumber(){
+	public void buildHouseNumberFromAssociatedHouseNumber(){
 		AssociatedStreetMember houseMember = new AssociatedStreetMember();
 		String number = "3";
 		String id = "234";
@@ -306,7 +306,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
-	public void testprocessAssociatedStreet_nohouse(){
+	public void processAssociatedStreet_nohouse(){
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
 		importer.processAssociatedStreet(associatedStreetHouseNumber);
@@ -314,7 +314,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
-	public void testprocessAssociatedStreet_noStreetMember(){
+	public void processAssociatedStreet_noStreetMember(){
 		//setup
 		Long openstreetmapId =123L;
 		OpenStreetMap osm = new OpenStreetMap();
@@ -376,7 +376,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	
 	
 	@Test
-	public void testprocessAssociatedStreet_noStreetMember_nostreetfound(){
+	public void processAssociatedStreet_noStreetMember_nostreetfound(){
 		//setup
 		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
 		EasyMock.replay(osmDaoMock);
@@ -414,7 +414,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
-	public void testprocessAssociatedStreet_OneStreetMember(){
+	public void processAssociatedStreet_OneStreetMember(){
 		//setup
 		Long openstreetmapId =158189815L;
 		OpenStreetMap osm = new OpenStreetMap();
@@ -459,7 +459,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
-	public void testprocessAssociatedStreet_SeveralStreetMember(){
+	public void processAssociatedStreet_SeveralStreetMember(){
 		//setup
 		Long openstreetmapId =158189815L;
 		Long openstreetmapId2 =158189815L;
@@ -548,8 +548,6 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 			
 		};;
 		
-		
-		
 		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
 		EasyMock.expect(osmDaoMock.getByOpenStreetMapId(openstreetmapId )).andStubReturn(osm);
 		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
@@ -561,6 +559,42 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		EasyMock.verify(osmDaoMock);
 		EasyMock.verify(solrResponseDto);
 		Assert.assertTrue(findNearestStreetCalled);
+	}
+	
+	@Test
+	public void processInterpolationHouseNumber(){
+		InterpolationHouseNumber interpolationHouseNumber = new InterpolationHouseNumber();
+		InterpolationMember m0 = new InterpolationMember("1796478450", 0, (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E61000009A023EE4525350C0959C137B682F38C0"),null,null);
+		InterpolationMember m1 = new InterpolationMember("1366275082", 1, (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000068661CD94B5350C0B055270C6F2F38C0"),null,"foo");
+		InterpolationMember m2 = new InterpolationMember("1796453793", 2, (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000038691A144D5350C023ADE75A6A2F38C0"),"600","ba_r");
+		InterpolationMember m3 = new InterpolationMember("1796453794", 3, (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000F38F6390605350C028A6666A6D2F38C0"),"607",null);
+		interpolationHouseNumber.addMember(m0);
+		interpolationHouseNumber.addMember(m1);
+		interpolationHouseNumber.addMember(m2);
+		interpolationHouseNumber.addMember(m3);
+		interpolationHouseNumber.setInterpolationType(InterpolationType.even);
+		interpolationHouseNumber.setStreetName("california street");
+		
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		List<HouseNumber> houseNumbers = importer.processInterpolationHouseNumber(interpolationHouseNumber);
+		Assert.assertEquals(5, houseNumbers.size());//600,602,604,606,608
+		
+		//check the first point
+		Assert.assertEquals("600", houseNumbers.get(0).getNumber());
+		Assert.assertEquals(1796453793L, houseNumbers.get(0).getOpenstreetmapId().longValue());
+		Assert.assertEquals(HouseNumberType.INTERPOLATION, houseNumbers.get(0).getType());
+		
+		//check intermediary point
+		Assert.assertEquals("602", houseNumbers.get(1).getNumber());
+		Assert.assertEquals(null, houseNumbers.get(1).getOpenstreetmapId());
+		Assert.assertEquals(HouseNumberType.INTERPOLATION, houseNumbers.get(1).getType());
+		
+		//check the last point
+		Assert.assertEquals("the number should be roud to the even value","608", houseNumbers.get(4).getNumber());
+		Assert.assertEquals(1796453794L, houseNumbers.get(4).getOpenstreetmapId().longValue());
+		Assert.assertEquals(null, houseNumbers.get(0).getName());
+		Assert.assertEquals(HouseNumberType.INTERPOLATION, houseNumbers.get(0).getType());
+		
 		
 		
 	}

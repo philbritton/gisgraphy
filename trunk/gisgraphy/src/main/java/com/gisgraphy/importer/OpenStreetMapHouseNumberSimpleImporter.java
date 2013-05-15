@@ -65,13 +65,8 @@ import com.vividsolutions.jts.geom.Point;
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
-/**
- * @author gisgraphy
- *
- */
 public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImporterProcessor {
 
-	protected IIdGenerator idGenerator;
 
 	protected IOpenStreetMapDao openStreetMapDao;
 
@@ -79,11 +74,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	protected ISolRSynchroniser solRSynchroniser;
 
-	protected IGeolocSearchEngine geolocSearchEngine;
-	
 	protected IFullTextSearchEngine fullTextSearchEngine;
 
-	protected IcityDetector cityDetector;
 
 	private static final String ASSOCIATED_HOUSE_NUMBER_REGEXP = "([0-9]+)___([^_]*)___((?:(?!___).)*)___((?:(?!___).)*)___([NW])___([^_]*)(?:___)?";
 
@@ -345,7 +337,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				return;
 			}
 			OpenStreetMap osm = null;
-			if (house.getStreetName() != null) {
+			if (house.getStreetName() != null && !"".equals(house.getStreetName())) {
 				SolrResponseDto street = findNearestStreet(house.getStreetName(), members.get(0).getLocation());
 				if (street != null) {
 					Long openstreetmapId = street.getOpenstreetmap_id();
@@ -358,7 +350,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 					return;// we don't know which street to add the numbers
 				}
 			}
-			List<HouseNumber> houseNumbers = processInterpolation(house);
+			List<HouseNumber> houseNumbers = processInterpolationHouseNumber(house);
 			if (houseNumbers!=null){
 				osm.addHouseNumbers(houseNumbers);
 				openStreetMapDao.save(osm);
@@ -464,13 +456,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 	}
 
-	protected List<HouseNumber> processInterpolation(InterpolationHouseNumber house) {
+	protected List<HouseNumber> processInterpolationHouseNumber(InterpolationHouseNumber house) {
 			List<InterpolationMember> membersForSegmentation = new ArrayList<InterpolationMember>();
 			List<InterpolationMember> members = house.getMembers();
 			if (members != null) {
 				for (InterpolationMember member : members) {
 					if (member.getHouseNumber() != null
-							|| !"".equals(member.getHouseNumber().trim())) {
+							&& !"".equals(member.getHouseNumber().trim())) {
 						// got HN in the member
 						membersForSegmentation.add(member);
 						if (membersForSegmentation.size() == 1) {
@@ -480,13 +472,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 							int nbInnerPoint = 0;
 							int increment = 1;
 							if (house.getInterpolationType() == InterpolationType.alphabetic) {
-								//TODO
+								//WE choose to ignore Alphabetic interpolation due to poor interest
 							} else {
 								// odd,even,all=>should be numeric
 								String firstNumberAsString = membersForSegmentation
 										.get(0).getHouseNumber();
 								String lastNumberAsString = membersForSegmentation
-										.get(0).getHouseNumber();
+										.get(membersForSegmentation.size()-1).getHouseNumber();
 								int firstNumberAsInt = 0;
 								int lastNumberAsInt = 0;
 								try {
@@ -495,7 +487,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 									lastNumberAsInt = Integer
 											.parseInt(lastNumberAsString);
 								} catch (NumberFormatException e) {
-									// todo
+									return null;
 								}
 								if (house.getInterpolationType() == InterpolationType.even) {// pair
 									if (firstNumberAsInt % 2 == 1) {
@@ -548,8 +540,26 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 										points, nbInnerPoint);
 								List<HouseNumber> houseNumbers = new ArrayList<HouseNumber>();
 								for (int i =0;i<segmentizedPoint.size();i++){
-									Point p = segmentizedPoint.get(i);
 									HouseNumber houseNumberToAdd = new HouseNumber();
+									//set the openstretmapid of the first point
+									if ((i==0 && membersForSegmentation.get(0)!= null && membersForSegmentation.get(0).getId()!=null)){
+										try {
+											Long id = Long.valueOf(membersForSegmentation.get(i).getId());
+											houseNumberToAdd.setOpenstreetmapId(id);
+										} catch (NumberFormatException e) {
+											//ignore
+										}
+									}
+									//set the openstretmapid of the last point
+									if ((i==(segmentizedPoint.size()-1) && membersForSegmentation.get(1)!= null && membersForSegmentation.get(1).getId()!=null)){
+										try {
+											Long id = Long.valueOf(membersForSegmentation.get(1).getId());
+											houseNumberToAdd.setOpenstreetmapId(id);
+										} catch (NumberFormatException e) {
+											//ignore
+										}
+									}
+									Point p = segmentizedPoint.get(i);
 									houseNumberToAdd.setType(HouseNumberType.INTERPOLATION);
 									houseNumberToAdd.setLocation(p);
 									houseNumberToAdd.setNumber(firstNumberAsInt+(increment*i)+"");
@@ -575,7 +585,6 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 						}
 					}
 
-					InterpolationType type = house.getInterpolationType();//todo
 				}
 			}
 			return null;
@@ -772,9 +781,14 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		this.openStreetMapDao = openStreetMapDao;
 	}
 	
-	@Autowired
+	@Required
 	public void setFullTextSearchEngine(IFullTextSearchEngine fullTextSearchEngine) {
 		this.fullTextSearchEngine = fullTextSearchEngine;
+	}
+
+	@Required
+	public void setSolRSynchroniser(ISolRSynchroniser solRSynchroniser) {
+		this.solRSynchroniser = solRSynchroniser;
 	}
 
 
