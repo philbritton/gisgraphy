@@ -180,6 +180,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Assert.assertNull(importer.parseNodeHouseNumber(""));
 	}
 	
+		
 	@Test
 	public void parseNodeHouseNumber(){
 		String line = "N	247464344	0101000020E610000044BC1A457B304DC018737C597F4B41C0	405	Museo Ferroviario	Avenida Del Libertador";
@@ -294,15 +295,25 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Point point = GeolocHelper.createPoint(2F,	3F);
 		query.around(point);
 		query.withRadius(OpenStreetMapHouseNumberSimpleImporter.SEARCH_DISTANCE);
+		query.withAllWordsRequired(false).withoutSpellChecking();
 
 		IFullTextSearchEngine fulltextEngine = EasyMock.createMock(IFullTextSearchEngine.class);
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		EasyMock.expect(fulltextEngine.executeQuery(query)).andStubReturn(mockResultDTO);
 		EasyMock.replay(fulltextEngine);
 		importer.setFullTextSearchEngine(fulltextEngine);
-		
+		System.out.println(query);
 		importer.findNearestStreet(streetName, point);
 		EasyMock.verify(fulltextEngine);
+	}
+	
+	@Test
+	public void findNearestStreet_nullOrEmptyQuery(){
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		Point point = GeolocHelper.createPoint(2F, 3F);
+		org.junit.Assert.assertNull(importer.findNearestStreet(null, point));
+		org.junit.Assert.assertNull(importer.findNearestStreet("", point));
+		org.junit.Assert.assertNull(importer.findNearestStreet("foo", null));
 	}
 	
 	@Test
@@ -515,21 +526,33 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 
 	@Test
 	public void processNodeHouseNumber(){
-		
-		Long openstreetmapId =123L;
-		OpenStreetMap osm = new OpenStreetMap();
-		osm.setOpenstreetmapId(openstreetmapId);
-		
-		final SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
-		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
-		EasyMock.replay(solrResponseDto);
-		
 		NodeHouseNumber house = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
 		house.setHouseNumber("12345");
 		house.setName("name");
 		house.setStreetName("streetName");
 		final Point point = GeolocHelper.createPoint(2F, 1F);
 		house.setLocation(point);
+		
+		HouseNumber houseNumber = new HouseNumber();
+		houseNumber.setNumber(house.getHouseNumber());
+		houseNumber.setName(house.getName());
+		houseNumber.setType(HouseNumberType.NODE);
+		String streetName = house.getStreetName();
+		Point location = house.getLocation();
+		houseNumber.setLocation(location);
+		
+		
+		Long openstreetmapId =123L;
+		OpenStreetMap osm = EasyMock.createMock(OpenStreetMap.class);
+		EasyMock.expect(osm.getOpenstreetmapId()).andStubReturn(openstreetmapId);
+		osm.addHouseNumber(houseNumber);
+		EasyMock.replay(osm);
+		
+		final SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
+		EasyMock.replay(solrResponseDto);
+		
+		
 		
 		findNearestStreetCalled=false;
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
@@ -554,10 +577,17 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		EasyMock.replay(osmDaoMock);
 		importer.setOpenStreetMapDao(osmDaoMock);
 		
-		importer.processNodeHouseNumber(house);
+		HouseNumber actual = importer.processNodeHouseNumber(house);
+		
+		Assert.assertEquals(point, actual.getLocation());
+		Assert.assertEquals("name", actual.getName());
+		Assert.assertEquals("12345", actual.getNumber());
+		Assert.assertEquals(247464344L, actual.getOpenstreetmapId().longValue());
+		Assert.assertEquals(HouseNumberType.NODE, actual.getType());
 		
 		EasyMock.verify(osmDaoMock);
 		EasyMock.verify(solrResponseDto);
+		EasyMock.verify(osm);
 		Assert.assertTrue(findNearestStreetCalled);
 	}
 	
