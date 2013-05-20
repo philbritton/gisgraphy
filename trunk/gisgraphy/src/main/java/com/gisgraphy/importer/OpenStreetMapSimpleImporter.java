@@ -41,6 +41,7 @@ import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
+import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocResultsDto;
@@ -83,6 +84,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     @Override
     protected void setup() {
         super.setup();
+        //temporary disable logging when importing
+        FullTextSearchEngine.disableLogging=true;
         logger.info("reseting Openstreetmap generatedId");
         idGenerator.sync();
     }
@@ -359,6 +362,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     //TODO test
     protected void tearDown() {
     	super.tearDown();
+    	FullTextSearchEngine.disableLogging=false;
     	String savedMessage = this.statusMessage;
     	try {
     		this.statusMessage = internationalisationService.getString("import.message.createIndex");

@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
 import org.hibernate.FlushMode;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -45,6 +47,7 @@ import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
@@ -89,6 +92,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	protected static final double SEARCH_DISTANCE = 6000;
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -105,6 +109,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	@Override
 	protected void setup() {
+		//temporary disable logging when importing
+		FullTextSearchEngine.disableLogging=true;
 		super.setup();
 	}
 
@@ -164,7 +170,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 					continue;
 				}
 				member.setId(matcher.group(1));
-				Point point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(matcher.group(2));
+				Point point;
+				try {
+					point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(matcher.group(2));
+				} catch (Exception e) {
+					logger.warn(e.getMessage());
+					return null;
+				}
 				if (point == null) {
 					logger.warn("wrong location for AssociatedStreetMember for point n" + i + "for line " + line);
 					continue;
@@ -249,7 +261,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				}
 				member.setSequenceId(seqId);
 				// location
-				Point point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(matcher.group(3));
+				Point point;
+				try {
+					point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(matcher.group(3));
+				} catch (Exception e) {
+					logger.warn(e.getMessage());
+					return null;
+				}
 				if (point == null) {
 					logger.warn("wrong location for InterpolationMember point n" + i + "for line " + line);
 					continue;
@@ -288,7 +306,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			node.setNodeId(fields[1].trim());
 		}
 		if (!isEmptyField(fields, 2, false)) {
-			Point point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[2].trim());
+			Point point;
+			try {
+				point = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[2].trim());
+			} catch (Exception e) {
+				logger.warn(e.getMessage());
+				return null;
+			}
 			if (point == null) {
 				logger.warn("wrong location for NodeHouseNumber for point for line " + line);
 				return null;
@@ -346,14 +370,18 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				SolrResponseDto street = findNearestStreet(house.getStreetName(), members.get(0).getLocation());
 				if (street != null) {
 					Long openstreetmapId = street.getOpenstreetmap_id();
-					osm = openStreetMapDao
+					if (openstreetmapId!=null){
+						osm = openStreetMapDao
 							.getByOpenStreetMapId(openstreetmapId);
+					}
 					if (osm == null) {
 						return;
 					}
 				} else {
 					return;// we don't know which street to add the numbers
 				}
+			} else {
+				return;
 			}
 			List<HouseNumber> houseNumbers = processInterpolationHouseNumber(house);
 			if (houseNumbers!=null){
@@ -795,6 +823,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 	// TODO test
 	protected void tearDown() {
 		super.tearDown();
+		FullTextSearchEngine.disableLogging=false;
 		String savedMessage = this.statusMessage;
 		try {
 			this.statusMessage = internationalisationService.getString("import.message.createIndex");
