@@ -57,6 +57,13 @@ import com.gisgraphy.stats.StatsUsageType;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class FullTextSearchEngine implements IFullTextSearchEngine {
+	
+	
+	/**
+	 * very usefull when import is running
+	 */
+	public static boolean disableLogging=false;
+	
 
     protected static final Logger logger = LoggerFactory
 	    .getLogger(FullTextSearchEngine.class);
@@ -120,7 +127,9 @@ public class FullTextSearchEngine implements IFullTextSearchEngine {
 	String queryString = ZipcodeNormalizer.normalize(query.getQuery(), query.getCountryCode());
 	query.withQuery(queryString);
 	try {
-	    logger.info(query.toString());
+		if (!disableLogging){
+			logger.info(query.toString());
+		}
 
 	    ModifiableSolrParams params = FulltextQuerySolrHelper.parameterize(query);
 	    CommonsHttpSolrServer server = new CommonsHttpSolrServer(solrClient
@@ -178,10 +187,11 @@ public class FullTextSearchEngine implements IFullTextSearchEngine {
 	QueryResponse results = null;
 	try {
 	    results = solrClient.getServer().query(params);
-
-	    logger.info(query + " took " + (results.getQTime())
+	    if (!disableLogging){
+	    	logger.info(query + " took " + (results.getQTime())
 		    + " ms and returns " + results.getResults().getNumFound()
 		    + " results");
+	    }
 
 	    List<Long> ids = new ArrayList<Long>();
 	    for (SolrDocument doc : results.getResults()) {
@@ -218,8 +228,10 @@ public class FullTextSearchEngine implements IFullTextSearchEngine {
 	if (response != null) {
 	    long numberOfResults = response.getResults() != null ? response
 		    .getResults().getNumFound() : 0;
-	    logger.info(query + " took " + response.getQTime()
-		    + " ms and returns " + numberOfResults + " results");
+		    if (!disableLogging){
+		    	logger.info(query + " took " + response.getQTime()
+		    	+ " ms and returns " + numberOfResults + " results");
+		    }
 	    return builder.build(response);
 	} else {
 	    return new FulltextResultsDto();

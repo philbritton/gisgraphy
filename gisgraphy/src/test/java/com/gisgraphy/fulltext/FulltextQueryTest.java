@@ -223,11 +223,14 @@ public class FulltextQueryTest {
     @Test
     public void testCleanQueryString(){
 	FulltextQuery query = new FulltextQuery("{!dismax qf=population} paris");
-	Assert.assertEquals("dismax qfpopulation paris", query.getQuery());
+	Assert.assertEquals("dismax qf population  paris", query.getQuery());
 	query.withQuery("\"foo\"");
 	Assert.assertEquals("foo", query.getQuery());
 	query.withQuery("\'foo\'");
 	Assert.assertEquals("foo", query.getQuery());
+	
+	query.withQuery("rue d\'edimburg");
+	Assert.assertEquals("rue d edimburg", query.getQuery());
 	
 	query.withQuery("\'foo AND BOR OR BAND\'");
 	Assert.assertEquals("foo and BOR or BAND", query.getQuery());
