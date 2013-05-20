@@ -526,7 +526,8 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 
 	@Test
 	public void processNodeHouseNumber(){
-		NodeHouseNumber house = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
+		Long openstreetmapId =247464344L;
+		NodeHouseNumber house = new NodeHouseNumber(openstreetmapId+"",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
 		house.setHouseNumber("12345");
 		house.setName("name");
 		house.setStreetName("streetName");
@@ -540,9 +541,9 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		String streetName = house.getStreetName();
 		Point location = house.getLocation();
 		houseNumber.setLocation(location);
+		houseNumber.setOpenstreetmapId(openstreetmapId);
 		
 		
-		Long openstreetmapId =123L;
 		OpenStreetMap osm = EasyMock.createMock(OpenStreetMap.class);
 		EasyMock.expect(osm.getOpenstreetmapId()).andStubReturn(openstreetmapId);
 		osm.addHouseNumber(houseNumber);
