@@ -9,7 +9,7 @@ import org.junit.Test;
 public class HouseNumberTest {
 
 	@Test
-	public void testEquals() {
+	public void testis_same() {
 		HouseNumber hn1 = new HouseNumber();
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
@@ -24,12 +24,12 @@ public class HouseNumberTest {
 		hn2.setStreet(street);
 		hn2.setNumber("2");
 		
-		Assert.assertFalse("not same number=>not equals",hn1.equals(hnNotSameNumber));
+		Assert.assertFalse("not same number=>not equals",hn1.is_same(hnNotSameNumber));
 
 		HouseNumber hnNotSameStreet = new HouseNumber();
 		hn2.setNumber("1");
 		
-		Assert.assertFalse("not same street=>not equals",hn1.equals(hnNotSameStreet));
+		Assert.assertFalse("not same street=>not equals",hn1.is_same(hnNotSameStreet));
 		
 		//test when name is not the same and number is not null
 		HouseNumber hn3 = new HouseNumber();
@@ -41,7 +41,7 @@ public class HouseNumberTest {
 		hn4.setNumber("1");
 		hn4.setStreet(street);
 		
-		Assert.assertEquals("name should not impact equals when number is not null",hn4, hn3);
+		Assert.assertTrue("name should not impact equals when number is not null",hn4.is_same(hn3));
 		
 		
 		//if number is null, they should have the same street and name
@@ -53,13 +53,13 @@ public class HouseNumberTest {
 		hnWithoutNumberButSameName.setName("name");
 		hnWithoutNumberButSameName.setStreet(street);
 		
-		Assert.assertTrue("number is null, name should be checked",hnWithoutNumber.equals(hnWithoutNumberButSameName));
+		Assert.assertTrue("number is null, name should be checked",hnWithoutNumber.is_same(hnWithoutNumberButSameName));
 		
 		HouseNumber hnWithoutNumberDifferentName = new HouseNumber();
 		hnWithoutNumberDifferentName.setName("differentName");
 		hnWithoutNumberDifferentName.setStreet(street);
 		
-		Assert.assertFalse("number is null, name should be checked",hnWithoutNumber.equals(hnWithoutNumberDifferentName));
+		Assert.assertFalse("number is null, name should be checked",hnWithoutNumber.is_same(hnWithoutNumberDifferentName));
 	}
 
 }

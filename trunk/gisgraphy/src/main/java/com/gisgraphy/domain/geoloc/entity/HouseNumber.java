@@ -238,22 +238,52 @@ public class HouseNumber {
 		this.street = street;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
+		result = prime * result
+				+ ((openstreetmapId == null) ? 0 : openstreetmapId.hashCode());
 		return result;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HouseNumber other = (HouseNumber) obj;
+		if (openstreetmapId == null) {
+			if (other.openstreetmapId != null)
+				return false;
+		} else if (!openstreetmapId.equals(other.openstreetmapId))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "HouseNumber [id=" + id + ", openstreetmapId=" + openstreetmapId
+				+ ", number=" + number + ", type=" + type + ", name=" + name
+				+ ", location=" + location + ", street=" + street
+				+ ", getId()=" + getId() + ", getOpenstreetmapId()="
+				+ getOpenstreetmapId() + ", getName()=" + getName()
+				+ ", getLocation()=" + getLocation() + ", getLatitude()="
+				+ getLatitude() + ", getLongitude()=" + getLongitude()
+				+ ", getNumber()=" + getNumber() + ", getType()=" + getType()
+				+ ", getStreet()=" + getStreet() + ", hashCode()=" + hashCode()
+				+ ", getClass()=" + getClass() + ", toString()="
+				+ super.toString() + "]";
+	}
+
 	/**
+	 * check if address are content identical
 	 * If number are equals and street (if number is null, we look at the name)
 	 */
-	public boolean equals(Object obj) {
+	public boolean is_same(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -276,7 +306,6 @@ public class HouseNumber {
 			return false;
 		return true;
 	}
-
 
    
 
