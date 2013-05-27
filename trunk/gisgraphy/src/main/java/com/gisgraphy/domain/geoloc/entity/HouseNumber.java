@@ -249,18 +249,25 @@ public class HouseNumber {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj){
 			return true;
-		if (obj == null)
+		}
+		if (obj == null){
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()){
 			return false;
+		}
 		HouseNumber other = (HouseNumber) obj;
 		if (openstreetmapId == null) {
-			if (other.openstreetmapId != null)
+			if (other.openstreetmapId != null){
 				return false;
-		} else if (!openstreetmapId.equals(other.openstreetmapId))
-			return false;
+			} else {
+				return other.is_same(this);
+			}
+		} else if (!openstreetmapId.equals(other.openstreetmapId)){
+			return other.is_same(this);
+		}
 		return true;
 	}
 
