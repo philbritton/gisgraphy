@@ -144,7 +144,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 		Point location = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[2]);
 		street.setLocation(location);
 	    } catch (RuntimeException e) {
-		logger.warn("can not parse location for "+fields[1]+" : "+e);
+	    	logger.warn("can not parse location for "+fields[1]+" : "+e);
+	    	return;
 	    }
 	}
 	
