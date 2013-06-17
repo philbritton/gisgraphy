@@ -500,7 +500,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			return null;
 		}
 		HouseNumber houseNumber = new HouseNumber();
-		houseNumber.setNumber(house.getHouseNumber());
+		houseNumber.setNumber(normalizeNumber(house.getHouseNumber()));
 		houseNumber.setName(house.getName());
 		houseNumber.setType(HouseNumberType.NODE);
 		try {
@@ -685,7 +685,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		} else {
 			return null;
 		}
-		houseNumber.setNumber(houseMember.getHouseNumber());//todo normalize 11 d
+		houseNumber.setNumber(normalizeNumber(houseMember.getHouseNumber()));//todo normalize 11 d
 		Long osmId = null;
 		try {
 			osmId = Long.valueOf(houseMember.getId());
@@ -818,6 +818,17 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		return deletedObjectInfo;
 	}
 
+	protected String normalizeNumber(String numberAsString){
+		if (numberAsString ==null){
+			return null;
+		}
+		Pattern pattern = Pattern.compile("[\\-\\–\\一]?(\\d+)[^\\d]*",Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(numberAsString);
+		if (matcher.find()){
+			return matcher.group(1);
+		}
+		return null;
+	}
 
 	@Override
 	// TODO test

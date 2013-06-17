@@ -626,7 +626,19 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Assert.assertEquals(null, houseNumbers.get(0).getName());
 		Assert.assertEquals(HouseNumberType.INTERPOLATION, houseNumbers.get(0).getType());
 		
-		
+	}
+	
+	@Test
+	public void normalizeNumber(){
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		Assert.assertEquals("1", importer.normalizeNumber("-1"));
+		Assert.assertEquals(null, importer.normalizeNumber("?"));
+		Assert.assertEquals("3", importer.normalizeNumber("ev.3"));
+		Assert.assertEquals("2", importer.normalizeNumber("2/1"));
+		Assert.assertEquals("1", importer.normalizeNumber("1-3"));
+		Assert.assertEquals(null, importer.normalizeNumber("A"));
+		Assert.assertEquals(null, importer.normalizeNumber(""));
+		Assert.assertEquals(null, importer.normalizeNumber(null));
 		
 	}
 	

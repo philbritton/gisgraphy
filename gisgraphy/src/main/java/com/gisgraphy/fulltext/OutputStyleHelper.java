@@ -79,6 +79,7 @@ public class OutputStyleHelper {
 		.append(",").append(FullTextFields.IS_IN_ADM.getValue())
 		.append(",").append(FullTextFields.IS_IN_ZIP.getValue())
 		.append(",").append(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue())
+		.append(",").append(FullTextFields.HOUSE_NUMBERS.getValue())
 		
 		//adm only
 		.append(",").append(FullTextFields.LEVEL.getValue())

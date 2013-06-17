@@ -598,7 +598,7 @@
 			</action>
 			
 			<action dev="David Masclet" type="fix">
-				one_way and length are not filled by default (length used to be 0 by de)fault even if not filled)
+				one_way and length are not filled by default (length used to be 0 by default even if not filled)
 			</action>
 			
 			<action dev="David Masclet" type="add">
