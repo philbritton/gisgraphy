@@ -96,6 +96,8 @@ public class Output {
     public static final String DEFAULT_LANGUAGE_CODE = null;
     
     public static final boolean DEFAULT_INDENTATION = false;
+    
+    public static final boolean DEFAULT_HOUSENUMBER_OUTPUT = true;
 
    
     /**
@@ -107,6 +109,11 @@ public class Output {
      * the iso639 Alpha2 LanguageCode, default to {@link #DEFAULT_LANGUAGE_CODE}
      */
     private String languageCode = Output.DEFAULT_LANGUAGE_CODE;
+    
+    /**
+     * Wether the house number should be retrieved
+     */
+    private boolean houseNumberOutput = DEFAULT_HOUSENUMBER_OUTPUT;
 
     /**
      * The output style verbosity, default to {@link #DEFAULT_OUTPUT_STYLE}
@@ -186,6 +193,26 @@ public class Output {
      */
     public Output withIndentation() {
 	this.indent = true;
+	return this;
+    }
+    
+    
+    /**
+     * @return wether the housenumber should be output, default to false
+     * @see #withIndentation()
+     */
+    public boolean isHouseNumberOutput() {
+	return houseNumberOutput;
+    }
+
+    /**
+     * This method force the house number to NOT be output 
+     * 
+     * @return the current Object instance in order to chain methods
+     * @see <a href="http://www.infoq.com/articles/internal-dsls-java/">DSL</a>
+     */
+    public Output withoutHouseNumberOutput() {
+	this.houseNumberOutput = true;
 	return this;
     }
 
