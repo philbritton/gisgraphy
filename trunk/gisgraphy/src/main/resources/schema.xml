@@ -200,7 +200,7 @@
   <!-- Medium --><field name="length" type="double" indexed="false" stored="true"/>
   <!-- Medium --><field name="openstreetmap_id" type="long" indexed="true" stored="true"/>
   <!--Medium  --><field name="city_population" type="integer" indexed="true" stored="false"/><!-- must be indexed for boost field -->
-  
+  <!-- Medium --><field name="house_numbers" type="exact_string_ci" indexed="false" stored="true"/>
   
    <field name="feature_id" type="long" indexed="true" stored="true"/>
    <field name="location" type="location" indexed="true" stored="false"/>
