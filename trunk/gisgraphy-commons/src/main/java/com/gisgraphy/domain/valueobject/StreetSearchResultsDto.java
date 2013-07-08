@@ -52,7 +52,7 @@ public class StreetSearchResultsDto {
 
     /**
      * @param result
-     *                The {@link GisFeatureDistance}'s Collection
+     *                The {@link StreetDistance}'s Collection
      * @param QTime
      *                The execution time
      * @param query The search term
@@ -73,7 +73,7 @@ public class StreetSearchResultsDto {
     }
 
     /**
-     * @return The list of {@link GisFeatureDistance}
+     * @return The list of {@link StreetDistance}
      */
     public List<StreetDistance> getResult() {
 	return result;
