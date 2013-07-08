@@ -117,8 +117,11 @@ public class SolrResponseDto {
     protected String is_in_adm;
     protected String is_in_zip;
     protected String fully_qualified_address;
+    protected String house_numbers;
 
-    /**
+   
+
+	/**
      * @return the name
      */
     public String getName() {
@@ -526,6 +529,14 @@ public class SolrResponseDto {
     public void setDistance(Double distance) {
 	this.distance = distance;
     }
+    
+    protected void setFeature_id(Long feature_id) {
+        this.feature_id = feature_id;
+    }
+    
+    public String getHouse_numbers() {
+		return house_numbers;
+	}
 
     @Override
     public int hashCode() {
@@ -552,8 +563,6 @@ public class SolrResponseDto {
 	return true;
     }
 
-    protected void setFeature_id(Long feature_id) {
-        this.feature_id = feature_id;
-    }
+   
 
 }
