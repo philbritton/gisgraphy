@@ -54,6 +54,7 @@ public Street create(OpenStreetMap openstreetmap){
 	   street.setIsInAdm(openstreetmap.getIsInAdm());
 	   street.setFullyQualifiedAddress(openstreetmap.getFullyQualifiedAddress());
 	   street.setPopulation(openstreetmap.getPopulation());
+	   street.setHouseNumbers(openstreetmap.getHouseNumbers());
 	   return street;
        }
        return null;

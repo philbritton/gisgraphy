@@ -99,6 +99,29 @@ public class GeolocHelper {
     }
 
     /**
+     * same as {@link #createPoint(Float, Float)} but with double
+     * @param longitude
+     * @param latitude
+     * @return
+     */
+    public static Point createPoint(Double longitude, Double latitude) {
+    	if (longitude < -180 || longitude > 180) {
+    	    throw new IllegalArgumentException(
+    		    "Longitude should be between -180 and 180");
+    	}
+    	if (latitude < -90 || latitude > 90) {
+    	    throw new IllegalArgumentException(
+    		    "latitude should be between -90 and 90");
+    	}
+    	GeometryFactory factory = new GeometryFactory(new PrecisionModel(
+    		PrecisionModel.FLOATING), SRID.WGS84_SRID.getSRID());
+    	Point point = (Point) factory.createPoint(new Coordinate(longitude,
+    		latitude));
+    	return point;
+        }
+
+    
+    /**
      * Create a JTS MultiLineString from the specified array of linestring for
      * the SRID (aka : Spatial Reference IDentifier) 4326 (WGS84)<br>
      * 
