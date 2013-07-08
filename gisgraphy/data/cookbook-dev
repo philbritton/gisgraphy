@@ -5,6 +5,8 @@
  modify solr shema +fulltextfields+solrsynchronizer+test
  modify OutputStyleHelper
  
+ solrsynchroniser+test
+ 
 doc
 
 #Importer

@@ -21,9 +21,13 @@
  ******************************************************************************/
 package com.gisgraphy.street;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.helper.GeolocHelper;
@@ -61,6 +65,12 @@ public class StreetFactoryTest {
 	openStreetMap.setIsInPlace(isInPlace);
 	openStreetMap.setIsInZip(isInZip);
 	openStreetMap.setFullyQualifiedAddress(fullyQualifiedAddress);
+	HouseNumber houseNumber = new HouseNumber();
+	houseNumber.setLocation(GeolocHelper.createPoint(10.3F, 9.6F));
+	houseNumber.setNumber("1");
+	List<HouseNumber> houseNumbers = new ArrayList<HouseNumber>();
+	houseNumbers.add(houseNumber);
+	openStreetMap.setHouseNumbers(houseNumbers);
 	
 	StreetFactory factory = new StreetFactory();
 	Street street = factory.create(openStreetMap);
@@ -78,6 +88,7 @@ public class StreetFactoryTest {
 	Assert.assertEquals(isInAdm, street.getIsInAdm());
 	Assert.assertEquals(isInZip, street.getIsInZip());
 	Assert.assertEquals(fullyQualifiedAddress, street.getFullyQualifiedAddress());
+	Assert.assertEquals(houseNumbers, street.getHouseNumbers());
 	
 	
     }

@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -43,17 +45,19 @@ public class Street extends GisFeature {
     private StreetType streetType;
     private Double length;
     private Long openstreetmapId;
+    //those fields are only used to sync the fulltext engine,
+    //there are not used to be stored in Datastore
+    
     private String isIn;
     private String isInPlace;
-    
     private String isInAdm;
-    
     private String isInZip;
-    
     private String fullyQualifiedAddress;
+    private List<HouseNumber> houseNumbers;
 
+    
 
-    public Long getOpenstreetmapId() {
+	public Long getOpenstreetmapId() {
 	return openstreetmapId;
     }
 
@@ -118,6 +122,7 @@ public class Street extends GisFeature {
     /**
      * @return The city or state or any information where the street is located
      */
+    @Transient
     public String getIsIn() {
 	return isIn;
     }
@@ -136,6 +141,7 @@ public class Street extends GisFeature {
 	 * this field is filled when {@link OpenStreetMap#isIn}
 	 *  is filled and we got more specific details (generally quarter, neighborhood)
 	 */
+    @Transient
 	public String getIsInPlace() {
 		return isInPlace;
 	}
@@ -151,6 +157,7 @@ public class Street extends GisFeature {
 	/**
 	 * @return the adm (aka administrative division) where the street is located.
 	 */
+	@Transient
 	public String getIsInAdm() {
 		return isInAdm;
 	}
@@ -165,6 +172,7 @@ public class Street extends GisFeature {
 	/**
 	 * @return the zipcode where the street is located
 	 */
+	@Transient
 	public String getIsInZip() {
 		return isInZip;
 	}
@@ -176,12 +184,21 @@ public class Street extends GisFeature {
 		this.isInZip = isInZip;
 	}
 
-
+	@Transient
 	public String getFullyQualifiedAddress() {
 		return fullyQualifiedAddress;
 	}
 
 	public void setFullyQualifiedAddress(String fullyQualifiedAddress) {
 		this.fullyQualifiedAddress = fullyQualifiedAddress;
+	}
+	
+	@Transient
+    public List<HouseNumber> getHouseNumbers() {
+		return houseNumbers;
+	}
+
+	public void setHouseNumbers(List<HouseNumber> houseNumbers) {
+		this.houseNumbers = houseNumbers;
 	}
 }
