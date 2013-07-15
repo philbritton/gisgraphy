@@ -25,6 +25,7 @@ package com.gisgraphy.domain.repository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -305,7 +306,9 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 			}
 			ex.setField(FullTextFields.LAT.getValue(), gisFeature.getLatitude());
 			ex.setField(FullTextFields.LONG.getValue(), gisFeature.getLongitude());
-			ex.setField(FullTextFields.LOCATION.getValue(), gisFeature.getLatitude().toString()+","+gisFeature.getLongitude().toString());
+			String latAsString = String.format(Locale.US, "%s", gisFeature.getLatitude().doubleValue());
+			String lngAsString = String.format(Locale.US, "%s", gisFeature.getLongitude().doubleValue());
+			ex.setField(FullTextFields.LOCATION.getValue(), latAsString+","+lngAsString);
 			
 			String placetype = ClassNameHelper.stripEnhancerClass(gisFeature
 					.getClass().getSimpleName());
