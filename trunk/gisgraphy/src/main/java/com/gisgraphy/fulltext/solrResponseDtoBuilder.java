@@ -8,8 +8,12 @@ import java.util.Map;
 import org.apache.solr.common.SolrDocument;
 
 import com.gisgraphy.domain.repository.exception.RepositoryException;
+import com.gisgraphy.street.HouseNumberDeserializer;
+import com.gisgraphy.street.HouseNumberDto;
 
 public class solrResponseDtoBuilder {
+	
+	HouseNumberDeserializer houseNumberDeserializer = new HouseNumberDeserializer();
 	
 	  /**
      * Create a {@link SolrResponseDto} from a {@link SolrDocument}
@@ -134,9 +138,32 @@ public class solrResponseDtoBuilder {
 	    solrResponseDto.is_in_zip = getFieldAsString(solrDocument, FullTextFields.IS_IN_ZIP.getValue());
 	    solrResponseDto.is_in_adm = getFieldAsString(solrDocument, FullTextFields.IS_IN_ADM.getValue());
 	    solrResponseDto.fully_qualified_address = getFieldAsString(solrDocument, FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue());
+	    solrResponseDto.house_numbers=getHouseNumber(solrDocument);
 	}
 	return solrResponseDto;
     }
+    
+    
+	private List<HouseNumberDto> getHouseNumber(SolrDocument solrDocument) {
+		List<HouseNumberDto> housenumbers = new ArrayList<HouseNumberDto>();
+		String fieldname = FullTextFields.HOUSE_NUMBERS.getValue();
+		if (solrDocument.getFieldValues(fieldname) != null) {
+			for (Object fieldValue : solrDocument.getFieldValues(fieldname)) {
+				if (fieldValue == null) {
+					continue;
+				} else if (fieldValue instanceof String) {
+					HouseNumberDto dto = houseNumberDeserializer
+							.deserialize((String) fieldValue);
+					housenumbers.add(dto);
+				} else {
+					throw new RepositoryException(fieldname
+							+ " is not a String but a "
+							+ fieldValue.getClass().getSimpleName());
+				}
+			}
+		}
+		return housenumbers;
+	}
 
     private Map<String, List<String>> getFieldsToMap(SolrDocument solrDocument,
 	    String fieldNamePrefix) {

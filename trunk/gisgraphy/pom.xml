@@ -422,12 +422,6 @@
 			<id>central</id>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
-		<!--  Geotools -->
-		<repository>
-			<id>geotools</id>
-			<name>Geotools repository</name>
-			<url>http://maven.geotools.fr/repository</url>
-		</repository>
 		<!-- Stuff such as Java/J2EE APIs, etc.. -->
 		<repository>
 			<id>jboss.repository</id>
@@ -591,24 +585,6 @@
 			<artifactId>hibernate-spatial-${gisProvider}</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt2-main</artifactId>
-			<version>${geotools.version}</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt2-geometry</artifactId>
-			<version>${geotools.version}</version>
-			<exclusions>
-
-			</exclusions>
-		</dependency>
-		<!-- jscience -->
-
-
 		<!-- solr and lucene and jsp -->
 		<dependency>
 			<groupId>org.apache.ant</groupId>
@@ -1630,7 +1606,6 @@
 		<velocity.version>1.6.4</velocity.version>
 		<xfire.version>1.2.6</xfire.version>
 		<gisProvider>postgis</gisProvider>
-		<geotools.version>2.5-M1</geotools.version>
 		<fill.db.skip>false</fill.db.skip>
 		<GisgraphyMessage></GisgraphyMessage>
 	</properties>

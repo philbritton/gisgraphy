@@ -40,7 +40,7 @@ public class SolrResponseDtoBuilderTest  {
 	assertNotNull(builder.build(null));
     }
     
-    //see solrunmarshalertest
+    //see solrunmarshallertest
     
     @Test
     public void equalsShouldBeBasedOnFeature_id(){

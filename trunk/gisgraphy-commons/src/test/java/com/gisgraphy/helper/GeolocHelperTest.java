@@ -20,15 +20,16 @@
  *  
  *  
  *******************************************************************************/
-package com.gisgraphy.domain.geoloc.entity;
+package com.gisgraphy.helper;
 
 import java.text.ParseException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.placetype.City;
+import com.gisgraphy.domain.placetype.GisFeature;
 import com.gisgraphy.domain.valueobject.SRID;
-import com.gisgraphy.helper.GeolocHelper;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiLineString;
@@ -37,10 +38,6 @@ import com.vividsolutions.jts.geom.Polygon;
 
 public class GeolocHelperTest {
 	
-   @Test
-    public void testgetBoundingBox(){
-    	Assert.assertFalse(GeolocHelper.getBoundingBox("alias", 51.8365537F ,7.0562314F, 10000).contains("NaN"));
-    }
 
     @Test
     public void createPointWithFloat() {
@@ -92,36 +89,6 @@ public class GeolocHelperTest {
 	Assert.assertEquals(22313, Math.round(GeolocHelper.distance(point1, point2)));
     }
 
-    @Test
-    public void getClassEntityFromStringShouldReturnCorrectClass() {
-	// typic
-	Class<? extends GisFeature> clazz = GeolocHelper
-		.getClassEntityFromString("City");
-	Assert.assertNotNull(
-		"getClassEntityFromString does not return a correct class",
-		clazz);
-	Assert.assertEquals(City.class, clazz);
-
-	// not existing
-	clazz = GeolocHelper.getClassEntityFromString("nothing");
-	Assert.assertNull(clazz);
-
-	// case insensitive
-	clazz = GeolocHelper.getClassEntityFromString("city");
-	Assert.assertNotNull("getClassEntityFromString should be case insensitive",
-		clazz);
-	Assert.assertEquals(City.class, clazz);
-
-	// case insensitive
-	clazz = GeolocHelper.getClassEntityFromString("gisfeature");
-	Assert.assertNotNull("getClassEntityFromString should be case insensitive",
-		clazz);
-	Assert.assertEquals(GisFeature.class, clazz);
-
-	// with null
-	clazz = GeolocHelper.getClassEntityFromString(null);
-	Assert.assertNull(clazz);
-    }
 
     @Test
     public void parseInternationalDoubleShouldAcceptPointOrCommaAsDecimalSeparator() {

@@ -39,6 +39,7 @@ import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.Country;
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.Language;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.IAdmDao;
@@ -49,6 +50,7 @@ import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.street.StreetType;
@@ -316,6 +318,10 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	street.setStreetType(streetType);
 	double length = 1.6D;
 	street.setLength(length);
+	HouseNumber houseNumber = new HouseNumber();
+	houseNumber.setNumber("3");
+	houseNumber.setLocation(GeolocHelper.createPoint(4F, 5F));
+	street.addHouseNumber(houseNumber);
 	openStreetMapDao.save(street);
 	
 	this.solRSynchroniser.commit();
@@ -355,6 +361,15 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 			    result.getFully_qualified_address());
 	    Assert.assertEquals("The openstreetmap id is not correct", street.getOpenstreetmapId(),
 			    result.getOpenstreetmap_id());
+	    
+	    Assert.assertEquals("The houseNumber latitude location  is not correct", street.getHouseNumbers().get(0).getLocation().getY(),
+			    result.getHouse_numbers().get(0).getLatitude());
+	    
+	    Assert.assertEquals("The houseNumber longitude location  is not correct", street.getHouseNumbers().get(0).getLocation().getX(),
+			    result.getHouse_numbers().get(0).getLongitude());
+	    
+	    Assert.assertEquals("The house number is not correct", street.getHouseNumbers().get(0).getNumber(),
+			    result.getHouse_numbers().get(0).getNumber());
 	
 	
     }

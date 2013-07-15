@@ -52,6 +52,7 @@ import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.Country;
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.Language;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
@@ -76,6 +77,7 @@ import com.gisgraphy.helper.FileHelper;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
+import com.gisgraphy.street.HouseNumberSerializer;
 import com.gisgraphy.street.StreetType;
 import com.gisgraphy.test.FeedChecker;
 import com.gisgraphy.test.GisgraphyTestHelper;
@@ -1187,6 +1189,19 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		String isInAdm = "california";
 		String isInZip = "90001";
 		String fullyQualifiedAddress = "fullyQualifiedAddress";
+		HouseNumber houseNumber1 = new HouseNumber();
+		houseNumber1.setNumber("4");
+		houseNumber1.setLocation(GeolocHelper.createPoint(4F, 3F));
+		
+		HouseNumber houseNumber2 = new HouseNumber();
+		houseNumber2.setNumber("3");
+		houseNumber2.setLocation(GeolocHelper.createPoint(6F, 5F));
+		
+		List<HouseNumber> houseNumbers = new ArrayList<HouseNumber>();
+		//we put the number in a wrong order to see if the are sorted
+		houseNumbers.add(houseNumber1);
+		houseNumbers.add(houseNumber2);
+		
     	
 		OpenStreetMap street = new OpenStreetMap();
     	street.setName(name);
@@ -1204,8 +1219,9 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
     	street.setIsInZip(isInZip);
     	street.setIsInPlace(isInPlace);
 		street.setFullyQualifiedAddress(fullyQualifiedAddress);
+		street.addHouseNumbers(houseNumbers);
    
-
+		HouseNumberSerializer houseNumberSerializer = new HouseNumberSerializer();
     	openStreetMapDao.save(street);
 
         this.solRSynchroniser.commit();
@@ -1276,7 +1292,12 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
 			+ "'][.='"+street.getIsInZip()+"']",
 			"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
-			+ "'][.='"+street.getFullyQualifiedAddress()+"']"
+			+ "'][.='"+street.getFullyQualifiedAddress()+"']",
+			//we check the order too
+			"//*[@name='" + FullTextFields.HOUSE_NUMBERS.getValue()
+			+ "'][./str[1][.='"+houseNumberSerializer.serialize(houseNumber2)+"']]"
+		, "//*[@name='" + FullTextFields.HOUSE_NUMBERS.getValue()
+		+ "'][./str[2][.='"+houseNumberSerializer.serialize(houseNumber1)+"']]"
 		
 	);
 

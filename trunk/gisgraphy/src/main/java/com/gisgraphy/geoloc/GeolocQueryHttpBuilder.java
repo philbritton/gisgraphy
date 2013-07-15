@@ -30,6 +30,7 @@ import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.GisgraphyServlet;
@@ -155,7 +156,7 @@ public class GeolocQueryHttpBuilder {
 		}
 
 	//placetype
-	Class<? extends GisFeature> clazz = GeolocHelper
+	Class<? extends GisFeature> clazz = GisHelper
 		.getClassEntityFromString(req
 			.getParameter(GeolocQuery.PLACETYPE_PARAMETER));
 

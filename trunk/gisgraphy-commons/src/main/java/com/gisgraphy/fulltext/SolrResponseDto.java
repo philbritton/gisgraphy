@@ -25,6 +25,8 @@ package com.gisgraphy.fulltext;
 import java.util.List;
 import java.util.Map;
 
+import com.gisgraphy.street.HouseNumberDto;
+
 /**
  * Java Dto for a solr fulltext response. it is used by
  * {@link FulltextResultsDto}
@@ -117,7 +119,7 @@ public class SolrResponseDto {
     protected String is_in_adm;
     protected String is_in_zip;
     protected String fully_qualified_address;
-    protected String house_numbers;
+    protected List<HouseNumberDto> house_numbers;
 
    
 
@@ -534,7 +536,7 @@ public class SolrResponseDto {
         this.feature_id = feature_id;
     }
     
-    public String getHouse_numbers() {
+    public List<HouseNumberDto> getHouse_numbers() {
 		return house_numbers;
 	}
 
