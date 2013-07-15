@@ -144,7 +144,6 @@ public class HouseNumber {
      */
     @Type(type = "org.hibernatespatial.GeometryUserType")
     @Column(name = HouseNumber.LOCATION_COLUMN_NAME,nullable=false)
-    
     public Point getLocation() {
 	return location;
     }
@@ -208,7 +207,7 @@ public class HouseNumber {
 	 * @see HouseNumberType for details
 	 */
 	@Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+   // @Column(nullable = false)
 	public HouseNumberType getType() {
 		return type;
 	}

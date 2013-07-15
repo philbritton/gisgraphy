@@ -1,7 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
 	<groupId>com.gisgraphy</groupId>
 	<artifactId>gisgraphy-commons</artifactId>
 	<version>3.0</version>
@@ -14,6 +16,7 @@
 		<project.build.sourceEncoding>
 			UTF-8
 		</project.build.sourceEncoding>
+		<geotools.version>2.5-M1</geotools.version>
 	</properties>
 
 	<dependencies>
@@ -71,6 +74,11 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.13</version>
 		</dependency>
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt2-main</artifactId>
+			<version>${geotools.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -99,6 +107,11 @@
 		<repository>
 			<id>gisgraphy</id>
 			<url>http://gisgraphy.free.fr/mavenrepo/</url>
+		</repository>
+		<repository>
+			<id>geotools</id>
+			<name>Geotools repository</name>
+			<url>http://maven.geotools.fr/repository</url>
 		</repository>
 	</repositories>
 </project>

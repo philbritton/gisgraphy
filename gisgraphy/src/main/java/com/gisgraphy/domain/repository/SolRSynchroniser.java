@@ -37,6 +37,7 @@ import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.Language;
 import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
@@ -52,6 +53,10 @@ import com.gisgraphy.helper.ClassNameHelper;
 import com.gisgraphy.helper.EncodingHelper;
 import com.gisgraphy.helper.RetryOnErrorTemplate;
 import com.gisgraphy.helper.URLUtils;
+import com.gisgraphy.street.HouseNumberComparator;
+import com.gisgraphy.street.HouseNumberSerializer;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Interface of data access object for {@link Language}
@@ -60,6 +65,9 @@ import com.gisgraphy.helper.URLUtils;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class SolRSynchroniser implements ISolRSynchroniser {
+	
+	HouseNumberSerializer houseNumberListSerializer = new HouseNumberSerializer();
+	HouseNumberComparator houseNumberComparator = new HouseNumberComparator();
     
     private static int numberOfRetryOnFailure = 3;
 
@@ -309,7 +317,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 							.createCountryFlagUrl(gisFeature.getCountryCode()));
 				}
 		    if (gisFeature instanceof Street) {
-			ex.setField(FullTextFields.OPENSTREETMAP_ID.getValue(), ((Street) gisFeature).getOpenstreetmapId());
+		    	ex.setField(FullTextFields.OPENSTREETMAP_ID.getValue(), ((Street) gisFeature).getOpenstreetmapId());
 		    	ex.setField(FullTextFields.LENGTH.getValue(), ((Street) gisFeature).getLength());
 		    	ex.setField(FullTextFields.ONE_WAY.getValue(), ((Street) gisFeature).isOneWay());
 		    	ex.setField(FullTextFields.STREET_TYPE.getValue(), ((Street) gisFeature).getStreetType());
@@ -328,6 +336,15 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 		    	}
 		    	if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
 		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
+		    	}
+		    	List<HouseNumber> houseNumbers = ((Street) gisFeature).getHouseNumbers();
+				if (houseNumbers!=null && houseNumbers.size()!=0){
+					 List<String> houseNumbersToAdd= new ArrayList<String>();
+					 Collections.sort(houseNumbers,houseNumberComparator);
+		    		for (HouseNumber houseNumber:houseNumbers){
+		    			houseNumbersToAdd.add(houseNumberListSerializer.serialize(houseNumber));
+		    		}
+		    		ex.setField(FullTextFields.HOUSE_NUMBERS.getValue(),houseNumbersToAdd );
 		    	}
 		    } else {
 			

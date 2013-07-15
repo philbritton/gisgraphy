@@ -31,11 +31,8 @@ import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
-import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.valueobject.Constants;
-import com.gisgraphy.domain.valueobject.FeatureCode;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -197,8 +194,9 @@ public class GeolocHelper {
      * @return The calculated distance
      */
     public static double distance(Point point1, Point point2) {
-	Assert.isTrue(point1 != null && point2 != null,
-		"Can not calculate distance for null point");
+	if(point1 == null || point2 == null){
+		throw new RuntimeException("Can not calculate distance for null point");
+	}
 
 	// Unit<Length> targetUnit = (unit != null) ? unit : SI.METER;
 	try {
@@ -211,26 +209,6 @@ public class GeolocHelper {
 	}
     }
 
-    /**
-     * Return the class corresponding to the specified String or null if not
-     * found. The Class will be searched in the 'entity' package. The search is
-     * not case sensitive. This method is mainly used to determine an entity
-     * Class from a web parameter
-     * 
-     * @param classNameWithoutPackage
-     *                the simple name of the Class we want to retrieve
-     * @return The class corresponding to the specified String or null if not
-     *         found.
-     */
-    @SuppressWarnings("unchecked")
-    public static Class<? extends GisFeature> getClassEntityFromString(
-	    String classNameWithoutPackage) {
-	if (classNameWithoutPackage != null) {
-	    return FeatureCode.entityClass.get(classNameWithoutPackage
-		    .toLowerCase());
-	}
-	return null;
-    }
 
     /**
      * parse a string and return the corresponding double value, it accepts
@@ -312,67 +290,6 @@ public class GeolocHelper {
     }
     
 
-    /**
-     * @param alias the
-     *                sql alias
-     * @param latInDegree
-     *                the latitude in degree
-     * @param longInDegree
-     *                the longitude in degree
-     * @param distance
-     *                the boundingbox distance
-     * @return a sql String that represents the bounding box
-     */
-    public static String getBoundingBox(String alias, double latInDegree, double longInDegree,
-	    double distance) {
-    
-    double lat = Math.toRadians(latInDegree);
-    double lon = Math.toRadians(longInDegree);
-
-	double deltaXInDegrees = Math.abs(Math.asin(Math
-		.sin(distance / Constants.RADIUS_OF_EARTH_IN_METERS)
-		/ Math.cos(lat)));
-	double deltaYInDegrees = Math.abs(distance
-		/ Constants.RADIUS_OF_EARTH_IN_METERS);
-
-	double minX = Math.toDegrees(lon - deltaXInDegrees);
-	double maxX = Math.toDegrees(lon + deltaXInDegrees);
-	double minY = Math.toDegrees(lat - deltaYInDegrees);
-	double maxY = Math.toDegrees(lat + deltaYInDegrees);
-
-	StringBuffer sb = new StringBuffer();
-	// {alias}.location && setSRID(BOX3D(...), 4326)
-	sb.append(alias);
-	sb.append(".").append(GisFeature.LOCATION_COLUMN_NAME);
-	sb.append(" ");
-	sb.append(INTERSECTION);
-	sb.append(" setSRID(");
-
-	// Construct the BBOX : 'BOX3D(-119.2705528794688
-	// 33.15289952334886,-117.2150071205312 34.95154047665114)'::box3d
-	sb.append("cast (");
-	sb.append("'");
-	sb.append(BBOX);
-	sb.append("(");
-	sb.append(minX); // minX
-	sb.append(" ");
-	sb.append(minY); // minY
-	sb.append(",");
-	sb.append(maxX); // maxX
-	sb.append(" ");
-	sb.append(maxY); // maxY
-	sb.append(")'as box3d)"); // cannot use the ::box3d notation, since
-	// nativeSQL interprets :param as a named
-	// parameter
-
-	// end of the BBOX, finish the setSRID
-	sb.append(", ");
-	sb.append(SRID.WGS84_SRID.getSRID());
-	sb.append(") ");
-
-	return sb.toString();
-
-    }
 
     
     /**

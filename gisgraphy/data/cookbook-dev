@@ -16,6 +16,7 @@ openstreetmap importer +test
 +service return the field
 
  #fulltext dto 
+ solrresponsebuilder
  solrresponsedto =>solrunmarshallertest
  
  #geoloc dto
@@ -25,6 +26,7 @@ openstreetmap importer +test
  #street dto
  StreetSearchResultsDto
  modify streetdistance
+ ResultTransformerUtil.transformToStreetDistance if necessary
  
  #test
  modify constructor of GisFeatureDistance(street) and createFullFilledGisFeatureDistanceForStreet in geolotesthelper

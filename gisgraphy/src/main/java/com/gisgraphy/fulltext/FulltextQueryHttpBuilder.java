@@ -35,6 +35,7 @@ import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocSearchException;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.FulltextServlet;
@@ -170,7 +171,7 @@ public class FulltextQueryHttpBuilder {
 	if (placetypeParameters!=null){
 		clazzs = new Class[placetypeParameters.length]; 
 		for (int i=0;i<placetypeParameters.length;i++){
-			Class<? extends GisFeature> classEntityFromString = GeolocHelper.getClassEntityFromString(placetypeParameters[i]);
+			Class<? extends GisFeature> classEntityFromString = GisHelper.getClassEntityFromString(placetypeParameters[i]);
 				clazzs[i]= classEntityFromString;
 		}
 	}

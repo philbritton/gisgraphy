@@ -31,6 +31,7 @@ import org.hibernate.engine.TypedValue;
 
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.GisHelper;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -108,7 +109,7 @@ public class DistanceRestriction implements Criterion {
 	StringBuffer result = new StringBuffer("( distance_sphere(").append(
 		columnName).append(", ?) <=").append(this.distance).append(")");
 	return useIndex ? result.append(" AND ").append(
-		GeolocHelper.getBoundingBox(criteriaQuery.getSQLAlias(criteria), this.point
+			GisHelper.getBoundingBox(criteriaQuery.getSQLAlias(criteria), this.point
 			.getY(), this.point.getX(), distance)).toString()
 		: result.toString();
 
