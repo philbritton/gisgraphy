@@ -185,9 +185,21 @@ goToStep(${step});
 					<@s.else>
 					<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
 					</@s.else>
-<div style="margin-left: 100px;" >
+					<div style="margin-left: 100px;" >
 							<@s.checkbox value="%{openStreetMapImporterEnabled}" name="openStreetMapImporterEnabled" id="disableGeonames" theme="simple"/> <@s.text name="import.openstreetmap"/>
+					</div>
+					<br/>
+					<@s.text name="import.dataset.status"><@s.param><@s.text name="global.housenumbers"/></@s.param></@s.text> &nbsp;:&nbsp;
+					<@s.if test="housenumberImporterEnabled">
+						<span class="ok"><@s.text name="import.enabled"/></span><br/><br/>
+					</@s.if>
+					<@s.else>
+						<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
+					</@s.else>
+						<div style="margin-left: 100px;" >
+							<@s.checkbox value="%{housenumberImporterEnabled}" name="houseNumberImporterEnabled" id="disableHouseNumber" theme="simple"/> <@s.text name="import.houseNumbers"/>
 						</div>
+					<br/>
 						<br/><br/><br/><br/><br/><br/><br/>
 						
 						<br/><br/><br/><br/>

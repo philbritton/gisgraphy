@@ -353,6 +353,21 @@ public class ImportConfirmActionTest {
 	Assert.assertTrue("isOpenStreetMapImporterEnabled should return the same value as the importerConfig One ", action.isOpenStreetMapImporterEnabled());
 	Assert.assertTrue("isOpenStreetMapImporterEnabled should return the same value as the importerConfig One ", importerConfig.isOpenstreetmapImporterEnabled());
     }
+    
+    @Test
+    public void enableHouseNumberImporter() {
+	ImporterConfig importerConfig = new ImporterConfig();
+	Assert.assertTrue(importerConfig.isOpenstreetmapHouseNumberImporterEnabled());
+
+	ImportConfirmAction action = new ImportConfirmAction();
+	action.setImporterConfig(importerConfig);
+	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(false);
+	Assert.assertFalse("isOpenstreetmapHouseNumberImporterEnabled should return the same value as the importerConfig One ", action.isHousenumberImporterEnabled());
+
+	action.setHousenumberImporterEnabled(true);
+	Assert.assertTrue("isHousenumberImporterEnabled should return the same value as the importerConfig One ", action.isHousenumberImporterEnabled());
+	Assert.assertTrue("isHousenumberImporterEnabled should return the same value as the importerConfig One ", importerConfig.isOpenstreetmapHouseNumberImporterEnabled());
+    }
 
     @Test
     public void isDownloadDirectoryAccessible() {

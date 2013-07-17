@@ -23,7 +23,7 @@
 			<include>launch.command</include>
 			<include>launch.txt</include>
 			<include>launch.bat</include>
-			<include>launch.sh</include>
+			<include>*.sh</include>
 			<include>debug.sh</include>
 			<include>start.jar</include>
 			<include>migrationguide</include>
