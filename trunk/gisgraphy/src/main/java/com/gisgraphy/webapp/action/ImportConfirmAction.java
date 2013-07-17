@@ -218,11 +218,12 @@ public class ImportConfirmAction extends ActionSupport {
 	}
 
 	/**
-	 * @return true if he Geonames importer is enabled
+	 * @return true if the Geonames importer is enabled
 	 */
 	public boolean isGeonamesImporterEnabled() {
 		return importerConfig.isGeonamesImporterEnabled();
 	}
+	
 
 	/**
 	 * Enable / Disable Geonames importer
@@ -243,6 +244,21 @@ public class ImportConfirmAction extends ActionSupport {
 	 */
 	public void setOpenStreetMapImporterEnabled(boolean openStreetMapImporter) {
 		importerConfig.setOpenstreetmapImporterEnabled(openStreetMapImporter);
+	}
+	
+
+	/**
+	 * @return true if the house number importer is enabled
+	 */
+	public boolean isHousenumberImporterEnabled() {
+		return importerConfig.isOpenstreetmapHouseNumberImporterEnabled();
+	}
+	
+	/**
+	 * Enable / Disable housenumber importer
+	 */
+	public void setHousenumberImporterEnabled(boolean housenumberImporterEnabled) {
+		importerConfig.setOpenstreetmapHouseNumberImporterEnabled(housenumberImporterEnabled);
 	}
 
 	/**
