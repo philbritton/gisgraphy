@@ -25,9 +25,16 @@
  */
 package com.gisgraphy.addressparser.web;
 
+
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 
+import com.gisgraphy.addressparser.Address;
 import com.gisgraphy.addressparser.AddressQuery;
+import com.gisgraphy.addressparser.StructuredAddressQuery;
 import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.helper.OutputFormatHelper;
@@ -54,22 +61,35 @@ public class AddressQueryHttpBuilder {
 	 *            an HttpServletRequest to construct a {@link AddressQuery}
 	 */
 	public AddressQuery buildFromRequest(HttpServletRequest req) {
-
-		// address Parameter
-		String adressParameter = req.getParameter(AbstractAddressServlet.ADDRESS_PARAMETER);
-		if (adressParameter == null || "".equals(adressParameter.trim())) {
-			throw new AddressParserException("address is not specified or empty");
-		}
-		if (adressParameter.length() > AbstractAddressServlet.QUERY_MAX_LENGTH) {
-			throw new AddressParserException("address is limited to " + AbstractAddressServlet.QUERY_MAX_LENGTH + "characters");
+		AddressQuery query = null;
+		if (req==null){
+			throw new AddressParserException("could not build address query from a null HTTP request");
 		}
 		// country parameter
 		String countryParameter = req.getParameter(AbstractAddressServlet.COUNTRY_PARAMETER);
 		if (countryParameter == null || countryParameter.trim().length() == 0) {
 			throw new AddressParserException("country parameter is not specified or empty");
 		}
+		// address Parameter
+		String adressParameter = req.getParameter(AbstractAddressServlet.ADDRESS_PARAMETER);
+		if (adressParameter == null) {
+			Address address = buildAddressFromRequest(req);
+			if (address == null){
+				//no setter has been callled
+				throw new AddressParserException("no structured address, nor address parameter is specified");
+			}
+			query =  new StructuredAddressQuery(address, countryParameter);
+		}
+		else {
+			if ("".equals(adressParameter.trim())){
+				throw new AddressParserException("'AbstractAddressServlet.ADDRESS_PARAMETER' could not be empty, please specify a valid parameter or some valid address fields");
+			}
+			if (adressParameter.length() > AbstractAddressServlet.QUERY_MAX_LENGTH) {
+				throw new AddressParserException("address is limited to " + AbstractAddressServlet.QUERY_MAX_LENGTH + "characters");
+			}
+			query = new AddressQuery(adressParameter, countryParameter);
+		}
 
-		AddressQuery query = new AddressQuery(adressParameter, countryParameter);
 		// outputformat
 		OutputFormat outputFormat = OutputFormat.getFromString(req.getParameter(AbstractAddressServlet.FORMAT_PARAMETER));
 		outputFormat = OutputFormatHelper.getDefaultForServiceIfNotSupported(outputFormat, GisgraphyServiceType.ADDRESS_PARSER);
@@ -97,4 +117,56 @@ public class AddressQueryHttpBuilder {
 		return query;
 	}
 
+	/**
+	 * build an Address from the request parameter names, parameter names are case sensitive.
+	 * Extra parameter names are ignored
+	 * @param req
+	 * @return
+	 */
+	public Address buildAddressFromRequest(HttpServletRequest req) {
+		if (req==null){
+			throw new AddressParserException("could not build an address from a null HTTP request");
+		}
+		Address address = new Address();
+		Map<String,String[]> parameterNames = req.getParameterMap();
+		boolean atLeastOneSetterFound = false;
+		for(Entry<String, String[]> parameters :parameterNames.entrySet()){
+			String parameterName =(String) parameters.getKey();
+			if (parameters.getValue().length==1){
+				if (AbstractAddressServlet.COUNTRY_PARAMETER.equalsIgnoreCase(parameterName)){
+					//the country parameter should not be set, it is only a populated field and should not be confused with countrycode.
+					//that's why we consider an unsuccess execution, if we return true and only the country is specified, the returned address won't be null
+					//even if only the country is specified
+					continue;
+				}
+				boolean success =setAddressField(address, parameterName, parameters.getValue()[0]);
+				if (success){
+					atLeastOneSetterFound=true;
+				}
+			}
+		}
+		if (atLeastOneSetterFound){
+		return address;
+		} else {
+			return null;
+		}
+		
+	}
+
+	protected static boolean setAddressField(Address address, String fieldName, String value) {
+		try {
+		String setter = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+		Method method;
+		try {
+			method = Address.class.getMethod(setter, new Class[] { String.class });
+			method.invoke(address, new Object[] { value });
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+		return true;
+	} catch (Exception e) {
+		throw new RuntimeException("exception in setAddressField : " + e.getMessage(), e);
+	}
+}
+	
 }
