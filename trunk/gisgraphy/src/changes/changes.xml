@@ -613,6 +613,10 @@
 				update streettype possibles values with most frequent values ()http://taginfo.openstreetmap.org/keys/?key=highway#values)
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add the ability to give a structured address to geocode 
+			</action>
+			
 			</release>
 			
 	</body>
