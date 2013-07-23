@@ -76,6 +76,7 @@ public class Address {
     private String city;
     private String postTown;
     private String state;
+    private String prefecture;//mainly for china
     private String country;
     private String countryCode;
 
@@ -217,6 +218,14 @@ public class Address {
 	this.state = state;
     }
 
+    public String getPrefecture() {
+        return prefecture;
+    }
+
+    public void setPrefecture(String prefecture) {
+        this.prefecture = prefecture;
+    }
+    
     public String getZipCode() {
 	return zipCode;
     }
