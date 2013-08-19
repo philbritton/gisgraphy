@@ -617,6 +617,10 @@
 				Add the ability to give a structured address to geocode 
 			</action>
 			
+			<action dev="David Masclet" type="fix">
+				A fulltext query without space between comma failed (now it is ok) 
+			</action>
+			
 			</release>
 			
 	</body>

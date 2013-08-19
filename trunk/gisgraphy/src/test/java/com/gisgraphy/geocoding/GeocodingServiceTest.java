@@ -36,6 +36,7 @@ import com.gisgraphy.addressparser.Address;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.AddressResultsDto;
 import com.gisgraphy.addressparser.IAddressParserService;
+import com.gisgraphy.addressparser.StructuredAddressQuery;
 import com.gisgraphy.addressparser.commons.GeocodingLevels;
 import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
@@ -1062,9 +1063,78 @@ public class GeocodingServiceTest {
     	Assert.assertFalse(service.isGeocodable(address));
     	
     }
+    
+ /*  _                   _                      _ 
+ ___| |_ _ __ _   _  ___| |_ _   _ _ __ ___  __| |
+/ __| __| '__| | | |/ __| __| | | | '__/ _ \/ _` |
+\__ \ |_| |  | |_| | (__| |_| |_| | | |  __/ (_| |
+|___/\__|_|   \__,_|\___|\__|\__,_|_|  \___|\__,_|
+                                                 
+*/
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void geocodeStructuredAdressShouldThrowIfAddressIsNull() {
+	IGeocodingService geocodingService = new GeocodingService();
+	Address address = null;
+	AddressQuery query = new StructuredAddressQuery(address, "US");
+	geocodingService.geocode(query);
+    }
 
-  /*
-	           _     _                   
+  
+    @Test(expected = IllegalArgumentException.class)
+    public void geocodeStructuredAdressShouldThrowIfCountryCodeIsNull() {
+	IGeocodingService geocodingService = new GeocodingService();
+	String countrycode = null;
+	AddressQuery query = new StructuredAddressQuery(new Address(), countrycode);
+	geocodingService.geocode(query);
+    }
+
+    @Test(expected = GeocodingException.class)
+    public void geocodeStructuredAdressShouldThrowIfCountryCodeHasenTALengthOf2() {
+	GeocodingService geocodingService = new GeocodingService();
+	geocodingService.setStatsUsageService(statsUsageService);
+	AddressQuery query = new StructuredAddressQuery(new Address(), "abc");
+	geocodingService.geocode(query);
+    }
+
+    @Test
+    public void geocodeStructuredAdressShouldCallGeocodeAddressIfParsedAddressIsSuccess() {
+	GeocodeAdressCalled = false;
+	GeocodingService geocodingService = new GeocodingService() {
+	    @Override
+	    public AddressResultsDto geocode(Address address, String countryCode) throws GeocodingException {
+		GeocodeAdressCalled = true;
+		return null;
+	    }
+	};
+	ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
+	EasyMock.expect(importerConfig.isOpenStreetMapFillIsIn()).andStubReturn(true);
+	geocodingService.setImporterConfig(importerConfig);
+	geocodingService.setStatsUsageService(statsUsageService);
+	geocodingService.setGisgraphyConfig(gisgraphyConfig);
+	gisgraphyConfig.setUseAddressParserWhenGeocoding(true);
+	IAddressParserService mockAddressParserService = EasyMock.createMock(IAddressParserService.class);
+	List<Address> addressList = new ArrayList<Address>() {
+	    {
+	    	Address address = new Address();
+			address.setStreetName("streetName");
+			address.setCity("city");
+			add(address);
+	    }
+	};
+	AddressResultsDto addressresults = new AddressResultsDto(addressList, 3L);
+	EasyMock.expect(mockAddressParserService.execute((AddressQuery) EasyMock.anyObject())).andReturn(addressresults);
+	EasyMock.replay(mockAddressParserService);
+	geocodingService.setAddressParser(mockAddressParserService);
+	AddressQuery query = new StructuredAddressQuery(new Address(), "ac");
+	geocodingService.geocode(query);
+	Assert.assertTrue(GeocodeAdressCalled);
+    }
+    
+    
+    
+
+  /*          _     _                   
 	  __ _  __| | __| |_ __ ___  ___ ___ 
 	 / _` |/ _` |/ _` | '__/ _ \/ __/ __|
 	| (_| | (_| | (_| | | |  __/\__ \__ \
