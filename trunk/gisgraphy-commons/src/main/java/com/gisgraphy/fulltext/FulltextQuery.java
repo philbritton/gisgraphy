@@ -59,6 +59,7 @@ public class FulltextQuery extends AbstractGisQuery {
 	
 	public final static int REGEXP_CASESENSITIVE_FLAG =  Pattern.UNICODE_CASE;
 	private static final Pattern CLEAN_QUERY_PATTERN = Pattern.compile("([\\{\\}\\(\\)\\=\\!\"\']+)");
+	private static final Pattern COMMA_PATTERN = Pattern.compile("([\\,]+)");
 
 	public static final int DEFAULT_MAX_RESULTS = 10;
 	
@@ -392,6 +393,7 @@ public class FulltextQuery extends AbstractGisQuery {
     public void cleanQueryString(){
 	if (this.query != null){
 	   this.query =  CLEAN_QUERY_PATTERN.matcher(this.query).replaceAll(" ");
+	   this.query = COMMA_PATTERN.matcher(this.query).replaceAll(", ");
 	   this.query =  Pattern.compile("\\b(AND)\\b").matcher(this.query).replaceAll("and");
 	   this.query =  Pattern.compile("\\b(OR)\\b").matcher(this.query).replaceAll("or").trim();
 	} 
