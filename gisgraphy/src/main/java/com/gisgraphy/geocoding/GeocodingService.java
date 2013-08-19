@@ -42,6 +42,7 @@ import com.gisgraphy.addressparser.Address;
 import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.AddressResultsDto;
 import com.gisgraphy.addressparser.IAddressParserService;
+import com.gisgraphy.addressparser.StructuredAddressQuery;
 import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
@@ -145,13 +146,20 @@ public class GeocodingService implements IGeocodingService {
 			throw new GeocodingException("Can not geocode a null query");
 		}
 		logger.info(query.toString());
-		String rawAddress = query.getAddress();
 		String countryCode = query.getCountry();
-		if (isEmptyString(rawAddress)) {
-			throw new GeocodingException("Can not geocode a null or empty address");
-		}
 		if (isEmptyString(countryCode) || countryCode.length() != 2) {
 			throw new GeocodingException("countrycode is mandatory and should have two letters : " + countryCode);
+		}
+		if (query instanceof StructuredAddressQuery){
+			Address address = ((StructuredAddressQuery)query).getStructuredAddress();
+			if (logger.isDebugEnabled()) {
+				logger.debug("structured address to geocode : '" + address + "' for country code : " + countryCode);
+			}
+			return geocode(address, countryCode);
+		}
+		String rawAddress = query.getAddress();
+		if (isEmptyString(rawAddress)) {
+			throw new GeocodingException("Can not geocode a null or empty address");
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("Raw address to geocode : '" + rawAddress + "' for country code : " + countryCode);
@@ -472,6 +480,7 @@ public class GeocodingService implements IGeocodingService {
 		address.setId(city.getFeature_id());
 		return address;
 	}
+	
 
 	protected void populateAddressFromCity(SolrResponseDto city, Address address) {
 		if (city != null) {
@@ -480,11 +489,16 @@ public class GeocodingService implements IGeocodingService {
 				address.setState(city.getAdm2_name());
 			} else if (city.getAdm1_name() != null) {
 				address.setState(city.getAdm1_name());
+			} else if (city.getIs_in_adm()!=null){
+				address.setState(city.getIs_in_adm());
 			}
 			if (city.getZipcodes() != null && city.getZipcodes().size() > 0) {
 				address.setZipCode(city.getZipcodes().get(0));
+			} else if (city.getIs_in_zip()!=null){
+				address.setZipCode(city.getIs_in_zip());
 			}
 			address.setCountryCode(city.getCountry_code());
+			address.setDependentLocality(city.getIs_in_place());
 		}
 	}
 

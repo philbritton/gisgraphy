@@ -243,6 +243,9 @@ public class FulltextQueryTest {
 	
 	query.withQuery("\'foo AND BOR OR OR\'");
 	Assert.assertEquals("foo and BOR or or", query.getQuery());
+	
+	query.withQuery("newyork,ny");
+	Assert.assertEquals("newyork, ny", query.getQuery());
     }
     
     @Test
