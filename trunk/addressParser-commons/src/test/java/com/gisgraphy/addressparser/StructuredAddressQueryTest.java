@@ -43,5 +43,15 @@ public class StructuredAddressQueryTest {
 		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address, "FR");
 		addressQuery.getAddress();
 	}
+	
+	@Test
+	public void toStringTest() {
+		Address address = new Address();
+		address.setStreetName("streetName");
+		address.setCity("city");
+		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address, "FR");
+		String queryToString = addressQuery.toString();
+		Assert.assertTrue(queryToString.contains(addressQuery.getClass().getSimpleName()));
+	}
 
 }
