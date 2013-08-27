@@ -12,7 +12,6 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class HouseNumberDto {
 
-	
 	private Point location;
 	private String number;
 	
@@ -66,5 +65,10 @@ public class HouseNumberDto {
 	return longitude;
     }
 
+    @Override
+	public String toString() {
+		return String.format("HouseNumberDto [location=%s, number=%s]",
+				location, number);
+	}
 
 }
