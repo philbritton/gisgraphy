@@ -80,6 +80,7 @@ import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.StringHelper;
 import com.gisgraphy.servlet.FulltextServlet;
 import com.gisgraphy.servlet.GisgraphyServlet;
+import com.gisgraphy.street.HouseNumberDto;
 import com.gisgraphy.street.StreetSearchQuery;
 import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.LineString;
@@ -892,6 +893,9 @@ public class GisgraphyTestHelper {
     	zipcodes.add("zip1");
     	EasyMock.expect(city.getZipcodes()).andStubReturn(zipcodes);
     	EasyMock.expect(city.getPlacetype()).andStubReturn(City.class.getSimpleName());
+    	EasyMock.expect(city.getIs_in_zip()).andStubReturn("zip");
+    	EasyMock.expect(city.getIs_in_adm()).andStubReturn("isinAdm");
+    	EasyMock.expect(city.getIs_in_place()).andStubReturn("isinPlace");
     	EasyMock.replay(city);
     	return city;
 	}
@@ -995,7 +999,35 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(street.getIs_in_adm()).andStubReturn("isinadm");
     	EasyMock.expect(street.getIs_in_place()).andStubReturn("isinplace");
     	EasyMock.expect(street.getIs_in_zip()).andStubReturn("isinzip");
+    	List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
+    	HouseNumberDto number1 = new HouseNumberDto(GeolocHelper.createPoint(2D, 3D), "1");
+    	HouseNumberDto number2 = new HouseNumberDto(GeolocHelper.createPoint(4D, 5D), "2");
+    	houseNumbers.add(number1);
+    	houseNumbers.add(number2);
+    	EasyMock.expect(street.getHouse_numbers()).andStubReturn(houseNumbers);
+    	EasyMock.replay(street);
+    	return street;
+	}
+	
+	public static SolrResponseDto createSolrResponseDtoForStreet(String is_in,String streetName,List<HouseNumberDto> houseNumbers, Long featureId) {
+		SolrResponseDto street = EasyMock.createMock(SolrResponseDto.class);
+		EasyMock.expect(street.getFeature_id()).andStubReturn(featureId);
+    	EasyMock.expect(street.getAdm1_name()).andStubReturn("adm1 Name");
+    	EasyMock.expect(street.getAdm2_name()).andStubReturn("adm2 Name");
+    	EasyMock.expect(street.getLat()).andStubReturn(1.53D);
+    	EasyMock.expect(street.getLng()).andStubReturn(2.35D);
+    	EasyMock.expect(street.getName()).andStubReturn(streetName);
+    	EasyMock.expect(street.getIs_in()).andStubReturn(is_in);
+    	EasyMock.expect(street.getZipcodes()).andStubReturn(null);
+    	EasyMock.expect(street.getPlacetype()).andStubReturn(Street.class.getSimpleName());
+    	EasyMock.expect(street.getFeature_id()).andStubReturn(123564L);
+    	EasyMock.expect(street.getStreet_type()).andStubReturn("street type");
+    	EasyMock.expect(street.getCountry_code()).andStubReturn("FR");
     	
+    	EasyMock.expect(street.getIs_in_adm()).andStubReturn("isinadm");
+    	EasyMock.expect(street.getIs_in_place()).andStubReturn("isinplace");
+    	EasyMock.expect(street.getIs_in_zip()).andStubReturn("isinzip");
+    	EasyMock.expect(street.getHouse_numbers()).andStubReturn(houseNumbers);
     	EasyMock.replay(street);
     	return street;
 	}
