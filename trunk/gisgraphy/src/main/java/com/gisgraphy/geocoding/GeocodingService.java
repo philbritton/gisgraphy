@@ -67,7 +67,6 @@ import com.gisgraphy.service.IStatsUsageService;
 import com.gisgraphy.stats.StatsUsageType;
 import com.gisgraphy.street.HouseNumberDto;
 import com.gisgraphy.street.HouseNumberUtil;
-import com.gisgraphy.test.GisgraphyTestHelper;
 import com.vividsolutions.jts.geom.Point;
 
 /**
