@@ -65,6 +65,9 @@ import com.gisgraphy.serializer.UniversalSerializer;
 import com.gisgraphy.serializer.common.UniversalSerializerConstant;
 import com.gisgraphy.service.IStatsUsageService;
 import com.gisgraphy.stats.StatsUsageType;
+import com.gisgraphy.street.HouseNumberDto;
+import com.gisgraphy.street.HouseNumberUtil;
+import com.gisgraphy.test.GisgraphyTestHelper;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -182,8 +185,8 @@ public class GeocodingService implements IGeocodingService {
 			}
 			return geocode(addressResultDto.getResult().get(0), countryCode);
 		} else if (importerConfig.isOpenStreetMapFillIsIn()) {
-			statsUsageService.increaseUsage(StatsUsageType.GEOCODING);
 			logger.debug("is_in is active");
+			statsUsageService.increaseUsage(StatsUsageType.GEOCODING);
 			AddressResultsDto results;
 			List<SolrResponseDto> aproximativeMatches = findStreetInText(rawAddress, countryCode, null);
 			if (GisgraphyConfig.searchForExactMatchWhenGeocoding) {
@@ -191,7 +194,7 @@ public class GeocodingService implements IGeocodingService {
 				List<SolrResponseDto> mergedResults = mergeSolrResponseDto(exactMatches, aproximativeMatches);
 				results = buildAddressResultDtoFromSolrResponseDto(mergedResults);
 			} else {
-				results = buildAddressResultDtoFromStreetsAndCities(aproximativeMatches, null);
+				results = buildAddressResultDtoFromStreetsAndCities(aproximativeMatches, null, null);
 			}
 			Long endTime = System.currentTimeMillis();
 			long qTime = endTime - startTime;
@@ -218,7 +221,7 @@ public class GeocodingService implements IGeocodingService {
 					logger.debug(" no city found for '" + rawAddress + "'");
 				}
 				List<SolrResponseDto> streets = findStreetInText(rawAddress, countryCode, null);
-				AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, cities);
+				AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, cities, null);
 				Long endTime = System.currentTimeMillis();
 				long qTime = endTime - startTime;
 				results.setQTime(qTime);
@@ -245,7 +248,7 @@ public class GeocodingService implements IGeocodingService {
 						streets = findStreetInText(addressNormalizedWithoutCity, countryCode, cityLocation);
 					}
 				}
-				AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, cities);
+				AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, cities, null);
 				Long endTime = System.currentTimeMillis();
 				long qTime = endTime - startTime;
 				results.setQTime(qTime);
@@ -290,7 +293,7 @@ public class GeocodingService implements IGeocodingService {
 		Long startTime = System.currentTimeMillis();
 		if (isEmptyString(address.getCity()) && isEmptyString(address.getZipCode()) && isEmptyString(address.getPostTown())) {
 			List<SolrResponseDto> streets = findStreetInText(address.getStreetName(), countryCode, null);
-			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, null);
+			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, null, null);
 			Long endTime = System.currentTimeMillis();
 			long qTime = endTime - startTime;
 			results.setQTime(qTime);
@@ -318,7 +321,7 @@ public class GeocodingService implements IGeocodingService {
 				}
 				fulltextResultsDto = findStreetInText(streetSentenceToSearch, countryCode, cityLocation);
 			}
-			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(fulltextResultsDto, cities);
+			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(fulltextResultsDto, cities, address.getHouseNumber());
 			Long endTime = System.currentTimeMillis();
 			long qTime = endTime - startTime;
 			results.setQTime(qTime);
@@ -351,18 +354,9 @@ public class GeocodingService implements IGeocodingService {
 		return new String(sentence + choice).trim();
 	}
 
-	/*
-	 * protected AddressResultsDto
-	 * buildAddressResultDtoFromFulltextResults(List<SolrResponseDto>
-	 * solrResponseDtos){ List<Address> addresses = new ArrayList<Address>(); if
-	 * (solrResponseDtos==null || solrResponseDtos.size()==0){ new
-	 * AddressResultsDto(addresses, 0L);//todo tests } else { for
-	 * (SolrResponseDto solrResponseDto:solrResponseDtos){
-	 * 
-	 * } } }
-	 */
+	
 
-	protected AddressResultsDto buildAddressResultDtoFromStreetsAndCities(List<SolrResponseDto> streets, List<SolrResponseDto> cities) {
+	protected AddressResultsDto buildAddressResultDtoFromStreetsAndCities(List<SolrResponseDto> streets, List<SolrResponseDto> cities, String houseNumberToFind) {
 		List<Address> addresses = new ArrayList<Address>();
 
 		if (streets != null && streets.size() > 0) {
@@ -373,6 +367,9 @@ public class GeocodingService implements IGeocodingService {
 			if (cities != null && cities.size() > 0) {
 				city = cities.get(0);
 			}
+			String lastName=null;
+			boolean housenumberFound =false;
+			int numberOfStreetThatHaveTheSameName = 0;
 			for (SolrResponseDto street : streets) {
 				Address address = new Address();
 
@@ -381,10 +378,11 @@ public class GeocodingService implements IGeocodingService {
 				address.setId(street.getFeature_id());
 				address.setCountryCode(street.getCountry_code());
 
+				String streetName = street.getName();
 				if (logger.isDebugEnabled() && streets != null) {
-					logger.debug("=>street : " + street.getName());
+					logger.debug("=>street : " + streetName);
 				}
-				address.setStreetName(street.getName());
+				address.setStreetName(streetName);
 				address.setStreetType(street.getStreet_type());
 				String is_in = street.getIs_in();
 				if (!isEmptyString(is_in)) {
@@ -393,11 +391,59 @@ public class GeocodingService implements IGeocodingService {
 					address.setZipCode(street.getIs_in_zip());
 					address.setDependentLocality(street.getIs_in_place());
 				} else {
-					// TODO : if we are not in is_in mode, we got more
-					// information,
-					// maybe add state and zip could be usefull
 					populateAddressFromCity(city, address);
 				}
+				//now search for house number!
+				List<HouseNumberDto> houseNumbersList = street.getHouse_numbers();
+				if(houseNumberToFind!=null && houseNumbersList!=null && houseNumbersList.size()>0){
+				if (!isEmptyString(streetName)){ 
+					if(streetName.equals(lastName) && city!=null){//probably the same street
+						if (housenumberFound){
+							continue;
+							//do nothing it has already been found in the street
+							//TODO do we have to search and if we find, we add it?
+						}else {
+							numberOfStreetThatHaveTheSameName++;
+							HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+							if (houseNumber !=null){
+								housenumberFound=true;
+								address.setHouseNumber(houseNumber.getNumber());
+								address.setLat(houseNumber.getLocation().getY());
+								address.setLng(houseNumber.getLocation().getX());
+								//remove the last results added
+								for (numberOfStreetThatHaveTheSameName--;numberOfStreetThatHaveTheSameName>=0;numberOfStreetThatHaveTheSameName--){
+									addresses.remove(addresses.size()-1-numberOfStreetThatHaveTheSameName);
+								}
+							} else {
+								housenumberFound=false;
+							}
+						}
+					} else { //the streetName is different, 
+						numberOfStreetThatHaveTheSameName=0;
+						HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+						if (houseNumber !=null){
+							housenumberFound=true;
+							address.setHouseNumber(houseNumber.getNumber());
+							address.setLat(houseNumber.getLocation().getY());
+							address.setLng(houseNumber.getLocation().getX());
+						} else {
+							housenumberFound=false;
+						}
+					}
+				} else {//streetname is null, we search for housenumber anyway
+					numberOfStreetThatHaveTheSameName=0;
+					HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+					if (houseNumber !=null){
+						housenumberFound=true;
+						address.setHouseNumber(houseNumber.getNumber());
+						address.setLat(houseNumber.getLocation().getY());
+						address.setLng(houseNumber.getLocation().getX());
+					} else {
+						housenumberFound=false;
+					}
+				}
+				}
+				lastName=streetName;
 				address.getGeocodingLevel();//force calculation of geocodingLevel
 				addresses.add(address);
 
@@ -418,6 +464,19 @@ public class GeocodingService implements IGeocodingService {
 			}
 		}
 		return new AddressResultsDto(addresses, 0L);
+	}
+
+	protected HouseNumberDto searchHouseNumber(String houseNumberToFind, List<HouseNumberDto> houseNumbersList) {
+		if(houseNumberToFind==null || houseNumbersList==null || houseNumbersList.size()==0){
+			return null;
+		} 
+		String HouseNumberToFind = HouseNumberUtil.normalizeNumber(houseNumberToFind);
+		for (HouseNumberDto candidate :houseNumbersList){
+			if (candidate!=null && candidate.getNumber()!=null && candidate.getNumber().equals(HouseNumberToFind)){
+				return candidate;
+			}
+		}
+		return null;
 	}
 
 	protected AddressResultsDto buildAddressResultDtoFromSolrResponseDto(List<SolrResponseDto> solResponseDtos) {

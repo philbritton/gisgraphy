@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.street.HouseNumberUtil.normalizeNumber;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +31,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.hibernate.FlushMode;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
-import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.repository.IhouseNumberDao;
@@ -52,7 +50,6 @@ import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.importer.dto.AddressInclusion;
 import com.gisgraphy.importer.dto.AssociatedStreetHouseNumber;
@@ -61,6 +58,7 @@ import com.gisgraphy.importer.dto.InterpolationHouseNumber;
 import com.gisgraphy.importer.dto.InterpolationMember;
 import com.gisgraphy.importer.dto.InterpolationType;
 import com.gisgraphy.importer.dto.NodeHouseNumber;
+import com.gisgraphy.street.HouseNumberUtil;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -818,17 +816,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		return deletedObjectInfo;
 	}
 
-	protected String normalizeNumber(String numberAsString){
-		if (numberAsString ==null){
-			return null;
-		}
-		Pattern pattern = Pattern.compile("[\\-\\–\\一]?(\\d+)[^\\d]*",Pattern.CASE_INSENSITIVE);
-		Matcher matcher = pattern.matcher(numberAsString);
-		if (matcher.find()){
-			return matcher.group(1);
-		}
-		return null;
-	}
+	
 
 	@Override
 	// TODO test
