@@ -1,7 +1,5 @@
 package com.gisgraphy.domain.geoloc.entity;
 
-import static org.junit.Assert.*;
-
 import net.sf.jstester.util.Assert;
 
 import org.junit.Test;

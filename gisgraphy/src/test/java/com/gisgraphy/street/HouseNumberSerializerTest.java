@@ -5,12 +5,10 @@ import static junit.framework.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.street.HouseNumberSerializer;
 
 public class HouseNumberSerializerTest {
 
