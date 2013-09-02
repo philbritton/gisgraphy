@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Required;

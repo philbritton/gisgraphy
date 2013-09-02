@@ -23,8 +23,6 @@
 
 package com.gisgraphy.importer.dto;
 
-import java.util.List;
-
 import com.vividsolutions.jts.geom.Point;
 
 /**

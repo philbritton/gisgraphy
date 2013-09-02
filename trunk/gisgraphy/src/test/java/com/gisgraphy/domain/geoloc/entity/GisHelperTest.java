@@ -22,19 +22,10 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
-import java.text.ParseException;
-
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.gisgraphy.domain.valueobject.SRID;
-import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.GisHelper;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 
 public class GisHelperTest {
 	

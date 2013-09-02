@@ -25,9 +25,6 @@
  */
 package com.gisgraphy.domain.repository;
 
-import static com.gisgraphy.domain.valueobject.HouseNumberType.ASSOCIATED;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jstester.util.Assert;
@@ -35,14 +32,9 @@ import net.sf.jstester.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gisgraphy.domain.geoloc.entity.AlternateName;
-import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
-import com.gisgraphy.domain.valueobject.AlternateNameSource;
-import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.fulltext.AbstractIntegrationHttpSolrTestCase;
-import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.test.GisgraphyTestHelper;
 
 /**

@@ -37,7 +37,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
 import com.gisgraphy.domain.valueobject.HouseNumberType;

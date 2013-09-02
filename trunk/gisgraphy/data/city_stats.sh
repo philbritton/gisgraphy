@@ -1,6 +1,6 @@
  #!/bin/bash
 
-pgPassword="mdpsdf99"
+pgPassword="mdp"
 export PGPASSWORD="$pgPassword";
 databaseName="gisgraphy"
 tableName="city"
