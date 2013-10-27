@@ -251,7 +251,8 @@
 			value="${importerConfig.importGisFeatureEmbededAlternateNames}" />
 		<property name="geonamesDir" value="${importer.geonames.dir}"/>
 		<property name="openStreetMapDir" value="${importer.openstreetmap.dir}"/>
-		<property name="openStreetMapHouseNumberDir" value="${importer.openstreetmap.housenumber.dir}"/>
+		<property name="openStreetMapHouseNumberDir" value="${importer.openstreetmap.housenumbers.dir}"/>
+		<property name="openStreetMapCitiesDir" value="${importer.openstreetmap.cities.dir}"/>
 		<property name="geonamesZipCodeDir" value="${importer.geoname.zipcode.dir}"/>
 		<property name="geonamesDownloadURL" value="${importer.geonames.downloadURL}"/>
 		
@@ -260,6 +261,8 @@
 		<property name="geonamesFilesToDownload" value="${importer.geonamesFilesToDownload}"/>
 		<property name="openStreetMapFilesToDownload" value="${importer.openstreetmapFilesToDownload}"/>
 		<property name="openStreetMapHouseNumberFilesToDownload" value="${importer.openstreetmapHouseNumberFilesToDownload}"/>
+		<property name="openStreetMapCitiesFilesToDownload" value="${importer.openStreetMapCitiesFilesToDownload}"/>
+		
 		<property name="adm1FileName" value="${importerConfig.adm1FileName}"/>
 		<property name="adm2FileName" value="${importerConfig.adm2FileName}"/>
 		<property name="adm3FileName" value="${importerConfig.adm3FileName}"/>
@@ -268,7 +271,8 @@
 		<property name="countriesFileName" value="${importerConfig.countriesInfosFileName}"/>
 		<property name="alternateNamesFileName" value="${importerConfig.alternateNamesFileName}"/>
 		<property name="openstreetMapDownloadURL" value="${importer.openstreetmap.downloadURL}"/>
-		<property name="openstreetMaphouseNumberDownloadURL" value="${importer.openstreetmap.housenumber.downloadURL}"/>
+		<property name="openstreetMaphouseNumbersDownloadURL" value="${importer.openstreetmap.housenumbers.downloadURL}"/>
+		<property name="openstreetMapCitiesDownloadURL" value="${importer.openstreetmap.cities.downloadURL}"/>
 		<property name="geonamesImporterEnabled" value="${importer.geonames.enabled}"/>
 		<property name="openstreetmapImporterEnabled" value="${importer.openstreetmap.enabled}"/>
 		<property name="openstreetmapHouseNumberImporterEnabled" value="${importer.openstreetmap.housenumber.enabled}"/>

@@ -103,6 +103,18 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapHouseNumberDir(filePath);
 		assertFalse(importerConfig.isOpenStreetMapHouseNumberDownloadDirectoryAccessible());
 	}
+	
+	@Test
+	public void isOpenStreetMapCitiesDirectoryAccessible() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setOpenStreetMapCitiesDir(accessiblePath);
+		assertTrue(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+
+		importerConfig.setOpenStreetMapCitiesDir(pathNotAccessible);
+		assertFalse(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+		importerConfig.setOpenStreetMapCitiesDir(filePath);
+		assertFalse(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+	}
 
 	@Test
 	public void setOpenStreetMapDirShouldAddFileSeparatorIfItDoesnTEndsWithFileSeparator() {
@@ -120,6 +132,15 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapHouseNumberDir(OpenStreetMapHouseNumberDir);
 		Assert.assertTrue("setOpenStreetMapHouseNumberDir should add File separator", importerConfig.getOpenStreetMapHouseNumberDir().endsWith(File.separator));
 		Assert.assertEquals(OpenStreetMapHouseNumberDir + File.separator, importerConfig.getOpenStreetMapHouseNumberDir());
+	}
+	
+	@Test
+	public void setOpenStreetMapCitiesDirShouldAddFileSeparatorIfItDoesnTEndsWithFileSeparator() {
+		String OpenStreetMapCitiesDir = "Test";
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setOpenStreetMapCitiesDir(OpenStreetMapCitiesDir);
+		Assert.assertTrue("setOpenStreetMapCitiesDir should add File separator", importerConfig.getOpenStreetMapCitiesDir().endsWith(File.separator));
+		Assert.assertEquals(OpenStreetMapCitiesDir + File.separator, importerConfig.getOpenStreetMapCitiesDir());
 	}
 
 	@Test

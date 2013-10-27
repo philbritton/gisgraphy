@@ -33,11 +33,11 @@ import com.gisgraphy.helper.Untar;
 
 
 /**
- * Retrieve The Geonames files from a server
+ * Retrieve The openstreetmap cities files from a server
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
-public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever {
+public class OpenStreetMapCitiesFileRetriever extends AbstractFileRetriever {
 
     private Untar untar;
     
@@ -49,7 +49,7 @@ public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever
      * @see com.gisgraphy.domain.geoloc.importer.AbstractFileRetriever#getDownloadDirectory()
      */
     public String getDownloadDirectory() {
-	return importerConfig.getOpenStreetMapHouseNumberDir();
+	return importerConfig.getOpenStreetMapCitiesDir();
     }
 
     /* (non-Javadoc)
@@ -57,7 +57,7 @@ public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever
      */
     public String getDownloadBaseUrl() {
 	return importerConfig
-	    .getOpenstreetMaphouseNumbersDownloadURL();
+	    .getOpenstreetMapCitiesDownloadURL();
     }
     
     /* (non-Javadoc)
@@ -81,7 +81,7 @@ public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever
 
 	for (int i = 0; i < filesToImport.length; i++) {
 	    logger.info("the files " + filesToImport[i].getName()
-		    + " will be imported for openstreetMap house number");
+		    + " will be imported for openstreetMap cities");
 	}
     }
 
@@ -90,7 +90,7 @@ public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever
      */
     @Override
     public boolean shouldBeSkipped() {
-	return !importerConfig.isOpenstreetmapHouseNumberImporterEnabled();
+	return !importerConfig.isOpenstreetmapImporterEnabled();
     }
 
     /* (non-Javadoc)
@@ -98,7 +98,7 @@ public class OpenStreetMapHouseNumberFileRetriever extends AbstractFileRetriever
      */
     @Override
     List<String> getFilesToDownload() {
-	return importerConfig.getOpenStreetMapHouseNumberDownloadFilesListFromOption();
+	return importerConfig.getOpenStreetMapCitiesDownloadFilesListFromOption();
     }
 
     @Override
