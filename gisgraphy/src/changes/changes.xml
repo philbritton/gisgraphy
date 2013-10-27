@@ -621,6 +621,14 @@
 				A fulltext query without space between comma failed (now it is ok) 
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add shape to gisfeature (Goal cities will shapes) 
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Add openstreetmap cities importer
+			</action>
+			
 			</release>
 			
 	</body>

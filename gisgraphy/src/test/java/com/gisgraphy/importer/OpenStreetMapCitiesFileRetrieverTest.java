@@ -42,14 +42,14 @@ import com.gisgraphy.service.IInternationalisationService;
 import com.gisgraphy.test.GisgraphyTestHelper;
 
 
-public class OpenStreetMapHouseNumberFileRetrieverTest {
+public class OpenStreetMapCitiesFileRetrieverTest {
     @Test
     public void processShouldExtractFilesEvenIfRetrieveFileIsFalse(){
 	 final List<String> methodCalled = new ArrayList<String>();
 	 final String downloadFlag = "download";
 	 final String decompressFlag = "decompress";
 	
-	OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever(){
+	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever(){
 	    @Override
 	    protected void downloadFiles() {
 		methodCalled.add(downloadFlag);
@@ -61,11 +61,11 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	    }
 	};
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(true);
+	importerConfig.setOpenstreetmapImporterEnabled(true);
 	importerConfig.setRetrieveFiles(false);
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
 	Assert.assertEquals(decompressFlag, methodCalled.get(0));
 	
     }
@@ -76,7 +76,7 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	 final String downloadFlag = "download";
 	 final String decompressFlag = "decompress";
 	
-	 OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever(){
+	 OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever(){
 	    @Override
 	    protected void downloadFiles() {
 		methodCalled.add(downloadFlag);
@@ -90,9 +90,9 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	ImporterConfig importerConfig = new ImporterConfig();
 	importerConfig.setOpenstreetmapImporterEnabled(true);
 	importerConfig.setRetrieveFiles(true);
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
 	Assert.assertEquals(downloadFlag, methodCalled.get(0));
 	Assert.assertEquals(decompressFlag, methodCalled.get(1));
 	
@@ -104,7 +104,7 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	 final String downloadFlag = "download";
 	 final String decompressFlag = "decompress";
 	
-	 OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever(){
+	 OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever(){
 	    @Override
 	    protected void downloadFiles() {
 		methodCalled.add(downloadFlag);
@@ -116,21 +116,21 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	    }
 	};
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(false);
+	importerConfig.setOpenstreetmapImporterEnabled(false);
 	importerConfig.setRetrieveFiles(true);
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
 	Assert.assertEquals(0, methodCalled.size());
 	
     }
     
     @Test
     public void process() {
-    OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
+    	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever();
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetMaphouseNumbersDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
+	importerConfig.setOpenstreetMapCitiesDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
 	
 	// create a temporary directory to download files
 	File tempDir = FileHelper.createTempDir(this.getClass()
@@ -140,37 +140,37 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	List<String> filesToDownload =new ArrayList<String>();
 	String fileTobeDownload = "NU.tar.bz2";
 	filesToDownload.add(fileTobeDownload);
-	importerConfig.setOpenStreetMapHouseNumberFilesToDownload(fileTobeDownload);
+	importerConfig.setOpenStreetMapCitiesFilesToDownload(fileTobeDownload);
 	importerConfig.setRetrieveFiles(true);
 
-	importerConfig.setOpenStreetMapHouseNumberDir(tempDir.getAbsolutePath());
+	importerConfig.setOpenStreetMapCitiesDir(tempDir.getAbsolutePath());
 
 	// check that the directory is ending with the / or \ according to the
 	// System
-	Assert.assertTrue("openstreetmap house number dir must ends with" + File.separator,
-		importerConfig.getOpenStreetMapHouseNumberDir().endsWith(File.separator));
+	Assert.assertTrue("openstreetmap cities dir must ends with" + File.separator,
+		importerConfig.getOpenStreetMapCitiesDir().endsWith(File.separator));
 	
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
 
 	// check that openStreetmapURL ends with '/' : normally "/" is added
 	// if not
-	Assert.assertTrue("openstreetmapHouseNumberDownloadURL must ends with '/' but was "
-		+ importerConfig.getOpenstreetMaphouseNumbersDownloadURL(), importerConfig
-		.getOpenstreetMaphouseNumbersDownloadURL().endsWith("/"));
+	Assert.assertTrue("openstreetmapCitiesDownloadURL must ends with '/' but was "
+		+ importerConfig.getOpenstreetMapCitiesDownloadURL(), importerConfig
+		.getOpenstreetMapCitiesDownloadURL().endsWith("/"));
 
 	// check that files have been Downloaded
 	File file = null;
 	for (String fileToDownload : filesToDownload) {
-	    file = new File(importerConfig.getOpenStreetMapHouseNumberDir() + fileToDownload);
+	    file = new File(importerConfig.getOpenStreetMapCitiesDir() + fileToDownload);
 	    if (importerConfig.isRetrieveFiles()) {
 		Assert.assertTrue("Le fichier " + fileToDownload
 			+ " have not been downloaded in "
-			+ importerConfig.getOpenStreetMapHouseNumberDir(), file.exists());
+			+ importerConfig.getOpenStreetMapCitiesDir(), file.exists());
 	    } else {
 		Assert.assertFalse("Le fichier " + fileToDownload
 			+ " have been downloaded in "
-			+ importerConfig.getOpenStreetMapHouseNumberDir()
+			+ importerConfig.getOpenStreetMapCitiesDir()
 			+ " even if the option retrievefile is"
 			+ importerConfig.isRetrieveFiles(), file.exists());
 	    }
@@ -181,16 +181,16 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	    String fileNameWithCSVExtension = fileToDownload.substring(0,
 		    (fileToDownload.length()) - 8)
 		    + ".txt";
-	    file = new File(importerConfig.getOpenStreetMapHouseNumberDir()
+	    file = new File(importerConfig.getOpenStreetMapCitiesDir()
 		    + fileNameWithCSVExtension);
 	    if (importerConfig.isRetrieveFiles()) {
 		Assert.assertTrue("Le fichier " + fileNameWithCSVExtension
 			+ " have not been untar in "
-			+ importerConfig.getOpenStreetMapHouseNumberDir(), file.exists());
+			+ importerConfig.getOpenStreetMapCitiesDir(), file.exists());
 	    } else {
 		Assert.assertFalse("Le fichier " + fileToDownload
 			+ " have been unzip in "
-			+ importerConfig.getOpenStreetMapHouseNumberDir()
+			+ importerConfig.getOpenStreetMapCitiesDir()
 			+ " even if the option retrievefile is"
 			+ importerConfig.isRetrieveFiles(), file.exists());
 	    }
@@ -206,10 +206,10 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
     
     @Test
     public void processWhenNotExistingFile() {
-    OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
-    openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
+    OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever();
+    openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetMaphouseNumbersDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
+	importerConfig.setOpenstreetMapCitiesDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
 	
 	// create a temporary directory to download files
 	File tempDir = FileHelper.createTempDir(this.getClass()
@@ -219,15 +219,15 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	List<String> filesToDownload =new ArrayList<String>();
 	String fileTobeDownload = "notExisting.bz2";
 	filesToDownload.add(fileTobeDownload);
-	importerConfig.setOpenStreetMapHouseNumberFilesToDownload(fileTobeDownload);
+	importerConfig.setOpenStreetMapCitiesFilesToDownload(fileTobeDownload);
 	importerConfig.setRetrieveFiles(true);
 
-	importerConfig.setOpenStreetMapHouseNumberDir(tempDir.getAbsolutePath());
+	importerConfig.setOpenStreetMapCitiesDir(tempDir.getAbsolutePath());
 
 
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
 	try {
-	    openStreetMapHouseNumberFileRetriever.process();
+	    openStreetMapCitiesFileRetriever.process();
 	    fail("all the files specify should exists");
 	} catch (ImporterException e) {
 	    Assert.assertEquals(FileNotFoundException.class, e.getCause().getCause().getClass());
@@ -250,54 +250,55 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
     
     @Test
     public void StatusShouldBeEqualsToSkipedIfRetrieveFileIsFalse(){
-    	OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever(){
+    	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever(){
 	    @Override
 	    public void decompressFiles() throws IOException {
 	       return;
 	    }
 	};
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(false);
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
-	Assert.assertEquals(ImporterStatus.SKIPPED, openStreetMapHouseNumberFileRetriever.getStatus());
-	ImporterStatusDto statusDto = new ImporterStatusDto(openStreetMapHouseNumberFileRetriever);
+	importerConfig.setOpenstreetmapImporterEnabled(false);
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
+	Assert.assertEquals(ImporterStatus.SKIPPED, openStreetMapCitiesFileRetriever.getStatus());
+	ImporterStatusDto statusDto = new ImporterStatusDto(openStreetMapCitiesFileRetriever);
 	Assert.assertEquals(0, statusDto.getPercent());
     }
     
     @Test
     public void StatusShouldBeEqualsToPROCESSEDIfNoError(){
-    OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
-	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
+    	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever();
+	openStreetMapCitiesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
 	EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true);
-	EasyMock.expect(importerConfig.isOpenstreetmapHouseNumberImporterEnabled()).andReturn(true);
+	EasyMock.expect(importerConfig.isOpenstreetmapImporterEnabled()).andReturn(true);
 	EasyMock.expect(importerConfig.getGeonamesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
-	EasyMock.expect(importerConfig.getOpenStreetMapHouseNumberDir()).andStubReturn("");
-	EasyMock.expect(importerConfig.getOpenstreetMaphouseNumbersDownloadURL()).andStubReturn("");
-	EasyMock.expect(importerConfig.getOpenStreetMapHouseNumberDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
+	EasyMock.expect(importerConfig.getOpenStreetMapCitiesDir()).andStubReturn("");
+	EasyMock.expect(importerConfig.getOpenstreetMapCitiesDownloadURL()).andStubReturn("");
+	EasyMock.expect(importerConfig.getOpenStreetMapCitiesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
 	
 	EasyMock.replay(importerConfig);
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	openStreetMapHouseNumberFileRetriever.process();
-	Assert.assertEquals(ImporterStatus.PROCESSED, openStreetMapHouseNumberFileRetriever.getStatus());
-	ImporterStatusDto statusDto = new ImporterStatusDto(openStreetMapHouseNumberFileRetriever);
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	openStreetMapCitiesFileRetriever.process();
+	Assert.assertEquals(ImporterStatus.PROCESSED, openStreetMapCitiesFileRetriever.getStatus());
+	ImporterStatusDto statusDto = new ImporterStatusDto(openStreetMapCitiesFileRetriever);
 	Assert.assertEquals(100, statusDto.getPercent());
     }
     
     @Test
     public void shouldBeSkipShouldReturnCorrectValue(){
 	ImporterConfig importerConfig = new ImporterConfig();
-	OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
 	
-	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(false);
-	Assert.assertTrue(openStreetMapHouseNumberFileRetriever.shouldBeSkipped());
+	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever();
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	
+	importerConfig.setOpenstreetmapImporterEnabled(false);
+	Assert.assertTrue(openStreetMapCitiesFileRetriever.shouldBeSkipped());
 
 	
-	importerConfig.setOpenstreetmapHouseNumberImporterEnabled(true);
-	Assert.assertFalse(openStreetMapHouseNumberFileRetriever.shouldBeSkipped());
+	importerConfig.setOpenstreetmapImporterEnabled(true);
+	Assert.assertFalse(openStreetMapCitiesFileRetriever.shouldBeSkipped());
 	
 	
     }
@@ -308,10 +309,10 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
 	String fileTobeDownload = "AD.tar.bz2";
 	List<String> filesToDownload =new ArrayList<String>();
 	filesToDownload.add(fileTobeDownload);
-	importerConfig.setOpenStreetMapHouseNumberFilesToDownload(fileTobeDownload);
-	OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
-	openStreetMapHouseNumberFileRetriever.setImporterConfig(importerConfig);
-	Assert.assertEquals("getFilesToDownload should return the importerConfig Option",filesToDownload, openStreetMapHouseNumberFileRetriever.getFilesToDownload());
+	importerConfig.setOpenStreetMapCitiesFilesToDownload(fileTobeDownload);
+	OpenStreetMapCitiesFileRetriever openStreetMapCitiesFileRetriever = new OpenStreetMapCitiesFileRetriever();
+	openStreetMapCitiesFileRetriever.setImporterConfig(importerConfig);
+	Assert.assertEquals("getFilesToDownload should return the importerConfig Option",filesToDownload, openStreetMapCitiesFileRetriever.getFilesToDownload());
 	
 	
     }

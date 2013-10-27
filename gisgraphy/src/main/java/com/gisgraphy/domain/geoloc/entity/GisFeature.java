@@ -61,6 +61,8 @@ import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.GisFeatureHelper;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.importer.ImporterConfig;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -89,6 +91,8 @@ import com.vividsolutions.jts.geom.Point;
 @SequenceGenerator(name = "gisFeatureSequence", sequenceName = "gisfeature_sequence")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class GisFeature{
+	
+	public static final String SHAPE_COLUMN_NAME = "shape";
 
     public static final String LOCATION_COLUMN_NAME = "location";
 
@@ -127,7 +131,7 @@ public class GisFeature{
     private List<AlternateName> alternateNames;
 
     private Point location;
-
+    
     private String adm1Code;
 
     private String adm2Code;
@@ -170,6 +174,9 @@ public class GisFeature{
 
     @IntrospectionIgnoredField
     private GISSource source;
+    
+    @IntrospectionIgnoredField
+    private Geometry shape;
     
     private List<ZipCode> zipCodes;
 
@@ -243,6 +250,23 @@ public class GisFeature{
     public Point getLocation() {
 	return location;
     }
+    
+    /**
+     * Returns The JTS shape of the feature : The Return type is a JTS
+     * geometry.
+     * 
+     * @see SRID
+     * @see #getLongitude()
+     * @see #getLocation()
+     * @return The JTS Point
+     */
+    @Column(nullable = true, name = SHAPE_COLUMN_NAME)
+    @Type(type = "org.hibernatespatial.GeometryUserType")
+    public Geometry getShape() {
+	return shape;
+    }
+    
+    
 
     /**
      * @return Returns the longitude (east-west) from the Location
@@ -745,6 +769,15 @@ public class GisFeature{
      */
     public void setLocation(Point location) {
 	this.location = location;
+    }
+    
+    /**
+     * @param location
+     *                The shape of the GisFeature (JTS)
+     * @see #getShape()
+     */
+    public void setShape(Geometry shape) {
+	this.shape = shape;
     }
 
     /**
