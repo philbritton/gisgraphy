@@ -22,10 +22,11 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.fulltext.Constants.ONLY_ADM_PLACETYPE;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
@@ -34,31 +35,24 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
-import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
-import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.GISSource;
-import com.gisgraphy.domain.valueobject.GisFeatureDistance;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
+import com.gisgraphy.domain.valueobject.Output;
+import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.Constants;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
-import com.gisgraphy.geoloc.GeolocQuery;
-import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.helper.StringHelper;
-import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -73,7 +67,9 @@ import com.vividsolutions.jts.geom.Point;
 public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterProcessor {
 	
     
-    protected IIdGenerator idGenerator;
+    public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
+
+	protected IIdGenerator idGenerator;
     
     protected ICityDao cityDao;
     
@@ -139,25 +135,18 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	//
 	checkNumberOfColumn(fields);
 	
-	/*find city by name and position
-	 * if found 
-	 * 	update source
-	 *  set municipality
-	 *  update shape
-	 *  if not found
-	 *  	
-	*/
 	// name
 	if (!isEmptyField(fields, 2, false)) {
-	    name=fields[1].trim();
+	    name=fields[2].trim();
 	    if (name==null){
 	    	return;
 	    }
 	}
-	
+	//countrycode
 	if (!isEmptyField(fields, 3, true)) {
-	    countrycode=fields[3].trim();
+	    countrycode=fields[3].trim().toUpperCase();
 	}
+	//location
 	if (!isEmptyField(fields, 6, false)) {
 	    try {
 		location = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[6]);
@@ -177,6 +166,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		city = createNewCity();
 	}
 	//populate new fields
+	//population
 	if(city.getPopulation()==null && !isEmptyField(fields, 5, false)){
 		try {
 			int population = Integer.parseInt(fields[5].trim());
@@ -185,28 +175,23 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			logger.error("can not parse population :"+fields[5]);
 		}
 	}
-	if(!isEmptyField(fields, 4, false) && city.getZipCodes()!=null && !city.getZipCodes().contains(fields[4])){
-			city.addZipCode(new ZipCode(fields[5]));
+	//countrycode
+	if(!isEmptyField(fields, 4, false) && (city.getZipCodes()==null || !city.getZipCodes().contains(new ZipCode(fields[4])))){
+			city.addZipCode(new ZipCode(fields[4]));
 	}
+	//shape
 	if(!isEmptyField(fields, 7, false)){
 		try {
 			Geometry shape = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[7]);
 			city.setShape(shape);
 		    } catch (RuntimeException e) {
 		    	logger.warn("can not parse shape for "+fields[7]+" : "+e);
-		    	return;
 		    }
 	}
 	city.setMunicipality(true);
+	//adm
 	if(!isEmptyField(fields, 9, false)){
-		String is_in =fields[9].trim();
-		int index =-1;
-		String admname;
-		if ((index = is_in.lastIndexOf(","))!=-1){
-			admname = is_in.substring(index);
-		} else {
-			admname = is_in;
-		}
+		String admname =fields[9];
 		SolrResponseDto solrResponseDto= getAdm(admname,countrycode);
 		if (solrResponseDto!=null){
 			Adm adm = admDao.getByFeatureId(solrResponseDto.getFeature_id());
@@ -225,7 +210,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 
     }
 
-	private City createNewCity() {
+	City createNewCity() {
 		City city;
 		city = new City();
 		city.setFeatureId(idGenerator.getNextFeatureId());
@@ -235,10 +220,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 
 
 	protected SolrResponseDto getNearestCity(Point location, String name,String countryCode) {
-		if (location ==null || name==null){
+		if (location ==null || name==null || "".equals(name.trim())){
 			return null;
 		}
-		FulltextQuery query = (FulltextQuery)new FulltextQuery(name).withPlaceTypes(new Class[]{City.class}).around(location).withPagination(Pagination.ONE_RESULT);
+		FulltextQuery query = (FulltextQuery) new FulltextQuery(name).withPlaceTypes(Constants.ONLY_CITY_PLACETYPE).around(location).withoutSpellChecking().withPagination(Pagination.ONE_RESULT).withOutput(MINIMUM_OUTPUT_STYLE);
 		if (countryCode != null){
 			query.limitToCountryCode(countryCode);
 		}
@@ -251,11 +236,12 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		return null;
 	}
 	
-	protected SolrResponseDto getAdm(String name,String countryCode) {
+	protected SolrResponseDto getAdm(String name, String countryCode) {
 		if (name==null){
 			return null;
 		}
-		FulltextQuery query = (FulltextQuery)new FulltextQuery(name).withPlaceTypes(new Class[]{Adm.class}).withPagination(Pagination.ONE_RESULT);
+		FulltextQuery query = (FulltextQuery)new FulltextQuery(name).withAllWordsRequired(false).withoutSpellChecking().
+				withPlaceTypes(ONLY_ADM_PLACETYPE).withOutput(MINIMUM_OUTPUT_STYLE).withPagination(Pagination.ONE_RESULT);
 		if (countryCode != null){
 			query.limitToCountryCode(countryCode);
 		}
