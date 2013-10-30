@@ -3445,6 +3445,86 @@ public enum FeatureCode {
 	public GisFeature getObject() {
 	    return new GisFeature();
 	}},
+	OSM_ADMBUILDING{
+	public GisFeature getObject() {
+	    return new AdmBuilding();
+	}},
+	OSM_BENCH{
+	public GisFeature getObject() {
+	    return new Bench();
+	}},
+	OSM_CINEMA{
+	public GisFeature getObject() {
+	    return new Cinema();
+	}},
+	OSM_DENTIST{
+	public GisFeature getObject() {
+	    return new Dentist();
+	}},
+	OSM_DOCTOR{
+	public GisFeature getObject() {
+	    return new Doctor();
+	}},
+	OSM_EMERGENCYPHONE{
+	public GisFeature getObject() {
+	    return new EmergencyPhone();
+	}},
+	OSM_FERRYTERMINAL{
+	public GisFeature getObject() {
+	    return new FerryTerminal();
+	}},
+	OSM_FIRESTATION{
+	public GisFeature getObject() {
+	    return new FireStation();
+	}},
+	OSM_FOUNTAIN{
+	public GisFeature getObject() {
+	    return new Fountain();
+	}},
+	OSM_FUEL{
+	public GisFeature getObject() {
+	    return new Fuel();
+	}},
+	OSM_NIGHTCLUB{
+	public GisFeature getObject() {
+	    return new NightClub();
+	}},
+	OSM_PHARMACY{
+	public GisFeature getObject() {
+	    return new Pharmacy();
+	}},
+	OSM_RENTAL{
+	public GisFeature getObject() {
+	    return new Rental();
+	}},
+	OSM_SHOP{
+	public GisFeature getObject() {
+	    return new Shop();
+	}},
+	OSM_SWIMMINGPOOL{
+	public GisFeature getObject() {
+	    return new SwimmingPool();
+	}},
+	OSM_TAXI{
+	public GisFeature getObject() {
+	    return new Taxi();
+	}},
+	OSM_TELEPHONE{
+	public GisFeature getObject() {
+	    return new Telephone();
+	}},
+	OSM_TOILET{
+	public GisFeature getObject() {
+	    return new Toilet();
+	}},
+	OSM_VENDINGMACHINE{
+	public GisFeature getObject() {
+	    return new VendingMachine();
+	}},
+	OSM_VETERINARY{
+	public GisFeature getObject() {
+	    return new Veterinary();
+	}},
 	UNKNOW {
 		public GisFeature getObject() {
 		    return new GisFeature();

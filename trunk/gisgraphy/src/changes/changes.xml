@@ -629,6 +629,17 @@
 				Add openstreetmap cities importer
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add openstreetmap POI importer
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				AdmBuilding, Bench, Cinema, Dentist, Doctor, EmergencyPhone, FerryTerminal,
+				FireStation, Fountain, Fuel, NightClub , Pharmacy, Rental, Shop, SwimmingPool, Taxi,
+				Telephone, Toilet, VendingMachine, Veterinary
+			</action>
+			
+			
 			</release>
 			
 	</body>

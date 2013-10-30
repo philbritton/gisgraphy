@@ -139,6 +139,28 @@
 		<mapping class="com.gisgraphy.domain.geoloc.entity.WaterBody" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.ZipCode" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Zoo" />
+		<!-- newly placetype added -->
+		<mapping class="com.gisgraphy.domain.geoloc.entity.AdmBuilding" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Bench" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Cinema" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Dentist" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Doctor" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.EmergencyPhone" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.FerryTerminal" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.FireStation" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Fountain" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Fuel" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.NightClub" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Pharmacy" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Rental" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Shop" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.SwimmingPool" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Taxi" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Telephone" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Toilet" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.VendingMachine" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Veterinary" />
+		
 		<mapping class="com.gisgraphy.stats.StatsUsage" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.HouseNumber" />
 		
