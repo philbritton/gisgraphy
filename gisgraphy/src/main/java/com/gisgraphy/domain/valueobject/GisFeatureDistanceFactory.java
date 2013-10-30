@@ -49,6 +49,7 @@ public class GisFeatureDistanceFactory {
 	    gisFeatureDistance.setName(gisFeature.getName().trim());
 	    gisFeatureDistance.setPopulation(gisFeature.getPopulation());
 	    gisFeatureDistance.setTimezone(gisFeature.getTimezone());
+	    gisFeatureDistance.setAmenity(gisFeature.getAmenity());
 	    gisFeatureDistance.setZipCodes(new ArrayList<String>());//TODO tests zip without zipcode
 		List<ZipCode> gisFeatureZipCodes = gisFeature.getZipCodes();
 			if (gisFeatureZipCodes != null){

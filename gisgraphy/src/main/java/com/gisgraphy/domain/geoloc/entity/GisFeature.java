@@ -179,12 +179,13 @@ public class GisFeature{
     private Geometry shape;
     
     private List<ZipCode> zipCodes;
+    
+    private String amenity;
 
 	
 
-	
 
-    /**
+	/**
      * The datastore id
      * 
      * @return The datastoreId, it is not a domain value, just a technical One
@@ -1109,6 +1110,25 @@ public class GisFeature{
 	//TODO tests zip
 	public void setZipCodes(List<ZipCode> zipCodes) {
 		this.zipCodes = zipCodes;
+	}
+	
+
+	
+
+    /**
+     * @return the amenity (typically the osm tag)
+     */
+    public String getAmenity() {
+		return amenity;
+	}
+
+    
+	/**
+	 * @param amenity the amenity tag 
+	 * (typically the osm tag)
+	 */
+	public void setAmenity(String amenity) {
+		this.amenity = amenity;
 	}
     
     
