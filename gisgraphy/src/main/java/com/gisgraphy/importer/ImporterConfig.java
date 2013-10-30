@@ -103,6 +103,8 @@ public class ImporterConfig {
     public final static String OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD = "allcountries.tar.bz2";
     
     public final static String OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD = "allcountries.tar.bz2";
+    
+    public final static String OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD = "allcountries.tar.bz2";
 
     public final static String GEONAMES_ALTERNATENAME_ZIP_FILE="alternateNames.zip";
     
@@ -159,13 +161,17 @@ public class ImporterConfig {
 
     private String openStreetMapCitiesDir;
     
+    private String openStreetMapPoisDir;
+    
     private String geonamesZipCodeDir;
 
     private String openstreetMapDownloadURL;
     
-    private String openstreetMaphouseNumbersDownloadURL;
+    private String openstreetMapHouseNumbersDownloadURL;
     
     private String openstreetMapCitiesDownloadURL;
+    
+    private String openstreetMapPoisDownloadURL;
 
     private String geonamesDownloadURL;
 
@@ -180,6 +186,8 @@ public class ImporterConfig {
     private String openStreetMapHouseNumberFilesToDownload = "";
     
     private String openStreetMapCitiesFilesToDownload = "";
+    
+    private String openStreetMapPoisFilesToDownload = "";
 
     private boolean geonamesImporterEnabled = true;
 
@@ -188,107 +196,7 @@ public class ImporterConfig {
     private boolean openstreetmapHouseNumberImporterEnabled = true;
 
     private boolean openStreetMapFillIsIn = true;
-
-    /**
-     * @return true if the importer should process the import of Geonames data
-     */
-    public boolean isGeonamesImporterEnabled() {
-	return geonamesImporterEnabled;
-    }
-
-    /**
-     * @param geonamesImporterEnabled
-     *            enable or disable Geonames importer
-     * @see ImporterConfig#isGeonamesImporterEnabled()
-     */
-    @Required
-    public void setGeonamesImporterEnabled(boolean geonamesImporterEnabled) {
-	this.geonamesImporterEnabled = geonamesImporterEnabled;
-    }
-
-    /**
-     * @return true if the importer should process the import of Openstreetmap
-     *         data
-     * @see ImporterConfig#isGeonamesImporterEnabled()
-     */
-    public boolean isOpenstreetmapImporterEnabled() {
-	return openstreetmapImporterEnabled;
-    }
     
-    /**
-     * @return true if the importer should process the import of Openstreetmap house number
-     *         data
-     * @see ImporterConfig#isGeonamesImporterEnabled()
-     */
-    public boolean isOpenstreetmapHouseNumberImporterEnabled() {
-	return  openstreetmapHouseNumberImporterEnabled;
-    }
-    
-   
-
-    /**
-     * @param openstreetmapImporterEnabled
-     *            enable or disable Openstreetmap importer
-     * @see ImporterConfig#isOpenstreetmapImporterEnabled()
-     */
-    @Required
-    public void setOpenstreetmapImporterEnabled(boolean openstreetmapImporterEnabled) {
-	this.openstreetmapImporterEnabled = openstreetmapImporterEnabled;
-    }
-    
-    /**
-     * @param openstreetmapHouseNumberImporterEnabled
-     *            enable or disable Openstreetmap housenumber importer
-     * @see ImporterConfig#isOpenstreetmapImporterEnabled()
-     */
-    @Required
-    public void setOpenstreetmapHouseNumberImporterEnabled(boolean openstreetmapHouseNumberImporterEnabled) {
-	this.openstreetmapHouseNumberImporterEnabled = openstreetmapHouseNumberImporterEnabled;
-    }
-
-    /**
-     * @return A list of string with the files to be download, processed from
-     *         {@link #geonamesFilesToDownload}
-     */
-    public List<String> getGeonamesDownloadFilesListFromOption() {
-	return splitSemiColmunStringToList(geonamesFilesToDownload);
-    }
-
-    private List<String> splitSemiColmunStringToList(String stringToSplit) {
-	List<String> list = new ArrayList<String>();
-	if (stringToSplit != null && stringToSplit.length() != 0) {
-	    String[] splited = stringToSplit.split(OPTION_SEPARATOR);
-	    for (int i = 0; i < splited.length; i++) {
-		list.add(splited[i]);
-	    }
-	}
-	return list;
-    }
-
-    /**
-     * @return A list of string with the files to be download, processed from
-     *         {@link #openStreetMapFilesToDownload}
-     */
-    public List<String> getOpenStreetMapDownloadFilesListFromOption() {
-    	return splitSemiColmunStringToList(openStreetMapFilesToDownload);
-    }
-    
-    /**
-     * @return A list of string with the files to be download, processed from
-     *         {@link #openStreetMapHouseNumberFilesToDownload}
-     */
-    public List<String> getOpenStreetMapHouseNumberDownloadFilesListFromOption() {
-    	return splitSemiColmunStringToList(openStreetMapHouseNumberFilesToDownload);
-    }
-    
-    /**
-     * @return A list of string with the files to be download, processed from
-     *         {@link #openStreetMapCitiesFilesToDownload}
-     */
-    public List<String> getOpenStreetMapCitiesDownloadFilesListFromOption() {
-    	return splitSemiColmunStringToList(openStreetMapCitiesFilesToDownload);
-    }
-
     private String adm1FileName;
 
     private String adm2FileName;
@@ -324,6 +232,688 @@ public class ImporterConfig {
     private String alternateNameAdm2FileName;
 
     private String alternateNameCountryFileName;
+    
+    
+    /*
+     *  
+     __ _  ___  ___  _ __   __ _ _ __ ___   ___  ___ 
+ 	/ _` |/ _ \/ _ \| '_ \ / _` | '_ ` _ \ / _ \/ __|
+   | (_| |  __/ (_) | | | | (_| | | | | | |  __/\__ \
+ 	\__, |\___|\___/|_| |_|\__,_|_| |_| |_|\___||___/
+ 	|___/ 
+     * 
+     */
+    
+    /**
+     * @return true if the importer should process the import of Geonames data
+     */
+    public boolean isGeonamesImporterEnabled() {
+    	return geonamesImporterEnabled;
+    }
+    
+    /**
+     * @param geonamesImporterEnabled
+     *            enable or disable Geonames importer
+     * @see ImporterConfig#isGeonamesImporterEnabled()
+     */
+    @Required
+    public void setGeonamesImporterEnabled(boolean geonamesImporterEnabled) {
+    	this.geonamesImporterEnabled = geonamesImporterEnabled;
+    }
+
+    /**
+     * @return The option
+     * @see #setGeonamesDownloadURL(String)
+     */
+    public String getGeonamesDownloadURL() {
+    	return geonamesDownloadURL;
+    }
+
+    /**
+     * The HTTP URL of the directory Where Geonames files are to be download
+     * from
+     * 
+     * @param importerGeonamesDownloadURL
+     *            The option
+     */
+    @Required
+    public void setGeonamesDownloadURL(String importerGeonamesDownloadURL) {
+	if (!importerGeonamesDownloadURL.endsWith("/")) {
+	    this.geonamesDownloadURL = importerGeonamesDownloadURL + "/";
+	} else {
+	    this.geonamesDownloadURL = importerGeonamesDownloadURL;
+	}
+	logger.debug("set geonamesDownloadURL to " + this.geonamesDownloadURL);
+    }
+    
+
+   
+    /**
+     * @return The option
+     * @see #setGeonamesDir(String)
+     */
+    public String getGeonamesDir() {
+    	return this.geonamesDir;
+    }
+
+    
+    /**
+     * The directory where the Geonames files will be retrieved and processed.
+     * It must ends with / or \ according to the System
+     * 
+     * @param importerGeonamesDir
+     *            the option
+     */
+    @Required
+    public void setGeonamesDir(String importerGeonamesDir) {
+	if (!importerGeonamesDir.endsWith(File.separator)) {
+	    logger.debug(importerGeonamesDir + " does not end with " + File.separator);
+	    this.geonamesDir = importerGeonamesDir + File.separator;
+	} else {
+	    this.geonamesDir = importerGeonamesDir;
+	}
+	logger.debug("set geonamesDir to " + this.geonamesDir);
+    }
+
+    /**
+     * @return true if the directory with the file to import exists and is
+     *         accessible
+     */
+    public boolean isGeonamesDownloadDirectoryAccessible() {
+    	return isDirectoryAccessible(getGeonamesDir());
+    }
+   
+    /**
+     * @return The option
+     * @see #setGeonamesFilesToDownload(String)
+     */
+    public String getGeonamesFilesToDownload() {
+    	return this.geonamesFilesToDownload;
+    }
+    
+    /**
+     * The list of the Geonames files to be download from the
+     * {@link #geonamesDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}, if not set or null, defaulting to {@link #GEONAMES_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param geonamesFilesToDownload
+     *            the filesToDownload to set
+     */
+    @Required
+    public void setGeonamesFilesToDownload(String geonamesFilesToDownload) {
+	if (geonamesFilesToDownload == null || geonamesFilesToDownload.trim().equals("")) {
+	    logger.warn("the option geonamesFilesToDownload is not set and will be set to his default value : " + GEONAMES_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.geonamesFilesToDownload = GEONAMES_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.geonamesFilesToDownload = geonamesFilesToDownload;
+	    logger.info("geonamesFilesToDownload=" + geonamesFilesToDownload);
+	}
+    }
+    
+   
+    
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #geonamesFilesToDownload}
+     */
+    public List<String> getGeonamesDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(geonamesFilesToDownload);
+    }
+    
+    /*
+     *       _       
+ 		 ___(_)_ __  
+		|_  / | '_ \ 
+ 		 / /| | |_) |
+		/___|_| .__/ 
+      		|_|   
+     */
+    
+    /**
+     * @return The option
+     * @see #setGeonamesZipCodeDownloadURL(String)
+     */
+    public String getGeonamesZipCodeDownloadURL() {
+    	return geonamesZipCodeDownloadURL;
+    }
+
+    /**
+     * The HTTP URL of the directory Where Geonames zip files are to be download
+     * from
+     * 
+     * @param geonamesZipCodeDownloadURL
+     *            The option
+     */
+    @Required
+    public void setGeonamesZipCodeDownloadURL(String geonamesZipCodeDownloadURL) {
+	if (!geonamesZipCodeDownloadURL.endsWith("/")) {
+	    this.geonamesZipCodeDownloadURL = geonamesZipCodeDownloadURL + "/";
+	} else {
+	    this.geonamesZipCodeDownloadURL = geonamesZipCodeDownloadURL;
+	}
+	logger.debug("set geonamesZipCodeDownloadURL to " + this.geonamesZipCodeDownloadURL);
+    }
+
+    
+    
+    /**
+     * @return the zipcode directory where the zipcode data are
+     */
+    public String getGeonamesZipCodeDir() {
+    	return geonamesZipCodeDir;
+    }
+    
+    /**
+     * The directory where the zip code files will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param geonamesZipCodeDir
+     *            the option
+     */
+    @Required
+    public void setGeonamesZipCodeDir(String geonamesZipCodeDir) {
+	if (!geonamesZipCodeDir.endsWith(File.separator)) {
+	    logger.debug(geonamesZipCodeDir + " does not end with " + File.separator);
+	    this.geonamesZipCodeDir = geonamesZipCodeDir + File.separator;
+	} else {
+	    this.geonamesZipCodeDir = geonamesZipCodeDir;
+	}
+	logger.debug("set geonamesZipCodeDir to " + this.geonamesZipCodeDir);
+    }
+
+   
+
+    
+    
+    
+    /*
+	                           _                 _       
+	  ___  ___ _ __ ___    ___| |_ _ __ ___  ___| |_ ___ 
+	 / _ \/ __| '_ ` _ \  / __| __| '__/ _ \/ _ \ __/ __|
+	| (_) \__ \ | | | | | \__ \ |_| | |  __/  __/ |_\__ \
+	 \___/|___/_| |_| |_| |___/\__|_|  \___|\___|\__|___/
+	                                                     
+     */
+    
+    /**
+     * @param openstreetmapImporterEnabled
+     *            enable or disable Openstreetmap importer
+     * @see ImporterConfig#isOpenstreetmapImporterEnabled()
+     */
+    @Required
+    public void setOpenstreetmapImporterEnabled(boolean openstreetmapImporterEnabled) {
+    	this.openstreetmapImporterEnabled = openstreetmapImporterEnabled;
+    }
+    
+    /**
+     * @return true if the importer should process the import of Openstreetmap
+     *         data
+     * @see ImporterConfig#isGeonamesImporterEnabled()
+     */
+    public boolean isOpenstreetmapImporterEnabled() {
+    	return openstreetmapImporterEnabled;
+    }
+    
+  
+    
+    /**
+     * @return The option
+     * @see #setOpenstreetMapDownloadURL(String)
+     */
+    public String getOpenstreetMapDownloadURL() {
+    	return openstreetMapDownloadURL;
+    }
+    
+    /**
+     * The HTTP URL of the directory Where openstreetmap streets files are to be
+     * download from
+     * 
+     * @param openstreetMapDownloadURL
+     *            The option
+     */
+    @Required
+    public void setOpenstreetMapDownloadURL(String openstreetMapDownloadURL) {
+	if (!openstreetMapDownloadURL.endsWith("/")) {
+	    this.openstreetMapDownloadURL = openstreetMapDownloadURL + "/";
+	} else {
+	    this.openstreetMapDownloadURL = openstreetMapDownloadURL;
+	}
+	logger.debug("set openstreetMapDownloadURL to " + this.openstreetMapDownloadURL);
+    }
+   
+    /**
+     * @return The option
+     * @see #setOpenStreetMapDir(String)
+     */
+    public String getOpenStreetMapDir() {
+    	return this.openStreetMapDir;
+    }
+    
+    /**
+     * The directory where the openStreetMap files will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param importerOpenStreetMapDir
+     *            the option
+     */
+    @Required
+    public void setOpenStreetMapDir(String importerOpenStreetMapDir) {
+	if (!importerOpenStreetMapDir.endsWith(File.separator)) {
+	    logger.debug(openStreetMapDir + " does not end with " + File.separator);
+	    this.openStreetMapDir = importerOpenStreetMapDir + File.separator;
+	} else {
+	    this.openStreetMapDir = importerOpenStreetMapDir;
+	}
+	logger.debug("set openStreetMapDir to " + this.openStreetMapDir);
+    }
+    
+    /**
+     * @return true if the directory with the file to import exists and is
+     *         accessible
+     */
+    public boolean isOpenStreetMapDownloadDirectoryAccessible() {
+    	return isDirectoryAccessible(getOpenStreetMapDir());
+    }
+    
+    /**
+     * @return The option
+     * @see #setOpenStreetMapFilesToDownload(String)
+     */
+    public String getOpenStreetMapFilesToDownload() {
+    	return this.openStreetMapFilesToDownload;
+    }
+    
+    /**
+     * The list of the Openstreetmap files to be download from the
+     * {@link #openstreetMapDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
+     * {@link #OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param openStreetMapFilesToDownload
+     *            The openstreetmap files to download to set
+     */
+    @Required
+    public void setOpenStreetMapFilesToDownload(String openStreetMapFilesToDownload) {
+	if (openStreetMapFilesToDownload == null || openStreetMapFilesToDownload.trim().equals("")) {
+	    logger.warn("the option openStreetMapFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.openStreetMapFilesToDownload = OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.openStreetMapFilesToDownload = openStreetMapFilesToDownload;
+	    logger.info("openStreetMapFilesToDownload=" + this.openStreetMapFilesToDownload);
+	}
+    }
+    
+   
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #openStreetMapFilesToDownload}
+     */
+    public List<String> getOpenStreetMapDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(openStreetMapFilesToDownload);
+    }
+    
+    
+   /*
+    												_                   
+		 ___  ___ _ __ ___    _ __  _   _ _ __ ___ | |__   ___ _ __ ___ 
+		/ _ \/ __| '_ ` _ \  | '_ \| | | | '_ ` _ \| '_ \ / _ \ '__/ __|
+	   | (_) \__ \ | | | | | | | | | |_| | | | | | | |_) |  __/ |  \__ \
+		\___/|___/_| |_| |_| |_| |_|\__,_|_| |_| |_|_.__/ \___|_|  |___/
+                         
+    */
+    
+    /**
+     * @return true if the importer should process the import of Openstreetmap house numbers
+     *         data
+     * @see ImporterConfig#isGeonamesImporterEnabled()
+     */
+    public boolean isOpenstreetmapHouseNumberImporterEnabled() {
+    	return  openstreetmapHouseNumberImporterEnabled;
+    }
+    
+    /**
+     * @param openstreetmapHouseNumberImporterEnabled
+     *            enable or disable Openstreetmap house numbers importer
+     * @see ImporterConfig#isOpenstreetmapImporterEnabled()
+     */
+    @Required
+    public void setOpenstreetmapHouseNumberImporterEnabled(boolean openstreetmapHouseNumberImporterEnabled) {
+    	this.openstreetmapHouseNumberImporterEnabled = openstreetmapHouseNumberImporterEnabled;
+    }
+    
+    /**
+     * @return The option
+     * @see #setOpenstreetMaphouseNumbersDownloadURL(String)
+     */
+    public String getOpenstreetMaphouseNumbersDownloadURL() {
+    	return openstreetMapHouseNumbersDownloadURL;
+    }
+    
+    /**
+     * The HTTP URL of the directory Where openstreetmap house numbers files are to be
+     * download from
+     * 
+     * @param openstreetMaphouseNumberDownloadURL
+     *            The option
+     */
+    @Required
+    public void setOpenstreetMaphouseNumbersDownloadURL(String openstreetMapHouseNumberDownloadURL) {
+	if (!openstreetMapHouseNumberDownloadURL.endsWith("/")) {
+	    this.openstreetMapHouseNumbersDownloadURL = openstreetMapHouseNumberDownloadURL + "/";
+	} else {
+	    this.openstreetMapHouseNumbersDownloadURL = openstreetMapHouseNumberDownloadURL;
+	}
+	logger.debug("set openstreetMaphouseNumberDownloadURL to " + this.openstreetMapHouseNumbersDownloadURL);
+    }
+    
+   
+    /**
+     * @return The option
+     * @see #setOpenStreetMapHouseNumberDir(String)
+     */
+    public String getOpenStreetMapHouseNumberDir() {
+    	return this.openStreetMapHouseNumberDir;
+    } 
+    
+    /**
+     * The directory where the openStreetMap files for house numbers will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param importerOpenStreetMapHouseNumberDir
+     *            the option
+     */
+    @Required
+    public void setOpenStreetMapHouseNumberDir(String importerOpenStreetMapHouseNumberDir) {
+	if (!importerOpenStreetMapHouseNumberDir.endsWith(File.separator)) {
+	    logger.debug(openStreetMapHouseNumberDir + " does not end with " + File.separator);
+	    this.openStreetMapHouseNumberDir = importerOpenStreetMapHouseNumberDir + File.separator;
+	} else {
+	    this.openStreetMapHouseNumberDir = importerOpenStreetMapHouseNumberDir;
+	}
+	logger.debug("set openStreetMapHouseNumberDir to " + this.openStreetMapHouseNumberDir);
+    }
+    
+    
+    /**
+     * @return true if the directory with the file to import exists and is
+     *         accessible
+     */
+    public boolean isOpenStreetMapHouseNumberDownloadDirectoryAccessible() {
+    	return isDirectoryAccessible(getOpenStreetMapHouseNumberDir());
+    }
+    
+    /**
+     * @return The option
+     * @see #setOpenStreetMapHouseNumberFilesToDownload(String)
+     */
+    public String getOpenStreetMapHouseNumberFilesToDownload() {
+    	return this.openStreetMapHouseNumberFilesToDownload;
+    }
+    
+    /**
+     * The list of the Openstreetmap house number files to be download from the
+     * {@link #openstreetMapHouseNumbersDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
+     * {@link #OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param openStreetMapFilesToDownload
+     *            The openstreetmap filesToDownload to set
+     */
+    @Required
+    public void setOpenStreetMapHouseNumberFilesToDownload(String openStreetMapHouseNumberFilesToDownload) {
+	if (openStreetMapHouseNumberFilesToDownload == null || openStreetMapHouseNumberFilesToDownload.trim().equals("")) {
+	    logger.warn("the option openStreetMapHouseNumberFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.openStreetMapHouseNumberFilesToDownload = OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.openStreetMapHouseNumberFilesToDownload = openStreetMapHouseNumberFilesToDownload;
+	    logger.info("openStreetMapHouseNumberFilesToDownload=" + this.openStreetMapHouseNumberFilesToDownload);
+	}
+    }
+
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #openStreetMapHouseNumberFilesToDownload}
+     */
+    public List<String> getOpenStreetMapHouseNumberDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(openStreetMapHouseNumberFilesToDownload);
+    }
+    
+    
+   /*
+    *                          _ _   _           
+  	 ___  ___ _ __ ___     ___(_) |_(_) ___  ___ 
+ 	/ _ \/ __| '_ ` _ \   / __| | __| |/ _ \/ __|
+   | (_) \__ \ | | | | | | (__| | |_| |  __/\__ \
+ 	\___/|___/_| |_| |_|  \___|_|\__|_|\___||___/
+    */
+    
+    
+    /**
+     * @return The option
+     * @see #setOpenstreetMapCitiesDownloadURL(String)
+     */
+    public String getOpenstreetMapCitiesDownloadURL() {
+    	return openstreetMapCitiesDownloadURL;
+    }
+    
+    /**
+     * The HTTP URL of the directory Where openstreetmap cities files are to be
+     * download from
+     * 
+     * @param openstreetMapHouseNumbersDownloadURL
+     *            The option
+     */
+    @Required
+    public void setOpenstreetMapCitiesDownloadURL(String openstreetMapCitiesDownloadURL) {
+	if (!openstreetMapCitiesDownloadURL.endsWith("/")) {
+	    this.openstreetMapCitiesDownloadURL = openstreetMapCitiesDownloadURL + "/";
+	} else {
+	    this.openstreetMapCitiesDownloadURL = openstreetMapCitiesDownloadURL;
+	}
+	logger.debug("set openstreetMapCitiesDownloadURL to " + this.openstreetMapCitiesDownloadURL);
+    }
+    
+
+    /**
+     * @return The option
+     * @see #setOpenStreetMapCitiesDir(String)
+     */
+    public String getOpenStreetMapCitiesDir() {
+    	return this.openStreetMapCitiesDir;
+    }
+    
+
+    /**
+     * The directory where the openStreetMap cities files will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param importeropenStreetMapDir
+     *            the option
+     */
+    @Required
+    public void setOpenStreetMapCitiesDir(String openStreetMapCitiesDir) {
+	if (!openStreetMapCitiesDir.endsWith(File.separator)) {
+	    logger.debug(openStreetMapCitiesDir + " does not end with " + File.separator);
+	    this.openStreetMapCitiesDir = openStreetMapCitiesDir + File.separator;
+	} else {
+	    this.openStreetMapCitiesDir = openStreetMapCitiesDir;
+	}
+	logger.debug("set openStreetMapCitiesDir to " + this.openStreetMapCitiesDir);
+    }
+    
+    
+    
+    /**
+     * @return true if the directory with the osm cities file to import exists and is
+     *         accessible
+     */
+    public boolean isOpenStreetMapCitiesDirectoryAccessible() {
+    	return isDirectoryAccessible(getOpenStreetMapCitiesDir());
+    }
+    
+    /**
+     * @return The option
+     * @see #setOpenStreetMapCitiesFilesToDownload(String)
+     */
+    public String getOpenStreetMapCitiesFilesToDownload() {
+    	return this.openStreetMapCitiesFilesToDownload;
+    }
+    
+    
+   
+    
+    
+    /**
+     * The list of the cities Openstreetmap to be download from the
+     * {@link #openstreetMapCitiesDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
+     * {@link #OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param openStreetMapFilesToDownload
+     *            The openstreetmap filesToDownload to set
+     */
+    @Required
+    public void setOpenStreetMapCitiesFilesToDownload(String openStreetMapCitiesFilesToDownload) {
+	if (openStreetMapCitiesFilesToDownload == null || openStreetMapCitiesFilesToDownload.trim().equals("")) {
+	    logger.warn("the option openStreetMapCitiesFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.openStreetMapCitiesFilesToDownload = OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.openStreetMapCitiesFilesToDownload = openStreetMapCitiesFilesToDownload;
+	    logger.info("openStreetMapCitiesFilesToDownload=" + openStreetMapCitiesFilesToDownload);
+	}
+    }
+    
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #openStreetMapCitiesFilesToDownload}
+     */
+    public List<String> getOpenStreetMapCitiesDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(openStreetMapCitiesFilesToDownload);
+    }
+    
+    /*
+  	 ___  ___ _ __ ___    _ __   ___ (_)
+ 	/ _ \/ __| '_ ` _ \  | '_ \ / _ \| |
+   | (_) \__ \ | | | | | | |_) | (_) | |
+ 	\___/|___/_| |_| |_| | .__/ \___/|_|
+                      	 |_|            
+
+     */
+
+   
+    /**
+     * @return The option
+     * @see #setOpenstreetMapPoisDownloadURL(String)
+     */
+    public String getOpenstreetMapPoisDownloadURL() {
+    	return openstreetMapPoisDownloadURL;
+    }
+
+   
+    /**
+     * The HTTP URL of the directory Where openstreetmap POI files are to be
+     * download from
+     * 
+     * @param openstreetMapHouseNumbersDownloadURL
+     *            The option
+     */
+    @Required
+    public void setOpenstreetMapPoisDownloadURL(String openstreetMapPoisDownloadURL) {
+	if (!openstreetMapPoisDownloadURL.endsWith("/")) {
+	    this.openstreetMapPoisDownloadURL = openstreetMapPoisDownloadURL + "/";
+	} else {
+	    this.openstreetMapPoisDownloadURL = openstreetMapPoisDownloadURL;
+	}
+	logger.debug("set openstreetMapPoisDownloadURL to " + this.openstreetMapPoisDownloadURL);
+    }
+
+    
+    /**
+     * @return The option
+     * @see #setOpenStreetMapPoisDir(String)
+     */
+    public String getOpenStreetMapPoisDir() {
+    	return this.openStreetMapPoisDir;
+    }
+
+    
+    /**
+     * The directory where the openStreetMap POI files will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param importeropenStreetMapDir
+     *            the option
+     */
+    @Required
+    public void setOpenStreetMapPoisDir(String openStreetMapPoisDir) {
+	if (!openStreetMapPoisDir.endsWith(File.separator)) {
+	    logger.debug(openStreetMapPoisDir + " does not end with " + File.separator);
+	    this.openStreetMapPoisDir = openStreetMapPoisDir + File.separator;
+	} else {
+	    this.openStreetMapPoisDir = openStreetMapPoisDir;
+	}
+	logger.debug("set openStreetMapPoisDir to " + this.openStreetMapPoisDir);
+    }
+    
+    /**
+     * @return true if the directory with the osm Poi file to import exists and is
+     *         accessible
+     */
+    public boolean isOpenStreetMapPoisDirectoryAccessible() {
+    	return isDirectoryAccessible(getOpenStreetMapPoisDir());
+    }
+
+    /**
+     * @return The option
+     * @see #setOpenStreetMapPoisFilesToDownload(String)
+     */
+    public String getOpenStreetMapPoisFilesToDownload() {
+    	return this.openStreetMapPoisFilesToDownload;
+    }
+    
+    /**
+     * The list of the Openstreetmap POI to be download from the
+     * {@link #openstreetMapPoisDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
+     * {@link #OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param openStreetMapFilesToDownload
+     *            The openstreetmap filesToDownload to set
+     */
+    @Required
+    public void setOpenStreetMapPoisFilesToDownload(String openStreetMapPoisFilesToDownload) {
+	if (openStreetMapPoisFilesToDownload == null || openStreetMapPoisFilesToDownload.trim().equals("")) {
+	    logger.warn("the option openStreetMapPoisFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.openStreetMapPoisFilesToDownload = OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.openStreetMapPoisFilesToDownload = openStreetMapPoisFilesToDownload;
+	    logger.info("openStreetMapPoisFilesToDownload=" + openStreetMapPoisFilesToDownload);
+	}
+    }
+    
+    
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #openStreetMapCitiesFilesToDownload}
+     */
+    public List<String> getOpenStreetMapPoisDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(openStreetMapPoisFilesToDownload);
+    }
+    
+    
+    //_____________________________________________________end importer specific config______________________________
+    
+    private List<String> splitSemiColmunStringToList(String stringToSplit) {
+	List<String> list = new ArrayList<String>();
+	if (stringToSplit != null && stringToSplit.length() != 0) {
+	    String[] splited = stringToSplit.split(OPTION_SEPARATOR);
+	    for (int i = 0; i < splited.length; i++) {
+		list.add(splited[i]);
+	    }
+	}
+	return list;
+    }
+
 
     /**
      * What should we do if the Adm file for the specified level has already
@@ -350,7 +940,7 @@ public class ImporterConfig {
      * @see #setAcceptRegExString(String)
      */
     public String getAcceptRegExString() {
-	return this.acceptRegExString;
+    	return this.acceptRegExString;
     }
 
     /**
@@ -358,7 +948,7 @@ public class ImporterConfig {
      * @see #setSyncAdmCodesWithLinkedAdmOnes(boolean)
      */
     public boolean isSyncAdmCodesWithLinkedAdmOnes() {
-	return this.syncAdmCodesWithLinkedAdmOnes;
+    	return this.syncAdmCodesWithLinkedAdmOnes;
     }
 
     /**
@@ -366,7 +956,7 @@ public class ImporterConfig {
      * @see #setTryToDetectAdmIfNotFound(boolean)
      */
     public boolean isTryToDetectAdmIfNotFound() {
-	return this.tryToDetectAdmIfNotFound;
+    	return this.tryToDetectAdmIfNotFound;
     }
 
     /**
@@ -398,8 +988,7 @@ public class ImporterConfig {
 	    return;
 	}
 	this.acceptRegExString = BASE_ACCEPT_REGEX + acceptRegExString;
-	logger.info("acceptRegExString=" + this.acceptRegExString);
-
+		logger.info("acceptRegExString=" + this.acceptRegExString);
     }
 
     /**
@@ -427,8 +1016,8 @@ public class ImporterConfig {
      */
     @Required
     public void setSyncAdmCodesWithLinkedAdmOnes(boolean setAdmCodesWithLinkedAdmObject) {
-	this.syncAdmCodesWithLinkedAdmOnes = setAdmCodesWithLinkedAdmObject;
-	logger.info("setAdmCodesWithLinkedAdmObject=" + setAdmCodesWithLinkedAdmObject);
+    	this.syncAdmCodesWithLinkedAdmOnes = setAdmCodesWithLinkedAdmObject;
+    	logger.info("setAdmCodesWithLinkedAdmObject=" + setAdmCodesWithLinkedAdmObject);
     }
 
     /**
@@ -442,8 +1031,8 @@ public class ImporterConfig {
      */
     @Required
     public void setTryToDetectAdmIfNotFound(boolean tryToDetectAdmIfNotFound) {
-	this.tryToDetectAdmIfNotFound = tryToDetectAdmIfNotFound;
-	logger.info("tryToDetectAdmIfNotFound=" + tryToDetectAdmIfNotFound);
+    	this.tryToDetectAdmIfNotFound = tryToDetectAdmIfNotFound;
+    	logger.info("tryToDetectAdmIfNotFound=" + tryToDetectAdmIfNotFound);
     }
 
     /**
@@ -451,7 +1040,7 @@ public class ImporterConfig {
      * @see #setAdm1ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions)
      */
     public AdmExtracterStrategyOptions getAdm1ExtracterStrategyIfAlreadyExists() {
-	return this.adm1ExtracterStrategyIfAlreadyExists;
+    	return this.adm1ExtracterStrategyIfAlreadyExists;
     }
 
     /**
@@ -463,7 +1052,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm1ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions adm1ExtracterStrategy) {
-	this.adm1ExtracterStrategyIfAlreadyExists = adm1ExtracterStrategy;
+    	this.adm1ExtracterStrategyIfAlreadyExists = adm1ExtracterStrategy;
     }
 
     /**
@@ -471,7 +1060,7 @@ public class ImporterConfig {
      * @see #setAdm2ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions)
      */
     public AdmExtracterStrategyOptions getAdm2ExtracterStrategyIfAlreadyExists() {
-	return this.adm2ExtracterStrategyIfAlreadyExists;
+    	return this.adm2ExtracterStrategyIfAlreadyExists;
     }
 
     /**
@@ -483,7 +1072,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm2ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions adm2ExtracterStrategy) {
-	this.adm2ExtracterStrategyIfAlreadyExists = adm2ExtracterStrategy;
+    	this.adm2ExtracterStrategyIfAlreadyExists = adm2ExtracterStrategy;
     }
 
     /**
@@ -491,7 +1080,7 @@ public class ImporterConfig {
      * @see #setAdm3ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions)
      */
     public AdmExtracterStrategyOptions getAdm3ExtracterStrategyIfAlreadyExists() {
-	return this.adm3ExtracterStrategyIfAlreadyExists;
+    	return this.adm3ExtracterStrategyIfAlreadyExists;
     }
 
     /**
@@ -503,7 +1092,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm3ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions adm3ExtracterStrategy) {
-	this.adm3ExtracterStrategyIfAlreadyExists = adm3ExtracterStrategy;
+    	this.adm3ExtracterStrategyIfAlreadyExists = adm3ExtracterStrategy;
     }
 
     /**
@@ -511,7 +1100,7 @@ public class ImporterConfig {
      * @see ImporterConfig#setAdm4ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions)
      */
     public AdmExtracterStrategyOptions getAdm4ExtracterStrategyIfAlreadyExists() {
-	return this.adm4ExtracterStrategyIfAlreadyExists;
+    	return this.adm4ExtracterStrategyIfAlreadyExists;
     }
 
     /**
@@ -523,7 +1112,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm4ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions adm4ExtracterStrategy) {
-	adm4ExtracterStrategyIfAlreadyExists = adm4ExtracterStrategy;
+    	adm4ExtracterStrategyIfAlreadyExists = adm4ExtracterStrategy;
     }
 
     /**
@@ -532,7 +1121,7 @@ public class ImporterConfig {
      * @see MissingRequiredFieldException
      */
     public boolean isMissingRequiredFieldThrows() {
-	return this.missingRequiredFieldThrows;
+    	return this.missingRequiredFieldThrows;
     }
 
     /**
@@ -546,7 +1135,7 @@ public class ImporterConfig {
      */
     @Required
     public void setMissingRequiredFieldThrows(boolean missingRequiredFieldThrows) {
-	this.missingRequiredFieldThrows = missingRequiredFieldThrows;
+    	this.missingRequiredFieldThrows = missingRequiredFieldThrows;
     }
 
     /**
@@ -554,7 +1143,7 @@ public class ImporterConfig {
      * @see #setWrongNumberOfFieldsThrows(boolean)
      */
     public boolean isWrongNumberOfFieldsThrows() {
-	return this.wrongNumberOfFieldsThrows;
+    	return this.wrongNumberOfFieldsThrows;
     }
 
     /**
@@ -567,7 +1156,7 @@ public class ImporterConfig {
      */
     @Required
     public void setWrongNumberOfFieldsThrows(boolean wrongNumberOfFieldsThrows) {
-	this.wrongNumberOfFieldsThrows = wrongNumberOfFieldsThrows;
+    	this.wrongNumberOfFieldsThrows = wrongNumberOfFieldsThrows;
     }
 
     /**
@@ -575,7 +1164,7 @@ public class ImporterConfig {
      * @see #setImportGisFeatureEmbededAlternateNames(boolean)
      */
     public boolean isImportGisFeatureEmbededAlternateNames() {
-	return importGisFeatureEmbededAlternateNames;
+    	return importGisFeatureEmbededAlternateNames;
     }
 
     /**
@@ -591,266 +1180,15 @@ public class ImporterConfig {
     	this.importGisFeatureEmbededAlternateNames = importGisFeatureEmbededAlternateNames;
     }
 
-    /**
-     * @return The option
-     * @see #setOpenStreetMapDir(String)
-     */
-    public String getOpenStreetMapDir() {
-    	return this.openStreetMapDir;
-    }
+   
     
-    /**
-     * @return The option
-     * @see #setOpenStreetMapHouseNumberDir(String)
-     */
-    public String getOpenStreetMapHouseNumberDir() {
-    	return this.openStreetMapHouseNumberDir;
-    }
-
-    /**
-     * The directory where the openStreetMap files will be retrieved and
-     * processed. It must ends with / or \ according to the System
-     * 
-     * @param importeropenStreetMapDir
-     *            the option
-     */
-    @Required
-    public void setOpenStreetMapDir(String importeropenStreetMapDir) {
-	if (!importeropenStreetMapDir.endsWith(File.separator)) {
-	    logger.debug(openStreetMapDir + " does not end with " + File.separator);
-	    this.openStreetMapDir = importeropenStreetMapDir + File.separator;
-	} else {
-	    this.openStreetMapDir = importeropenStreetMapDir;
-	}
-	logger.debug("set openStreetMapDir to " + this.openStreetMapDir);
-    }
-    
-    /**
-     * @return The option
-     * @see #setOpenStreetMapCitiesDir(String)
-     */
-    public String getOpenStreetMapCitiesDir() {
-    	return this.openStreetMapCitiesDir;
-    }
-
-    /**
-     * The directory where the openStreetMap files will be retrieved and
-     * processed. It must ends with / or \ according to the System
-     * 
-     * @param importeropenStreetMapDir
-     *            the option
-     */
-    @Required
-    public void setOpenStreetMapCitiesDir(String openStreetMapCitiesDir) {
-	if (!openStreetMapCitiesDir.endsWith(File.separator)) {
-	    logger.debug(openStreetMapCitiesDir + " does not end with " + File.separator);
-	    this.openStreetMapCitiesDir = openStreetMapCitiesDir + File.separator;
-	} else {
-	    this.openStreetMapCitiesDir = openStreetMapCitiesDir;
-	}
-	logger.debug("set openStreetMapCitiesDir to " + this.openStreetMapCitiesDir);
-    }
-    
-    
-
-    /**
-     * The directory where the openStreetMap files for house number will be retrieved and
-     * processed. It must ends with / or \ according to the System
-     * 
-     * @param importeropenStreetMapHouseNumberDir
-     *            the option
-     */
-    @Required
-    public void setOpenStreetMapHouseNumberDir(String importeropenStreetMapHouseNumberDir) {
-	if (!importeropenStreetMapHouseNumberDir.endsWith(File.separator)) {
-	    logger.debug(openStreetMapHouseNumberDir + " does not end with " + File.separator);
-	    this.openStreetMapHouseNumberDir = importeropenStreetMapHouseNumberDir + File.separator;
-	} else {
-	    this.openStreetMapHouseNumberDir = importeropenStreetMapHouseNumberDir;
-	}
-	logger.debug("set openStreetMapHouseNumberDir to " + this.openStreetMapHouseNumberDir);
-    }
-
-    /**
-     * The directory where the openStreetMap files will be retrieved and
-     * processed. It must ends with / or \ according to the System
-     * 
-     * @param geonamesZipCodeDir
-     *            the option
-     */
-    @Required
-    public void setGeonamesZipCodeDir(String geonamesZipCodeDir) {
-	if (!geonamesZipCodeDir.endsWith(File.separator)) {
-	    logger.debug(geonamesZipCodeDir + " does not end with " + File.separator);
-	    this.geonamesZipCodeDir = geonamesZipCodeDir + File.separator;
-	} else {
-	    this.geonamesZipCodeDir = geonamesZipCodeDir;
-	}
-	logger.debug("set geonamesZipCodeDir to " + this.geonamesZipCodeDir);
-    }
-
-    public String getGeonamesZipCodeDir() {
-	return geonamesZipCodeDir;
-    }
-
-    /**
-     * The directory where the Geonames files will be retrieved and processed.
-     * It must ends with / or \ according to the System
-     * 
-     * @param importerGeonamesDir
-     *            the option
-     */
-    @Required
-    public void setGeonamesDir(String importerGeonamesDir) {
-	if (!importerGeonamesDir.endsWith(File.separator)) {
-	    logger.debug(importerGeonamesDir + " does not end with " + File.separator);
-	    this.geonamesDir = importerGeonamesDir + File.separator;
-	} else {
-	    this.geonamesDir = importerGeonamesDir;
-	}
-	logger.debug("set geonamesDir to " + this.geonamesDir);
-    }
-
-    /**
-     * @return The option
-     * @see #setGeonamesDir(String)
-     */
-    public String getGeonamesDir() {
-	return this.geonamesDir;
-    }
-
-    /**
-     * @return The option
-     * @see #setOpenstreetMapDownloadURL(String)
-     */
-    public String getOpenstreetMapDownloadURL() {
-	return openstreetMapDownloadURL;
-    }
-    
-    
-    /**
-     * @return The option
-     * @see #setOpenstreetMaphouseNumbersDownloadURL(String)
-     */
-    public String getOpenstreetMaphouseNumbersDownloadURL() {
-	return openstreetMaphouseNumbersDownloadURL;
-    }
-    
-    /**
-     * @return The option
-     * @see #setOpenstreetMapcitiesDownloadURL(String)
-     */
-    public String getOpenstreetMapCitiesDownloadURL() {
-	return openstreetMapCitiesDownloadURL;
-    }
-
-    /**
-     * The HTTP URL of the directory Where openstreetmap files are to be
-     * download from
-     * 
-     * @param openstreetMapDownloadURL
-     *            The option
-     */
-    @Required
-    public void setOpenstreetMapDownloadURL(String openstreetMapDownloadURL) {
-	if (!openstreetMapDownloadURL.endsWith("/")) {
-	    this.openstreetMapDownloadURL = openstreetMapDownloadURL + "/";
-	} else {
-	    this.openstreetMapDownloadURL = openstreetMapDownloadURL;
-	}
-	logger.debug("set openstreetMapDownloadURL to " + this.openstreetMapDownloadURL);
-    }
-    
-    /**
-     * The HTTP URL of the directory Where openstreetmap house number files are to be
-     * download from
-     * 
-     * @param openstreetMaphouseNumberDownloadURL
-     *            The option
-     */
-    @Required
-    public void setOpenstreetMaphouseNumbersDownloadURL(String openstreetMaphouseNumberDownloadURL) {
-	if (!openstreetMaphouseNumberDownloadURL.endsWith("/")) {
-	    this.openstreetMaphouseNumbersDownloadURL = openstreetMaphouseNumberDownloadURL + "/";
-	} else {
-	    this.openstreetMaphouseNumbersDownloadURL = openstreetMaphouseNumberDownloadURL;
-	}
-	logger.debug("set openstreetMaphouseNumberDownloadURL to " + this.openstreetMaphouseNumbersDownloadURL);
-    }
-    
-    /**
-     * The HTTP URL of the directory Where openstreetmap house number files are to be
-     * download from
-     * 
-     * @param openstreetMaphouseNumbersDownloadURL
-     *            The option
-     */
-    @Required
-    public void setOpenstreetMapCitiesDownloadURL(String openstreetMapCitiesDownloadURL) {
-	if (!openstreetMapCitiesDownloadURL.endsWith("/")) {
-	    this.openstreetMapCitiesDownloadURL = openstreetMapCitiesDownloadURL + "/";
-	} else {
-	    this.openstreetMapCitiesDownloadURL = openstreetMapCitiesDownloadURL;
-	}
-	logger.debug("set openstreetMapCitiesDownloadURL to " + this.openstreetMapCitiesDownloadURL);
-    }
-
-    /**
-     * @return The option
-     * @see #setGeonamesDownloadURL(String)
-     */
-    public String getGeonamesDownloadURL() {
-	return geonamesDownloadURL;
-    }
-
-    /**
-     * The HTTP URL of the directory Where Geonames files are to be download
-     * from
-     * 
-     * @param importerGeonamesDownloadURL
-     *            The option
-     */
-    @Required
-    public void setGeonamesDownloadURL(String importerGeonamesDownloadURL) {
-	if (!importerGeonamesDownloadURL.endsWith("/")) {
-	    this.geonamesDownloadURL = importerGeonamesDownloadURL + "/";
-	} else {
-	    this.geonamesDownloadURL = importerGeonamesDownloadURL;
-	}
-	logger.debug("set geonamesDownloadURL to " + this.geonamesDownloadURL);
-    }
-
-    /**
-     * @return The option
-     * @see #setGeonamesDownloadURL(String)
-     */
-    public String getGeonamesZipCodeDownloadURL() {
-	return geonamesZipCodeDownloadURL;
-    }
-
-    /**
-     * The HTTP URL of the directory Where Geonames zip files are to be download
-     * from
-     * 
-     * @param geonamesZipCodeDownloadURL
-     *            The option
-     */
-    @Required
-    public void setGeonamesZipCodeDownloadURL(String geonamesZipCodeDownloadURL) {
-	if (!geonamesZipCodeDownloadURL.endsWith("/")) {
-	    this.geonamesZipCodeDownloadURL = geonamesZipCodeDownloadURL + "/";
-	} else {
-	    this.geonamesZipCodeDownloadURL = geonamesZipCodeDownloadURL;
-	}
-	logger.debug("set geonamesZipCodeDownloadURL to " + this.geonamesZipCodeDownloadURL);
-    }
-
+   
     /**
      * @return The option
      * @see #setRetrieveFiles(boolean)
      */
     public boolean isRetrieveFiles() {
-	return this.retrieveFiles;
+    	return this.retrieveFiles;
     }
 
     /**
@@ -862,127 +1200,18 @@ public class ImporterConfig {
      */
     @Required
     public void setRetrieveFiles(boolean retrieveFiles) {
-	this.retrieveFiles = retrieveFiles;
+    	this.retrieveFiles = retrieveFiles;
     }
 
-    /**
-     * @return The option
-     * @see #setOpenStreetMapFilesToDownload(String)
-     */
-    public String getOpenStreetMapFilesToDownload() {
-	return this.openStreetMapFilesToDownload;
-    }
     
     
-    /**
-     * @return The option
-     * @see #setOpenStreetMapHouseNumberFilesToDownload(String)
-     */
-    public String getOpenStreetMapHouseNumberFilesToDownload() {
-    	return this.openStreetMapHouseNumberFilesToDownload;
-    }
-    
-    /**
-     * @return The option
-     * @see #setOpenStreetMapHouseNumberFilesToDownload(String)
-     */
-    public String getOpenStreetMapCitiesFilesToDownload() {
-    	return this.openStreetMapCitiesFilesToDownload;
-    }
-    
-    /**
-     * The list of the cities Openstreetmap to be download from the
-     * {@link #openstreetMapCitiesDownloadURL}. the several files will be separated by
-     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
-     * {@link #OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD}
-     * 
-     * @param openStreetMapFilesToDownload
-     *            The openstreetmap filesToDownload to set
-     */
-    @Required
-    public void setOpenStreetMapCitiesFilesToDownload(String openStreetMapCitiesFilesToDownload) {
-	if (openStreetMapCitiesFilesToDownload == null || openStreetMapCitiesFilesToDownload.trim().equals("")) {
-	    logger.warn("the option openStreetMapCitiesFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD);
-	    this.openStreetMapCitiesFilesToDownload = OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD;
-	} else {
-	    this.openStreetMapCitiesFilesToDownload = openStreetMapCitiesFilesToDownload;
-	    logger.info("openStreetMapCitiesFilesToDownload=" + openStreetMapCitiesFilesToDownload);
-	}
-    }
-
-    /**
-     * The list of the Openstreetmap to be download from the
-     * {@link #openstreetMapDownloadURL}. the several files will be separated by
-     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
-     * {@link #OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD}
-     * 
-     * @param openStreetMapFilesToDownload
-     *            The openstreetmap filesToDownload to set
-     */
-    @Required
-    public void setOpenStreetMapFilesToDownload(String openStreetMapFilesToDownload) {
-	if (openStreetMapFilesToDownload == null || openStreetMapFilesToDownload.trim().equals("")) {
-	    logger.warn("the option openStreetMapFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
-	    this.openStreetMapFilesToDownload = OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD;
-	} else {
-	    this.openStreetMapFilesToDownload = openStreetMapFilesToDownload;
-	    logger.info("openStreetMapFilesToDownload=" + openStreetMapFilesToDownload);
-	}
-    }
-    
-    /**
-     * The list of the Openstreetmap house number files to be download from the
-     * {@link #openstreetMaphouseNumbersDownloadURL}. the several files will be separated by
-     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
-     * {@link #OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD}
-     * 
-     * @param openStreetMapFilesToDownload
-     *            The openstreetmap filesToDownload to set
-     */
-    @Required
-    public void setOpenStreetMapHouseNumberFilesToDownload(String openStreetMapHouseNumberFilesToDownload) {
-	if (openStreetMapHouseNumberFilesToDownload == null || openStreetMapHouseNumberFilesToDownload.trim().equals("")) {
-	    logger.warn("the option openStreetMapHouseNumberFilesToDownload is not set and will be set to his default value : " + OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD);
-	    this.openStreetMapHouseNumberFilesToDownload = OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD;
-	} else {
-	    this.openStreetMapHouseNumberFilesToDownload = openStreetMapHouseNumberFilesToDownload;
-	    logger.info("openStreetMapHouseNumberFilesToDownload=" + openStreetMapHouseNumberFilesToDownload);
-	}
-    }
-
-    /**
-     * @return The option
-     * @see #setGeonamesFilesToDownload(String)
-     */
-    public String getGeonamesFilesToDownload() {
-	return this.geonamesFilesToDownload;
-    }
-
-    /**
-     * The list of the Geonames files to be download from the
-     * {@link #geonamesDownloadURL}. the several files will be separated by
-     * {@link #OPTION_SEPARATOR}, il not set or null, defaulting to {@link #GEONAMES_DEFAULT_FILES_TO_DOWNLOAD}
-     * 
-     * @param geonamesFilesToDownload
-     *            the filesToDownload to set
-     */
-    @Required
-    public void setGeonamesFilesToDownload(String geonamesFilesToDownload) {
-	if (geonamesFilesToDownload == null || geonamesFilesToDownload.trim().equals("")) {
-	    logger.warn("the option geonamesFilesToDownload is not set and will be set to his default value : " + GEONAMES_DEFAULT_FILES_TO_DOWNLOAD);
-	    this.geonamesFilesToDownload = GEONAMES_DEFAULT_FILES_TO_DOWNLOAD;
-	} else {
-	    this.geonamesFilesToDownload = geonamesFilesToDownload;
-	    logger.info("geonamesFilesToDownload=" + geonamesFilesToDownload);
-	}
-    }
-
+   
     /**
      * @return the option
      * @see #getAdm1FileName()
      */
     public String getAdm1FileName() {
-	return this.adm1FileName;
+    	return this.adm1FileName;
     }
 
     /**
@@ -993,7 +1222,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm1FileName(String adm1FileName) {
-	this.adm1FileName = adm1FileName;
+    	this.adm1FileName = adm1FileName;
     }
 
     /**
@@ -1001,7 +1230,7 @@ public class ImporterConfig {
      * @see #getAdm2FileName()
      */
     public String getAdm2FileName() {
-	return this.adm2FileName;
+    	return this.adm2FileName;
     }
 
     /**
@@ -1012,7 +1241,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm2FileName(String adm2FileName) {
-	this.adm2FileName = adm2FileName;
+    	this.adm2FileName = adm2FileName;
     }
 
     /**
@@ -1020,7 +1249,7 @@ public class ImporterConfig {
      * @see #getAdm3FileName()
      */
     public String getAdm3FileName() {
-	return this.adm3FileName;
+    	return this.adm3FileName;
     }
 
     /**
@@ -1031,7 +1260,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm3FileName(String adm3FileName) {
-	this.adm3FileName = adm3FileName;
+    	this.adm3FileName = adm3FileName;
     }
 
     /**
@@ -1039,7 +1268,7 @@ public class ImporterConfig {
      * @see #getAdm4FileName()
      */
     public String getAdm4FileName() {
-	return adm4FileName;
+    	return adm4FileName;
     }
 
     /**
@@ -1050,7 +1279,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAdm4FileName(String adm4FileName) {
-	this.adm4FileName = adm4FileName;
+    	this.adm4FileName = adm4FileName;
     }
 
     /**
@@ -1058,7 +1287,7 @@ public class ImporterConfig {
      * @see #getCountriesFileName()
      */
     public String getCountriesFileName() {
-	return this.countriesFileName;
+    	return this.countriesFileName;
     }
 
     /**
@@ -1069,7 +1298,7 @@ public class ImporterConfig {
      */
     @Required
     public void setCountriesFileName(String countryFileName) {
-	this.countriesFileName = countryFileName;
+    	this.countriesFileName = countryFileName;
     }
 
     /**
@@ -1077,7 +1306,7 @@ public class ImporterConfig {
      * @see #setLanguageFileName(String)
      */
     public String getLanguageFileName() {
-	return this.languageFileName;
+    	return this.languageFileName;
     }
 
     /**
@@ -1088,7 +1317,7 @@ public class ImporterConfig {
      */
     @Required
     public void setLanguageFileName(String languageFileName) {
-	this.languageFileName = languageFileName;
+    	this.languageFileName = languageFileName;
     }
 
     /**
@@ -1096,7 +1325,7 @@ public class ImporterConfig {
      * @see #getAlternateNamesFileName()
      */
     public String getAlternateNamesFileName() {
-	return alternateNamesFileName;
+    	return alternateNamesFileName;
     }
 
     /**
@@ -1107,7 +1336,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAlternateNamesFileName(String alternateNamesFileName) {
-	this.alternateNamesFileName = alternateNamesFileName;
+    	this.alternateNamesFileName = alternateNamesFileName;
     }
 
     /**
@@ -1122,7 +1351,7 @@ public class ImporterConfig {
      */
     @Required
     public void setMaxInsertsBeforeFlush(int maxInsertsBeforeFlush) {
-	this.maxInsertsBeforeFlush = maxInsertsBeforeFlush;
+    	this.maxInsertsBeforeFlush = maxInsertsBeforeFlush;
     }
 
     /**
@@ -1130,7 +1359,7 @@ public class ImporterConfig {
      * @see #setMaxInsertsBeforeFlush(int)
      */
     public int getMaxInsertsBeforeFlush() {
-	return this.maxInsertsBeforeFlush;
+    	return this.maxInsertsBeforeFlush;
     }
 
     /**
@@ -1140,54 +1369,25 @@ public class ImporterConfig {
      *         writable
      */
     private boolean isDirectoryAccessible(String directoryPath) {
-	File dir = new File(directoryPath);
-	return dir.exists() && dir.isDirectory() && dir.canWrite();
+    	File dir = new File(directoryPath);
+		return dir.exists() && dir.isDirectory() && dir.canWrite();
     }
 
-    /**
-     * @return true if the directory with the file to import exists and is
-     *         accessible
-     */
-    public boolean isGeonamesDownloadDirectoryAccessible() {
-	return isDirectoryAccessible(getGeonamesDir());
-    }
 
-    /**
-     * @return true if the directory with the file to import exists and is
-     *         accessible
-     */
-    public boolean isOpenStreetMapDownloadDirectoryAccessible() {
-	return isDirectoryAccessible(getOpenStreetMapDir());
-    }
-    
-    /**
-     * @return true if the directory with the file to import exists and is
-     *         accessible
-     */
-    public boolean isOpenStreetMapHouseNumberDownloadDirectoryAccessible() {
-	return isDirectoryAccessible(getOpenStreetMapHouseNumberDir());
-    }
-    
-    /**
-     * @return true if the directory with the file to import exists and is
-     *         accessible
-     */
-    public boolean isOpenStreetMapcitiesDirectoryAccessible() {
-	return isDirectoryAccessible(getOpenStreetMapCitiesDir());
-    }
 
     /**
      * @return true if the regexp of the feature class/ code are correct
      */
     public boolean isRegexpCorrects() {
-	return ImporterHelper.compileRegex(getAcceptRegExString()) != null;
+    	return ImporterHelper.compileRegex(getAcceptRegExString()) != null;
     }
 
     /**
      * @return true if the config is Ok to process the import
      */
     public boolean isConfigCorrectForImport() {
-	return isRegexpCorrects() && isGeonamesDownloadDirectoryAccessible() && isOpenStreetMapDownloadDirectoryAccessible() && isOpenStreetMapHouseNumberDownloadDirectoryAccessible();
+    	return isRegexpCorrects() && isGeonamesDownloadDirectoryAccessible() && isOpenStreetMapDownloadDirectoryAccessible() && isOpenStreetMapHouseNumberDownloadDirectoryAccessible()
+    			&& isOpenStreetMapCitiesDirectoryAccessible() && isOpenStreetMapPoisDirectoryAccessible();
     }
     
    
@@ -1196,7 +1396,7 @@ public class ImporterConfig {
      *         done or not
      */
     public String getAlreadyDoneFilePath() {
-	return getImporterMetadataDirectoryPath() + ALREADY_DONE_FILE_NAME;
+    	return getImporterMetadataDirectoryPath() + ALREADY_DONE_FILE_NAME;
     }
 
     /**
@@ -1204,7 +1404,7 @@ public class ImporterConfig {
      *         done or not
      */
     public String getImporterMetadataDirectoryPath() {
-	return getGeonamesDir() + IMPORTER_METADATA_RELATIVE_PATH + File.separator;
+    	return getGeonamesDir() + IMPORTER_METADATA_RELATIVE_PATH + File.separator;
     }
 
     /**
@@ -1236,7 +1436,7 @@ public class ImporterConfig {
      * @return The name of the file
      */
     public String getAlternateNameFeaturesFileName() {
-	return alternateNameFeaturesFileName;
+    	return alternateNameFeaturesFileName;
     }
 
     /**
@@ -1249,7 +1449,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAlternateNameFeaturesFileName(String alternateNameFeaturesFileName) {
-	this.alternateNameFeaturesFileName = alternateNameFeaturesFileName;
+    	this.alternateNameFeaturesFileName = alternateNameFeaturesFileName;
     }
 
     /**
@@ -1260,7 +1460,7 @@ public class ImporterConfig {
      * @return The name of the file
      */
     public String getAlternateNameAdm1FileName() {
-	return alternateNameAdm1FileName;
+    	return alternateNameAdm1FileName;
     }
 
     /**
@@ -1273,7 +1473,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAlternateNameAdm1FileName(String alternateNameAdm1FileName) {
-	this.alternateNameAdm1FileName = alternateNameAdm1FileName;
+    	this.alternateNameAdm1FileName = alternateNameAdm1FileName;
     }
 
     /**
@@ -1284,7 +1484,7 @@ public class ImporterConfig {
      * @return The name of the file
      */
     public String getAlternateNameAdm2FileName() {
-	return alternateNameAdm2FileName;
+    	return alternateNameAdm2FileName;
     }
 
     /**
@@ -1297,7 +1497,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAlternateNameAdm2FileName(String alternateNameAdm2FileName) {
-	this.alternateNameAdm2FileName = alternateNameAdm2FileName;
+    	this.alternateNameAdm2FileName = alternateNameAdm2FileName;
     }
 
     /**
@@ -1307,7 +1507,7 @@ public class ImporterConfig {
      * @return The name of the file
      */
     public String getAlternateNameCountryFileName() {
-	return alternateNameCountryFileName;
+    	return alternateNameCountryFileName;
     }
 
     /**
@@ -1319,7 +1519,7 @@ public class ImporterConfig {
      */
     @Required
     public void setAlternateNameCountryFileName(String alternateNameCountryFileName) {
-	this.alternateNameCountryFileName = alternateNameCountryFileName;
+    	this.alternateNameCountryFileName = alternateNameCountryFileName;
     }
 
     /**
@@ -1328,15 +1528,15 @@ public class ImporterConfig {
      * relevance of the geocoder
      */
     public boolean isOpenStreetMapFillIsIn() {
-	return openStreetMapFillIsIn;
+    	return openStreetMapFillIsIn;
     }
 
     /**
      * @see #isOpenStreetMapFillIsIn()
      */
     public void setOpenStreetMapFillIsIn(boolean openStreetMapFillIsIn) {
-	this.openStreetMapFillIsIn = openStreetMapFillIsIn;
-	CommentedProperties.editPropertyFromClassPathRessource(PROPERTIES_CONFIG_FILE_CLASSPATH, OPENSTREETMAP_FILL_ISIN_FIELD_NAME, String.valueOf(openStreetMapFillIsIn));
+    	this.openStreetMapFillIsIn = openStreetMapFillIsIn;
+    	CommentedProperties.editPropertyFromClassPathRessource(PROPERTIES_CONFIG_FILE_CLASSPATH, OPENSTREETMAP_FILL_ISIN_FIELD_NAME, String.valueOf(openStreetMapFillIsIn));
     }
 
 }
