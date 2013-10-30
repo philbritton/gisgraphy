@@ -172,7 +172,10 @@ public class GisFeatureDistance {
     
     private String isInZip;
     
-    private String fullyQualifiedAddress;
+    private String amenity;
+    
+
+	private String fullyQualifiedAddress;
 
     public GisFeatureDistance() {
 	super();
@@ -946,7 +949,13 @@ public class GisFeatureDistance {
 		return openstreetmap_map_url;
 	}
 
+	public String getAmenity() {
+		return amenity;
+	}
 
+	public void setAmenity(String amenity) {
+		this.amenity = amenity;
+	}
 
 	public void setLength(Double length) {
 		this.length = length;
