@@ -108,12 +108,24 @@ public class ImporterConfigTest {
 	public void isOpenStreetMapCitiesDirectoryAccessible() {
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setOpenStreetMapCitiesDir(accessiblePath);
-		assertTrue(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+		assertTrue(importerConfig.isOpenStreetMapCitiesDirectoryAccessible());
 
 		importerConfig.setOpenStreetMapCitiesDir(pathNotAccessible);
-		assertFalse(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+		assertFalse(importerConfig.isOpenStreetMapCitiesDirectoryAccessible());
 		importerConfig.setOpenStreetMapCitiesDir(filePath);
-		assertFalse(importerConfig.isOpenStreetMapcitiesDirectoryAccessible());
+		assertFalse(importerConfig.isOpenStreetMapCitiesDirectoryAccessible());
+	}
+	
+	@Test
+	public void isOpenStreetMapPoiDirectoryAccessible() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setOpenStreetMapPoisDir(accessiblePath);
+		assertTrue(importerConfig.isOpenStreetMapPoisDirectoryAccessible());
+
+		importerConfig.setOpenStreetMapPoisDir(pathNotAccessible);
+		assertFalse(importerConfig.isOpenStreetMapPoisDirectoryAccessible());
+		importerConfig.setOpenStreetMapPoisDir(filePath);
+		assertFalse(importerConfig.isOpenStreetMapPoisDirectoryAccessible());
 	}
 
 	@Test
@@ -141,6 +153,15 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapCitiesDir(OpenStreetMapCitiesDir);
 		Assert.assertTrue("setOpenStreetMapCitiesDir should add File separator", importerConfig.getOpenStreetMapCitiesDir().endsWith(File.separator));
 		Assert.assertEquals(OpenStreetMapCitiesDir + File.separator, importerConfig.getOpenStreetMapCitiesDir());
+	}
+	
+	@Test
+	public void setOpenStreetMapPoiDirShouldAddFileSeparatorIfItDoesnTEndsWithFileSeparator() {
+		String OpenStreetMapPoiDir = "Test";
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setOpenStreetMapPoisDir(OpenStreetMapPoiDir);
+		Assert.assertTrue("setOpenStreetMapPoiDir should add File separator", importerConfig.getOpenStreetMapPoisDir().endsWith(File.separator));
+		Assert.assertEquals(OpenStreetMapPoiDir + File.separator, importerConfig.getOpenStreetMapPoisDir());
 	}
 
 	@Test
@@ -171,19 +192,27 @@ public class ImporterConfigTest {
 		importerConfig.setGeonamesDir(accessiblePath);
 		importerConfig.setOpenStreetMapDir(accessiblePath);
 		importerConfig.setAcceptRegExString(ImporterConfig.BASE_ACCEPT_REGEX);
-		//test with bad geonamesDir
+		//test with wrong geonamesDir
 		importerConfig.setGeonamesDir(pathNotAccessible);
 		Assert.assertFalse("when geonames dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
 		importerConfig.setGeonamesDir(accessiblePath);
-		//test with bad Openstreetmap dir
+		//test with wrong Openstreetmap dir
 		importerConfig.setOpenStreetMapDir(pathNotAccessible);
 		Assert.assertFalse("when openstreetmap dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
 		importerConfig.setOpenStreetMapDir(accessiblePath);
-		//test with bad Openstreetmap house number dir
+		//test with wrong Openstreetmap house number dir
 		importerConfig.setOpenStreetMapHouseNumberDir(pathNotAccessible);
 		Assert.assertFalse("when openstreetmap house number dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
 		importerConfig.setOpenStreetMapHouseNumberDir(accessiblePath);
-		//test with bad regexp
+		//test with wrong Openstreetmap cities dir
+		importerConfig.setOpenStreetMapCitiesDir(pathNotAccessible);
+		Assert.assertFalse("when openstreetmap cities dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
+		importerConfig.setOpenStreetMapCitiesDir(accessiblePath);
+		//test with wrong Openstreetmap poi dir
+		importerConfig.setOpenStreetMapPoisDir(pathNotAccessible);
+		Assert.assertFalse("when openstreetmap Poi dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
+		importerConfig.setOpenStreetMapPoisDir(accessiblePath);
+		//test with wrong regexp
 		importerConfig.setAcceptRegExString("k[;l");
 		Assert.assertFalse("when regexp string is not ok the function should return false", importerConfig.isConfigCorrectForImport());
 		importerConfig.setAcceptRegExString(ImporterConfig.BASE_ACCEPT_REGEX);
