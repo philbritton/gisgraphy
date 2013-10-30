@@ -73,14 +73,20 @@ import com.gisgraphy.domain.geoloc.entity.Veterinary;
  */
 public class OsmAmenityToPlacetype {
 	
+	public final static String  DEFAULT_OSM_FEATURE_CODE= "OSM";
+	public final static String  DEFAULT_OSM_FEATURE_CLASS= "UNK";
+	
+	
 	public GisFeature getObject(String amenity){
+		GisFeature gisfeature = new GisFeature();
+		gisfeature.setFeatureCode("OSM");
+		gisfeature.setFeatureClass("UNK");
 		if (amenity == null){
-			return new GisFeature();
+			return gisfeature;
 		} 
 		String a = amenity.trim().toLowerCase();
-		GisFeature gisfeature = new GisFeature();
 		if ("".equals(amenity)){
-			gisfeature.setAmenity(amenity);
+			gisfeature.setAmenity(null);
 			return gisfeature;
 		}
 		//take care of case, always put in lower case
@@ -243,9 +249,13 @@ public class OsmAmenityToPlacetype {
 		}  else {
 			gisfeature =  new GisFeature();
 		}
-		gisfeature.setAmenity(amenity);
 		gisfeature.setFeatureCode("OSM");
-		gisfeature.setFeatureClass(gisfeature.getClass().getSimpleName().toUpperCase());
+		if (gisfeature.getClass().getSimpleName().equals("GisFeature")){
+			gisfeature.setFeatureClass(DEFAULT_OSM_FEATURE_CLASS);
+		} else {
+			gisfeature.setFeatureClass(gisfeature.getClass().getSimpleName().toUpperCase());
+		}
+		gisfeature.setAmenity(a);
 		return gisfeature;
 	}
 
