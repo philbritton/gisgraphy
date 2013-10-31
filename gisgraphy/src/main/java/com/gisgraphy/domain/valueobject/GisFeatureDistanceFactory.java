@@ -49,6 +49,7 @@ public class GisFeatureDistanceFactory {
 	    gisFeatureDistance.setName(gisFeature.getName().trim());
 	    gisFeatureDistance.setPopulation(gisFeature.getPopulation());
 	    gisFeatureDistance.setTimezone(gisFeature.getTimezone());
+	    gisFeatureDistance.setOpenstreetmapId(gisFeature.getOpenstreetmapId());
 	    gisFeatureDistance.setAmenity(gisFeature.getAmenity());
 	    gisFeatureDistance.setZipCodes(new ArrayList<String>());//TODO tests zip without zipcode
 		List<ZipCode> gisFeatureZipCodes = gisFeature.getZipCodes();
@@ -75,7 +76,6 @@ public class GisFeatureDistanceFactory {
 	gisFeatureDistance.setLength(street.getLength());
 	gisFeatureDistance.setOneWay(street.isOneWay());
 	gisFeatureDistance.setStreetType(street.getStreetType());
-	gisFeatureDistance.setOpenstreetmapId(street.getOpenstreetmapId());
 	gisFeatureDistance.setIsIn(street.getIsIn());
 	gisFeatureDistance.setIsInAdm(street.getIsInAdm());
 	gisFeatureDistance.setIsInZip(street.getIsInZip());

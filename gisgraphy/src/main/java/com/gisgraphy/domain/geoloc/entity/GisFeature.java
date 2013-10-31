@@ -181,6 +181,8 @@ public class GisFeature{
     private List<ZipCode> zipCodes;
     
     private String amenity;
+    
+    private Long openstreetmapId;
 
 	
 
@@ -952,6 +954,8 @@ public class GisFeature{
 				this.addZipCode(zipCode);
 			}
 		}
+		this.amenity=gisFeature.getAmenity();
+		this.openstreetmapId = gisFeature.getOpenstreetmapId();
 	}
     }
 
@@ -1129,6 +1133,23 @@ public class GisFeature{
 	 */
 	public void setAmenity(String amenity) {
 		this.amenity = amenity;
+	}
+
+	/**
+	 * @return the openstreetmap id. 
+	 * GisFeature has the openstreetmap field when it
+	 * is a OSM POI
+	 */
+	public Long getOpenstreetmapId() {
+		return openstreetmapId;
+	}
+
+	/**
+	 * @param openstreetmapId
+	 * The openstreetmap id of the POI
+	 */
+	public void setOpenstreetmapId(Long openstreetmapId) {
+		this.openstreetmapId = openstreetmapId;
 	}
     
     

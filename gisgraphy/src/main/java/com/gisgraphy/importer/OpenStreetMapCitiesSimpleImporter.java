@@ -188,6 +188,18 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		    	logger.warn("can not parse shape for "+fields[7]+" : "+e);
 		    }
 	}
+	//osmId
+	if (!isEmptyField(fields, 1, true)) {
+		String osmIdAsString =fields[1].trim();
+		Long osmId;
+		try {
+			osmId = Long.parseLong(osmIdAsString);
+			city.setOpenstreetmapId(osmId);
+		} catch (NumberFormatException e) {
+			logger.error("can not parse openstreetmap id "+osmIdAsString);
+		}
+	}
+
 	city.setMunicipality(true);
 	//adm
 	if(!isEmptyField(fields, 9, false)){
@@ -303,11 +315,6 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
     	return deletedObjectInfo;
     }
     
-    
-    @Required
-    public void setOpenStreetMapDao(ICityDao cityDao) {
-        this.cityDao = cityDao;
-    }
     
     @Override
     //TODO test

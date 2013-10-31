@@ -309,6 +309,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 			String latAsString = String.format(Locale.US, "%s", gisFeature.getLatitude().doubleValue());
 			String lngAsString = String.format(Locale.US, "%s", gisFeature.getLongitude().doubleValue());
 			ex.setField(FullTextFields.LOCATION.getValue(), latAsString+","+lngAsString);
+			ex.setField(FullTextFields.OPENSTREETMAP_ID.getValue(), gisFeature.getOpenstreetmapId());
 			
 			String placetype = ClassNameHelper.stripEnhancerClass(gisFeature
 					.getClass().getSimpleName());
@@ -320,7 +321,6 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 							.createCountryFlagUrl(gisFeature.getCountryCode()));
 				}
 		    if (gisFeature instanceof Street) {
-		    	ex.setField(FullTextFields.OPENSTREETMAP_ID.getValue(), ((Street) gisFeature).getOpenstreetmapId());
 		    	ex.setField(FullTextFields.LENGTH.getValue(), ((Street) gisFeature).getLength());
 		    	ex.setField(FullTextFields.ONE_WAY.getValue(), ((Street) gisFeature).isOneWay());
 		    	ex.setField(FullTextFields.STREET_TYPE.getValue(), ((Street) gisFeature).getStreetType());
@@ -359,9 +359,11 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 			ex.setField(FullTextFields.NAMEASCII.getValue(), gisFeature
 				.getAsciiName());
 			}
-
+			
 			ex.setField(FullTextFields.ELEVATION.getValue(), gisFeature
 				.getElevation());
+			ex.setField(FullTextFields.AMENITY.getValue(), gisFeature
+					.getAmenity());
 			ex.setField(FullTextFields.GTOPO30.getValue(), gisFeature.getGtopo30());
 			ex.setField(FullTextFields.TIMEZONE.getValue(), gisFeature
 				.getTimezone());
