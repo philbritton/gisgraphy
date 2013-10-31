@@ -88,7 +88,7 @@ public class OpenStreetMapPoisSimpleImporterTest {
     	EasyMock.replay(idGenerator);
     	importer.setIdGenerator(idGenerator);
 		
-    	String line= "W\t90139043\tPfarrkirche Heiliger Johannes der Täufer\tAT\tPfarrkirche Heiliger Johannes der Täufer___Parish church Saint John Baptist\t010100WRONGPOINT0020E61000000E6D653509482C40B01EF706AB514740\tplace_of_worship";
+    	String line= "W\t90139043\tPfarrkirche Heiliger Johannes der Täufer\tAT\tPfarrkirche Heiliger Johannes der Täufer___Parish church Saint John Baptist\tfoo\tplace_of_worship";
 		
 		importer.processData(line);
 		EasyMock.verify(gisFeatureDao);
