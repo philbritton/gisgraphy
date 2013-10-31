@@ -163,7 +163,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			while (matcher.find()) {
 				AssociatedStreetMember member = new AssociatedStreetMember();
 				if (matcher.groupCount() != 6) {
-					logger.warn("wrong number of fields for AssociatedStreetMember n" + i + "for line " + line);
+					logger.warn("wrong number of fields for AssociatedStreetMember no " + i + "for line " + line);
 					continue;
 				}
 				member.setId(matcher.group(1));

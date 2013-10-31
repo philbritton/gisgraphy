@@ -565,6 +565,7 @@ public class GisgraphyTestHelper {
 	paris.addZipCode(new ZipCode("50263"));
 	
 	paris.setAsciiName("ascii");
+	paris.setAmenity("amenity");
 	paris.setFeatureClass("P");
 	paris.setFeatureCode("PPL");
 	paris.setElevation(13456);

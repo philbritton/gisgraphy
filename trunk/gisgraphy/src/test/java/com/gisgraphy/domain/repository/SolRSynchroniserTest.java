@@ -776,6 +776,8 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		, 
 		"//*[@name='" + FullTextFields.NAMEASCII.getValue()
 			+ "'][.='ascii']",
+		"//*[@name='" + FullTextFields.AMENITY.getValue()
+			+ "'][.='amenity']",
 		"//*[@name='" + FullTextFields.ELEVATION.getValue()
 			+ "'][.='13456']"
 		, "//*[@name='"

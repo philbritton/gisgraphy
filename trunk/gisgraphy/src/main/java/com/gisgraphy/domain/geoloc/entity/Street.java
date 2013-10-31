@@ -44,7 +44,7 @@ public class Street extends GisFeature {
     private boolean oneWay = false;
     private StreetType streetType;
     private Double length;
-    private Long openstreetmapId;
+    //private Long openstreetmapId;
     //those fields are only used to sync the fulltext engine,
     //there are not used to be stored in Datastore
     
@@ -57,13 +57,13 @@ public class Street extends GisFeature {
 
     
 
-	public Long getOpenstreetmapId() {
+	/*public Long getOpenstreetmapId() {
 	return openstreetmapId;
     }
 
     public void setOpenstreetmapId(Long openstreetmapId) {
 	this.openstreetmapId = openstreetmapId;
-    }
+    }*/
 
     /**
      * Override the gisFeature value.<br>

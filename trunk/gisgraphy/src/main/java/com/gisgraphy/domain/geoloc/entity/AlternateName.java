@@ -277,9 +277,6 @@ public class AlternateName {
 	if (this == obj) {
 	    return true;
 	}
-	if (!super.equals(obj)) {
-	    return false;
-	}
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
