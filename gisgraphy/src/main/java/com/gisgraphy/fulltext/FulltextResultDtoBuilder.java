@@ -7,7 +7,7 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse;
 import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
 
-public class fulltextResultDtoBuilder {
+public class FulltextResultDtoBuilder {
 
 	/**
 	 * @param response

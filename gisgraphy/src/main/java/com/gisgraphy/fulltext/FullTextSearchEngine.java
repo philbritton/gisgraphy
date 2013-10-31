@@ -72,7 +72,7 @@ public class FullTextSearchEngine implements IFullTextSearchEngine {
 
     private IsolrClient solrClient;
     
-    fulltextResultDtoBuilder builder = new fulltextResultDtoBuilder();
+    FulltextResultDtoBuilder builder = new FulltextResultDtoBuilder();
 
     @Autowired
     @Qualifier("gisFeatureDao")

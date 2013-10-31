@@ -234,6 +234,7 @@
   <!--Medium --><field name="level" type="integer" indexed="false" stored="true"/>
  
   <!--Short  --><field name="zipcode" type="exact_string_ci" indexed="true" stored="true"  multiValued="true"/>
+  <!-- Medium --><field name="municipality" type="boolean" indexed="true" stored="true"/>
   <!--Short  --><field name="amenity" type="exact_string_ci" indexed="true" stored="true"  multiValued="false"/>
   <!--Medium --><field name="name_ascii" type="text" indexed="false" stored="true"/>
   <!--Long  --><field name="name_alternate" type="text" indexed="false" stored="true" multiValued="true"/><!-- alternatename without lang to be retrieved independently from those with languages -->

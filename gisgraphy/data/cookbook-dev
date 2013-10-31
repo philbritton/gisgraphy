@@ -3,6 +3,8 @@
  =>add the same fields to street.
  modify streetfactory +test
  modify solr shema +fulltextfields+solrsynchronizer+test
+ solrresponsedto +solrunmarshaller+test (pour execute client 
+ car different de streaming : les champs peuvent etre present mais pas mis dans le dto)
  modify OutputStyleHelper
  
  solrsynchroniser+test
