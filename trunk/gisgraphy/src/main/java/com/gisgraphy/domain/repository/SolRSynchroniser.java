@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
@@ -320,6 +321,9 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 				    ex.setField(FullTextFields.COUNTRY_FLAG_URL.getValue(), URLUtils
 							.createCountryFlagUrl(gisFeature.getCountryCode()));
 				}
+			if (gisFeature instanceof City){
+				ex.setField(FullTextFields.MUNICIPALITY.getValue(), ((City) gisFeature).isMunicipality());
+			}
 		    if (gisFeature instanceof Street) {
 		    	ex.setField(FullTextFields.LENGTH.getValue(), ((Street) gisFeature).getLength());
 		    	ex.setField(FullTextFields.ONE_WAY.getValue(), ((Street) gisFeature).isOneWay());

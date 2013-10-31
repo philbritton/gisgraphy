@@ -571,6 +571,8 @@ public class GisgraphyTestHelper {
 	paris.setElevation(13456);
 	paris.setGtopo30(7654);
 	paris.setTimezone("Europe/Paris");
+	paris.setAmenity("amenity");
+	paris.setMunicipality(true);
 
 	paris.setAdm(parent);
 	this.cityDao.save(paris);

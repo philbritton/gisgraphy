@@ -108,6 +108,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		.getFully_qualified_name());
 	assertEquals(city.getClass().getSimpleName(), result.getPlacetype());
 	assertEquals(city.getPopulation(), result.getPopulation());
+	assertEquals(city.isMunicipality(), result.isMunicipality());
+	assertEquals(city.getAmenity(), result.getAmenity());
 	assertEquals(city.getLatitude(), result.getLat());
 	assertEquals(city.getLongitude(), result.getLng());
 	assertEquals(city.getAdm1Code(), result.getAdm1_code());

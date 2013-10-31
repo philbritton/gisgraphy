@@ -124,10 +124,15 @@ public class solrResponseDtoBuilder {
 		    FullTextFields.AREA.getValue());
 	    solrResponseDto.level= getFieldAsInteger(solrDocument,
 		    FullTextFields.LEVEL.getValue());
+	    solrResponseDto.amenity= getFieldAsString(solrDocument,
+			    FullTextFields.AMENITY.getValue());
+	    solrResponseDto.municipality= getFieldAsBoolean(solrDocument,
+			    FullTextFields.MUNICIPALITY.getValue(),false);
+	    
 	    
 	    //street specific
 	    solrResponseDto.one_way = getFieldAsBoolean(solrDocument,
-		    FullTextFields.ONE_WAY.getValue());
+		    FullTextFields.ONE_WAY.getValue(),false);
 	    solrResponseDto.length = getFieldAsDouble(solrDocument,
 		    FullTextFields.LENGTH.getValue());
 	    solrResponseDto.street_type = getFieldAsString(solrDocument,
@@ -222,11 +227,11 @@ public class solrResponseDtoBuilder {
     }
     
 
-    private Boolean getFieldAsBoolean(SolrDocument solrDocument,
-	    String fieldname) {
+    private boolean getFieldAsBoolean(SolrDocument solrDocument,
+	    String fieldname,boolean defaultValue) {
 	Object o = solrDocument.getFieldValue(fieldname);
 	if (o == null) {
-	    return null;
+	    return defaultValue;
 	} else if (o instanceof Boolean) {
 	    return (Boolean) o;
 	} else {

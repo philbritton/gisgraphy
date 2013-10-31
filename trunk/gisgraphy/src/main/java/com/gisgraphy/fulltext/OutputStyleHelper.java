@@ -36,8 +36,8 @@ public class OutputStyleHelper {
 			.append(",")
 			.append(FullTextFields.PLACETYPE.getValue())
 			.append(",").append(
-				FullTextFields.COUNTRYCODE.getValue()).append(
-				",").append(
+				FullTextFields.COUNTRYCODE.getValue())
+			.append(",").append(
 				FullTextFields.COUNTRYNAME.getValue())
 			.toString();
 	    
@@ -81,6 +81,7 @@ public class OutputStyleHelper {
 		.append(",").append(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue())
 		.append(",").append(FullTextFields.HOUSE_NUMBERS.getValue())
 		.append(",").append(FullTextFields.AMENITY.getValue())
+		.append(",").append(FullTextFields.MUNICIPALITY.getValue())
 		
 		//adm only
 		.append(",").append(FullTextFields.LEVEL.getValue())
