@@ -56,6 +56,7 @@ public enum FullTextFields {
 	AMENITY("amenity"),
 	//City only
 	ZIPCODE("zipcode"),
+	MUNICIPALITY("municipality"),
 	LOCATION("location"),
 	//end City only
 	COUNTRYCODE("country_code"),
