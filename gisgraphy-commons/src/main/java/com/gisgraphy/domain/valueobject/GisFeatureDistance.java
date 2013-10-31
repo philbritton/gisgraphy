@@ -174,7 +174,6 @@ public class GisFeatureDistance {
     
     private String amenity;
     
-
 	private String fullyQualifiedAddress;
 
     public GisFeatureDistance() {
