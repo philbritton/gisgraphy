@@ -53,6 +53,7 @@ public enum FullTextFields {
 	ALL_ADM2_NAME("all_adm2_name"),
 	ADM3NAME("adm3_name"),
 	ADM4NAME("adm4_name"),
+	AMENITY("amenity"),
 	//City only
 	ZIPCODE("zipcode"),
 	LOCATION("location"),
