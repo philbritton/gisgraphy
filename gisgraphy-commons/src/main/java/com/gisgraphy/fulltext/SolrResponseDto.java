@@ -110,7 +110,7 @@ public class SolrResponseDto {
     protected String yahoo_map_url;
     protected String openstreetmap_map_url;
     
-    protected Boolean one_way;
+    protected boolean one_way;
     protected Double length;
     protected String  street_type;
     protected Long openstreetmap_id;
@@ -120,7 +120,8 @@ public class SolrResponseDto {
     protected String is_in_zip;
     protected String fully_qualified_address;
     protected List<HouseNumberDto> house_numbers;
-
+    protected boolean municipality;
+    protected String amenity;
    
 
 	/**
@@ -564,6 +565,14 @@ public class SolrResponseDto {
 	    return false;
 	return true;
     }
+
+	public boolean isMunicipality() {
+		return municipality;
+	}
+
+	public String getAmenity() {
+		return amenity;
+	}
 
    
 
