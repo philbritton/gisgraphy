@@ -138,6 +138,11 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				}
 				return solrResponseDtoAdm;
 			}
+			@Override
+			void savecity(City city) {
+				super.savecity(city);
+				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
+			}
 		};
 		
 		ICityDao cityDao = EasyMock.createMock(ICityDao.class);
@@ -192,6 +197,12 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				}
 				return solrResponseDtoAdm;
 			}
+			
+			@Override
+			void savecity(City city) {
+				super.savecity(city);
+				Assert.assertTrue("city should be a municipality because it is present in both db",city.isMunicipality());
+			}
 		};
 		
 		ICityDao cityDao = EasyMock.createMock(ICityDao.class);
@@ -235,6 +246,12 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
 				return null;
+			}
+			
+			@Override
+			void savecity(City city) {
+				super.savecity(city);
+				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
 			}
 		};
 		
@@ -285,6 +302,12 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
 				return null;
+			}
+			
+			@Override
+			void savecity(City city) {
+				super.savecity(city);
+				Assert.assertTrue("city should be a municipality because it is present in both db",city.isMunicipality());
 			}
 		};
 		
