@@ -25,6 +25,7 @@ package com.gisgraphy.domain.repository;
 import java.util.List;
 
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * Interface of data access object for {@link City}
@@ -44,5 +45,10 @@ public interface ICityDao extends IGisDao<City> {
      *         zip code use : {@link CityDao#listFromText(String, boolean)}.
      */
     public List<City> listByZipCode(String zipcode, String countrycode);
+    
+    /**
+     * @return the city that the given point belongs by searching by shape
+     */
+    public City getByShape(Point location);
 
 }

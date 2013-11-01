@@ -31,8 +31,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.valueobject.SRID;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * A data access object for {@link City}
@@ -85,5 +88,25 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 		    }
 		});
     }
+
+	public City getByShape(final Point location) {
+		Assert.notNull(location);
+		return (City) this.getHibernateTemplate().execute(new HibernateCallback() {
+
+		    public Object doInHibernate(Session session)
+			    throws PersistenceException {
+		    String pointAsString = "ST_GeometryFromText('POINT("+location.getX()+" "+location.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+			String queryString = "from " + persistentClass.getSimpleName()
+				+ " as c where st_contains(c.shape,"+pointAsString+")=true";
+
+			Query qry = session.createQuery(queryString);
+
+			//qry.setParameter("point2", location);
+			City result = (City) qry.uniqueResult();
+
+			return result;
+		    }
+		});
+	}
 
 }
