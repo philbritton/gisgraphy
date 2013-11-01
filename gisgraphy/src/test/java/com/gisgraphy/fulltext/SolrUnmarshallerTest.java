@@ -27,6 +27,8 @@ package com.gisgraphy.fulltext;
 
 import static com.gisgraphy.domain.valueobject.Pagination.paginate;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -51,6 +53,7 @@ import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.IntrospectionHelper;
 import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.street.StreetType;
@@ -73,6 +76,24 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
     @Resource
     private IAdmDao admDao;
 
+    
+    @Test
+    public void testAllfulltextfieldsShouldBeMapped(){
+    	//there is some fields present in fulltextfields but stored=false,some Fulltextfields are suffix, distance is calculated in solrdto
+    	//but not in ftf.. the difference beetween FulltextFields and dto is 2
+    	int numFieldDifference = 2;
+    	FullTextFields[] fulltextfields = 	FullTextFields.class.getEnumConstants();
+    	System.out.println(fulltextfields.length);
+    	Field[] dtoFields = SolrResponseDto.class.getDeclaredFields();
+    	List<String> dtoFieldsName = new ArrayList<String>();
+    	for(Field field: dtoFields){
+    		dtoFieldsName.add(field.getName());
+    	}
+    	Assert.assertEquals("there is probably"+(fulltextfields.length-numFieldDifference - dtoFields.length)+" field added in Fulltext fields but that is not in solrdto",fulltextfields.length-numFieldDifference, dtoFields.length);
+    	
+    }
+    
+    
     @Test
     public void testUnmarshallSolrDocumentShouldReallyUnmarshall() {
 	Long featureId = 1002L;
