@@ -149,7 +149,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	//location
 	if (!isEmptyField(fields, 6, false)) {
 	    try {
-		location = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[6]);
+	    	location = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[6]);
 	    } catch (RuntimeException e) {
 	    	logger.warn("can not parse location for "+fields[6]+" : "+e);
 	    	return;
@@ -161,6 +161,8 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		city = cityDao.getByFeatureId(nearestCity.getFeature_id());
 			if (city==null){
 				city = createNewCity();
+			} else {
+				city.setMunicipality(true);
 			}
 	} else {
 		city = createNewCity();
@@ -200,7 +202,6 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		}
 	}
 
-	city.setMunicipality(true);
 	//adm
 	if(!isEmptyField(fields, 9, false)){
 		String admname =fields[9];
@@ -213,7 +214,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		}
 	}
 	try {
-		cityDao.save(city);
+		savecity(city);
 	} catch (ConstraintViolationException e) {
 		logger.error("Can not save "+dumpFields(fields)+"(ConstraintViolationException) we continue anyway but you should consider this",e);
 	}catch (Exception e) {
@@ -221,6 +222,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	}
 
     }
+
+	void savecity(City city) {
+		cityDao.save(city);
+	}
 
 	City createNewCity() {
 		City city;

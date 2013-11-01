@@ -82,7 +82,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
     protected IGisDao<? extends GisFeature>[] iDaos;
     
     @Autowired
-    protected IcityDetector cityDetector;
+    protected IMunicipalityDetector municipalityDetector;
 
     /**
      * Default constructor
@@ -333,7 +333,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	    featureObject.populate(gisFeature);
 	    /* old code replace by osm cities importer
 	     * if (gisFeature instanceof City){
-	    	((City)gisFeature).setMunicipality(cityDetector.isMunicipality(gisFeature.getCountryCode(), gisFeature));
+	    	((City)gisFeature).setMunicipality(municipalityDetector.isMunicipality(gisFeature.getCountryCode(), gisFeature));
 	    }
 	    */
 		// zipcode

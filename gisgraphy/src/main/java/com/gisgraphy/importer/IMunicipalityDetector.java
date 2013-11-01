@@ -2,7 +2,7 @@ package com.gisgraphy.importer;
 
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 
-public interface IcityDetector {
+public interface IMunicipalityDetector {
 
 	public boolean isCountryHasMunicipality(String countryCode);
 

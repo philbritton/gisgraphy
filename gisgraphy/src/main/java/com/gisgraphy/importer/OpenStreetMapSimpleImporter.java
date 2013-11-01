@@ -66,7 +66,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
     protected IGeolocSearchEngine geolocSearchEngine;
     
-    protected IcityDetector cityDetector;
+    protected IMunicipalityDetector municipalityDetector;
     
     private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
@@ -209,7 +209,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 
 	protected void setIsInFields(OpenStreetMap street) {
 		if (street != null && street.getLocation() != null) {
-			boolean filterMunicipality = cityDetector.isCountryHasMunicipality(street.getCountryCode());
+			boolean filterMunicipality = municipalityDetector.isCountryHasMunicipality(street.getCountryCode());
 			GisFeatureDistance city = getNearestCity(street.getLocation(), filterMunicipality);
 			if (city != null) {
 				street.setPopulation(city.getPopulation());
@@ -404,8 +404,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	}
 
     @Required
-    public void setCityDetector(IcityDetector cityDetector) {
-		this.cityDetector = cityDetector;
+    public void setMunicipalityDetector(IMunicipalityDetector municipalityDetector) {
+		this.municipalityDetector = municipalityDetector;
 	}
     
 }
