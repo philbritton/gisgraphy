@@ -223,7 +223,7 @@ public abstract class AbstractFileRetriever implements IImporterProcessor {
     }
 
     public long getNumberOfLinesToProcess() {
-	if (fileSizeToDownloadCached==0){
+	if (fileSizeToDownloadCached==0 && importerConfig.isRetrieveFiles()){
 	List<String> downloadFileList = getFilesToDownload();
 	long cumulatedSize = 0;
 	for (String file : downloadFileList) {

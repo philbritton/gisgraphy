@@ -639,6 +639,11 @@
 				Telephone, Toilet, VendingMachine, Veterinary
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				check that all files that will be downloaded are not 404/500 and don't check url file size if retrieve file is false 
+				(based on user feedbacks): 
+			</action>
+			
 			
 			</release>
 			
