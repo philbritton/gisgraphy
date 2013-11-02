@@ -35,9 +35,15 @@ public class OpenStreetMapCitiesSimpleImporterTest {
     	EasyMock.replay(idGenerator);
     	importer.setIdGenerator(idGenerator);
 		importer.idGenerator= idGenerator;
-		City actual = importer.createNewCity();
+		
+		Point location = GeolocHelper.createPoint(3D, 2D);
+		City actual = importer.createNewCity("name","FR",location );
 		Assert.assertEquals(GISSource.OPENSTREETMAP, actual.getSource());
 		Assert.assertEquals(1234L, actual.getFeatureId().longValue());
+		Assert.assertEquals("name", actual.getName());
+		Assert.assertEquals("FR", actual.getCountryCode());
+		Assert.assertEquals(location, actual.getLocation());
+		
 	}
 
 	@Test
@@ -122,6 +128,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		
 		final SolrResponseDto solrResponseDtoAdm = EasyMock.createMock(SolrResponseDto.class);
 		EasyMock.expect(solrResponseDtoAdm.getFeature_id()).andReturn(4356L);
+		EasyMock.expect(solrResponseDtoAdm.getName()).andReturn("admName");
 		EasyMock.replay(solrResponseDtoAdm);
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
 			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode) {
@@ -141,6 +148,16 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			@Override
 			void savecity(City city) {
 				super.savecity(city);
+				Assert.assertEquals("city", city.getAmenity());
+				Assert.assertEquals("paris", city.getName());
+				Assert.assertEquals("FR", city.getCountryCode());
+				Assert.assertEquals(48.2, city.getLatitude().doubleValue(),0.1);
+				Assert.assertEquals(16.3, city.getLongitude().doubleValue(),0.1);
+				
+				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
+				Assert.assertEquals(1000000L, city.getPopulation().longValue());
+				Assert.assertEquals("admName", city.getAdm().getName());
+				Assert.assertEquals("5678", city.getZipCodes().get(0).getCode());
 				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
 			}
 		};
@@ -159,6 +176,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		
 		IAdmDao admDao = EasyMock.createMock(IAdmDao.class);
 		Adm adm = new Adm(2);
+		adm.setName("admName");
 		EasyMock.expect(admDao.getByFeatureId(4356L)).andReturn(adm);
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);
@@ -177,6 +195,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 	public void processWithknownCityAndAdm(){
 		final SolrResponseDto solrResponseDtoCity = EasyMock.createMock(SolrResponseDto.class);
 		EasyMock.expect(solrResponseDtoCity.getFeature_id()).andReturn(123L);
+
 		EasyMock.replay(solrResponseDtoCity);
 		
 		final SolrResponseDto solrResponseDtoAdm = EasyMock.createMock(SolrResponseDto.class);
@@ -201,12 +220,25 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			@Override
 			void savecity(City city) {
 				super.savecity(city);
+				Assert.assertEquals("city", city.getAmenity());
+				Assert.assertEquals("When a city is already present, we keep the name","initial name", city.getName());
+				Assert.assertEquals("When a city is already present, we keep the countrycode","DE", city.getCountryCode());
+				Assert.assertEquals("When a city is already present, we keep the lat",20D, city.getLatitude().doubleValue(),0.01);
+				Assert.assertEquals("When a city is already present, we keep the long",30D, city.getLongitude().doubleValue(),0.01);
+				
+				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
+				Assert.assertEquals(1000000L, city.getPopulation().longValue());
+				Assert.assertEquals("admName", city.getAdm().getName());
+				Assert.assertEquals("5678", city.getZipCodes().get(0).getCode());
 				Assert.assertTrue("city should be a municipality because it is present in both db",city.isMunicipality());
 			}
 		};
 		
 		ICityDao cityDao = EasyMock.createMock(ICityDao.class);
 		City city=new City();
+		city.setName("initial name");
+		city.setCountryCode("DE");
+		city.setLocation(GeolocHelper.createPoint(30D, 20D));
 		city.setFeatureId(123L);
 		EasyMock.expect(cityDao.getByFeatureId(123L)).andReturn(city);
 		EasyMock.expect(cityDao.save(city)).andReturn(city);
@@ -216,6 +248,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		
 		IAdmDao admDao = EasyMock.createMock(IAdmDao.class);
 		Adm adm = new Adm(2);
+		adm.setName("admName");
 		EasyMock.expect(admDao.getByFeatureId(4356L)).andReturn(adm);
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);

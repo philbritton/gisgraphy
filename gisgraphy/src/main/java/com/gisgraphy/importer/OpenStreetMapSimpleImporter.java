@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
+import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
@@ -67,6 +68,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     protected IGeolocSearchEngine geolocSearchEngine;
     
     protected IMunicipalityDetector municipalityDetector;
+    
+    protected ICityDao cityDao;
     
     private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
@@ -207,45 +210,61 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 
     }
 
-	protected void setIsInFields(OpenStreetMap street) {
-		if (street != null && street.getLocation() != null) {
-			boolean filterMunicipality = municipalityDetector.isCountryHasMunicipality(street.getCountryCode());
-			GisFeatureDistance city = getNearestCity(street.getLocation(), filterMunicipality);
-			if (city != null) {
-				street.setPopulation(city.getPopulation());
-				street.setIsInAdm(getDeeperAdmName(city));
-				if (city.getZipCodes() != null && city.getZipCodes().size() == 1) {
-					street.setIsInZip(city.getZipCodes().get(0));
-				}
-				if (city.getName() != null) {
-					street.setIsIn(pplxToPPL(city.getName()));
-				}
-			}
-			if (filterMunicipality) {
-				GisFeatureDistance city2 = getNearestCity(street.getLocation(), false);
-				if (city2 != null) {
-					if (city != null && city.getFeatureId() == city2.getFeatureId()) {
-						return;
-					}
-					if (city2.getPopulation() != null && city2.getPopulation() != 0 && (street.getPopulation() == null || street.getPopulation() == 0)) {
-						street.setPopulation(city2.getPopulation());
-					}
+    protected void setIsInFields(OpenStreetMap street) {
+    	if (street != null && street.getLocation() != null) {
+    		//first searchByShape because it is the more reliable :
+    		City cityByShape = cityDao.getByShape(street.getLocation());
+    		if (cityByShape != null){
+    			street.setIsIn(cityByShape.getName());
+    			street.setPopulation(cityByShape.getPopulation());
+    			if (cityByShape.getZipCodes() != null && cityByShape.getZipCodes().size() == 1) {
+    				street.setIsInZip(cityByShape.getZipCodes().get(0).getCode());
+    			}
+    			if (cityByShape.getAdm()!=null){
+    				street.setIsInAdm(cityByShape.getAdm().getName());
+    			}
+    			return;
+    		}
+    		GisFeatureDistance city = getNearestCity(street.getLocation(), true);
+    		if (city != null) {
+    			street.setPopulation(city.getPopulation());
+    			street.setIsInAdm(getDeeperAdmName(city));
+    			if (city.getZipCodes() != null && city.getZipCodes().size() == 1) {
+    				street.setIsInZip(city.getZipCodes().get(0));
+    			}
+    			if (city.getName() != null) {
+    				street.setIsIn(pplxToPPL(city.getName()));
+    			}
+    		}
+    		GisFeatureDistance city2 = getNearestCity(street.getLocation(), false);
+    		if (city2 != null) {
+    			if (city != null){
+    					if (city.getFeatureId() == city2.getFeatureId()) {
+    						return;
+    					}
+    					if (city2.getDistance()>city.getDistance()){
+    						return;
+    					}
+    			}
+    				//we got a non municipality that is nearest, we set isinPlace tag and update is_in if needed
+    				if (city2.getPopulation() != null && city2.getPopulation() != 0 && (street.getPopulation() == null || street.getPopulation() == 0)) {
+    					street.setPopulation(city2.getPopulation());
+    				}
 
-					if (street.getIsIn() == null) {
-						street.setIsIn(pplxToPPL(city2.getName()));
-					} else {
-						street.setIsInPlace(pplxToPPL(city2.getName()));
-					}
-					if (street.getIsInAdm() == null) {
-						street.setIsInAdm(getDeeperAdmName(city2));
-					}
-					if (street.getIsInZip() == null && city2.getZipCodes() != null && city2.getZipCodes().size() == 1) {
-						street.setIsInZip(city2.getZipCodes().get(0));
-					}
-				}
-			}
-		}
-	}
+    				if (street.getIsIn() == null) {
+    					street.setIsIn(pplxToPPL(city2.getName()));
+    				} else {
+    					street.setIsInPlace(pplxToPPL(city2.getName()));
+    				}
+    				if (street.getIsInAdm() == null) {
+    					street.setIsInAdm(getDeeperAdmName(city2));
+    				}
+    				if (street.getIsInZip() == null && city2.getZipCodes() != null && city2.getZipCodes().size() == 1) {
+    					street.setIsInZip(city2.getZipCodes().get(0));
+    				}
+    		}
+    	}
+    }
 
 	//todo test
 	protected String getDeeperAdmName(GisFeatureDistance city) {
@@ -406,6 +425,11 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     @Required
     public void setMunicipalityDetector(IMunicipalityDetector municipalityDetector) {
 		this.municipalityDetector = municipalityDetector;
+	}
+
+    @Required
+	public void setCityDao(ICityDao cityDao) {
+		this.cityDao = cityDao;
 	}
     
 }

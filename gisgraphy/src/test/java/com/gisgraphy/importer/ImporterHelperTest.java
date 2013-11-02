@@ -28,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -317,4 +318,25 @@ public class ImporterHelperTest {
 		Assert.assertNotNull(ImporterHelper.listZipFiles(""));
 	}
 
+	@Test
+	public void checkUrl(){
+		Assert.assertTrue(ImporterHelper.checkUrl("http://www.google.com/"));
+		Assert.assertFalse(ImporterHelper.checkUrl("http://www.goolge.com/notExistingUri"));
+	}
+	
+	@Test
+	public void checkUrls(){
+		List<String> urls = new ArrayList<String>();
+		urls.add("http://www.google.com/");
+		urls.add("http://www.google.com/");
+		
+		Assert.assertTrue(ImporterHelper.checkUrls(urls));
+		
+		urls = new ArrayList<String>();
+		urls.add("http://www.google.com/");
+		urls.add("http://www.goolge.com/notExistingUri");
+		
+		Assert.assertFalse(ImporterHelper.checkUrls(urls));
+	}
+	
 }

@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -344,10 +346,61 @@ public class ImporterHelper {
         headMethod.releaseConnection();
     }
     return -1;
-
-	
-	
     }
+    
+    /**
+     * @param urlsAsString
+     * @return true if ALL the url doesn't retrun 404 or 500 code
+     */
+    public static boolean checkUrls(List<String> urlsAsString){
+    	if (urlsAsString==null){
+    		return false;
+    	}
+    	for (String url:urlsAsString){
+    		if (!checkUrl(url)){
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    /**
+     * check if an url doesn't return 404 or 500 code
+     * @param urlAsString the url to check
+     * @return true if the url exists.
+     */
+    public static boolean checkUrl(String urlAsString){
+    	if (urlAsString==null){
+    		logger.error("can not check null URL");
+    		return false;
+    	}
+    	URL url;
+		try {
+			url = new URL(urlAsString);
+		} catch (MalformedURLException e) {
+			logger.error(urlAsString+" is not a valid url, can not check.");
+			return false;
+		}
+    	int responseCode;
+		try {
+			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+			huc.setRequestMethod("HEAD");
+			responseCode = huc.getResponseCode();
+		} catch (ProtocolException e) {
+			logger.error("can not check url "+e.getMessage(),e);
+			return false;
+		} catch (IOException e) {
+			logger.error("can not check url "+e.getMessage(),e);
+			return false;
+		}
+
+    	if (responseCode != 404 || responseCode >500) {
+    	return true;
+    	} else {
+    	return false;
+    	}
+    }
+    
     /**
      * @param address
      *            the address of the file to be downloaded

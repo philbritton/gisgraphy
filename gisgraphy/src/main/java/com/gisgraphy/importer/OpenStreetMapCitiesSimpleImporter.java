@@ -79,7 +79,6 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
     
     protected IFullTextSearchEngine fullTextSearchEngine;
     
-    private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
 
     /* (non-Javadoc)
@@ -141,6 +140,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	    if (name==null){
 	    	return;
 	    }
+	    
 	}
 	//countrycode
 	if (!isEmptyField(fields, 3, true)) {
@@ -160,12 +160,13 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	if (nearestCity != null ){
 		city = cityDao.getByFeatureId(nearestCity.getFeature_id());
 			if (city==null){
-				city = createNewCity();
+				city = createNewCity(name,countrycode,location);
+				
 			} else {
 				city.setMunicipality(true);
 			}
 	} else {
-		city = createNewCity();
+		city = createNewCity(name,countrycode,location);
 	}
 	//populate new fields
 	//population
@@ -181,6 +182,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	if(!isEmptyField(fields, 4, false) && (city.getZipCodes()==null || !city.getZipCodes().contains(new ZipCode(fields[4])))){
 			city.addZipCode(new ZipCode(fields[4]));
 	}
+	//place tag/amenity
+	if(!isEmptyField(fields, 8, false)){
+		city.setAmenity(fields[8]);
+}
 	//shape
 	if(!isEmptyField(fields, 7, false)){
 		try {
@@ -227,11 +232,14 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		cityDao.save(city);
 	}
 
-	City createNewCity() {
+	City createNewCity(String name,String countryCode,Point location) {
 		City city;
 		city = new City();
 		city.setFeatureId(idGenerator.getNextFeatureId());
 		city.setSource(GISSource.OPENSTREETMAP);
+		city.setName(name);
+		city.setLocation(location);
+		city.setCountryCode(countryCode);
 		return city;
 	}
 
