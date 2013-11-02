@@ -350,7 +350,8 @@ public class ImporterHelper {
     
     /**
      * @param urlsAsString
-     * @return true if ALL the url doesn't retrun 404 or 500 code
+     * @return true if ALL the url doesn't retrun 200 or 3XX code 
+     * and are valids
      */
     public static boolean checkUrls(List<String> urlsAsString){
     	if (urlsAsString==null){
@@ -365,9 +366,9 @@ public class ImporterHelper {
     }
     
     /**
-     * check if an url doesn't return 404 or 500 code
+     * check if an url doesn't return 200 or 3XX code
      * @param urlAsString the url to check
-     * @return true if the url exists.
+     * @return true if the url exists and is valid
      */
     public static boolean checkUrl(String urlAsString){
     	if (urlAsString==null){
@@ -394,9 +395,10 @@ public class ImporterHelper {
 			return false;
 		}
 
-    	if (responseCode != 404 || responseCode >500) {
-    	return true;
+    	if (responseCode == 200 || (responseCode >300 &&  responseCode < 400)) {
+    		return true;
     	} else {
+    		logger.error(urlAsString+" return a "+responseCode);
     	return false;
     	}
     }
