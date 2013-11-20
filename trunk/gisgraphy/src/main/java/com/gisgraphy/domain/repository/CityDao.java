@@ -89,7 +89,7 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 		});
     }
 
-	public City getByShape(final Point location) {
+	public City getByShape(final Point location,final boolean filterMunicipality) {
 		Assert.notNull(location);
 		return (City) this.getHibernateTemplate().execute(new HibernateCallback() {
 
@@ -97,7 +97,10 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 			    throws PersistenceException {
 		    String pointAsString = "ST_GeometryFromText('POINT("+location.getX()+" "+location.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
 			String queryString = "from " + persistentClass.getSimpleName()
-				+ " as c where st_contains(c.shape,"+pointAsString+")=true";
+				+ " as c where st_contains(c.shape,"+pointAsString+")=true ";
+			if (filterMunicipality){
+				queryString+=" and c.municipality=true";
+			}
 
 			Query qry = session.createQuery(queryString);
 

@@ -214,7 +214,12 @@ public class FulltextQueryHttpBuilder {
 	    query.withAllWordsRequired(true);
 	}
 	else if ("false".equalsIgnoreCase(req.getParameter(FulltextQuery.ALLWORDSREQUIRED_PARAMETER))) {
-	query.withAllWordsRequired(false);}
+		query.withAllWordsRequired(false);
+	}
+	
+	// apiKey
+	String apiKey = req.getParameter(GisgraphyServlet.APIKEY_PARAMETER);
+	query.setApikey(apiKey);
 
 	
 	query.withPagination(pagination);

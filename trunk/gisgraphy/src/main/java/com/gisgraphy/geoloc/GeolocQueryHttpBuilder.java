@@ -168,6 +168,10 @@ public class GeolocQueryHttpBuilder {
 	    geolocQuery.withDistanceField(false);
 	}
 	
+	// apiKey
+	String apiKey = req.getParameter(GisgraphyServlet.APIKEY_PARAMETER);
+	geolocQuery.setApikey(apiKey);
+	
 	String CallBackParameter = req.getParameter(GeolocQuery.CALLBACK_PARAMETER);
 	if (CallBackParameter!=null){
 	    geolocQuery.withCallback(CallBackParameter);

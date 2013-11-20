@@ -40,6 +40,7 @@ import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.AbstractAddressServlet;
+import com.gisgraphy.servlet.GisgraphyServlet;
 
 /**
  * An address Query builder. it build Address query from HTTP Request
@@ -113,6 +114,10 @@ public class AddressQueryHttpBuilder {
 		if ("true".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER)) || "on".equalsIgnoreCase(req.getParameter(AbstractAddressServlet.STANDARDIZE_PARAMETER))) {
 			query.setStandardize(true);
 		}
+		
+		// apiKey
+		String apiKey = req.getParameter(GisgraphyServlet.APIKEY_PARAMETER);
+		query.setApikey(apiKey);
 
 		return query;
 	}

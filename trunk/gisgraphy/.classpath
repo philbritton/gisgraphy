@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry excluding="ApplicationResources_de.properties|ApplicationResources_fr.properties|ApplicationResources_ko.properties|ApplicationResources_nl.properties|ApplicationResources_no.properties|ApplicationResources_pt*.properties|ApplicationResources_tr.properties|ApplicationResources_zh*.properties|applicationContext-resources.xml|struts.xml|**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/main/webapp"/>
-	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/test/resources"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/main/webapp"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjlib/1.5.2a/aspectjlib-1.5.2a.jar"/>
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjtools/1.5.2a/aspectjtools-1.5.2a.jar"/>
@@ -97,7 +97,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/springframework/spring-test/2.5/spring-test-2.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ognl/ognl/2.7.3/ognl-2.7.3.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/freemarker/freemarker/2.3.15/freemarker-2.3.15.jar"/>
-	<classpathentry kind="lib" path="/usr/local/jdk1.6.0_43/lib/tools.jar"/>
+	<classpathentry kind="lib" path="/usr/local/jdk1.6.0_45/lib/tools.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-spring-plugin/2.1.8/struts2-spring-plugin-2.1.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/velocity/velocity/1.6.4/velocity-1.6.4.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/jettison/jettison/1.0-RC1/jettison-1.0-RC1.jar"/>

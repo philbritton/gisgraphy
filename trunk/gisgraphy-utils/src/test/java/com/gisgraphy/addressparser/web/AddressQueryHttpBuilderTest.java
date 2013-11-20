@@ -334,6 +334,15 @@ public class AddressQueryHttpBuilderTest {
 	query =builder.buildFromRequest(request);
     assertEquals("callback should not be set when alphanumeric",
 	     "doit",query.getCallback());
+    
+    //callback set with alpha value
+    request = new MockHttpServletRequest();
+    request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
+	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
+	request.setParameter(AbstractAddressServlet.APIKEY_PARAMETER, "apiKEY");
+	query =builder.buildFromRequest(request);
+    assertEquals("api key Should Be set",
+	     "api key",query.getApikey());
 	
     }
 

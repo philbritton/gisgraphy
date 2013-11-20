@@ -25,6 +25,7 @@ package com.gisgraphy.street;
 import javax.servlet.http.HttpServletRequest;
 
 import com.gisgraphy.geoloc.GeolocQueryHttpBuilder;
+import com.gisgraphy.servlet.GisgraphyServlet;
 import com.gisgraphy.servlet.StreetServlet;
 import com.vividsolutions.jts.geom.Point;
 
@@ -70,6 +71,11 @@ public class StreetSearchQueryHttpBuilder extends GeolocQueryHttpBuilder {
 	
 	String StreetSearchModeparameter = req.getParameter(StreetServlet.STREET_SEARCH_MODE_PARAMETER);
 	streetSearchQuery.withStreetSearchMode(StreetSearchMode.getFromString(StreetSearchModeparameter));
+	
+	// apiKey
+	String apiKey = req.getParameter(GisgraphyServlet.APIKEY_PARAMETER);
+	streetSearchQuery.setApikey(apiKey);
+	
 	return streetSearchQuery;
 
     }

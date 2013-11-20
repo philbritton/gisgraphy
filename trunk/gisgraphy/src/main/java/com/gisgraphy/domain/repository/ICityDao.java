@@ -48,7 +48,8 @@ public interface ICityDao extends IGisDao<City> {
     
     /**
      * @return the city that the given point belongs by searching by shape
+     * we can filter the result if the city is a municipality or not
      */
-    public City getByShape(Point location);
+    public City getByShape(Point location,boolean filterMunicipality);
 
 }
