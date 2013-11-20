@@ -644,6 +644,10 @@
 				(based on user feedbacks): 
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				parse apikey for each request receive by HTTP
+			</action>
+			
 			
 			</release>
 			

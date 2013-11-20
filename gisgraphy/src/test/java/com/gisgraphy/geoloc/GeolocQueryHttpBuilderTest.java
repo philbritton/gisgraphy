@@ -482,6 +482,12 @@ public class GeolocQueryHttpBuilderTest {
 		    query = buildQuery(request);
 		    assertEquals("callback should not be set when alphanumeric",
 			     "doit",query.getCallback());
+		    
+		  //apiKey
+			request = GisgraphyTestHelper.createMockHttpServletRequestForGeoloc();
+			request.setParameter(GisgraphyServlet.APIKEY_PARAMETER, "apiKey");
+			query =buildQuery(request);
+			Assert.assertEquals("apiKey", query.getApikey());
 
 		} finally {
 		    GisgraphyConfig.defaultGeolocSearchPlaceTypeClass = savedDefaultType;
