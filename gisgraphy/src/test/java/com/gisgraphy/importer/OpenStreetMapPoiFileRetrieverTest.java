@@ -249,7 +249,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    	OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
 		openStreetMapPoiFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
-		EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true);
+		EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true).times(2);
 		EasyMock.expect(importerConfig.isOpenstreetmapImporterEnabled()).andReturn(true);
 		EasyMock.expect(importerConfig.getGeonamesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
 		EasyMock.expect(importerConfig.getOpenStreetMapPoisDir()).andStubReturn("");

@@ -205,12 +205,33 @@
 				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="openstreetmapFileRetriever" />
 				<ref bean="openStreetMapImporter"/>
+				<ref bean="OpenStreetMapCitiesFileRetriever"/>
+				<ref bean="OpenStreetMapCitiesSimpleImporter"/>
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>
 				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
-				<!--<ref bean="openStreetMapFulltextBuilder"/>-->
+				<ref bean="OpenStreetMapPoiFileRetriever"/>
+				<ref bean="OpenStreetMapPoisSimpleImporter"/>
 			</list>
 		</constructor-arg>
 	</bean>
+	
+	<bean id="OpenStreetMapPoiFileRetriever"
+		class="com.gisgraphy.importer.OpenStreetMapPoiFileRetriever" parent="abstractFileRetriever" >
+	</bean>
+	
+	<bean id="OpenStreetMapPoisSimpleImporter"
+		class="com.gisgraphy.importer.OpenStreetMapPoisSimpleImporter" parent="abstract${classifier}ImporterProcessor" >
+	</bean>
+	
+	
+	<bean id="OpenStreetMapCitiesFileRetriever"
+		class="com.gisgraphy.importer.OpenStreetMapCitiesFileRetriever" parent="abstractFileRetriever" >
+	</bean>
+	
+	<bean id="OpenStreetMapCitiesSimpleImporter"
+		class="com.gisgraphy.importer.OpenStreetMapCitiesSimpleImporter" parent="abstract${classifier}ImporterProcessor" >
+	</bean>
+	
 
 	<bean id="importerConfig" class="com.gisgraphy.importer.ImporterConfig">
 		<property name="maxInsertsBeforeFlush" value="1000" /><!-- todo v2 option -->

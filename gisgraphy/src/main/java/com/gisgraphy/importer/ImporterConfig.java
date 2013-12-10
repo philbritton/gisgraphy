@@ -1388,8 +1388,13 @@ public class ImporterConfig {
      * @return true if the config is Ok to process the import
      */
     public boolean isConfigCorrectForImport() {
-    	return isRegexpCorrects() && isGeonamesDownloadDirectoryAccessible() && isOpenStreetMapDownloadDirectoryAccessible() && isOpenStreetMapHouseNumberDownloadDirectoryAccessible()
-    			&& isOpenStreetMapCitiesDirectoryAccessible() && isOpenStreetMapPoisDirectoryAccessible() && (isRetrieveFiles() && isAllFilesDownloadables());
+    	boolean firstcondition =  isRegexpCorrects() && isGeonamesDownloadDirectoryAccessible() && isOpenStreetMapDownloadDirectoryAccessible() && isOpenStreetMapHouseNumberDownloadDirectoryAccessible()
+    			&& isOpenStreetMapCitiesDirectoryAccessible() && isOpenStreetMapPoisDirectoryAccessible();
+    		if (isRetrieveFiles()){
+    			return firstcondition && isAllFilesDownloadables();
+    		} else {
+    			return firstcondition;
+    		}
     }
     
     

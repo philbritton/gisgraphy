@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
@@ -61,11 +62,15 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     
     public static final Pattern ALTERNATENAMES_EXTRACTION_PATTERN = Pattern.compile(ALTERNATENAMES_EXTRACTION_REGEXP);
 
+    @Autowired
 	protected IIdGenerator idGenerator;
     
+    @Autowired
     protected IGisFeatureDao gisFeatureDao;
     
+    @Autowired
     protected ISolRSynchroniser solRSynchroniser;
+  
     
     OsmAmenityToPlacetype osmAmenityToPlacetype = new OsmAmenityToPlacetype();
     

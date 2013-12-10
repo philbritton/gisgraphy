@@ -606,6 +606,10 @@
 			</action>
 			
 			<action dev="David Masclet" type="add">
+				city can now be flaged with 'municipality' to filter real municipality from popoluated place
+			</action>
+			
+			<action dev="David Masclet" type="add">
 				add is_in_place,is_in_adm_is_in_zip,fully_qualified_address to streets
 			</action>
 			
@@ -646,6 +650,10 @@
 			
 			<action dev="David Masclet" type="add">
 				parse apikey for each request receive by HTTP
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				update yahoo google and openstreetmap with new URLs
 			</action>
 			
 			

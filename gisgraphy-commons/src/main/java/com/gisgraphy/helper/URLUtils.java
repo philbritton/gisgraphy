@@ -42,17 +42,17 @@ public class URLUtils {
     /**
      * A constant to create Google map URL
      */
-    public static final String GOOGLE_MAP_BASE_URL = "http://maps.google.com/maps?f=q&amp;ie=UTF-8&amp;iwloc=addr&amp;om=1&amp;z=12&amp;q=";
+    public static final String GOOGLE_MAP_BASE_URL = "https://www.google.fr/maps/preview#!q=";
 
     /**
      * The default Google map URL
      */
-    public static final String DEFAULT_GOOGLE_MAP_BASE_URL = "http://maps.google.com/maps?f=q&amp;ie=UTF-8&amp;iwloc=addr&amp;om=1&amp;z=1&amp;q=";
+    public static final String DEFAULT_GOOGLE_MAP_BASE_URL = "https://www.google.fr/maps/preview#";
 
     /**
      * A Constant to create Yahoo map URL
      */
-    public static final String YAHOO_MAP_BASE_URL = "http://maps.yahoo.com/broadband?mag=6&amp;mvt=m";
+    public static final String YAHOO_MAP_BASE_URL = "http://maps.yahoo.com/place/?";
 
     /**
      * The default Yahoo map URL
@@ -62,7 +62,7 @@ public class URLUtils {
     /**
      * A Constant to create Openstreetmap map URL
      */
-    public static final String OPENSTREETMAP_MAP_BASE_URL = "http://www.openstreetmap.org/?zoom=14&layers=M";
+    public static final String OPENSTREETMAP_MAP_BASE_URL = "http://www.openstreetmap.org/#map=14/";
 
     /**
      * The default Openstreetmap map URL
@@ -93,15 +93,10 @@ public class URLUtils {
 	}
 	try {
 	    StringBuffer sb = new StringBuffer(GOOGLE_MAP_BASE_URL);
-	    sb.append(
-		    URLEncoder.encode(label == null ? "" : label,
-			    Constants.CHARSET)).append("&amp;ll=").append(
-		    point.getY() + 0.03)// add
-		    // an
-		    // offset
-		    .append(",").append(point.getX());
+	    sb.append(point.getY()+ 0.03)
+		    .append("+").append(point.getX());
 	    return sb.toString();
-	} catch (UnsupportedEncodingException e) {
+	} catch (Exception e) {
 	    return DEFAULT_GOOGLE_MAP_BASE_URL;
 	}
     }
@@ -116,9 +111,10 @@ public class URLUtils {
 	if (point == null) {
 	    return DEFAULT_YAHOO_MAP_BASE_URL;
 	}
-	StringBuffer sb = new StringBuffer(YAHOO_MAP_BASE_URL);
-	sb.append("&amp;lon=").append(point.getX()).append("&amp;lat=").append(
-		point.getY());
+	StringBuffer sb = new StringBuffer(YAHOO_MAP_BASE_URL)
+	.append("lat=").append(
+			point.getY())
+	.append("&amp;lon=").append(point.getX());
 	return sb.toString();
     }
     
@@ -132,9 +128,9 @@ public class URLUtils {
 	if (point == null) {
 	    return DEFAULT_OPENSTREETMAP_MAP_BASE_URL;
 	}
-	StringBuffer sb = new StringBuffer(OPENSTREETMAP_MAP_BASE_URL);
-	sb.append("&amp;lon=").append(point.getX()).append("&amp;lat=").append(
-		point.getY());
+	StringBuffer sb = new StringBuffer(OPENSTREETMAP_MAP_BASE_URL)
+	.append(point.getY()).append("/").append(
+		point.getX());
 	return sb.toString();
     }
 

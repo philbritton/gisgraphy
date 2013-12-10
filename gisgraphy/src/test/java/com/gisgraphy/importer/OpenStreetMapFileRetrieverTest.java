@@ -130,7 +130,7 @@ public class OpenStreetMapFileRetrieverTest {
 	OpenStreetMapFileRetriever openStreetMapFileRetriever = new OpenStreetMapFileRetriever();
 	openStreetMapFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = new ImporterConfig();
-	importerConfig.setOpenstreetMapDownloadURL("http://download.gisgraphy.com/openstreetmap/");
+	importerConfig.setOpenstreetMapDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
 	
 	// create a temporary directory to download files
 	File tempDir = FileHelper.createTempDir(this.getClass()
@@ -271,7 +271,7 @@ public class OpenStreetMapFileRetrieverTest {
 	OpenStreetMapFileRetriever openStreetMapFileRetriever = new OpenStreetMapFileRetriever();
 	openStreetMapFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
-	EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true);
+	EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true).times(2);
 	EasyMock.expect(importerConfig.isOpenstreetmapImporterEnabled()).andReturn(true);
 	EasyMock.expect(importerConfig.getGeonamesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
 	EasyMock.expect(importerConfig.getOpenStreetMapDir()).andStubReturn("");
