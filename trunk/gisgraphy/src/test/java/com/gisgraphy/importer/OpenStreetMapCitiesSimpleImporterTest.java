@@ -12,9 +12,11 @@ import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.fulltext.Constants;
@@ -43,6 +45,24 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		Assert.assertEquals("name", actual.getName());
 		Assert.assertEquals("FR", actual.getCountryCode());
 		Assert.assertEquals(location, actual.getLocation());
+		
+	}
+	
+	@Test
+	public void populateAlternateNames() {
+		String RawAlternateNames="Karl-Franzens-Universität Graz___Universidad de Graz___Université de Graz___Грацский университет имени Карла и Франца";
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
+		GisFeature poi = new GisFeature();
+		poi = importer.populateAlternateNames(poi, RawAlternateNames);
+		Assert.assertEquals(4, poi.getAlternateNames().size());
+		Assert.assertEquals("Karl-Franzens-Universität Graz",poi.getAlternateNames().get(0).getName());
+		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(0).getSource());
+		Assert.assertEquals("Universidad de Graz",poi.getAlternateNames().get(1).getName());
+		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(1).getSource());
+		Assert.assertEquals("Université de Graz",poi.getAlternateNames().get(2).getName());
+		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(2).getSource());
+		Assert.assertEquals("Грацский университет имени Карла и Франца",poi.getAlternateNames().get(3).getName());
+		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(3).getSource());
 		
 	}
 
@@ -181,8 +201,10 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);
 		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
 		
-		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope";
+		
+		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope\tparis2";
 		
 		importer.processData(line);
 		
@@ -230,7 +252,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				Assert.assertEquals(1000000L, city.getPopulation().longValue());
 				Assert.assertEquals("admName", city.getAdm().getName());
 				Assert.assertEquals("5678", city.getZipCodes().get(0).getCode());
-				Assert.assertTrue("city should be a municipality because it is present in both db",city.isMunicipality());
+				Assert.assertFalse("city should not be a municipality because it is a N and country FR",city.isMunicipality());
 			}
 		};
 		
@@ -253,8 +275,9 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);
 		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
 		
-		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope";
+		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope\tParis2";
 		
 		importer.processData(line);
 		
@@ -305,8 +328,9 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);
 		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
 		
-		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope";
+		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope\tparis2";
 		
 		importer.processData(line);
 		
@@ -340,7 +364,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			@Override
 			void savecity(City city) {
 				super.savecity(city);
-				Assert.assertTrue("city should be a municipality because it is present in both db",city.isMunicipality());
+				Assert.assertTrue("city should be a municipality because it is a relation and countrycode is FR",city.isMunicipality());
 			}
 		};
 		
@@ -357,8 +381,9 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.replay(admDao);
 		importer.setAdmDao(admDao);
 		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
 		
-		String line= "N\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope";
+		String line= "R\t1234\tparis\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope\tParis2";
 		
 		importer.processData(line);
 		

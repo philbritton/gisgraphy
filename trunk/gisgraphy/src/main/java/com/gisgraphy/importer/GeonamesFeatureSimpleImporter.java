@@ -331,11 +331,10 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 		    + " have an entry in " + FeatureCode.class.getSimpleName()
 		    + " : " + featureObject.getClass().getSimpleName());
 	    featureObject.populate(gisFeature);
-	    /* old code replace by osm cities importer
-	     * if (gisFeature instanceof City){
-	    	((City)gisFeature).setMunicipality(municipalityDetector.isMunicipality(gisFeature.getCountryCode(), gisFeature));
+	    if (gisFeature instanceof City){
+	    	((City)gisFeature).setMunicipality(municipalityDetector.isMunicipality(fields[8].toUpperCase(),null,null,GISSource.GEONAMES));
 	    }
-	    */
+	    
 		// zipcode
 		String foundZipCode = findZipCode(fields);
 		if (foundZipCode != null){

@@ -38,12 +38,8 @@ public class URLUtilsTest  {
     public void createGoogleMapUrlShouldReturnCorrectURL() {
 	Point point = GisgraphyUtilsTestHelper.createPoint(2.33333F, 48.86667F);
 	String URL = URLUtils.createGoogleMapUrl(point, "Paris");
-	HashMap<String, String> map = GisgraphyUtilsTestHelper.splitURLParams(URL,
-		"&amp;");
-	assertTrue(map.get("q").equals("Paris"));
-	String[] ll = map.get("ll").split(",");
-	assertTrue(ll[0].startsWith("48.896"));
-	assertTrue(ll[1].startsWith("2.333"));
+	assertTrue(URL.contains("!q=48.896"));
+	assertTrue(URL.contains("+2.333"));
 
     }
 
@@ -75,10 +71,8 @@ public class URLUtilsTest  {
 	Point point = GisgraphyUtilsTestHelper.createPoint(2.33333F, 48.86667F);
 	String URL = URLUtils.createOpenstreetmapMapUrl(point);
 	System.out.println(URL);
-	HashMap<String, String> map = GisgraphyUtilsTestHelper.splitURLParams(URL,
-		"&amp;");
-	assertTrue(map.get("lat").startsWith("48.866"));
-	assertTrue(map.get("lon").startsWith("2.333"));
+	assertTrue(URL.contains("/48.866"));
+	assertTrue(URL.contains("/2.333"));
     }
     
 

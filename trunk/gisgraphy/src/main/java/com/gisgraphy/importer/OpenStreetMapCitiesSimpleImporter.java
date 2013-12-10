@@ -27,6 +27,7 @@ import static com.gisgraphy.fulltext.Constants.ONLY_ADM_PLACETYPE;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
@@ -34,12 +35,15 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Output;
@@ -52,6 +56,7 @@ import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
+import com.sun.tools.javac.code.Source;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -68,6 +73,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	
     
     public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
+    
+    public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";
+    
+    public static final Pattern ALTERNATENAMES_EXTRACTION_PATTERN = Pattern.compile(ALTERNATENAMES_EXTRACTION_REGEXP);
 
 	protected IIdGenerator idGenerator;
     
@@ -78,6 +87,8 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
     protected ISolRSynchroniser solRSynchroniser;
     
     protected IFullTextSearchEngine fullTextSearchEngine;
+    
+    protected IMunicipalityDetector municipalityDetector;
     
     
 
@@ -112,7 +123,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
      */
     @Override
     protected int getNumberOfColumns() {
-	return 10;
+	return 11;
     }
 
     /* (non-Javadoc)
@@ -130,7 +141,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	// --------------------------------------------------- 
 	//0: N|W|R; 1 id; 2 name; 3 countrycode; 4 :postcode 
 	//5:population 6:location; 7 : shape ;8: place tag; 9 : is_in;
-	//
+	// 10 : alternatenames
 	//
 	checkNumberOfColumn(fields);
 	
@@ -162,12 +173,13 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			if (city==null){
 				city = createNewCity(name,countrycode,location);
 				
-			} else {
-				city.setMunicipality(true);
-			}
+			} 
 	} else {
 		city = createNewCity(name,countrycode,location);
 	}
+	//set municipality if needed
+	city.setMunicipality(municipalityDetector.isMunicipality(countrycode, fields[8], fields[0], GISSource.OPENSTREETMAP));
+	
 	//populate new fields
 	//population
 	if(city.getPopulation()==null && !isEmptyField(fields, 5, false)){
@@ -206,6 +218,12 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			logger.error("can not parse openstreetmap id "+osmIdAsString);
 		}
 	}
+	
+	//populate alternatenames
+	if (!isEmptyField(fields, 10, false)) {
+		String alternateNamesAsString=fields[4].trim();
+		populateAlternateNames(city,alternateNamesAsString);
+	}
 
 	//adm
 	if(!isEmptyField(fields, 9, false)){
@@ -241,6 +259,27 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		city.setLocation(location);
 		city.setCountryCode(countryCode);
 		return city;
+	}
+	
+	GisFeature populateAlternateNames(GisFeature feature,
+			String alternateNamesAsString) {
+		if (feature ==null || alternateNamesAsString ==null){
+			return feature;
+		}
+		Matcher matcher = ALTERNATENAMES_EXTRACTION_PATTERN.matcher(alternateNamesAsString);
+		int i = 0;
+		while (matcher.find()){
+			if (matcher.groupCount() != 1) {
+				logger.warn("wrong number of fields for alternatename no " + i + "for line " + alternateNamesAsString);
+				continue;
+			}
+			String alternateName = matcher.group(1);
+			if (alternateName!= null && !"".equals(alternateName.trim())){
+				feature.addAlternateName(new AlternateName(alternateName,AlternateNameSource.OPENSTREETMAP));
+			}
+		}
+		return feature;
+		
 	}
 
 
@@ -372,7 +411,11 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		this.admDao = admDao;
 	}
     
-    
+
+    @Required
+    public void setMunicipalityDetector(IMunicipalityDetector municipalityDetector) {
+		this.municipalityDetector = municipalityDetector;
+	}
 
     
 }

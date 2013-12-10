@@ -422,7 +422,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
 		EasyMock.replay(cityDao);
 		openStreetMapSimpleImporter.setCityDao(cityDao);
     	
@@ -513,7 +513,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 
@@ -606,7 +606,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
 		EasyMock.replay(cityDao);
 		openStreetMapSimpleImporter.setCityDao(cityDao);
     	    	
@@ -702,7 +702,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 
@@ -765,7 +765,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
 
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
     	
@@ -802,7 +802,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Adm adm = new Adm(2);
     	adm.setName("admName");
     	cityByShape.setAdm(adm);
-    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(cityByShape);
+    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(cityByShape);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 
@@ -841,7 +841,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
-    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),true)).andReturn(null);
+    	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 

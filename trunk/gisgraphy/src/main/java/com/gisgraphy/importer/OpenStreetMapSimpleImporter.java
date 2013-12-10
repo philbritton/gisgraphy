@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.City;
@@ -58,17 +59,22 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor {
 	
-    
+    @Autowired
     protected IIdGenerator idGenerator;
     
+    @Autowired
     protected IOpenStreetMapDao openStreetMapDao;
     
+    @Autowired
     protected ISolRSynchroniser solRSynchroniser;
     
+    @Autowired
     protected IGeolocSearchEngine geolocSearchEngine;
     
+    @Autowired
     protected IMunicipalityDetector municipalityDetector;
     
+    @Autowired
     protected ICityDao cityDao;
     
     private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);

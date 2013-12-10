@@ -271,7 +271,7 @@ public class OpenStreetMapHouseNumberFileRetrieverTest {
     OpenStreetMapHouseNumberFileRetriever openStreetMapHouseNumberFileRetriever = new OpenStreetMapHouseNumberFileRetriever();
 	openStreetMapHouseNumberFileRetriever.setInternationalisationService(createMockInternationalisationService());
 	ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
-	EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true);
+	EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true).times(2);
 	EasyMock.expect(importerConfig.isOpenstreetmapHouseNumberImporterEnabled()).andReturn(true);
 	EasyMock.expect(importerConfig.getGeonamesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
 	EasyMock.expect(importerConfig.getOpenStreetMapHouseNumberDir()).andStubReturn("");
