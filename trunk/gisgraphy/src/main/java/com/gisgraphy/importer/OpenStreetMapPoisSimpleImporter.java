@@ -143,7 +143,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     }
 
 	GisFeature createAndpopulatePoi(String[] fields, String amenity) {
-		GisFeature poi = osmAmenityToPlacetype.getObject(amenity);
+		GisFeature poi = osmAmenityToPlacetype.getAmenityObject(amenity);
 		//osmId
 		if (!isEmptyField(fields, 1, true)) {
 			String osmIdAsString =fields[1].trim();
