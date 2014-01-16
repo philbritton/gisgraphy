@@ -20,52 +20,27 @@
  *  
  *  
  *******************************************************************************/
-/**
- * 
- */
 package com.gisgraphy.domain.repository;
 
-import java.util.Collection;
+import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
+import com.gisgraphy.domain.geoloc.entity.Ambulance;
+import com.gisgraphy.domain.geoloc.entity.Camp;
+import com.gisgraphy.domain.geoloc.entity.Picnic;
 
-import org.junit.Test;
-
-import com.gisgraphy.domain.geoloc.entity.City;
-import com.gisgraphy.domain.geoloc.entity.GisFeature;
-import com.gisgraphy.domain.valueobject.FeatureCode;
-
-
-public class RepositoryStrategyTest extends AbstractTransactionalTestCase {
-
-    @Resource
-    IRepositoryStrategy repositoryStrategy;
-
-    @Resource
-    IGisFeatureDao gisFeatureDao;
-
-    @Resource
-    ICityDao cityDao;
-
-   
+/**
+ * A data access object for {@link Ambulance} Object
+ * 
+ * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
+ */
+@Repository
+public class AmbulanceDao extends GenericGisDao<Ambulance> implements IGisDao<Ambulance> {
 
     /**
-     * Test method for
-     * {@link com.gisgraphy.domain.repository.RepositoryStrategy#GetDao(java.lang.Class)}.
+     * Default constructor
      */
-    @Test
-    public void testGetDaoWithNullReturnGisFeatureDao() {
-	assertEquals(gisFeatureDao, repositoryStrategy.getDao(null));
-    }
-
-    /**
-     * Test method for
-     * {@link com.gisgraphy.domain.repository.RepositoryStrategy#GetDao(java.lang.Class)}.
-     */
-    @Test
-    public void testGetDaoreturnCorrectDao() {
-	assertEquals(gisFeatureDao, repositoryStrategy.getDao(GisFeature.class));
-	assertEquals(cityDao, repositoryStrategy.getDao(City.class));
+    public AmbulanceDao() {
+	super(Ambulance.class);
     }
 
 }

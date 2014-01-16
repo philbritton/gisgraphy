@@ -165,6 +165,59 @@ public class OpenStreetMap {
 
     @IntrospectionIgnoredField
     private String textSearchName;
+    
+    private List<AlternateOsmName> alternateNames;
+    
+    /**
+     * @return A list of the {@link AlternateName}s for this GisFeature
+     */
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "street")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Fetch(FetchMode.SELECT)
+    public List<AlternateOsmName> getAlternateNames() {
+	return alternateNames;
+    }
+    
+    /**
+     * @param alternateNames
+     *                The {@link AlternateName}s for this GisFeature
+     */
+    public void setAlternateNames(List<AlternateOsmName> alternateNames) {
+	this.alternateNames = alternateNames;
+    }
+
+    /**
+     * Do a double set : add the alternate name to the current GisFeature and set
+     * this GisFeature as the GisFeature of the specified AlternateName
+     * 
+     * @param alternateName
+     *                the alternateName to add
+     */
+    public void addAlternateName(AlternateOsmName alternateName) {
+	List<AlternateOsmName> currentAlternateNames = getAlternateNames();
+	if (currentAlternateNames == null) {
+	    currentAlternateNames = new ArrayList<AlternateOsmName>();
+	}
+	currentAlternateNames.add(alternateName);
+	this.setAlternateNames(currentAlternateNames);
+	alternateName.setStreet(this);
+    }
+
+    /**
+     * Do a double set : add (not replace !) the AlternateNames to the current
+     * GisFeature and for each alternatenames : set the current GisFeature as
+     * the GisFeature of the Alternate Names
+     * 
+     * @param alternateNames
+     *                The alternateNames list to add
+     */
+    public void addAlternateNames(List<AlternateOsmName> alternateNames) {
+	if (alternateNames != null) {
+	    for (AlternateOsmName alternateName : alternateNames) {
+		addAlternateName(alternateName);
+	    }
+	}
+    }
 
     /**
      * (Experimental) This String is used to search for a part of a street name

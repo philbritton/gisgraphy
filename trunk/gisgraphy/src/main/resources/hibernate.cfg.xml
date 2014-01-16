@@ -129,6 +129,7 @@
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Stream" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Street" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.OpenStreetMap" />
+		<mapping class="com.gisgraphy.domain.geoloc.entity.AlternateOsmName" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Theater" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Tower" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Tree" />
@@ -160,6 +161,17 @@
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Toilet" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.VendingMachine" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.Veterinary" />
+		
+		<mapping class="com.gisgraphy.domain.geoloc.entity.Ambulance" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Camping" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Cave" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.CityHall" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Craft" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Picnic" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.RestArea" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Sport" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.Tourism" />
+        <mapping class="com.gisgraphy.domain.geoloc.entity.TourismInfo" />
 		
 		<mapping class="com.gisgraphy.stats.StatsUsage" />
 		<mapping class="com.gisgraphy.domain.geoloc.entity.HouseNumber" />
