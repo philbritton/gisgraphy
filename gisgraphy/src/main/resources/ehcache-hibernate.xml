@@ -47,15 +47,21 @@
 		memoryStoreEvictionPolicy="LRU" />
 
 		<cache name="com.gisgraphy.domain.geoloc.entity.GisFeature"
-		maxElementsInMemory="1000" eternal="true" overflowToDisk="false" />
+		maxElementsInMemory="1000" eternal="true" overflowToDisk="false" />com.gisgraphy.domain.geoloc.entity.OpenStreetMap.alternateNames
 
 		<cache name="com.gisgraphy.domain.geoloc.entity.GisFeature.alternateNames"
+		maxElementsInMemory="500" eternal="true" overflowToDisk="false" />
+		
+		<cache name="com.gisgraphy.domain.geoloc.entity.OpenStreetMap.alternateNames"
 		maxElementsInMemory="500" eternal="true" overflowToDisk="false" />
         
         <cache name="com.gisgraphy.domain.geoloc.entity.City"
 		maxElementsInMemory="1000" eternal="true" overflowToDisk="false" />	
 		
 		<cache name="com.gisgraphy.domain.geoloc.entity.AlternateName"
+		maxElementsInMemory="100" eternal="true" overflowToDisk="false" />
+		
+		<cache name="com.gisgraphy.domain.geoloc.entity.AlternateOsmName"
 		maxElementsInMemory="100" eternal="true" overflowToDisk="false" />	
 			
 		<cache name="com.gisgraphy.domain.geoloc.entity.Adm"

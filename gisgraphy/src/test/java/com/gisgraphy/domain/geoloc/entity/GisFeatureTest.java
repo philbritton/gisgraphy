@@ -25,10 +25,12 @@ package com.gisgraphy.domain.geoloc.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.repository.ICityDao;
@@ -41,6 +43,18 @@ public class GisFeatureTest extends AbstractIntegrationHttpSolrTestCase {
     private ICountryDao countryDao;
 
     private ICityDao cityDao;
+    
+    @Test
+    public void CheckAllEntitiesHasTheirPlacetype(){
+    	Reflections reflections = new Reflections("com.gisgraphy.domain.geoloc.entity");
+
+    	 Set<Class<? extends Object>> allClasses = 
+    	     reflections.getSubTypesOf(Object.class);
+    	 
+    	 for (Class c: allClasses){
+    		 System.out.println(c);
+    	 }
+    }
 
     @Test
     public void testAddAlternateNamesShouldAddChildrenAndNotReplace() {
