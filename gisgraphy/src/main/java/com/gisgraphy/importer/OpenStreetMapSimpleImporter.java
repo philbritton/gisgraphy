@@ -33,12 +33,16 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
@@ -79,6 +83,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
     private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
+ public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";
+    
+    public static final Pattern ALTERNATENAMES_EXTRACTION_PATTERN = Pattern.compile(ALTERNATENAMES_EXTRACTION_REGEXP);
+    
 
     /* (non-Javadoc)
      * @see com.gisgraphy.domain.geoloc.importer.AbstractImporterProcessor#flushAndClear()
@@ -112,7 +120,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
      */
     @Override
     protected int getNumberOfColumns() {
-	return 9;
+	return 10;
     }
 
     /* (non-Javadoc)
@@ -205,6 +213,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	    }
 	    
 	}
+	
+	if (fields.length == 10 && !isEmptyField(fields, 8, false)){
+		populateAlternateNames(street,fields[9]);
+	}
 		
 	try {
 		openStreetMapDao.save(street);
@@ -215,6 +227,31 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	}
 
     }
+    
+    OpenStreetMap populateAlternateNames(OpenStreetMap street,
+			String alternateNamesAsString) {
+		if (street ==null || alternateNamesAsString ==null){
+			return street;
+		}
+		Matcher matcher = ALTERNATENAMES_EXTRACTION_PATTERN.matcher(alternateNamesAsString);
+		int i = 0;
+		while (matcher.find()){
+			if (matcher.groupCount() != 1) {
+				logger.warn("wrong number of fields for street alternatename no " + i + "for line " + alternateNamesAsString);
+				continue;
+			}
+			String alternateName = matcher.group(1);
+			if (alternateName!= null && !"".equals(alternateName.trim())){
+				if (street.getName()==null){
+					street.setName(alternateName);
+				} else {
+				 street.addAlternateName((new AlternateOsmName(alternateName.trim(),AlternateNameSource.OPENSTREETMAP)));
+				}
+			}
+		}
+		return street;
+		
+	}
 
     protected void setIsInFields(OpenStreetMap street) {
     	if (street != null && street.getLocation() != null) {
@@ -405,6 +442,24 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     	    // we restore message in case of error
     	    this.statusMessage = savedMessage;
     	}
+    }
+    
+    /**
+     * overidded because alternatenames can be null so number of fields can differ
+     * 
+     * @see #getNumberOfColumns()
+     * @param fields
+     *                The array to check
+     */
+    @Override
+    protected void checkNumberOfColumn(String[] fields) {
+	if (fields.length != 9 && fields.length != 10) {
+
+	    throw new WrongNumberOfFieldsException(
+		    "The number of fields is not correct. expected : "
+			    + getNumberOfColumns() + ", founds :  "
+			    + fields.length+ ". details :"+dumpFields(fields));
+	}
     }
     
     protected boolean shouldFillIsInField(){

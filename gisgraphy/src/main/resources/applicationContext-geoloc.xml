@@ -203,10 +203,10 @@
 				<ref bean="geonamesZipCodeFileRetriever" />
 				<ref bean="geonamesZipCodeImporter" />
 				<ref bean="geonamesDatabaseIndexer" />
-				<ref bean="openstreetmapFileRetriever" />
-				<ref bean="openStreetMapImporter"/>
 				<ref bean="OpenStreetMapCitiesFileRetriever"/>
 				<ref bean="OpenStreetMapCitiesSimpleImporter"/>
+				<ref bean="openstreetmapFileRetriever" />
+				<ref bean="openStreetMapImporter"/>
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>
 				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
 				<ref bean="OpenStreetMapPoiFileRetriever"/>

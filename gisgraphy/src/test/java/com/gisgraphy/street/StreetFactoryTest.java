@@ -27,9 +27,12 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.helper.GeolocHelper;
 import com.vividsolutions.jts.geom.Point;
 
@@ -72,6 +75,11 @@ public class StreetFactoryTest {
 	houseNumbers.add(houseNumber);
 	openStreetMap.setHouseNumbers(houseNumbers);
 	
+	List<AlternateOsmName> alternateNames = new ArrayList<AlternateOsmName>();
+	alternateNames.add(new AlternateOsmName("altname",AlternateNameSource.PERSONAL));
+	alternateNames.add(new AlternateOsmName("altname2",AlternateNameSource.OPENSTREETMAP));
+	openStreetMap.addAlternateNames(alternateNames);
+	
 	StreetFactory factory = new StreetFactory();
 	Street street = factory.create(openStreetMap);
 	
@@ -89,8 +97,25 @@ public class StreetFactoryTest {
 	Assert.assertEquals(isInZip, street.getIsInZip());
 	Assert.assertEquals(fullyQualifiedAddress, street.getFullyQualifiedAddress());
 	Assert.assertEquals(houseNumbers, street.getHouseNumbers());
+	Assert.assertEquals(2, street.getAlternateNames().size());
+	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname"));
+	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname2"));
 	
 	
+    }
+    
+    private boolean alternateNamesContain(List<AlternateName> names, String name){
+    	if (names!=null ){
+    		for(AlternateName nameToTest:names){
+    			if (nameToTest!=null && nameToTest.getName().equals(name)){
+    				return true;
+    			}
+    		}
+    	} else {
+    		return false;
+    	}
+    	Assert.fail("alternateNames doesn't contain "+name);
+    	return false;
     }
     
 }

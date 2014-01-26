@@ -203,11 +203,11 @@ public class OsmAmenityToPlacetype {
 
 
 
-	public GisFeature getAmenityObject(String amenity){
+	GisFeature getAmenityObject(String amenity){
 		if (amenity == null  || "".equals(amenity)){
 			return null;
 		} 
-		GisFeature gisfeature = new GisFeature();
+		GisFeature gisfeature = null;
 		//take care of case, always put in lower case
 		String a = amenity.trim().toLowerCase();
 		if ("parking".equals(a)){
@@ -256,7 +256,7 @@ public class OsmAmenityToPlacetype {
 			gisfeature =  new FireStation();
 		} else  if ("police".equals(a)){
 			gisfeature =  new PolicePost();
-		}else  if ("bar".equals(a)){
+		} else  if ("bar".equals(a)){
 			gisfeature =  new Bar();
 		} else  if ("swimming_pool".equals(a)){
 			gisfeature =  new SwimmingPool();
@@ -375,11 +375,13 @@ public class OsmAmenityToPlacetype {
 		} else  if ("waste_disposal".equals(a)){
 			return null;
 		}
-		//default if we don't know (it let us the ability to search by amenity
+		//default if we don't know (should we kepp the poi and it let us the ability to search by amenity,
+		//or should we consider that it is something exotic
 		else {
-			gisfeature.setFeatureCode(DEFAULT_OSM_FEATURE_CODE);
+			/*gisfeature.setFeatureCode(DEFAULT_OSM_FEATURE_CODE);
 			gisfeature.setFeatureClass(DEFAULT_OSM_FEATURE_CLASS);
-			gisfeature =  new GisFeature();
+			gisfeature =  new GisFeature();*/
+			return null;
 		}
 		gisfeature.setFeatureCode(DEFAULT_OSM_FEATURE_CODE);
 		gisfeature.setFeatureClass(DEFAULT_OSM_FEATURE_CLASS);
@@ -388,7 +390,7 @@ public class OsmAmenityToPlacetype {
 	}
 
 
-	public GisFeature getAerowayObject(String aeroway){
+	GisFeature getAerowayObject(String aeroway){
 		//default to airport
 		if (aeroway == null || "".equals(aeroway.trim()) ){
 			return null;
@@ -403,7 +405,7 @@ public class OsmAmenityToPlacetype {
 	}
 
 
-	public GisFeature getRailwayObject(String railway){
+	GisFeature getRailwayObject(String railway){
 		//default to rail
 		String a = null;
 		if (railway == null || "".equals(railway.trim()) ){
@@ -423,7 +425,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getBuildingObject(String building){
+	GisFeature getBuildingObject(String building){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (building != null && !"".equals(building.trim()) ){
@@ -461,7 +463,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getHistoricObject(String historic){
+	GisFeature getHistoricObject(String historic){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (historic != null && !"".equals(historic.trim()) ){
@@ -485,7 +487,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getManMadeObject(String manMade){
+	GisFeature getManMadeObject(String manMade){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (manMade != null && !"".equals(manMade.trim()) ){
@@ -505,7 +507,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getOfficeObject(String office){
+	GisFeature getOfficeObject(String office){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (office != null && !"".equals(office.trim()) ){
@@ -524,7 +526,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getCraftObject(String craft){
+	GisFeature getCraftObject(String craft){
 		GisFeature gisfeature = new Craft();
 		String a = null;
 		if (craft != null && !"".equals(craft.trim()) ){
@@ -540,7 +542,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getShopObject(String shop){
+	GisFeature getShopObject(String shop){
 		String a = null;
 		if (shop == null || "".equals(shop.trim())){
 			return null;
@@ -555,7 +557,7 @@ public class OsmAmenityToPlacetype {
 		return gisfeature;
 	}
 
-	public GisFeature getSportObject(String sport){
+	GisFeature getSportObject(String sport){
 		String a = null;
 		if (sport == null || "".equals(sport.trim()) ){
 			return null;
@@ -571,7 +573,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getLanduseObject(String landuse){
+	GisFeature getLanduseObject(String landuse){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (landuse != null && !"".equals(landuse.trim()) ){
@@ -590,7 +592,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getHighwayObject(String highway){
+	GisFeature getHighwayObject(String highway){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (highway != null && !"".equals(highway.trim()) ){
@@ -610,7 +612,7 @@ public class OsmAmenityToPlacetype {
 	}
 
 	//'common','dance','fishing','garden','golf','golf_course','ice_rink','marina','miniature_golf','nature_reserve','park' , 'pitch','playground','sports_center','stadium','swimming_pool','water_park')
-	public GisFeature getLeisureObject(String tourism){
+	GisFeature getLeisureObject(String tourism){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (tourism != null && !"".equals(tourism.trim()) ){
@@ -655,7 +657,7 @@ public class OsmAmenityToPlacetype {
 
 	}
 
-	public GisFeature getTourismObject(String tourism){
+	GisFeature getTourismObject(String tourism){
 		GisFeature gisfeature = null;
 		String a = null;
 		if (tourism != null && !"".equals(tourism.trim()) ){

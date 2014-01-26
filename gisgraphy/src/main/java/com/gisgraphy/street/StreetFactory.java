@@ -22,8 +22,12 @@
  *******************************************************************************/
 package com.gisgraphy.street;
 
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
+import com.gisgraphy.domain.valueobject.GISSource;
 
 
 /**
@@ -55,6 +59,12 @@ public Street create(OpenStreetMap openstreetmap){
 	   street.setFullyQualifiedAddress(openstreetmap.getFullyQualifiedAddress());
 	   street.setPopulation(openstreetmap.getPopulation());
 	   street.setHouseNumbers(openstreetmap.getHouseNumbers());
+	   if (openstreetmap.getAlternateNames()!=null){
+		   for (AlternateOsmName alternateOsmName : openstreetmap.getAlternateNames()){
+			   street.addAlternateName(new AlternateName(alternateOsmName.getName(),alternateOsmName.getSource()));
+			   
+		   }
+	   }
 	   return street;
        }
        return null;

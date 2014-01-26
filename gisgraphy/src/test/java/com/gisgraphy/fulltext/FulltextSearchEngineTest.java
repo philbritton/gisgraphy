@@ -305,8 +305,8 @@ public class FulltextSearchEngineTest extends
 			+ "'][.='"+street.getStreetType()+"']",
 			"//*[@name='" + FullTextFields.COUNTRYCODE.getValue()
 			+ "'][.='"+street.getCountryCode()+"']",
-			"//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
-			+ "'][.='"+URLUtils.createCountryFlagUrl(street.getCountryCode())+"']",
+			/*"//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
+			+ "'][.='"+URLUtils.createCountryFlagUrl(street.getCountryCode())+"']",*/
 			"//*[@name='" + FullTextFields.PLACETYPE.getValue()
 			+ "'][.='"+Street.class.getSimpleName()+"']",
 			"//*[@name='" + FullTextFields.IS_IN.getValue()
@@ -421,8 +421,8 @@ public class FulltextSearchEngineTest extends
 	}
 	FeedChecker.assertQ("The query return incorrect values", content,
 		"//*[@numFound='1']", "//*[@name='status'][.='0']",
-		"//*[@name='" + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			+ "'][.='" + paris.getFullyQualifiedName(false) + "']");
+		"//*[@name='" + FullTextFields.NAME.getValue()
+			+ "'][.='" + paris.getName() + "']");
 
 	// delete temp dir
 	assertTrue("the tempDir has not been deleted", GisgraphyTestHelper
@@ -482,8 +482,8 @@ public class FulltextSearchEngineTest extends
 	}
 	FeedChecker.assertQ("The query return incorrect values", content,
 		"//*[@numFound='1']", "//*[@name='status'][.='0']",
-		"//*[@name='" + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			+ "'][.='" + paris.getFullyQualifiedName(false) + "']");
+		"//*[@name='" + FullTextFields.NAME.getValue()
+			+ "'][.='" + paris.getName() + "']");
 
 	// delete temp dir
 	assertTrue("the tempDir has not been deleted", GisgraphyTestHelper
@@ -511,8 +511,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -692,8 +692,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -721,8 +721,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -815,8 +815,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -870,8 +870,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -899,8 +899,8 @@ public class FulltextSearchEngineTest extends
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
 		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
 			    + "']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
@@ -933,10 +933,7 @@ public class FulltextSearchEngineTest extends
 		    .executeQueryToString(fulltextQuery);
 	    FeedChecker.assertQ("The query return incorrect values", result,
 		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
-		    "//*[@name='"
-			    + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			    + "'][.='" + city.getFullyQualifiedName(false)
-			    + "']", "//*[@name='"
+		     "//*[@name='"
 			    + FullTextFields.SPELLCHECK.getValue() + "']",
 		"//*[@name='" + FullTextFields.SPELLCHECK_SUGGESTIONS.getValue()
 				+ "']"

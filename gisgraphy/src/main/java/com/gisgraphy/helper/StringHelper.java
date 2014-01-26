@@ -35,7 +35,7 @@ import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 
 /**
- * Provide some usefull method to copute strinfg for autocompletion and fulltextsearch
+ * Provide some usefull method to compute string for autocompletion and fulltextsearch
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */

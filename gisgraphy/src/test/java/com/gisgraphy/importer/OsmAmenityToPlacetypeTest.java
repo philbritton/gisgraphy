@@ -71,6 +71,14 @@ public class OsmAmenityToPlacetypeTest {
 		Assert.assertNotNull(objects);
 		Assert.assertEquals(2, objects.size());
 		
+		//two tags and one is a gisfeature
+		tags = new String[14];
+		tags[0]="bbq";//amenity
+		tags[2]="hotel";//building
+		objects = osmAmenityToPlacetype.getObjectsFromTags(tags);
+		Assert.assertNotNull(objects);
+		Assert.assertEquals("we should have 2 object and one gisFeature cause even if hotel extends GisFeature, GisFeature is considered as a real placetype not a 'by default one'",2, objects.size());
+		
 		//simple leisure with some sport
 		tags = new String[14];
 		tags[5]="dance";//leisure
@@ -127,10 +135,7 @@ public class OsmAmenityToPlacetypeTest {
 	@Test
 	public void getAmenityObjectWithUnknowAmenity() {
 		GisFeature o = osmAmenityToPlacetype.getAmenityObject("foo");
-		Assert.assertEquals(GisFeature.class, o.getClass());
-		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CLASS, o.getFeatureClass());
-		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CODE, o.getFeatureCode());
-		Assert.assertEquals("foo", o.getAmenity());
+		Assert.assertEquals(null, o);
 	}
 	
 	@Test

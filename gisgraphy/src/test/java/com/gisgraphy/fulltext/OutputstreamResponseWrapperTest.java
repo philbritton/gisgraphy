@@ -116,8 +116,8 @@ public class OutputstreamResponseWrapperTest extends
 
 	FeedChecker.assertQ("The query return incorrect values", content,
 		"//*[@numFound='1']", "//*[@name='status'][.='0']",
-		"//*[@name='fully_qualified_name'][.='"
-			+ paris.getFullyQualifiedName(false) + "']");
+		"//*[@name='"+FullTextFields.NAME.getValue()+"'][.='"
+			+ paris.getName() + "']");
 
 	// delete temp dir
 	assertTrue("the tempDir has not been deleted", GisgraphyTestHelper

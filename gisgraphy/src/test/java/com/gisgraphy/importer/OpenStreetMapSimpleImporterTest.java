@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
@@ -71,7 +72,17 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     
     static boolean setupIsCalled = false;
     
-   
+    @Test
+    public void testSetup(){
+    	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
+    	IIdGenerator idGenerator = EasyMock.createMock(IIdGenerator.class);
+    	idGenerator.sync();
+    	EasyMock.replay(idGenerator);
+    	importer.setIdGenerator(idGenerator);
+    	
+    	importer.setup();
+    	EasyMock.verify(idGenerator);
+    }
   
     @Test
     public void testRollback() throws Exception {
@@ -108,8 +119,41 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 	assertEquals("The location->Y is not correct ",((Point)GeolocHelper.convertFromHEXEWKBToGeometry("010100000006C82291A0521E4054CC39B16BC64740")).getY(), openStreetMap.getLocation().getY());
 	assertEquals("The length is not correct",0.00142246604529, openStreetMap.getLength());
 	assertEquals("The shape is not correct ",GeolocHelper.convertFromHEXEWKBToGeometry("01020000000200000009B254CD6218024038E22428D9EF484075C93846B217024090A8AB96CFEF4840").toString(), openStreetMap.getShape().toString());
+	
+	//check alternate names when there is 2
+	Assert.assertEquals(2, openStreetMap.getAlternateNames().size());
+	Assert.assertTrue(alternateNamesContain(openStreetMap.getAlternateNames(),"Rue de Bachlettenstrasse"));
+	Assert.assertTrue(alternateNamesContain(openStreetMap.getAlternateNames(),"Bachletten strasse"));
+	
+	//check alternate names when there is no name but alternate
+	openStreetMap = openStreetMapDao.getByGid(firstIdAssigned+1);
+		Assert.assertEquals(1, openStreetMap.getAlternateNames().size());
+		Assert.assertEquals("When there is no name and some alternatename, the first alternatename is set to name ","noName BUT an alternate",openStreetMap.getName());
+		Assert.assertTrue(alternateNamesContain(openStreetMap.getAlternateNames(),"other an"));
+		
+		//one alternate name
+		openStreetMap = openStreetMapDao.getByGid(firstIdAssigned+2);
+		Assert.assertEquals(1, openStreetMap.getAlternateNames().size());
+		Assert.assertTrue(alternateNamesContain(openStreetMap.getAlternateNames(),"Friedhof"));
+		
+		//no alternate names
+		openStreetMap = openStreetMapDao.getByGid(firstIdAssigned+3);
+		Assert.assertEquals(0, openStreetMap.getAlternateNames().size());
     }
 
+    private boolean alternateNamesContain(List<AlternateOsmName> names, String name){
+    	if (names!=null ){
+    		for(AlternateOsmName nameToTest:names){
+    			if (nameToTest!=null && nameToTest.getName().equals(name)){
+    				return true;
+    			}
+    		}
+    	} else {
+    		return false;
+    	}
+    	Assert.fail("alternateNames doesn't contain "+name);
+    	return false;
+    }
    
     
     @Test
@@ -273,11 +317,16 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		Assert.assertNull(openStreetMapImporter.getDeeperAdmName(gisFeatureDistance));
 		
 	}
+	 @Test
+	    public void testProcessLineWithoutAlternateNames(){
+		String line = "		010100000029F2C9850F79E4BFFCAEFE473CE14740	19406.7343711266	FR	8257014	road	false	BADSHAPE\t";
+		OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
+	 }
 	
     
     @Test
     public void testProcessLineWithBadShapeShouldNotTryToSaveLine(){
-	String line = "		010100000029F2C9850F79E4BFFCAEFE473CE14740	19406.7343711266	FR	8257014	road	false	BADSHAPE";
+	String line = "		010100000029F2C9850F79E4BFFCAEFE473CE14740	19406.7343711266	FR	8257014	road	false	BADSHAPE\tfoo";
 	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
 	IOpenStreetMapDao dao = EasyMock.createMock(IOpenStreetMapDao.class);
 	//now we simulate the fact that the dao should not be called
@@ -336,17 +385,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 	return importer;
     }
     
-    @Test
-    public void testSetup(){
-    	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
-    	IIdGenerator idGenerator = EasyMock.createMock(IIdGenerator.class);
-    	idGenerator.sync();
-    	EasyMock.replay(idGenerator);
-    	importer.setIdGenerator(idGenerator);
-    	
-    	importer.setup();
-    	EasyMock.verify(idGenerator);
-    }
+   
     
     @Test
     public void testSetupIsCalled(){

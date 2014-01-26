@@ -1,5 +1,7 @@
 package com.gisgraphy.importer;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.easymock.EasyMock;
@@ -47,10 +49,12 @@ public class OpenStreetMapPoisSimpleImporterTest {
     	EasyMock.replay(idGenerator);
     	importer.setIdGenerator(idGenerator);
 		
-		String line= "W\t90139043\tPfarrkirche Heiliger Johannes der Täufer\tAT\tPfarrkirche Heiliger Johannes der Täufer___Parish church Saint John Baptist\t0101000020E61000000E6D653509482C40B01EF706AB514740\tplace_of_worship";
+		String line= "W\t90139043\tPfarrkirche Heiliger Johannes der Täufer\tAT\tPfarrkirche Heiliger Johannes der Täufer___Parish church Saint John Baptist\t0101000020E61000000E6D653509482C40B01EF706AB514740\tplace_of_worship__________________________________________";
 		String[] fields = line.split("\t");
 		String amenity= fields[6];
-		GisFeature poi = importer.createAndpopulatePoi(fields, amenity);
+		List<GisFeature> pois = importer.createAndpopulatePoi(fields, amenity);
+		Assert.assertEquals(1, pois.size());
+		GisFeature poi = pois.get(0);
 		Assert.assertEquals(90139043L, poi.getOpenstreetmapId().longValue());
 		Assert.assertEquals("Pfarrkirche Heiliger Johannes der Täufer", poi.getName());
 		Assert.assertEquals("AT", poi.getCountryCode());

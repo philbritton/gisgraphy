@@ -113,7 +113,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     @Override
     protected void processData(String line) throws ImporterException {
 	String[] fields = line.split("\t");
-	String amenity = null;
+	String amenityFields = null;
 	
 	//
 	// Line table has the following fields :
@@ -125,15 +125,17 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 	checkNumberOfColumn(fields);
 	//amenity
 	if (!isEmptyField(fields, 6, true)) {
-			amenity=fields[6].trim();
+			amenityFields=fields[6].trim();
 	}
 	
-	GisFeature poi = createAndpopulatePoi(fields,amenity);
-	if (poi == null){
+	List<GisFeature> pois = createAndpopulatePoi(fields,amenityFields);
+	if (pois == null){
 		return;
 	}
 	try {
-		gisFeatureDao.save(poi);
+		for (GisFeature poi:pois){
+			gisFeatureDao.save(poi);
+		}
 	} catch (ConstraintViolationException e) {
 		logger.error("Can not save "+dumpFields(fields)+"(ConstraintViolationException) we continue anyway but you should consider this",e);
 	}catch (Exception e) {
@@ -142,8 +144,11 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 
     }
 
-	GisFeature createAndpopulatePoi(String[] fields, String amenity) {
-		GisFeature poi = osmAmenityToPlacetype.getAmenityObject(amenity);
+    
+	List<GisFeature> createAndpopulatePoi(String[] fields, String amenity) {
+		String[] tags = splitTags(amenity);
+		List<GisFeature> pois = osmAmenityToPlacetype.getObjectsFromTags(tags);
+		for (GisFeature poi:pois){
 		//osmId
 		if (!isEmptyField(fields, 1, true)) {
 			String osmIdAsString =fields[1].trim();
@@ -191,7 +196,21 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		
 		//featureId
 		poi.setFeatureId(idGenerator.getNextFeatureId());
-		return poi;
+		}
+		return pois;
+	}
+
+	protected String[] splitTags(String amenity) {
+		String[] tags= new String[14];
+		String[] tagsvalues = amenity.split("___");
+		System.out.println(tagsvalues.length);
+		for (int j =0;j<tagsvalues.length;j++){
+			System.err.println(j+"="+tagsvalues[j]);
+			if (!"".equals(tagsvalues[j].trim())){
+				tags[j]=tagsvalues[j];
+			}
+		}
+		return tags;
 	}
 
 

@@ -80,7 +80,6 @@ delete from Plantation;
 delete from PolicePost;
 delete from PoliticalEntity;
 delete from Pond;
-delete from openstreetmap;
 delete from Port;
 delete from PostOffice;
 delete from Prison;
@@ -113,13 +112,48 @@ delete from WaterBody;
 delete from ZipCode;
 delete from Zoo;
 
+delete from AdmBuilding;
+delete from Bench;
+delete from Cinema;
+delete from Dentist;
+delete from Doctor;
+delete from EmergencyPhone;
+delete from FerryTerminal;
+delete from FireStation;
+delete from Fountain;
+delete from Fuel;
+delete from NightClub;
+delete from Pharmacy;
+delete from Rental;
+delete from Shop;
+delete from SwimmingPool;
+delete from Taxi;
+delete from Telephone;
+delete from Toilet;
+delete from VendingMachine;
+delete from Veterinary;
+delete from Ambulance;
+delete from Camping;
+delete from Cave;
+delete from CityHall;
+delete from Craft;
+delete from Picnic;
+delete from RestArea;
+delete from Sport;
+delete from Tourism;
+delete from TourismInfo;
 
+
+delete from housenumber;
+delete from alternateosmname;
+delete from openstreetmap;
 
 -- usage : psql -UYOURUSER -f /path/to/file/resetdb.sql
 
 
 
-DROP TABLE  adm CASCADE;
+
+
 DROP TABLE  Airport CASCADE;
 DROP TABLE  AlternateName CASCADE;
 DROP TABLE  AmusePark CASCADE;
@@ -187,7 +221,6 @@ DROP TABLE  Oasis CASCADE;
 DROP TABLE  ObservatoryPoint CASCADE;
 DROP TABLE  Ocean CASCADE;
 DROP TABLE  OperaHouse CASCADE;
-DROP TABLE  Openstreetmap CASCADE;
 DROP TABLE  Park CASCADE;
 DROP TABLE  Parking CASCADE;
 DROP TABLE  Plantation CASCADE;
@@ -225,6 +258,43 @@ DROP TABLE  Volcano CASCADE;
 DROP TABLE  WaterBody CASCADE;
 DROP TABLE  ZipCode CASCADE;
 DROP TABLE  Zoo CASCADE;
+
+DROP TABLE AdmBuilding CASCADE;
+DROP TABLE Bench CASCADE;
+DROP TABLE Cinema CASCADE;
+DROP TABLE Dentist CASCADE;
+DROP TABLE Doctor CASCADE;
+DROP TABLE EmergencyPhone CASCADE;
+DROP TABLE FerryTerminal CASCADE;
+DROP TABLE FireStation CASCADE;
+DROP TABLE Fountain CASCADE;
+DROP TABLE Fuel CASCADE;
+DROP TABLE NightClub CASCADE;
+DROP TABLE Pharmacy CASCADE;
+DROP TABLE Rental CASCADE;
+DROP TABLE Shop CASCADE;
+DROP TABLE SwimmingPool CASCADE;
+DROP TABLE Taxi CASCADE;
+DROP TABLE Telephone CASCADE;
+DROP TABLE Toilet CASCADE;
+DROP TABLE VendingMachine CASCADE;
+DROP TABLE Veterinary CASCADE;
+DROP TABLE Ambulance CASCADE;
+DROP TABLE Camping CASCADE;
+DROP TABLE Cave CASCADE;
+DROP TABLE CityHall CASCADE;
+DROP TABLE Craft CASCADE;
+DROP TABLE Picnic CASCADE;
+DROP TABLE RestArea CASCADE;
+DROP TABLE Sport CASCADE;
+DROP TABLE Tourism CASCADE;
+DROP TABLE TourismInfo CASCADE;
+
+DROP TABLE  adm CASCADE;
+
+DROP TABLE housenumber CASCADE;
+DROP TABLE alternateosmname CASCADE;
+DROP TABLE  Openstreetmap CASCADE;
 
 VACUUM FULL ANALYZE;
 
