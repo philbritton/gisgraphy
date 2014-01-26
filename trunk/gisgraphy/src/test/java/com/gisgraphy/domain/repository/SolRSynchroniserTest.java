@@ -50,6 +50,7 @@ import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
@@ -760,8 +761,9 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		"//*[@name='" + FullTextFields.FEATURECODE.getValue()
 			+ "'][.='PPL']", "//*[@name='"
 			+ FullTextFields.FEATUREID.getValue() + "'][.='1001']",
-		"//*[@name='" + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
-			+ "'][.='" + paris.getFullyQualifiedName(false) + "']",
+			//since V 4.0 we have removed preprocessed field for performance reasons
+		/*"//*[@name='" + FullTextFields.FULLY_QUALIFIED_NAME.getValue()
+			+ "'][.='" + paris.getFullyQualifiedName(false) + "']",*/
 		"//*[@name='" + FullTextFields.LAT.getValue() + "'][.='2.5']",
 		"//*[@name='" + FullTextFields.LONG.getValue() + "'][.='1.5']",
 		"//*[@name='" + FullTextFields.PLACETYPE.getValue()
@@ -787,7 +789,8 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		"//*[@name='" + FullTextFields.TIMEZONE.getValue()
 			+ "'][.='Europe/Paris']"
 
-		, "//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
+			//since V 4.0 we have removed preprocessed field for performance reasons
+		/*, "//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
 			+ "'][.='"
 			+ URLUtils.createCountryFlagUrl(paris.getCountryCode())
 			+ "']"
@@ -802,7 +805,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		, "//*[@name='"
 			+ FullTextFields.OPENSTREETMAP_MAP_URL.getValue()
 			+ "'][.='"
-			+ URLUtils.createOpenstreetmapMapUrl(paris.getLocation()) + "']"
+			+ URLUtils.createOpenstreetmapMapUrl(paris.getLocation()) + "']"*/
 		,//spellchecker fields
 		"//*[@name='" + FullTextFields.SPELLCHECK.getValue()
 			+ "']"
@@ -1193,6 +1196,8 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		String isInAdm = "california";
 		String isInZip = "90001";
 		String fullyQualifiedAddress = "fullyQualifiedAddress";
+		String altname1 = "alt name 1";
+		String altname2 = "alt name 2";
 		HouseNumber houseNumber1 = new HouseNumber();
 		houseNumber1.setNumber("4");
 		houseNumber1.setLocation(GeolocHelper.createPoint(4F, 3F));
@@ -1205,6 +1210,10 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		//we put the number in a wrong order to see if the are sorted
 		houseNumbers.add(houseNumber1);
 		houseNumbers.add(houseNumber2);
+		
+		List<AlternateOsmName> alternateNames = new ArrayList<AlternateOsmName>();
+		alternateNames.add(new AlternateOsmName(altname1,AlternateNameSource.OPENSTREETMAP));
+		alternateNames.add(new AlternateOsmName(altname2,AlternateNameSource.OPENSTREETMAP));
 		
     	
 		OpenStreetMap street = new OpenStreetMap();
@@ -1224,6 +1233,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
     	street.setIsInPlace(isInPlace);
 		street.setFullyQualifiedAddress(fullyQualifiedAddress);
 		street.addHouseNumbers(houseNumbers);
+		street.addAlternateNames(alternateNames);
    
 		HouseNumberSerializer houseNumberSerializer = new HouseNumberSerializer();
     	openStreetMapDao.save(street);
@@ -1283,8 +1293,8 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			+ "'][.='"+street.getOpenstreetmapId()+"']",
 			"//*[@name='" + FullTextFields.COUNTRYCODE.getValue()
 			+ "'][.='"+street.getCountryCode()+"']",
-			"//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
-			+ "'][.='"+URLUtils.createCountryFlagUrl(street.getCountryCode())+"']",
+			/*"//*[@name='" + FullTextFields.COUNTRY_FLAG_URL.getValue()
+			+ "'][.='"+URLUtils.createCountryFlagUrl(street.getCountryCode())+"']",*/
 			"//*[@name='" + FullTextFields.PLACETYPE.getValue()
 			+ "'][.='"+Street.class.getSimpleName()+"']",
 			"//*[@name='" + FullTextFields.IS_IN.getValue()
@@ -1295,13 +1305,20 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			+ "'][.='"+street.getIsInPlace()+"']",
 			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
 			+ "'][.='"+street.getIsInZip()+"']",
-			"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
-			+ "'][.='"+street.getFullyQualifiedAddress()+"']",
+			/*"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
+			+ "'][.='"+street.getFullyQualifiedAddress()+"']",*/
 			//we check the order too
 			"//*[@name='" + FullTextFields.HOUSE_NUMBERS.getValue()
 			+ "'][./str[1][.='"+houseNumberSerializer.serialize(houseNumber2)+"']]"
 		, "//*[@name='" + FullTextFields.HOUSE_NUMBERS.getValue()
-		+ "'][./str[2][.='"+houseNumberSerializer.serialize(houseNumber1)+"']]"
+		+ "'][./str[2][.='"+houseNumberSerializer.serialize(houseNumber1)+"']]",
+		//altnames
+		"//*[@name='" + FullTextFields.NAME.getValue()
+		+ FullTextFields.ALTERNATE_NAME_SUFFIX.getValue()
+		+ "'][./str[1]]['"+altname1+"']"
+		,"//*[@name='" + FullTextFields.NAME.getValue()
+		+ FullTextFields.ALTERNATE_NAME_SUFFIX.getValue()
+		+ "'][./str[2]]['"+altname2+"']"
 		
 	);
 

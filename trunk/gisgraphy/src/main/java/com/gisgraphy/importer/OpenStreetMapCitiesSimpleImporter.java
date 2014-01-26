@@ -275,7 +275,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			}
 			String alternateName = matcher.group(1);
 			if (alternateName!= null && !"".equals(alternateName.trim())){
-				feature.addAlternateName(new AlternateName(alternateName,AlternateNameSource.OPENSTREETMAP));
+				feature.addAlternateName(new AlternateName(alternateName.trim(),AlternateNameSource.OPENSTREETMAP));
 			}
 		}
 		return feature;

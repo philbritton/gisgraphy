@@ -125,7 +125,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(city.getElevation(), result.getElevation());
 	assertEquals(city.getGtopo30(), result.getGtopo30());
 	assertEquals(city.getTimezone(), result.getTimezone());
-	assertEquals(city.getFullyQualifiedName(false), result
+	//since v 4.0 we don't process calculated fields
+	assertEquals(null, result
 		.getFully_qualified_name());
 	assertEquals(city.getClass().getSimpleName(), result.getPlacetype());
 	assertEquals(city.getPopulation(), result.getPopulation());
@@ -144,13 +145,12 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(city.getZipCodes().get(0).getCode(), result.getZipcodes().get(0));
 	assertEquals(city.getZipCodes().get(1).getCode(), result.getZipcodes().get(1));
 	assertEquals(city.getCountry().getName(), result.getCountry_name());
-	assertEquals(URLUtils.createGoogleMapUrl(city.getLocation(), city
-		.getName()), result.getGoogle_map_url());
-	assertEquals(URLUtils.createCountryFlagUrl(city.getCountryCode()),
-		result.getCountry_flag_url());
-	assertEquals(URLUtils.createYahooMapUrl(city.getLocation()), result
+	assertEquals(null,
+			result.getCountry_flag_url());
+	assertEquals(null, result.getGoogle_map_url());
+	assertEquals(null, result
 		.getYahoo_map_url());
-	assertEquals(URLUtils.createOpenstreetmapMapUrl(city.getLocation()), result
+	assertEquals(null, result
 			.getOpenstreetmap_map_url());
 
 	assertEquals(1, result.getName_alternates().size());
@@ -238,9 +238,9 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(country.getGtopo30(), result.getGtopo30());
 	assertNotNull(result.getTimezone());
 	assertEquals(country.getTimezone(), result.getTimezone());
-	assertNotNull(result.getFully_qualified_name());
-	assertEquals(country.getFullyQualifiedName(false), result
-		.getFully_qualified_name());
+	//since v 4.0 we don't process calculated fields
+		assertEquals(null, result
+			.getFully_qualified_name());
 	assertNotNull(result.getPlacetype());
 	assertEquals(country.getClass().getSimpleName(), result.getPlacetype());
 	assertNotNull(result.getPopulation());
@@ -249,14 +249,11 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(country.getLatitude(), result.getLat());
 	assertNotNull(result.getLng());
 	assertEquals(country.getLongitude(), result.getLng());
-	assertNotNull(result.getGoogle_map_url());
-	assertEquals(URLUtils.createGoogleMapUrl(country.getLocation(), country
-		.getName()), result.getGoogle_map_url());
-	assertNotNull(result.getCountry_flag_url());
-	assertEquals(URLUtils.createCountryFlagUrl(country.getCountryCode()),
+	//since v 4.0 url maps are not preprocessed to reduce storage
+	assertEquals(null, result.getGoogle_map_url());
+	assertEquals(null,
 		result.getCountry_flag_url());
-	assertNotNull(result.getYahoo_map_url());
-	assertEquals(URLUtils.createYahooMapUrl(country.getLocation()), result
+	assertEquals(null, result
 		.getYahoo_map_url());
 
 	assertEquals(1, result.getCountry_names_alternate().size());

@@ -653,7 +653,8 @@
 			</action>
 			
 			<action dev="David Masclet" type="add">
-				update yahoo google and openstreetmap with new URLs
+				update yahoo google and openstreetmap with new URLs, but the URLs are no longueur available as a field,
+				 you have to process it from the results
 			</action>
 			
 			

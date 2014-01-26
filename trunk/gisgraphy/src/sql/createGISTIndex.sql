@@ -107,6 +107,40 @@ CREATE INDEX locationIndexVolcano ON volcano USING GIST (location);
 CREATE INDEX locationIndexWaterBody ON waterBody USING GIST (location);
 CREATE INDEX locationIndexZoo ON zoo USING GIST (location);
 
+CREATE INDEX locationIndexAdmBuilding ON AdmBuilding USING GIST (location);
+CREATE INDEX locationIndexBench ON Bench USING GIST (location);
+CREATE INDEX locationIndexCinema ON Cinema USING GIST (location);
+CREATE INDEX locationIndexDentist ON Dentist USING GIST (location);
+CREATE INDEX locationIndexDoctor ON Doctor USING GIST (location);
+CREATE INDEX locationIndexEmergencyPhone ON EmergencyPhone USING GIST (location);
+CREATE INDEX locationIndexFerryTerminal ON FerryTerminal USING GIST (location);
+CREATE INDEX locationIndexFireStation ON FireStation USING GIST (location);
+CREATE INDEX locationIndexFountain ON Fountain USING GIST (location);
+CREATE INDEX locationIndexFuel ON Fuel USING GIST (location);
+CREATE INDEX locationIndexNightClub ON NightClub USING GIST (location);
+CREATE INDEX locationIndexPharmacy ON Pharmacy USING GIST (location);
+CREATE INDEX locationIndexRental ON Rental USING GIST (location);
+CREATE INDEX locationIndexShop ON Shop USING GIST (location);
+CREATE INDEX locationIndexSwimmingPool ON SwimmingPool USING GIST (location);
+CREATE INDEX locationIndexTaxi ON Taxi USING GIST (location);
+CREATE INDEX locationIndexTelephone ON Telephone USING GIST (location);
+CREATE INDEX locationIndexToilet ON Toilet USING GIST (location);
+CREATE INDEX locationIndexVendingMachine ON VendingMachine USING GIST (location);
+CREATE INDEX locationIndexVeterinary ON Veterinary USING GIST (location);
+CREATE INDEX locationIndexAmbulance ON Ambulance USING GIST (location);
+CREATE INDEX locationIndexCamping ON Camping USING GIST (location);
+CREATE INDEX locationIndexCave ON Cave USING GIST (location);
+CREATE INDEX locationIndexCityHall ON CityHall USING GIST (location);
+CREATE INDEX locationIndexCraft ON Craft USING GIST (location);
+CREATE INDEX locationIndexPicnic ON Picnic USING GIST (location);
+CREATE INDEX locationIndexRestArea ON RestArea USING GIST (location);
+CREATE INDEX locationIndexSport ON Sport USING GIST (location);
+CREATE INDEX locationIndexTourism ON Tourism USING GIST (location);
+CREATE INDEX locationIndexTourismInfo ON TourismInfo USING GIST (location);
+
+
+
+
 \echo will create Openstreetmap index
 
 CREATE INDEX locationindexopenstreetmap ON openstreetmap USING GIST (location);
