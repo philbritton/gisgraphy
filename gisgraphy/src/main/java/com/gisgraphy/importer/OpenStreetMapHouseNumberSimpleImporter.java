@@ -294,8 +294,8 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			logger.warn("wrong number of fields for line " + line + " expected 4 but was " + fields.length);
 			return null;
 		}
-		if (!"N".equals(fields[0])) {
-			logger.warn("wrong house Number Type for line " + line + " expected 'N' but was " + fields[0]);
+		if (!"N".equals(fields[0]) && !"W".equals(fields[0])) {
+			logger.warn("wrong house Number Type for line " + line + " expected 'N' or 'w' but was " + fields[0]);
 			return null;
 		}
 		NodeHouseNumber node = new NodeHouseNumber();
@@ -352,7 +352,12 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			if (house!=null){
 				processNodeHouseNumber(house);
 			}
-		} else if (line.startsWith("I")) {
+		}else if (line.startsWith("W")){
+			NodeHouseNumber house = parseNodeHouseNumber(line);
+			if (house!=null){
+				processNodeHouseNumber(house);
+			}
+		}  else if (line.startsWith("I")) {
 			InterpolationHouseNumber house = parseInterpolationHouseNumber(line);
 			if(house==null){
 				return;

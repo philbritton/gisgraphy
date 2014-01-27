@@ -124,6 +124,32 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		EasyMock.verify(gisFeatureDao);
 		
 	}
+	
+	@Test
+	public void testSplitTags(){
+		OpenStreetMapPoisSimpleImporter importer = new OpenStreetMapPoisSimpleImporter();
+		String[] tags = importer.splitTags("place_of_worship");
+		Assert.assertEquals(14, tags.length);
+		Assert.assertEquals("place_of_worship", tags[0]);
+		
+		 tags = importer.splitTags("place_of_worship___f______y______u___i________________________");
+		 Assert.assertEquals(14, tags.length);
+		 Assert.assertEquals("place_of_worship", tags[0]);
+		 Assert.assertEquals("f", tags[1]);
+		 Assert.assertEquals("y", tags[3]);
+		 Assert.assertEquals("u", tags[5]);
+		 Assert.assertEquals("i", tags[6]);
+		 
+		 tags = importer.splitTags("place_of_worship___f______y______u___i_____________________toto");
+		 Assert.assertEquals(14, tags.length);
+		 Assert.assertEquals("place_of_worship", tags[0]);
+		 Assert.assertEquals("f", tags[1]);
+		 Assert.assertEquals("y", tags[3]);
+		 Assert.assertEquals("u", tags[5]);
+		 Assert.assertEquals("i", tags[6]);
+		 Assert.assertEquals("toto", tags[13]);
+		
+	}
 	/*
 	@Test
 	public void process(){

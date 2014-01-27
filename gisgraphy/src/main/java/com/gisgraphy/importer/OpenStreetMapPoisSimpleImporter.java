@@ -205,7 +205,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		String[] tagsvalues = amenity.split("___");
 		System.out.println(tagsvalues.length);
 		for (int j =0;j<tagsvalues.length;j++){
-			System.err.println(j+"="+tagsvalues[j]);
+		//	System.err.println(j+"="+tagsvalues[j]);
 			if (!"".equals(tagsvalues[j].trim())){
 				tags[j]=tagsvalues[j];
 			}

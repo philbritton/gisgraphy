@@ -45,7 +45,7 @@ public class FulltextQuerySolrHelper {
 
 	private static OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
 
-	private final static String IS_IN_SENTENCE = " "+FullTextFields.IS_IN.getValue()+"^1 ";
+	private final static String IS_IN_SENTENCE = " "+FullTextFields.IS_IN.getValue()+"^1 "+FullTextFields.IS_IN_PLACE.getValue()+"^1  "+FullTextFields.IS_IN_ADM.getValue()+"^0.5 "+FullTextFields.IS_IN_ZIP.getValue()+"^1 ";
 	protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bq='placetype:City^2 population^2' bf='pow(population,0.4) pow(city_population,0.4)'}%s\"";
 	//below the all_adm1_name^0.5 all_adm2_name^0.5 has been kept
 	//protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.1 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bf=population^2.0}%s\"";

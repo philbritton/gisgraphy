@@ -29,6 +29,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Index;
 
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 
@@ -131,6 +132,7 @@ public class City extends GisFeature implements ZipCodesAware {
 		return completeCityName.toString();
 	}
 
+	@Index(name = "gisFeatureCountryindex")
 	public boolean isMunicipality() {
 		return municipality;
 	}
