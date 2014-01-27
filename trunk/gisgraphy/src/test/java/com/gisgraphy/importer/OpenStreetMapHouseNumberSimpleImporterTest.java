@@ -172,6 +172,15 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Assert.assertNull(importer.parseNodeHouseNumber(line));
 	}
 	
+	//parseNodeHouseNumber
+		@Test
+		public void parseNodeHouseNumberWrongNumberOFields_W() {
+			String line = "W	" +
+					"2069647	";
+			OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+			Assert.assertNull(importer.parseNodeHouseNumber(line));
+		}
+	
 	@Test
 	public void parseNodeHouseNumberNullOrEmptyLine() {
 		String line =null;
@@ -180,10 +189,20 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Assert.assertNull(importer.parseNodeHouseNumber(""));
 	}
 	
+	
 		
 	@Test
 	public void parseNodeHouseNumber(){
 		String line = "N	247464344	0101000020E610000044BC1A457B304DC018737C597F4B41C0	405	Museo Ferroviario	Avenida Del Libertador";
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		NodeHouseNumber actual = importer.parseNodeHouseNumber(line);
+		NodeHouseNumber expected = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void parseNodeHouseNumber_W(){
+		String line = "W	247464344	0101000020E610000044BC1A457B304DC018737C597F4B41C0	405	Museo Ferroviario	Avenida Del Libertador";
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		NodeHouseNumber actual = importer.parseNodeHouseNumber(line);
 		NodeHouseNumber expected = new NodeHouseNumber("247464344",(Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E610000044BC1A457B304DC018737C597F4B41C0"),"405","Museo Ferroviario","Avenida Del Libertador") ;

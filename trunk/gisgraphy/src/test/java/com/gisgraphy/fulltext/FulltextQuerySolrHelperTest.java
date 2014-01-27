@@ -456,5 +456,70 @@ public class FulltextQuerySolrHelperTest {
 	assertNotNull("spellchecker query should be set when numeric query",parameters
 		.get(Constants.SPELLCHECKER_QUERY_PARAMETER));  
     }
+    
+    @Test
+    public void testToQueryStringShouldreturnCorrectParamsForStreetQuery() {
+	Pagination pagination = paginate().from(3).to(10);
+	Output output = Output.withFormat(OutputFormat.JSON).withLanguageCode(
+		"FR").withStyle(OutputStyle.SHORT).withIndentation();
+	String searchTerm = "Saint-André";
+	FulltextQuery fulltextQuery = new FulltextQuery(searchTerm,
+		pagination, output, com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, "fr");
+	Float longitude = 20F;
+	Float latitude = 30F;
+	fulltextQuery.around(GeolocHelper.createPoint(longitude, latitude));
+	// split parameters
+	HashMap<String, String> parameters = GisgraphyTestHelper.splitURLParams(
+		FulltextQuerySolrHelper.toQueryString(fulltextQuery), "&");
+	// check parameters
+	assertEquals(outputStyleHelper.getFulltextFieldList(Output.OutputStyle.SHORT,"FR"), parameters
+		.get(Constants.FL_PARAMETER));
+	assertEquals("wrong indent parameter found", "on", parameters
+		.get(Constants.INDENT_PARAMETER));
+	assertEquals("wrong echoparams parameter found", "none", parameters
+		.get(Constants.ECHOPARAMS_PARAMETER));
+	assertEquals("wrong start parameter found", "2", parameters
+		.get(Constants.START_PARAMETER));
+	assertEquals("wrong rows parameter found", "8", parameters
+		.get(Constants.ROWS_PARAMETER));
+	assertEquals("wrong output format parameter found", OutputFormat.JSON
+		.getParameterValue(), parameters
+		.get(Constants.OUTPUT_FORMAT_PARAMETER));
+	assertEquals("wrong query type parameter found",
+		Constants.SolrQueryType.advanced.toString(), parameters
+			.get(Constants.QT_PARAMETER));
+	
+	assertTrue(FullTextFields.IS_IN.getValue()+" field should be added : ",
+			parameters
+				.get(Constants.QUERY_PARAMETER).contains(FullTextFields.IS_IN.getValue()));
+	
+	assertTrue(FullTextFields.IS_IN_ADM.getValue()+" field should be added : ",
+			parameters
+				.get(Constants.QUERY_PARAMETER).contains(FullTextFields.IS_IN_ADM.getValue()));
+	
+	assertTrue(FullTextFields.IS_IN_PLACE.getValue()+" field should be added : ",
+			parameters
+				.get(Constants.QUERY_PARAMETER).contains(FullTextFields.IS_IN_PLACE.getValue()));
+	
+	assertTrue(FullTextFields.IS_IN_ZIP.getValue()+" field should be added : ",
+			parameters
+				.get(Constants.QUERY_PARAMETER).contains(FullTextFields.IS_IN_ZIP.getValue()));
+	
+	assertTrue("wrong query parameter found (no geoloc part) actual : "+parameters
+		.get(Constants.QUERY_PARAMETER),
+		parameters
+			.get(Constants.QUERY_PARAMETER).contains(String.format(Locale.US,FulltextQuerySolrHelper.GEOLOC_QUERY_TEMPLATE, fulltextQuery.getPoint().getY(),fulltextQuery.getPoint().getX(),fulltextQuery.getRadius()/1000)));
+	assertTrue("wrong query parameter found '"+FullTextFields.PLACETYPE.getValue()+":' expected in query but was "+parameters
+			.get(Constants.QUERY_PARAMETER),
+		parameters
+			.get(Constants.QUERY_PARAMETER).contains(FullTextFields.PLACETYPE.getValue()+":"));
+	assertTrue("wrong query parameter found '"+FullTextFields.COUNTRYCODE.getValue()+":' expected in query but was "+parameters
+			.get(Constants.QUERY_PARAMETER),
+			parameters
+				.get(Constants.QUERY_PARAMETER).contains(FullTextFields.COUNTRYCODE.getValue()+":"));
+	assertNotNull("spellchecker query should be set when numeric query",parameters
+		.get(Constants.SPELLCHECKER_QUERY_PARAMETER));  
+    }
+
 
 }
