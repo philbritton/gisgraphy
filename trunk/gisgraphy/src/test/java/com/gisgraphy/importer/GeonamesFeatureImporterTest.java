@@ -23,6 +23,8 @@
 package com.gisgraphy.importer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -92,6 +94,28 @@ public class GeonamesFeatureImporterTest {
     	Assert.assertFalse(importer.isAdmMode());
     }
     
+    @Test
+    public void isPlacetypeAccepted() {
+	assertEquals(
+			"ADM|COUNTRY|CITY$",
+	ImporterConfig.DEFAULT_ACCEPT_REGEX_CITY);
+	ImporterConfig importerConfig = new ImporterConfig();
+	importerConfig.setAcceptRegExString(ImporterConfig.DEFAULT_ACCEPT_REGEX_CITY);
+	GeonamesFeatureSimpleImporter importer = new GeonamesFeatureSimpleImporter();
+	importer.setImporterConfig(importerConfig);
+	importer.setup();
+	
+	
+	// must be false
+	assertFalse(importer.isPlaceTypeAccepted("foo"));
+	assertFalse(importer.isPlaceTypeAccepted("Ci"));
+	// must be true
+	assertTrue(importer.isPlaceTypeAccepted("city"));
+	assertTrue(importer.isPlaceTypeAccepted("ADM"));
+	assertTrue(importer.isPlaceTypeAccepted("CITY"));
+	
+
+    }
     
 
 }

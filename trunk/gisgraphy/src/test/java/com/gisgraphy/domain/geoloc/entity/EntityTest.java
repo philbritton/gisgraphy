@@ -39,7 +39,7 @@ public class EntityTest  {
     	 
     	 System.out.println("Found "+allClasses.size()+" entities that extends GisFeature");
     	 for (Class c: allClasses){
-    		 System.out.println(c);
+    		 System.out.println(c.getSimpleName());
     		 try {
 				Class placetype = Class.forName("com.gisgraphy.domain.placetype."+c.getSimpleName());
 			} catch (ClassNotFoundException e) {

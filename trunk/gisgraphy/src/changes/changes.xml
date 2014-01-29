@@ -657,6 +657,10 @@
 				 you have to process it from the results
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add the ability to filter POI to import by place types
+			</action>
+			
 			
 			</release>
 			

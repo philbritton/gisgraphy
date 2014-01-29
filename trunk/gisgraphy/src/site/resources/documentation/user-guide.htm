@@ -509,14 +509,15 @@ importerConfig.missingRequiredFieldThrows=false
 <div align="right"><a href="#top">[top]</a></div>
 <h4>importerConfig.acceptRegExString</h4>
 
-List of regular expresions separated by ';' that determines the <a href="http://forum.geonames.org/gforum/posts/list/130.page">feature class / code</a> to be imported. The default value is .*  (all the feature class / code), if the value is not specified.
-The regular expressions must match <code>featureClass.featureCode</code>. The gisFeature which matches "A.ADM." (administrative divisions) and "A.PCL." (countries) regex are automaticaly imported. This option is case sensitive and the should be set in upper case because feature class / code are in upper case.
+a Regular expression for the place type we want to import. The default value is .*  (all the place type), if the value is not specified.
+Administrative divisions and countries are automaticaly imported. This option is case insensitive. place types are the name of the entities class (see package com.gisgraphy.domain.geoloc.entity source code for details), don't forget to add GISFEATURE for POI that are not Categorized
 
 <div class="code">
 Examples :<br/>
 <code>.*</code> : import all gisfeatures, no matter their feature class / code<br/>
-<code>P[.]PPL[A-Z&&[^QW]];P[.]PPL$;P[.]STLMT$</code> : import Israeli settlements and all the cities except destroyed and abandoned city<br/>
-<code>V.FRST.</code> : import all the forests<br/>
+<code>RESTAURANT|BAR</code> : import all Restaurants and Bars<br/>
+<code>RESTAURANT|BAR|GISFEATURE</code> : import all Restaurants and Bars and POI that have no real categories<br/>
+<code>FOREST</code> : import all the forests<br/>
 <br/>
 </div>
 <br/>

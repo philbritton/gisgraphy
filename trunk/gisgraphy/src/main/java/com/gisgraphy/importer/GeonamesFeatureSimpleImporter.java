@@ -73,7 +73,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
   
     protected ICountryDao countryDao;
 
-    protected List<Pattern> acceptedPatterns ;
+    protected Pattern acceptedPatterns ;
     
 
     protected ISolRSynchroniser solRSynchroniser;
@@ -94,15 +94,9 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
     private SimpleDateFormat dateFormatter = new SimpleDateFormat(
 	    Constants.GIS_DATE_PATTERN);
 
-    private boolean isFeatureClassCodeAccepted(String featureClass,
-	    String featureCode) {
-	String classCode = featureClass.trim() + "." + featureCode.trim();
-	Matcher matcher = null;
-	for (Pattern pattern : acceptedPatterns) {
-	    matcher = pattern.matcher(classCode);
-	    if (matcher.matches()) {
+    boolean isPlaceTypeAccepted(String classname) {
+	if (acceptedPatterns.matcher(classname).find()){
 		return true;
-	    }
 	}
 	return false;
     }
@@ -158,9 +152,21 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	// fields = ImporterHelper.virtualizeADMD(fields);
 	fields = ImporterHelper.correctLastAdmCodeIfPossible(fields);
 
-	if (!isFeatureClassCodeAccepted(featureClass, featureCode)) {
-	    return;
+	FeatureCode featureCode_ = null;
+
+	try {
+	    featureCode_ = FeatureCode
+		    .valueOf(featureClass + "_" + featureCode);
+	} catch (RuntimeException e) {
 	}
+	GisFeature featureObject;
+	if (featureCode_ != null ) {
+	    featureObject = (GisFeature) featureCode_.getObject();
+	    if (featureObject!=null && !isPlaceTypeAccepted(featureObject.getClass().getSimpleName())){
+	    	return;
+	    }
+	}
+	
 
 	GisFeature gisFeature = null;
 	// create GisFeature and set featureId
@@ -254,13 +260,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	    return;
 	}
 
-	FeatureCode featureCode_ = null;
-
-	try {
-	    featureCode_ = FeatureCode
-		    .valueOf(featureClass + "_" + featureCode);
-	} catch (RuntimeException e) {
-	}
+	
 	if (featureCode_ != null) {
 	    if (featureCode_.getObject() instanceof Country) {
 		logger.warn("[wrongCountryCode] Country " + fields[8]
@@ -326,7 +326,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	setAdmNames(adm, gisFeature);
 
 	if (featureCode_ != null) {
-	    GisFeature featureObject = (GisFeature) featureCode_.getObject();
+	    featureObject = (GisFeature) featureCode_.getObject();
 	    logger.debug(featureClass + "_" + featureCode
 		    + " have an entry in " + FeatureCode.class.getSimpleName()
 		    + " : " + featureObject.getClass().getSimpleName());

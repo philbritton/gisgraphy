@@ -576,21 +576,17 @@ public class ImporterHelper {
     }
 
     /**
-     * @param regexpSemiColumnSeparated
-     *            a string with multiple reqgexp separated by ';'
-     * @return A list of {@link Pattern} or null if a regexp are not corrects
+     * @param regexp
+     *            a regexp
+     * @return A {@link Pattern} or null if the regexp are not corrects
      */
-    public static List<Pattern> compileRegex(String regexpSemiColumnSeparated) {
+    public static Pattern compileRegex(String regexp) {
 	try {
-	    List<Pattern> patternsList = new ArrayList<Pattern>();
-	    String[] acceptRegexpString = regexpSemiColumnSeparated.trim().split(ImporterConfig.OPTION_SEPARATOR);
-	    for (String pattern : acceptRegexpString) {
-		if (pattern != null && !pattern.trim().equals("")) {
-		    patternsList.add(Pattern.compile(pattern));
+	   	if (regexp != null && !regexp.trim().equals("")) {
+		    return Pattern.compile(regexp,Pattern.CASE_INSENSITIVE);
+		} else {
+			return null;
 		}
-	    }
-	    logger.info(patternsList.size() + " regex for gisFeatureImporter");
-	    return patternsList;
 	} catch (RuntimeException e) {
 	    return null;
 	}

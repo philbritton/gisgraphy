@@ -52,6 +52,11 @@ public class ImporterConfig {
      * A list of options is separated by this. e.g : a list of regexp options
      */
     public static final String OPTION_SEPARATOR = ";";
+    
+    /**
+     * A list of options is separated by this. e.g : a list of regexp options
+     */
+    public static final String REGEXP_SEPARATOR = "|";
 
     /**
      * The relative path of the directory that contains importer metadata
@@ -76,12 +81,12 @@ public class ImporterConfig {
     /**
      * The default regexp if no one is specified in the env.properties file
      */
-    public final static String BASE_ACCEPT_REGEX = ImporterConfig.DEFAULT_FEATURE_CLASS + "[.].+;.[.]" + ImporterConfig.DEFAULT_FEATURE_CODE + ";A[.]ADM.?;A[.]PCL.?;";
+    public final static String BASE_ACCEPT_REGEX = "ADM|COUNTRY|";
 
     /**
      * The regexp to use to import all the city
      */
-    public final static String DEFAULT_ACCEPT_REGEX_CITY = BASE_ACCEPT_REGEX + "P[.]PPL[A-Z&&[^QW]];P[.]PPL$;P[.]STLMT$";
+    public final static String DEFAULT_ACCEPT_REGEX_CITY = BASE_ACCEPT_REGEX + "CITY$";
 
     /**
      * The regexp to use to import all the feature class / code
@@ -962,21 +967,19 @@ public class ImporterConfig {
     }
 
     /**
-     * List of regular expressions for feature class and feature code to be
+     * List of regular expressions for placetype (class name without .class to be
      * import.<br>
      * <br>
-     * <u>Important</u> : The regular expressions must match
-     * featureClass.featureCode and are separated by {@link #OPTION_SEPARATOR}.<br>
-     * <br>
-     * The gisFeature which match "A.ADM." and "A.PCL." regex are automaticaly
+     * 
+     * "ADM" and "country" are automaticaly
      * imported (Administrative division and country).<br>
      * Examples :
      * <ul>
      * <li>.* : import all gisfeatures, no matter their feature class and
      * feature code</li>
-     * <li> {@link #DEFAULT_ACCEPT_REGEX_CITY} : import Israeli settlements and
-     * all the cities except destroyed and abandoned city</li>
-     * <li>V.FRST. : import all the forests</li>
+     * <li> {@link #DEFAULT_ACCEPT_REGEX_CITY} : import all adm city and countries</li>
+     * <li>ATM : import all ATM</li>
+     * <li>ATM|RESTAURANT : import all ATM and restaurant</li>
      * </ul>
      * 
      * @param acceptRegExString

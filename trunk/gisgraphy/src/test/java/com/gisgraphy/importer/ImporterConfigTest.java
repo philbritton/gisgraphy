@@ -226,8 +226,8 @@ public class ImporterConfigTest {
 	    ImporterConfig importerConfig = new ImporterConfig();
 	    importerConfig.setAcceptRegExString(" ");
 	    Assert.assertEquals(ImporterConfig.ACCEPT_ALL_REGEX_OPTION, importerConfig.getAcceptRegExString());
-	    importerConfig.setAcceptRegExString("UNK.UNK");
-	    Assert.assertEquals("base regexp should be added",ImporterConfig.BASE_ACCEPT_REGEX+"UNK.UNK", importerConfig.getAcceptRegExString());
+	    importerConfig.setAcceptRegExString("ATM");
+	    Assert.assertEquals("base regexp should be added",ImporterConfig.BASE_ACCEPT_REGEX+"ATM", importerConfig.getAcceptRegExString());
 	    importerConfig.setAcceptRegExString(null);
 	    Assert.assertEquals(ImporterConfig.ACCEPT_ALL_REGEX_OPTION, importerConfig.getAcceptRegExString());
 	    
