@@ -25,11 +25,14 @@ package com.gisgraphy.webapp.action;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.valueobject.FeatureCode;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
@@ -105,8 +108,23 @@ public class ImportConfirmAction extends ActionSupport {
 		
 	}
 
-	public FeatureCode[] getPlacetypesList() {
-		return FeatureCode.values();
+	public String[] getPlacetypesList() {
+		Reflections reflections = new Reflections("com.gisgraphy.domain.geoloc.entity");
+
+		Set<Class<? extends GisFeature>> allClasses = 
+				reflections.getSubTypesOf(GisFeature.class);
+		String[] placteypes;
+		if (allClasses!=null){
+			placteypes = new String[allClasses.size()];
+			int i=0;
+			for (Class clazz: allClasses){
+				placteypes[i]=clazz.getSimpleName();
+				i++;
+			}
+		} else {
+			placteypes = new String[0];
+		}
+		return placteypes;
 	}
 
 	public String doImport() {
@@ -157,10 +175,10 @@ public class ImportConfirmAction extends ActionSupport {
 			if (getPlacetypes() != null && getPlacetypes().size() > 0) {
 				StringBuffer placetypeOption = new StringBuffer();
 				for(String placetype:getPlacetypes()){
-					placetypeOption.append(placetype.replace("_", "[.]").toUpperCase()).append(ImporterConfig.OPTION_SEPARATOR);
+					placetypeOption.append(placetype.toUpperCase()).append(ImporterConfig.REGEXP_SEPARATOR);
 				}
 				String optionAsString = placetypeOption.toString();
-				if (optionAsString.endsWith(ImporterConfig.OPTION_SEPARATOR)){
+				if (optionAsString.endsWith(ImporterConfig.REGEXP_SEPARATOR)){
 					optionAsString = optionAsString.substring(0, optionAsString.length() - 1);
 				}
 				importerConfig.setAcceptRegExString(optionAsString);

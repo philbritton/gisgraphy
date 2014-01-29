@@ -237,12 +237,12 @@ public class ImportConfirmActionTest {
     	action.setImporterConfig(importerConfig);
     	action.setImportallplacetype(false);
     	List<String> Placetypes = new ArrayList<String>();
-    	Placetypes.add("P_PPL");//test to upper case
-    	Placetypes.add("v_frst");
+    	Placetypes.add("ATM");//test to upper case
+    	Placetypes.add("bay");
     	action.setPlacetypes(Placetypes);
     	String result = action.doImport();
     	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
-    	Assert.assertEquals(ImporterConfig.BASE_ACCEPT_REGEX+"P[.]PPL;V[.]FRST", importerConfig.getAcceptRegExString());
+    	Assert.assertEquals(ImporterConfig.BASE_ACCEPT_REGEX+"ATM|BAY", importerConfig.getAcceptRegExString());
     	Assert.assertTrue(importerConfig.isRegexpCorrects());
     }
 

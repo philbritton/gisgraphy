@@ -95,20 +95,20 @@ public class ImporterHelperTest {
 
 	@Test
 	public void compileRegexShouldCompile() {
-		List<Pattern> patterns = ImporterHelper.compileRegex("P[.]PPL[A-Z&&[^QW]];P[.]PPL$;P[.]STLMT$");
-		assertEquals(3, patterns.size());
+		Pattern pattern = ImporterHelper.compileRegex("ATM|FOREST$");
+		Assert.assertNotNull(pattern);
 	}
 
 	@Test
 	public void compileRegexShouldReturnEmptyListForEmptyString() {
-		List<Pattern> patterns = ImporterHelper.compileRegex("");
-		assertEquals(0, patterns.size());
+		Pattern pattern = ImporterHelper.compileRegex("");
+		Assert.assertNull(pattern);
 	}
 
 	@Test
 	public void compileRegexShouldReturnNullIfRegexAreIncorect() {
-		List<Pattern> patterns = ImporterHelper.compileRegex("P[.]PPL[A-Z&&[^QW]];P[.]PPL$;P[.]STLMT$;*");
-		assertNull(patterns);
+		Pattern pattern = ImporterHelper.compileRegex("[ci");
+		Assert.assertNull(pattern);
 	}
 
 	@Test

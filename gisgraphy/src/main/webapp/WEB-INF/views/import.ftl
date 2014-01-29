@@ -481,7 +481,7 @@ goToStep(${step});
 				<p>
 <@s.text name="featureclasscode.explanation"/><br/><br/>
 <@s.radio name="importallplacetype" list="%{#@java.util.LinkedHashMap@{'true' : getText('import.all.placetype'), 'false': getText('import.select.placetype')}}" onclick="enableList(this.value,'placetypesList');" theme="simple" value="true"/><br/><br/>
-</span><@s.select listKey="name()" id="placetypesList" listValue="getObject().getClass().getSimpleName()+' ('+name()+')'" name="placetypes" list="placetypesList" multiple="true" size="7"  theme="simple" disabled="true"/>
+</span><@s.select listKey="toString()" id="placetypesList" listValue="toString()" name="placetypes" list="placetypesList" multiple="true" size="7"  theme="simple" disabled="true"/>
 <br/><@s.text name="global.useshifttoselectmore"/> <br/><br/><br/>
 				<div class="navigationtoolbar">
 <span class="prev"><input type="button" onclick="goToStep(5);" value="<@s.text name="global.prev.step" />" class="gotostep "/></span><span class="next"><input type="button"  onclick="goToStep(7);" value="<@s.text name="global.next.step" />" class="gotostep"/></span></div>
