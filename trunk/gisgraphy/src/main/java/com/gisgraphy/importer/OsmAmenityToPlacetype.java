@@ -108,6 +108,13 @@ public class OsmAmenityToPlacetype {
 
 	public final static String  DEFAULT_OSM_FEATURE_CODE= "UNK";
 	public final static String  DEFAULT_OSM_FEATURE_CLASS= "UNK";
+	
+	boolean isNonRealTag(String tag) {
+		if (tag == null || "".equals(tag.trim()) || "yes".equalsIgnoreCase(tag) ||  "no".equalsIgnoreCase(tag)  ||  "fixme".equalsIgnoreCase(tag) ){
+			return true;
+		} 
+		return false;
+	}
 
 	public List<GisFeature> getObjectsFromTags(String[] tags){
 		List<GisFeature> objects = new ArrayList<GisFeature>();
@@ -197,14 +204,16 @@ public class OsmAmenityToPlacetype {
 			placeTypes.add(o.getClass().getSimpleName());
 		}
 
-
+        if (objects.size()==0){
+        	objects.add(new GisFeature());
+        }
 		return objects;
 	}
 
 
 
 	GisFeature getAmenityObject(String amenity){
-		if (amenity == null  || "".equals(amenity)){
+		if (isNonRealTag(amenity)){
 			return null;
 		} 
 		GisFeature gisfeature = null;
@@ -392,9 +401,9 @@ public class OsmAmenityToPlacetype {
 
 	GisFeature getAerowayObject(String aeroway){
 		//default to airport
-		if (aeroway == null || "".equals(aeroway.trim()) ){
+		if (isNonRealTag(aeroway)){
 			return null;
-		}
+		} 
 		GisFeature gisfeature =  new Airport();
 		String a  = aeroway.trim().toLowerCase();
 		gisfeature.setFeatureCode(DEFAULT_OSM_FEATURE_CODE);
@@ -408,9 +417,9 @@ public class OsmAmenityToPlacetype {
 	GisFeature getRailwayObject(String railway){
 		//default to rail
 		String a = null;
-		if (railway == null || "".equals(railway.trim()) ){
+		if (isNonRealTag(railway)){
 			return null;
-		}
+		} 
 		GisFeature gisfeature = new Rail();
 		a = railway.trim().toLowerCase();
 		if ("funicular".equals(a)||"light_rail".equals(a)||"monorail".equals(a)){
@@ -544,9 +553,9 @@ public class OsmAmenityToPlacetype {
 
 	GisFeature getShopObject(String shop){
 		String a = null;
-		if (shop == null || "".equals(shop.trim())){
+		if (isNonRealTag(shop)){
 			return null;
-		}
+		} 
 		a = shop.trim().toLowerCase();
 		GisFeature gisfeature = new Shop();
 
@@ -559,7 +568,7 @@ public class OsmAmenityToPlacetype {
 
 	GisFeature getSportObject(String sport){
 		String a = null;
-		if (sport == null || "".equals(sport.trim()) ){
+		if (isNonRealTag(sport) ){
 			return null;
 		} 
 		a = sport.trim().toLowerCase();
@@ -572,6 +581,10 @@ public class OsmAmenityToPlacetype {
 		return gisfeature;
 
 	}
+
+	
+
+
 
 	GisFeature getLanduseObject(String landuse){
 		GisFeature gisfeature = null;

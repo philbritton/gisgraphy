@@ -148,6 +148,12 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		 Assert.assertEquals("u", tags[5]);
 		 Assert.assertEquals("i", tags[6]);
 		 Assert.assertEquals("toto", tags[13]);
+		 
+		 tags = importer.splitTags("_______________________________________");
+		 Assert.assertEquals(14, tags.length);
+		 for (int i=0;i<tags.length;i++){
+			 Assert.assertEquals(null, tags[0]);
+		 }
 		
 	}
 	/*

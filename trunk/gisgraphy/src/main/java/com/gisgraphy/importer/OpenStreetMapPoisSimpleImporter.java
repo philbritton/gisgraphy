@@ -203,7 +203,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 	protected String[] splitTags(String amenity) {
 		String[] tags= new String[14];
 		String[] tagsvalues = amenity.split("___");
-		System.out.println(tagsvalues.length);
+		//System.out.println(tagsvalues.length);
 		for (int j =0;j<tagsvalues.length;j++){
 		//	System.err.println(j+"="+tagsvalues[j]);
 			if (!"".equals(tagsvalues[j].trim())){
