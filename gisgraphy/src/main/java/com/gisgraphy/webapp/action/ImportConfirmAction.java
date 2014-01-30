@@ -22,6 +22,7 @@
  *******************************************************************************/
 package com.gisgraphy.webapp.action;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -33,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
-import com.gisgraphy.domain.valueobject.FeatureCode;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.helper.PropertiesHelper;
@@ -42,6 +42,8 @@ import com.gisgraphy.importer.ImporterConfig;
 import com.gisgraphy.importer.ImporterManager;
 import com.gisgraphy.importer.ImporterMetaDataException;
 import com.opensymphony.xwork2.ActionSupport;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Action that retrieve the configuration and
@@ -113,18 +115,19 @@ public class ImportConfirmAction extends ActionSupport {
 
 		Set<Class<? extends GisFeature>> allClasses = 
 				reflections.getSubTypesOf(GisFeature.class);
-		String[] placteypes;
+		String[] placeTypes;
 		if (allClasses!=null){
-			placteypes = new String[allClasses.size()];
+			placeTypes = new String[allClasses.size()];
 			int i=0;
 			for (Class clazz: allClasses){
-				placteypes[i]=clazz.getSimpleName();
+				placeTypes[i]=clazz.getSimpleName();
 				i++;
 			}
 		} else {
-			placteypes = new String[0];
+			placeTypes = new String[0];
 		}
-		return placteypes;
+		 Arrays.sort(placeTypes);
+		 return placeTypes;
 	}
 
 	public String doImport() {
