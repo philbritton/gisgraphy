@@ -1375,7 +1375,11 @@ public class ImporterConfig {
      */
     private boolean isDirectoryAccessible(String directoryPath) {
     	File dir = new File(directoryPath);
-		return dir.exists() && dir.isDirectory() && dir.canWrite();
+		boolean ok = dir.exists() && dir.isDirectory() && dir.canWrite();
+    	if (!ok){
+    		logger.error("directory "+directoryPath+"' is not accessible");
+    	} 
+    	return ok;
     }
 
 
@@ -1384,7 +1388,11 @@ public class ImporterConfig {
      * @return true if the regexp of the feature class/ code are correct
      */
     public boolean isRegexpCorrects() {
-    	return ImporterHelper.compileRegex(getAcceptRegExString()) != null;
+    	boolean ok = ImporterHelper.compileRegex(getAcceptRegExString()) != null;
+    	if (!ok){
+    		logger.error("regexp "+getAcceptRegExString()+"' is not correct");
+    	} 
+    	return ok;
     }
 
     /**
