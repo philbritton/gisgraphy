@@ -35,14 +35,33 @@ public class OsmAmenityToPlacetypeTest {
 		osmAmenityToPlacetype.getObjectsFromTags(tags);
 	}
 	
+	
+	@Test
+	public void isNonRealTag(){
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("yes"));
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("no"));
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("fixme"));
+		
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("YES"));
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("NO"));
+		Assert.assertTrue(osmAmenityToPlacetype.isNonRealTag("FIXME"));
+		
+		Assert.assertFalse(osmAmenityToPlacetype.isNonRealTag("foo"));
+	}
 	@Test
 	public void getObjectsFromTags(){
 		List<GisFeature> objects = osmAmenityToPlacetype.getObjectsFromTags(null);
 		Assert.assertNotNull(objects);
 		Assert.assertEquals(0, objects.size());
 		
-		//amenity only (one tag)
+		//empty array
 		String[] tags = new String[14];
+		objects = osmAmenityToPlacetype.getObjectsFromTags(tags);
+		Assert.assertNotNull(objects);
+		Assert.assertEquals(1, objects.size());
+		
+		//amenity only (one tag)
+		 tags = new String[14];
 		tags[0]="parking";//amenity
 		objects = osmAmenityToPlacetype.getObjectsFromTags(tags);
 		Assert.assertNotNull(objects);
