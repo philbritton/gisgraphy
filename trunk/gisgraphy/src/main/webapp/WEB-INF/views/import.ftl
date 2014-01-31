@@ -200,7 +200,6 @@ goToStep(${step});
 							<@s.checkbox value="%{housenumberImporterEnabled}" name="houseNumberImporterEnabled" id="disableHouseNumber" theme="simple"/> <@s.text name="import.houseNumbers"/>
 						</div>
 					<br/>
-						<br/><br/><br/><br/><br/><br/><br/>
 						
 						<br/><br/><br/><br/>
 <div class="navigationtoolbar">

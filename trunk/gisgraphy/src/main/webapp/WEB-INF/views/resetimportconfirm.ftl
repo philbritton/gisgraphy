@@ -21,7 +21,7 @@
 					<br/><br/>
                           <@s.url id="resetImportResetURL" action="resetimport" method="reset"/>
 						<@s.form action="${resetImportResetURL}" method="get" id="reset">
-							<@s.submit onclick="$('wait').show();$('doCancelButton').disable();return true;" title="%{getText('import.reset.button')}" value="%{getText('import.reset.button')}" theme="simple" id="doCancelButton" />
+							<@s.submit onclick="$('wait').show();$('doCancelButton').disable();" title="%{getText('import.reset.button')}" value="%{getText('import.reset.button')}" theme="simple" id="doCancelButton" />
 						</@s.form>
 					</#if> 
 				</div>

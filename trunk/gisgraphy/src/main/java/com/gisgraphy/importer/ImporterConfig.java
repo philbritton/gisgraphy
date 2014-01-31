@@ -1411,42 +1411,52 @@ public class ImporterConfig {
     
     public boolean isAllFilesDownloadables(){
     	//geonames
-    	List<String> filenames = getGeonamesDownloadFilesListFromOption();
-    	for (String filename:filenames){
-    		if (!checkUrl(getGeonamesDownloadURL()+filename)){
-    			return false;
-    		}
+    	List<String> filenames ;
+    	if(isGeonamesImporterEnabled()){
+	    	 filenames = getGeonamesDownloadFilesListFromOption();
+	    	for (String filename:filenames){
+	    		if (!checkUrl(getGeonamesDownloadURL()+filename)){
+	    			return false;
+	    		}
+	    	}
+	    	//zip
+	    	//because the zipcode importer is tolerant to non existing url we skip the tests
+	    	
     	}
-    	//zip
-    	//because the zipcode importer is tolerant to non existing url we skip the tests
-    	//osmstreet
-    	filenames = getOpenStreetMapDownloadFilesListFromOption();
-    	for (String filename:filenames){
-    		if (!checkUrl(getOpenstreetMapDownloadURL()+filename)){
-    			return false;
-    		}
+    	
+    	if(isOpenstreetmapHouseNumberImporterEnabled()){
+	    	//osm house number
+	    	filenames = getOpenStreetMapHouseNumberDownloadFilesListFromOption();
+	    	for (String filename:filenames){
+	    		if (!checkUrl(getOpenstreetMaphouseNumbersDownloadURL()+filename)){
+	    			return false;
+	    		}
+	    	}
     	}
-    	//osm house number
-    	filenames = getOpenStreetMapHouseNumberDownloadFilesListFromOption();
-    	for (String filename:filenames){
-    		if (!checkUrl(getOpenstreetMaphouseNumbersDownloadURL()+filename)){
-    			return false;
-    		}
-    	}
-    	//osm cities
-    	filenames = getOpenStreetMapCitiesDownloadFilesListFromOption();
-    	for (String filename:filenames){
-    		if (!checkUrl(getOpenStreetMapCitiesDownloadFilesListFromOption()+filename)){
-    			return false;
-    		}
-    	}
-    	//osm poi
-    	filenames = getOpenStreetMapPoisDownloadFilesListFromOption();
-    	for (String filename:filenames){
-    		if (!checkUrl(getOpenstreetMapPoisDownloadURL()+filename)){
-    			return false;
-    		}
-    	}
+    	
+    	if(isOpenstreetmapImporterEnabled()){
+    		//osmstreet
+	    	filenames = getOpenStreetMapDownloadFilesListFromOption();
+	    	for (String filename:filenames){
+	    		if (!checkUrl(getOpenstreetMapDownloadURL()+filename)){
+	    			return false;
+	    		}
+	    	}
+	    	//osm cities
+	    	filenames = getOpenStreetMapCitiesDownloadFilesListFromOption();
+	    	for (String filename:filenames){
+	    		if (!checkUrl(getOpenStreetMapCitiesDownloadFilesListFromOption()+filename)){
+	    			return false;
+	    		}
+	    	}
+	    	//osm poi
+	    	filenames = getOpenStreetMapPoisDownloadFilesListFromOption();
+	    	for (String filename:filenames){
+	    		if (!checkUrl(getOpenstreetMapPoisDownloadURL()+filename)){
+	    			return false;
+	    		}
+	    	}
+	    	}
     	return true;
     }
    
