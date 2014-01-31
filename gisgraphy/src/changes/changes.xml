@@ -661,6 +661,10 @@
 				Add the ability to filter POI to import by place types.
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Reset import now works on gg chrome (https://code.google.com/p/gisgraphy/issues/detail?id=25)
+			</action>
+			
 			
 			</release>
 			
