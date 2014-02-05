@@ -403,7 +403,7 @@ public class GeocodingService implements IGeocodingService {
 							//TODO do we have to search and if we find, we add it?
 						}else {
 							numberOfStreetThatHaveTheSameName++;
-							HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+							HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,street.getCountry_code());
 							if (houseNumber !=null){
 								housenumberFound=true;
 								address.setHouseNumber(houseNumber.getNumber());
@@ -419,7 +419,7 @@ public class GeocodingService implements IGeocodingService {
 						}
 					} else { //the streetName is different, 
 						numberOfStreetThatHaveTheSameName=0;
-						HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+						HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,street.getCountry_code());
 						if (houseNumber !=null){
 							housenumberFound=true;
 							address.setHouseNumber(houseNumber.getNumber());
@@ -431,7 +431,7 @@ public class GeocodingService implements IGeocodingService {
 					}
 				} else {//streetname is null, we search for housenumber anyway
 					numberOfStreetThatHaveTheSameName=0;
-					HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList);
+					HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,street.getCountry_code());
 					if (houseNumber !=null){
 						housenumberFound=true;
 						address.setHouseNumber(houseNumber.getNumber());
@@ -465,11 +465,16 @@ public class GeocodingService implements IGeocodingService {
 		return new AddressResultsDto(addresses, 0L);
 	}
 
-	protected HouseNumberDto searchHouseNumber(String houseNumberToFind, List<HouseNumberDto> houseNumbersList) {
+	protected HouseNumberDto searchHouseNumber(String houseNumberToFind, List<HouseNumberDto> houseNumbersList,String countryCode) {
 		if(houseNumberToFind==null || houseNumbersList==null || houseNumbersList.size()==0){
 			return null;
-		} 
-		String HouseNumberToFind = HouseNumberUtil.normalizeNumber(houseNumberToFind);
+		}
+		String HouseNumberToFind;
+		if (countryCode!=null && ("SK".equalsIgnoreCase(countryCode) || "CZ".equalsIgnoreCase(countryCode))){
+			HouseNumberToFind = HouseNumberUtil.normalizeSkCzNumber(houseNumberToFind);
+		} else {
+			HouseNumberToFind = HouseNumberUtil.normalizeNumber(houseNumberToFind);
+		}
 		for (HouseNumberDto candidate :houseNumbersList){
 			if (candidate!=null && candidate.getNumber()!=null && candidate.getNumber().equals(HouseNumberToFind)){
 				return candidate;

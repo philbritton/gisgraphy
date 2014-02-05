@@ -141,7 +141,7 @@ public class MunicipalityDetector implements IMunicipalityDetector {
 		if (strategy == null ||	strategy == MunicipalityOSMDetectionStrategy.ALL){
 			return true;
 		}
-		if (source == GISSource.OPENSTREETMAP){ 
+		if (source == GISSource.OPENSTREETMAP){
 			if (strategy == MunicipalityOSMDetectionStrategy.OSM){
 				return true;
 			}

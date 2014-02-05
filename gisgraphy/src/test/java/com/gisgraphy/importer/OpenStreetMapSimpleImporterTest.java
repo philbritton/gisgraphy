@@ -852,6 +852,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	
     	
     	Assert.assertEquals("ZIP", street.getIsInZip());
+    	Assert.assertEquals(true, street.isCityConfident());
     	Assert.assertEquals("admName", street.getIsInAdm());
     	Assert.assertEquals("name", street.getIsIn());
     	Assert.assertEquals(null, street.getIsInPlace());
@@ -900,41 +901,6 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	
     }
     
-    @Test
-    public void testTearDown(){
-	if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-	OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter(){
-	    //simulate an error
-	    public boolean shouldBeSkipped() {throw new RuntimeException("errormessage");};
-	};
-	IOpenStreetMapDao dao = createMock(IOpenStreetMapDao.class);
-	openStreetMapDao.createSpatialIndexes();
-	dao.clearPartialSearchName();
-	EasyMock.replay(dao);
-	importer.setOpenStreetMapDao(dao);
-	
-	ISolRSynchroniser solRSynchroniser = EasyMock.createMock(ISolRSynchroniser.class);
-	solRSynchroniser.optimize();
-	EasyMock.replay(solRSynchroniser);
-	importer.setSolRSynchroniser(solRSynchroniser);
-	
-		IInternationalisationService internationalisationService = createMock(IInternationalisationService.class);
-		expect(internationalisationService.getString("import.message.createIndex")).andReturn("localizedString");
-    	expect(internationalisationService.getString("import.fulltext.optimize")).andReturn("localizedString");
-    	replay(internationalisationService);
-    	importer.setInternationalisationService(internationalisationService);
-	
-	    try {
-		importer.process();
-	    } catch (Exception ignore) {
-		
-	    }
-	    Assert.assertTrue(importer.getStatusMessage().contains("errormessage"));
-	    EasyMock.verify(dao);
-	    EasyMock.verify(internationalisationService);
-	    EasyMock.verify(solRSynchroniser);
-    }
-    }
 	  
     @Test
     public void testPplxToPPL(){

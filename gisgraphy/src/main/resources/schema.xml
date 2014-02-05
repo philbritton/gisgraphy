@@ -54,14 +54,14 @@
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
-		<filter class="solr.ISOLatin1AccentFilterFactory"/>
+		<filter class="solr.ASCIIFoldingFilterFactory"/>
 		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
 		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
-		<filter class="solr.ISOLatin1AccentFilterFactory"/>
+		<filter class="solr.ASCIIFoldingFilterFactory"/>
 		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
 		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
       </analyzer>

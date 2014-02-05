@@ -73,16 +73,7 @@ public class OpenStreetMap {
      */
     public static final String FULLTEXTSEARCH_VECTOR_PROPERTY_NAME = "textsearchVector";
 
-    /**
-     * (Experimental) Name of the column that is equals to to_tsvector(
-     * {@link #PARTIALSEARCH_COLUMN_NAME} It is used to do Fulltext search with
-     * the postgres text search module (to use the index) This value should be
-     * change if the getter and the setter of the {@link #partialSearchName}
-     * change
-     * @see GisgraphyConfig#PARTIAL_SEARH_EXPERIMENTAL
-     */
-    public static final String PARTIALSEARCH_VECTOR_PROPERTY_NAME = "partialsearchVector";
-
+    
     /**
      * Name of the field property in hibernate. This is a string that is used
      * for fulltext and contains search without postgres fulltext engine. this
@@ -105,15 +96,6 @@ public class OpenStreetMap {
      */
     public static final String FULLTEXTSEARCH_COLUMN_NAME = FULLTEXTSEARCH_PROPERTY_NAME.toLowerCase();
 
-    /**
-     * Name of the column that is used to store a string used for partial search
-     * with postgres fulltext engine This value should be change if the getter
-     * and the setter of the {@link #getPartialsearchVector()} change
-     * 
-     * @see GisgraphyConfig#PARTIAL_SEARH_EXPERIMENTAL
-     * @see StreetSearchMode#CONTAINS
-     */
-    public static final String PARTIALSEARCH_COLUMN_NAME = "partialsearchname";
 
     public static final String LOCATION_COLUMN_NAME = "location";
 
@@ -167,6 +149,13 @@ public class OpenStreetMap {
     private String textSearchName;
     
     private List<AlternateOsmName> alternateNames;
+    
+    /**
+     * if the associated city has been found by shape 
+     * (only for sttistics and relevance purpose
+     */
+    @IntrospectionIgnoredField
+    private boolean cityConfident = false;
     
     /**
      * @return A list of the {@link AlternateName}s for this GisFeature
@@ -660,5 +649,13 @@ public class OpenStreetMap {
 	    }
 	}
     }
+
+	public boolean isCityConfident() {
+		return cityConfident;
+	}
+
+	public void setCityConfident(boolean cityConfident) {
+		this.cityConfident = cityConfident;
+	}
 
 }

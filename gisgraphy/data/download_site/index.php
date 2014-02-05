@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 include("header.inc");
 ?>
 <style>
@@ -28,26 +29,25 @@ function _format_bytes($size)
 }
  $dirlist .= '<li><img src="/flags/directory_back.png" alt="^" title="^" class="flag" /><a href="..">Parent directory</a></li>';
  if ($handle = opendir('.')) {
- $files = readdir($handle);
- $dirFiles = array();
+$files = readdir($handle);
+$dirFiles = array();
   while (false !== ($file = readdir($handle))) {
-     $dirFiles[]=$file;
-  }
+$dirFiles[]=$file;
+}
 sort($dirFiles, SORT_LOCALE_STRING);
    foreach($dirFiles as $file)
-
       {
         if (is_dir($file)){
-        if ($file != "." && $file != ".." && $file!="flags" && $file!="css" && $file!="scripts" && $file!="images"){
+        if ($file != "." && $file != ".." && $file!="flags" && $file!="css" && $file!="scripts" && $file!="images" && $file!="viewpoly"){
                 $dirlist .= '<li><img src="/flags/directory.png" alt=">" title=">" class="flag" /><a href="'.$file.'">'.$file.'</a></li>';
         }
-        }else if ($file!="favicon.ico" && $file != "index.php" && $file!="readme.txt" && $file!="robots.txt"){
+        }else if ($file!="favicon.ico" && $file != "index.php" && $file!="readme.txt" && $file!="robots.txt" && $file!="header.inc" && $file!="footer.inc"){
 
                 $countryArray=explode(".",$file);
                 if (count(countryArray)>0){
                 $country=strtoupper($countryArray[0]);
                 $last_modification_date=date ("F d Y ", filemtime($file));
-                $file_size=_format_bytes(filesize($file));
+		$file_size=_format_bytes(filesize($file));
                 $fileList .= '<li><img src="/flags/'.$country.'.png" alt=">" title=">" class="flag" /><a href="'.$file.'">'.$file.'</a>&nbsp;&nbsp;'.$file_size.'&nbsp;&nbsp;(last update : '.$last_modification_date.')</li>';
 }
        }
@@ -55,11 +55,10 @@ sort($dirFiles, SORT_LOCALE_STRING);
   closedir($handle);
   }
 ?>
-
 <h1>Download server</h1>
-<pre><?php
+<div style="font-family: Arial,Verdana,sans-serif;background-color: rgb(235, 245, 252);font-size: 1em;padding: 25px;text-align: left;"><?php
 if (file_exists("readme.txt")){ include("readme.txt"); } ?>
-</pre>
+</div>
 <ul>
 <?=$dirlist?>
 <?=$fileList?>

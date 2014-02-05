@@ -110,8 +110,8 @@ public class GeonamesDatabaseIndexerTest extends AbstractTransactionalTestCase {
 		};
 		try {
 			indexer.process();
-			fail("The GeonamesDatabaseIndexer should have throws");
 		} catch (RuntimeException ignore) {
+			fail("The GeonamesDatabaseIndexer should not throws");
 		}
 		Assert.assertTrue(indexer.getStatusMessage().length() > 0);
 		Assert.assertEquals(ImporterStatus.ERROR, indexer.getStatus());

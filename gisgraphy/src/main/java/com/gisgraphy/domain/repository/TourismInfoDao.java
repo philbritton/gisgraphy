@@ -25,20 +25,21 @@ package com.gisgraphy.domain.repository;
 import org.springframework.stereotype.Repository;
 
 import com.gisgraphy.domain.geoloc.entity.Camp;
+import com.gisgraphy.domain.geoloc.entity.TourismInfo;
 
 /**
- * A data access object for {@link Camp} Object
+ * A data access object for {@link TourismInfo} Object
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 @Repository
-public class TourismInfoDao extends GenericGisDao<Camp> implements IGisDao<Camp> {
+public class TourismInfoDao extends GenericGisDao<TourismInfo> implements IGisDao<TourismInfo> {
 
     /**
      * Default constructor
      */
     public TourismInfoDao() {
-	super(Camp.class);
+	super(TourismInfo.class);
     }
 
 }

@@ -1445,7 +1445,7 @@ public class ImporterConfig {
 	    	//osm cities
 	    	filenames = getOpenStreetMapCitiesDownloadFilesListFromOption();
 	    	for (String filename:filenames){
-	    		if (!checkUrl(getOpenStreetMapCitiesDownloadFilesListFromOption()+filename)){
+	    		if (!checkUrl(getOpenstreetMapCitiesDownloadURL()+filename)){
 	    			return false;
 	    		}
 	    	}
@@ -1457,6 +1457,7 @@ public class ImporterConfig {
 	    		}
 	    	}
 	    	}
+    	logger.info("All files are downloadables");
     	return true;
     }
    

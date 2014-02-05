@@ -188,11 +188,8 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	assertNotNull(openStreetMapDao.get(streetOSM2.getId()));
 	
 	int numberOfLineUpdated = openStreetMapDao.updateTS_vectorColumnForStreetNameSearch();
-		if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-			assertEquals("It should have 4 lines updated : (streetosm +streetosm2) for partial + (streetosm +streetosm2) for fulltext",4, numberOfLineUpdated);
-		} else {
+	
 			assertEquals("It should have 2 lines updated : (streetosm +streetosm2) for fulltext",2, numberOfLineUpdated);
-		}
 	
 	
 	Point searchPoint = GeolocHelper.createPoint(6.9412748F, 50.9155829F);
@@ -378,35 +375,10 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
     	assertEquals(0,nearestStreet.size());
     	
     	int numberOfLineUpdated = openStreetMapDao.updateTS_vectorColumnForStreetNameSearch();
-    	if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-    		assertEquals("It should have 2 lines updated : streetosm for fulltext and partial",2, numberOfLineUpdated);
-    	} else {
     		assertEquals("It should have 1 lines updated : streetosm for fulltext",1, numberOfLineUpdated);
-    	}
     	
     }
     
-    @Test
-    public void testclearPartialSearchName(){
-	boolean saveOption = GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL;
-	GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL = true;
-	try {
-	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
-	String partialSearchName = "partial";
-	streetOSM.setTextSearchName(partialSearchName);
-	StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM);
-    	openStreetMapDao.save(streetOSM);
-    	OpenStreetMap streetWithPartialSearchNameRetrieved =openStreetMapDao.getByGid(streetOSM.getGid());
-    	assertEquals("partialsearchName should be persist",StringHelper.transformStringForPartialWordIndexation(streetOSM.getName(), StringHelper.WHITESPACE_CHAR_DELIMITER),streetWithPartialSearchNameRetrieved.getPartialSearchName());
-    	openStreetMapDao.clearPartialSearchName();
-    	//we clear cache
-    	openStreetMapDao.flushAndClear();
-    	OpenStreetMap streetWithOutPartailSearchNameRetrieved =openStreetMapDao.getByGid(streetOSM.getGid());
-    	assertNull("partialsearchName should be null after clearTextSearchName has been called",streetWithOutPartailSearchNameRetrieved.getPartialSearchName());
-	} finally {
-	    GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL= saveOption;
-	}
-    }
     
     
     @Test

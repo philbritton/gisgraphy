@@ -130,7 +130,17 @@ public class ImportConfirmAction extends ActionSupport {
 		 return placeTypes;
 	}
 
-	public String doImport() {
+	public String doImport() throws Exception {
+		setConfig();
+		if (isConfigOk()){
+			return IMPORT_VIEW_NAME;
+		} else {
+			step=8;
+			return super.execute();
+		}
+	}
+
+	protected void setConfig() {
 		if (importallcountries) {
 			importerConfig.setOpenStreetMapFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
 			importerConfig.setOpenStreetMapHouseNumberFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
@@ -191,10 +201,6 @@ public class ImportConfirmAction extends ActionSupport {
 			}
 		}
 		logger.info("placetypes wizard :  "+importerConfig.getAcceptRegExString());
-		if (!importerConfig.isRegexpCorrects()){
-			throw new IllegalArgumentException("oops ! it seems that there is a bug when setting placetype option to "+importerConfig.getAcceptRegExString()+"please report it");
-		}
-		return IMPORT_VIEW_NAME;
 	}
 
 	public int getNumberOfProcessors() {

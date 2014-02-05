@@ -58,9 +58,9 @@ public class GisFeatureDistanceFactory {
 				    gisFeatureDistance.getZipCodes().add(zipCode.getCode());
 			    }
 			}
-			gisFeatureDistance.setPlaceType(gisFeature.getClass().getSimpleName()
+		gisFeatureDistance.setPlaceType(gisFeature.getClass().getSimpleName()
 		    .toLowerCase());
-	    updateFields(gisFeatureDistance);
+	    updateFields(gisFeatureDistance,null);
 	    }
 	return gisFeatureDistance;
     }
@@ -116,7 +116,7 @@ public class GisFeatureDistanceFactory {
      * update the calculated fields (GoogleMapUrl,YahooMapURL,CountryFlag,...)
      * 
      */
-    public  void  updateFields(GisFeatureDistance gisFeatureDistance) {
+    public  void  updateFields(GisFeatureDistance gisFeatureDistance,Class clazz) {
    	gisFeatureDistance.setOpenstreetmap_map_url(URLUtils.createOpenstreetmapMapUrl(gisFeatureDistance.getLocation()));
 	gisFeatureDistance.setGoogle_map_url(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation(),
 		gisFeatureDistance.getName()));
@@ -130,10 +130,12 @@ public class GisFeatureDistanceFactory {
 	    try {
 		gisFeatureDistance.setPlaceType(FeatureCode.valueOf(
 			gisFeatureDistance.getFeatureClass() + "_" + gisFeatureDistance.getFeatureCode()).getObject()
-			.getClass().getSimpleName());
+			.getClass().getSimpleName().toLowerCase());
 	    } catch (RuntimeException e) {
 		logger.warn("no feature code for "+gisFeatureDistance.getFeatureClass() + "_" + gisFeatureDistance.getFeatureCode());
 	    }
+	} else if (clazz!=null){
+		gisFeatureDistance.setPlaceType(clazz.getSimpleName().toLowerCase());
 	}
     }
 

@@ -194,7 +194,7 @@ doAjaxSearch = function(formName){
 				<#list fulltextResponseDTO.results as result>
 	 			<div class="bodyResults">
 					<div class="flag" >
-						<img src="${result.country_flag_url}" alt="country flag"/>
+						<img src="/images/flags/${result.country_code}.png" alt="country flag"/>
 					</div>
 					<div class="resultblock">
 					<div>
@@ -336,14 +336,15 @@ doAjaxSearch = function(formName){
 				  					<@s.param name="featureId" value="${result.featureId?c}" />
 				 				</@s.url>
 								<div class="resultheaderleft"><a href="${featureURL}">${result.name} (${result.countryCode})</a> <#if result.distance??>: ${result.distance} <@s.text name="search.unit.meter"/></#if></div>
-								<div class="resultheaderright"><@s.text name="${result.featureClass}_${result.featureCode}"/></div>
+								<div class="resultheaderright"><#if result.feature_class?? && result.feature_code??><@s.text name="${result.featureClass}_${result.featureCode}"/></#if></div>
 						</div>
 					
 						<div class="separator"><hr/></div>
 					
 						<div class="summary">
-						<@s.text name="global.typeDescription"/> : <@s.text name="${result.featureClass}_${result.featureCode}"/><br/>
+						<#if result.feature_class?? && result.feature_code??><@s.text name="global.typeDescription"/> : <@s.text name="${result.featureClass}_${result.featureCode}"/><br/>
 						<@s.text name="global.featureClassCode"/> : ${result.featureClass}.${result.featureCode}<br/>
+						</#if>
 						<@s.text name="global.latitude"/> : ${result.lat}; 
 						<br/>
 						<@s.text name="global.longitude"/> : ${result.lng}<br/>

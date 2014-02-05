@@ -219,6 +219,22 @@ public class ImporterConfigTest {
 		//test when everything is correct
 		assertTrue("when all the condition are ok the function should return true", importerConfig.isConfigCorrectForImport());
 		
+		importerConfig.setRetrieveFiles(true);
+		importerConfig.setOpenStreetMapHouseNumberFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
+		importerConfig.setOpenStreetMapPoisFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
+		importerConfig.setOpenStreetMapCitiesFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
+		importerConfig.setOpenStreetMapFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
+		importerConfig.setGeonamesFilesToDownload(ImporterConfig.GEONAMES_DEFAULT_FILES_TO_DOWNLOAD);
+		
+		String baseUrl = "http://dl.gisgraphy.com";
+		importerConfig.setGeonamesDownloadURL("http://download.geonames.org/export/dump/");
+		importerConfig.setOpenstreetMapDownloadURL(baseUrl+"/streets/");
+		importerConfig.setOpenstreetMapCitiesDownloadURL(baseUrl+"/cities/");
+		importerConfig.setOpenstreetMapPoisDownloadURL(baseUrl+"/pois/");
+		importerConfig.setOpenstreetMaphouseNumbersDownloadURL(baseUrl+"/housenumbers/");
+		
+		assertTrue("when all the condition are ok the function should return true when retrieve files is true", importerConfig.isConfigCorrectForImport());
+		
 	}
 	
 	@Test

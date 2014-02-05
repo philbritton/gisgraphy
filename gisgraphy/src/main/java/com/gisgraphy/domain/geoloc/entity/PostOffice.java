@@ -35,7 +35,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PostOffice extends GisFeature {
+public class PostOffice extends GisFeature implements ZipCodesAware {
 
     /**
      * Override the gisFeature value.<br>

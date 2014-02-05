@@ -11,7 +11,7 @@
 			<div class="clear"><br/></div>
 	 			<div class="bodyResults">
 					<div>
-						<span class="flag"><img src="${result.country_flag_url}" alt="<#if result.country_name??>(${result.country_name})</#if>" /></span>
+						<span class="flag"><img src="/images/flags/${result.country_code}.png" alt="<#if result.country_name??>(${result.country_name})</#if>" /></span>
 						<span class="resultheaderleft">${preferedName} <#if result.country_name??>(${result.country_name})</#if></span>
 					</div>
 					
