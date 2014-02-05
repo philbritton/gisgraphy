@@ -529,13 +529,57 @@ public class GeocodingServiceTest {
     	houseNumbers.add(number1);
     	houseNumbers.add(number2);
     	
-    	Assert.assertNull(service.searchHouseNumber("3", houseNumbers));
+    	Assert.assertNull(service.searchHouseNumber("3", houseNumbers,"FR"));
     	
-    	HouseNumberDto result = service.searchHouseNumber("2", houseNumbers);
+    	HouseNumberDto result = service.searchHouseNumber("2", houseNumbers,"FR");
     	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
     	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
     	
-    	result = service.searchHouseNumber("2bis", houseNumbers);
+    	result = service.searchHouseNumber("2bis", houseNumbers,"FR");
+    	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
+    	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
+    }
+    
+    @Test
+    public void searchHouseNumberTestWithNull(){
+    	GeocodingService service = new GeocodingService();
+    	List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
+    	HouseNumberDto number1 = new HouseNumberDto(GeolocHelper.createPoint(2D, 3D), "1");
+    	HouseNumberDto number2 = new HouseNumberDto(GeolocHelper.createPoint(4D, 5D), "2");
+    	houseNumbers.add(number1);
+    	houseNumbers.add(number2);
+    	
+    	Assert.assertNull(service.searchHouseNumber("3", houseNumbers,null));
+    	
+    	HouseNumberDto result = service.searchHouseNumber("2", houseNumbers,null);
+    	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
+    	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
+    	
+    	result = service.searchHouseNumber("2bis", houseNumbers,null);
+    	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
+    	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
+    }
+    
+    @Test
+    public void searchHouseNumberTestforCZSK(){
+    	GeocodingService service = new GeocodingService();
+    	List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
+    	HouseNumberDto number1 = new HouseNumberDto(GeolocHelper.createPoint(2D, 3D), "1");
+    	HouseNumberDto number2 = new HouseNumberDto(GeolocHelper.createPoint(4D, 5D), "2");
+    	houseNumbers.add(number1);
+    	houseNumbers.add(number2);
+    	
+    	Assert.assertNull(service.searchHouseNumber("3", houseNumbers,"CZ"));
+    	
+    	HouseNumberDto result = service.searchHouseNumber("2", houseNumbers,"CZ");
+    	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
+    	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
+    	
+    	result = service.searchHouseNumber("1/2", houseNumbers,"CZ");
+    	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
+    	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
+    	
+    	result = service.searchHouseNumber("1/2", houseNumbers,"SK");
     	Assert.assertEquals(4D, result.getLocation().getX(),0.0001);
     	Assert.assertEquals(5D, result.getLocation().getY(),0.0001);
     }
@@ -544,9 +588,9 @@ public class GeocodingServiceTest {
     public void searchHouseNumber_WithNullValues(){
     	GeocodingService service = new GeocodingService();
     	List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
-    	Assert.assertNull(service.searchHouseNumber("3", null));
-    	Assert.assertNull(service.searchHouseNumber(null, houseNumbers));
-    	Assert.assertNull(service.searchHouseNumber(null, null));
+    	Assert.assertNull(service.searchHouseNumber("3", null,"FR"));
+    	Assert.assertNull(service.searchHouseNumber(null, houseNumbers,"FR"));
+    	Assert.assertNull(service.searchHouseNumber(null, null,"FR"));
     }
     
     @Test

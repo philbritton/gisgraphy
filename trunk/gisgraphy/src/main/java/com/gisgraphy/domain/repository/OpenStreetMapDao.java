@@ -236,13 +236,6 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 				Query qryUpdateFulltextField = session.createSQLQuery(updateFulltextField);
 				int numberOfLineUpdatedForFulltext = qryUpdateFulltextField.executeUpdate();
 				int numberOfLineUpdatedForPartial = 0;
-				if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-					logger.info("will update "+OpenStreetMap.PARTIALSEARCH_VECTOR_PROPERTY_NAME.toLowerCase()+" field");
-					String updatePartialWordField = "UPDATE openStreetMap SET "+OpenStreetMap.PARTIALSEARCH_VECTOR_PROPERTY_NAME.toLowerCase()+" = to_tsvector('simple',coalesce("+OpenStreetMap.PARTIALSEARCH_COLUMN_NAME+" ,'')) where name is not null";
-					Query qryUpdateParialWordField = session.createSQLQuery(updatePartialWordField);
-					numberOfLineUpdatedForPartial = qryUpdateParialWordField.executeUpdate();
-					session.flush();
-				}
 				return Integer.valueOf(numberOfLineUpdatedForFulltext + numberOfLineUpdatedForPartial);
 				
 			    }
@@ -264,13 +257,6 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 				Query qryUpdateFulltextField = session.createSQLQuery(updateFulltextField);
 				int numberOfLineUpdatedForFulltext = qryUpdateFulltextField.executeUpdate();
 				int numberOfLineUpdatedForPartial = 0;
-				if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-					logger.info("will update "+OpenStreetMap.PARTIALSEARCH_VECTOR_PROPERTY_NAME.toLowerCase()+" field");
-					String updatePartialWordField = "UPDATE openStreetMap SET "+OpenStreetMap.PARTIALSEARCH_VECTOR_PROPERTY_NAME.toLowerCase()+" = to_tsvector('simple',coalesce("+OpenStreetMap.PARTIALSEARCH_COLUMN_NAME+" ,'')) where gid >= "+from+" and gid <= "+to+" and name is not null";
-					Query qryUpdateParialWordField = session.createSQLQuery(updatePartialWordField);
-					numberOfLineUpdatedForPartial = qryUpdateParialWordField.executeUpdate();
-					session.flush();
-				}
 				return Integer.valueOf(numberOfLineUpdatedForFulltext + numberOfLineUpdatedForPartial);
 				
 			    }
@@ -317,22 +303,6 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 			});
    }
     
-    public void clearPartialSearchName() {
-	 this.getHibernateTemplate().execute(
-			 new HibernateCallback() {
-
-			    public Object doInHibernate(Session session)
-				    throws PersistenceException {
-				session.flush();
-				logger.info("will clear textSearchName");
-				String clearTextSearchNameQueryString = "Update openstreetmap set  "+OpenStreetMap.PARTIALSEARCH_COLUMN_NAME.toLowerCase()+"= null";  
-				Query fulltextIndexQuery = session.createSQLQuery(clearTextSearchNameQueryString);
-				fulltextIndexQuery.executeUpdate();
-				
-				return null;
-			    }
-			});
-  }
 
     
     /* (non-Javadoc)

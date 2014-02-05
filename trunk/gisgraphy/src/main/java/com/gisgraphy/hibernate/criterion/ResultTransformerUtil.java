@@ -44,7 +44,7 @@ public class ResultTransformerUtil<T> {
 	 * @return the list of GisFeatureDistance
 	 */
 	//TODO tests zip test
-	public static List<GisFeatureDistance> transformToGisFeatureDistance(String aliasList[], List<?> resultList, Map<Long, List<String>> featureIdToZipCodesMap) {
+	public static List<GisFeatureDistance> transformToGisFeatureDistance(String aliasList[], List<?> resultList, Map<Long, List<String>> featureIdToZipCodesMap,Class clazz) {
 		List<GisFeatureDistance> results = new ArrayList<GisFeatureDistance>();
 		if (aliasList != null && !resultList.isEmpty()) {
 			ResultTransformer tr = new AliasToBeanResultTransformer(GisFeatureDistance.class);
@@ -56,7 +56,7 @@ public class ResultTransformerUtil<T> {
 				gisFeatureDistance = (GisFeatureDistance) tr.transformTuple(obj, aliasList);
 				int indexInList = results.indexOf(gisFeatureDistance);
 				if (indexInList == -1) {
-				    gisFeatureDistanceFactory.updateFields(gisFeatureDistance);
+				    gisFeatureDistanceFactory.updateFields(gisFeatureDistance,clazz);
 					results.add(gisFeatureDistance);
 					if (featureIdToZipCodesMap != null){
 					    gisFeatureDistance.setZipCodes(featureIdToZipCodesMap.get(gisFeatureDistance.getId()));

@@ -132,7 +132,7 @@ public class City extends GisFeature implements ZipCodesAware {
 		return completeCityName.toString();
 	}
 
-	@Index(name = "gisFeatureCountryindex")
+	@Index(name = "cityMunicipalityIndex")
 	public boolean isMunicipality() {
 		return municipality;
 	}

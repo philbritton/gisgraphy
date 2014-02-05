@@ -33,10 +33,8 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
-import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
@@ -44,7 +42,6 @@ import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
@@ -259,6 +256,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     		City cityByShape = cityDao.getByShape(street.getLocation(),true);
     		if (cityByShape != null){
     			street.setIsIn(cityByShape.getName());
+    			street.setCityConfident(true);
     			street.setPopulation(cityByShape.getPopulation());
     			if (cityByShape.getZipCodes() != null && cityByShape.getZipCodes().size() == 1) {
     				street.setIsInZip(cityByShape.getZipCodes().get(0).getCode());
@@ -434,14 +432,6 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     	}
     	this.statusMessage = internationalisationService.getString("import.fulltext.optimize");
     	solRSynchroniser.optimize();
-    	try {
-    	    if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL) {
-    		openStreetMapDao.clearPartialSearchName();
-    	    }
-    	} finally {
-    	    // we restore message in case of error
-    	    this.statusMessage = savedMessage;
-    	}
     }
     
     /**

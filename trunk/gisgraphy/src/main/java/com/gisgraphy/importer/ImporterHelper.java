@@ -396,7 +396,7 @@ public class ImporterHelper {
 		}
 
     	if (responseCode == 200 || (responseCode >300 &&  responseCode < 400)) {
-    		logger.info(urlAsString+ " is reachable");
+    		logger.info("URL "+urlAsString+ " exists");
     		return true;
     	} else {
     		logger.error(urlAsString+" return a "+responseCode);

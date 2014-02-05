@@ -665,6 +665,18 @@
 				Reset import now works on gg chrome (https://code.google.com/p/gisgraphy/issues/detail?id=25)
 			</action>
 			
+			<action dev="David Masclet" type="remove">
+				Remove experimental partial search
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				manage slovakia and czech housenumber (http://www.pitt.edu/~votruba/qsonhist/housenumbersslovakia.html)
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				beter management of alphabet (e.g:Duchnovičová)
+			</action>
+			
 			
 			</release>
 			

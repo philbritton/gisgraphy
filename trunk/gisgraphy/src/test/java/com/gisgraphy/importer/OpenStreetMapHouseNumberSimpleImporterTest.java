@@ -331,6 +331,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		Point point = GeolocHelper.createPoint(2F, 3F);
 		org.junit.Assert.assertNull(importer.findNearestStreet(null, point));
+		org.junit.Assert.assertNull(importer.findNearestStreet("\"\"", point));
 		org.junit.Assert.assertNull(importer.findNearestStreet("", point));
 		org.junit.Assert.assertNull(importer.findNearestStreet("foo", null));
 	}

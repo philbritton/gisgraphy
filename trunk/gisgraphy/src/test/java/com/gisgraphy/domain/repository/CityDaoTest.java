@@ -353,7 +353,7 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 			gisFeatureDistance.getZipCodes().size());
 	assertTrue(gisFeatureDistance.getZipCodes().contains(p1.getZipCodes().get(0).getCode()));
 	assertTrue(gisFeatureDistance.getZipCodes().contains(p1.getZipCodes().get(1).getCode()));
-	assertEquals("City", gisFeatureDistance.getPlaceType());
+	assertEquals("city", gisFeatureDistance.getPlaceType());
 	// check transcient field
 	assertEquals(URLUtils.createCountryFlagUrl(p1.getCountryCode()),
 		gisFeatureDistance.getCountry_flag_url());
@@ -405,6 +405,24 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 	// check values and sorted
 	assertEquals(p3.getName(), results.get(0).getName());
 	assertEquals(p2.getName(), results.get(1).getName());
+
+    }
+    
+    @Test
+    public void testgetNearestAndDistanceShouldSetPlacetypeIfFeatureClassCodeIsNotSet() {
+	City p1 = GisgraphyTestHelper.createCity("paris", 48.86667F, 2.3333F, 1L);
+	City p2 = GisgraphyTestHelper.createCity("bordeaux", 44.83333F, -0.56667F,
+		3L);
+	p2.setFeatureClass(null);
+	p2.setFeatureCode(null);
+
+	this.cityDao.save(p1);
+	this.cityDao.save(p2);
+	List<GisFeatureDistance> results = this.cityDao
+		.getNearestAndDistanceFrom(p1.getLocation(), 1000000, 2, 5,true, false);
+	assertEquals(1, results.size());
+	// check values and sorted
+	assertEquals(p2.getClass().getSimpleName().toLowerCase(), results.get(0).getPlaceType());
 
     }
 

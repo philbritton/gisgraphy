@@ -155,11 +155,8 @@ public class StreetSearchEngineTest extends AbstractIntegrationHttpSolrTestCase 
 
 	this.openStreetMapDao.save(street);
 	int numberOfLineUpdated =openStreetMapDao.updateTS_vectorColumnForStreetNameSearch();
-	if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-		assertEquals("It should have 2 lines updated one for partial + one for fulltext",2, numberOfLineUpdated);
-	} else {
-		assertEquals("It should have 1 lines updated for fulltext",1, numberOfLineUpdated);
-	}
+	
+	assertEquals("It should have 1 lines updated for fulltext",1, numberOfLineUpdated);
 
 	Pagination pagination = paginate().from(1).to(15);
 	Output output = Output.withFormat(OutputFormat.XML).withIndentation();

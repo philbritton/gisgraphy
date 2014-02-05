@@ -76,7 +76,10 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	protected IFullTextSearchEngine fullTextSearchEngine;
 
-
+	private Pattern DEFAULT_HOUSENUMBER_EXTRACTOR = Pattern.compile("([0-9]+)");
+	
+	private Pattern DEFAULTSK_CZ_HOUSENUMBER_EXTRACTOR = Pattern.compile("(?:[^/]?/)?([0-9]+)");
+	
 	private static final String ASSOCIATED_HOUSE_NUMBER_REGEXP = "([0-9]+)___([^_]*)___((?:(?!___).)*)___((?:(?!___).)*)___([NW])___([^_]*)(?:___)?";
 
 	private static final String INTERPOLATION_HOUSE_NUMBER_REGEXP = "([0-9]+)___([0-9])___((?:(?!___).)+)*___((?:(?!___).)+)*___((?:(?!___).)+)*(?:___)?";
@@ -328,6 +331,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 		return node;
 	}
+	
 
 	/*
 	 * (non-Javadoc)
@@ -663,7 +667,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 
 	protected SolrResponseDto findNearestStreet(String streetName, Point location) {
-		if (streetName==null || "".equals(streetName.trim()) || location == null){
+		if (streetName==null || "".equals(streetName.trim()) || "\"\"".equals(streetName.trim()) || location == null){
 			return null;
 		}
 		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, MEDIUM_OUTPUT, 
@@ -836,14 +840,6 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 		this.statusMessage = internationalisationService.getString("import.fulltext.optimize");
 		solRSynchroniser.optimize();
-		try {
-			if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL) {
-				openStreetMapDao.clearPartialSearchName();
-			}
-		} finally {
-			// we restore message in case of error
-			this.statusMessage = savedMessage;
-		}
 	}
 
 

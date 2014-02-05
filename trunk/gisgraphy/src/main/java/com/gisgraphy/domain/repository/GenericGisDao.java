@@ -286,7 +286,7 @@ public class GenericGisDao<T extends GisFeature> extends
 			List<GisFeatureDistance> results = ResultTransformerUtil
 			.transformToGisFeatureDistance(
 					aliasList,
-				queryResults,idToZipCodesMap);
+				queryResults,idToZipCodesMap,persistentClass);
 			return results;
 		    }
 		});

@@ -128,9 +128,6 @@ public class StringHelper {
 	 */
 	public static OpenStreetMap updateOpenStreetMapEntityForIndexation(OpenStreetMap openStreetMap) {
 		if (openStreetMap.getName() != null) {
-			if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-				openStreetMap.setPartialSearchName(StringHelper.transformStringForPartialWordIndexation(openStreetMap.getName(), StringHelper.WHITESPACE_CHAR_DELIMITER));
-			}
 			openStreetMap.setTextSearchName(StringHelper.normalize(openStreetMap.getName()));
 		}
 		return openStreetMap;

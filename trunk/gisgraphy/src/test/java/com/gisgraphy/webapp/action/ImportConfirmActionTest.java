@@ -156,13 +156,12 @@ public class ImportConfirmActionTest {
     }
     
     @Test
-    public void DoImportShouldHandleAllcountriesEnabled(){
+    public void DoImportShouldHandleAllcountriesEnabled() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
     	action.setImportallcountries(true);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	 action.setConfig();
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapFilesToDownload());
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapHouseNumberFilesToDownload());
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapCitiesFilesToDownload());
@@ -171,13 +170,12 @@ public class ImportConfirmActionTest {
     }
     
     @Test
-    public void DoImportShouldHandleAllcountriesDisable_CountryFileListNotReceived(){
+    public void DoImportShouldHandleAllcountriesDisable_CountryFileListNotReceived() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
     	action.setImportallcountries(false);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	action.setConfig();
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapFilesToDownload());
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapHouseNumberFilesToDownload());
     	Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapCitiesFilesToDownload());
@@ -186,7 +184,7 @@ public class ImportConfirmActionTest {
     }
     
     @Test
-    public void DoImportShouldHandleAllcountriesDisable_CountryFileListReceived(){
+    public void DoImportShouldHandleAllcountriesDisable_CountryFileListReceived() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
@@ -197,8 +195,7 @@ public class ImportConfirmActionTest {
     	countryCodes.add("US");
     	countryCodes.add("x");//countrycode should only have two letters
     	action.setCountryCodes(countryCodes);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	action.setConfig();
     	Assert.assertEquals("FR.tar.bz2;DE.tar.bz2;US.tar.bz2", importerConfig.getOpenStreetMapFilesToDownload());
     	Assert.assertEquals("FR.tar.bz2;DE.tar.bz2;US.tar.bz2", importerConfig.getOpenStreetMapHouseNumberFilesToDownload());
     	Assert.assertEquals("FR.tar.bz2;DE.tar.bz2;US.tar.bz2", importerConfig.getOpenStreetMapCitiesFilesToDownload());
@@ -207,31 +204,29 @@ public class ImportConfirmActionTest {
     }
     
     @Test
-    public void DoImportShouldHandleAllPlacetypeEnabled(){
+    public void DoImportShouldHandleAllPlacetypeEnabled() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
     	action.setImportallplacetype(true);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	action.setConfig();
     	Assert.assertEquals(ImporterConfig.ACCEPT_ALL_REGEX_OPTION, importerConfig.getAcceptRegExString());
     	Assert.assertTrue(importerConfig.isRegexpCorrects());
     }
     
     @Test
-    public void DoImportShouldHandleAllPlacetypeDisable_plactypeListNotReceived(){
+    public void DoImportShouldHandleAllPlacetypeDisable_plactypeListNotReceived() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
     	action.setImportallplacetype(false);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	action.setConfig();
     	Assert.assertEquals(ImporterConfig.ACCEPT_ALL_REGEX_OPTION, importerConfig.getAcceptRegExString());
     	Assert.assertTrue(importerConfig.isRegexpCorrects());
     }
     
     @Test
-    public void DoImportShouldHandleAllPlacetypeDisable_plactypeListReceived(){
+    public void DoImportShouldHandleAllPlacetypeDisable_plactypeListReceived() throws Exception{
     	ImportConfirmAction action = new ImportConfirmAction();
     	ImporterConfig importerConfig = new ImporterConfig();
     	action.setImporterConfig(importerConfig);
@@ -240,8 +235,7 @@ public class ImportConfirmActionTest {
     	Placetypes.add("ATM");//test to upper case
     	Placetypes.add("bay");
     	action.setPlacetypes(Placetypes);
-    	String result = action.doImport();
-    	Assert.assertEquals(ImportConfirmAction.IMPORT_VIEW_NAME, result);
+    	action.setConfig();
     	Assert.assertEquals(ImporterConfig.BASE_ACCEPT_REGEX+"ATM|BAY", importerConfig.getAcceptRegExString());
     	Assert.assertTrue(importerConfig.isRegexpCorrects());
     }
@@ -425,6 +419,7 @@ public class ImportConfirmActionTest {
     	
     	ImporterConfig importerConfig = createMock(ImporterConfig.class);
     	expect(importerConfig.isConfigCorrectForImport()).andReturn(true);
+    	
     	replay(importerConfig);
     	
     	ImportConfirmAction action = new ImportConfirmAction();

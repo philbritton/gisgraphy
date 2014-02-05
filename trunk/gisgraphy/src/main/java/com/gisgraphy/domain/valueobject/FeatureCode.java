@@ -1018,7 +1018,7 @@ public enum FeatureCode {
     },
     L_LCTY {
 	public GisFeature getObject() {
-	    return new GisFeature();
+	    return new City();
 	}
     },
     L_MILB {

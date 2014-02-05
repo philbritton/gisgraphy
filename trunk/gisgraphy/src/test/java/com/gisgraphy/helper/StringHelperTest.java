@@ -121,9 +121,6 @@ public class StringHelperTest {
 	openStreetMap.setPartialSearchName(null);
 	openStreetMap.setTextSearchName(null);
 	StringHelper.updateOpenStreetMapEntityForIndexation(openStreetMap);
-	if (GisgraphyConfig.PARTIAL_SEARH_EXPERIMENTAL){
-		Assert.assertEquals("The value of partial search name is not correct",StringHelper.transformStringForPartialWordIndexation(openStreetMap.getName(),StringHelper.WHITESPACE_CHAR_DELIMITER), openStreetMap.getPartialSearchName());
-	}
 	Assert.assertEquals("The value of text search name is not correct",StringHelper.normalize(openStreetMap.getName()), openStreetMap.getTextSearchName());
     }
     
