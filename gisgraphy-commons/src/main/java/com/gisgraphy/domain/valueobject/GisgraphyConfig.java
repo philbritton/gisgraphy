@@ -78,12 +78,6 @@ public class GisgraphyConfig {
 	
 	
 	/**
-	 * it enable or not the partial search that use postgres fulltextsearch
-	 * it must be activate before the import to be useable 
-	 */
-	public static boolean PARTIAL_SEARH_EXPERIMENTAL = false; 
-	
-	/**
 	 * it enable or not the fulltext mode for streetservice
 	 * it must be activate before the import to be useable 
 	 * @see StreetSearchMode
