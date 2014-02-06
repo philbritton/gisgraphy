@@ -186,7 +186,7 @@ public class FeedChecker {
 	    Assert.assertEquals(gisFeatureDistance.getPlaceType(), jsTester.eval("evalresult.result[0]['placeType']"));
 	    Assert.assertTrue(jsTester.eval("evalresult.QTime").toString() != "0");
 	    Assert.assertEquals(1D, jsTester.eval("evalresult.numFound"));
-	    Assert.assertEquals(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation(), gisFeatureDistance.getName()), jsTester.eval("evalresult.result[0]['google_map_url']"));
+	    Assert.assertEquals(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation()), jsTester.eval("evalresult.result[0]['google_map_url']"));
 	    Assert.assertEquals(URLUtils.createOpenstreetmapMapUrl(gisFeatureDistance.getLocation()), jsTester.eval("evalresult.result[0]['openstreetmap_map_url']"));
 	    Assert.assertEquals(URLUtils.createYahooMapUrl(gisFeatureDistance.getLocation()), jsTester.eval("evalresult.result[0]['yahoo_map_url']"));
 	    Assert.assertEquals(URLUtils.createCountryFlagUrl(gisFeatureDistance.getCountryCode()), jsTester.eval("evalresult.result[0]['country_flag_url']"));

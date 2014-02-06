@@ -224,11 +224,7 @@ doAjaxSearch = function(formName){
 					<#if result.openstreetmap_id??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmap_id?c};<br/></#if>
 					<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 					<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
-					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a><br/></#if>
-						<#if result.length??><@s.text name="global.length"/> : ${result.length} m(s); </#if>
-						<br/>
-						<#if result.street_type??><@s.text name="${result.street_type}" /><br/></#if>
-						<#if result.one_way??>
+					<#if result.one_way??>
 						<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
 							<#if result.one_way==true>
 								<@s.text name="street.oneway"/>
@@ -236,12 +232,16 @@ doAjaxSearch = function(formName){
 								<@s.text name="street.twoway"/>
 							</#if>
 						<br/><br/>
-						</#if>
+					</#if>
+					<#if result.length??><@s.text name="global.length"/> : ${result.length} m(s); </#if>
+					<br/>
+					<#if result.street_type??><@s.text name="${result.street_type}" /><br/></#if>
+					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a></#if>
 						<#if result.placetype.equals('Street')>
 						<@s.url id="streetURL" action="displaystreet" includeParams="none" namespace="/public" >
 				  					<@s.param name="gid" value="${result.feature_id?c}" />
 				 		</@s.url>
-						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${streetURL}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewStreet"/></a>
+						<!--<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${streetURL}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewStreet"/></a>-->
 					 <@s.url id="proximitySearchUrl" action="ajaxgeolocsearch" forceAddSchemeHostAndPort="true" method="search" includeParams="none" >
 			  			<@s.param name="lat" value="${result.lat?c}" />
 			  			<@s.param name="lng" value="${result.lng?c}" />
@@ -254,7 +254,7 @@ doAjaxSearch = function(formName){
 			  			<@s.param name="lng" value="${result.lng?c}" />
 						<@s.param name="autosubmit" value="true" />
 					</@s.url>
-					 | <a href="${streetsearchurl}" class="greenlink"><@s.text name="search.view.street.breadcrumbs"/></a>
+					 > <a href="${streetsearchurl}" class="greenlink"><@s.text name="search.view.street.breadcrumbs"/></a>
 					</#if>
 					<#if result.length?? >
 						<#if editable>	

@@ -87,7 +87,7 @@ public class URLUtils {
      * @see #DEFAULT_GOOGLE_MAP_BASE_URL
      * @return an Google Map URL for the specified point and label
      */
-    public static String createGoogleMapUrl(Point point, String label) {
+    public static String createGoogleMapUrl(Point point) {
 	if (point == null) {
 	    return DEFAULT_GOOGLE_MAP_BASE_URL;
 	}

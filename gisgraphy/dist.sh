@@ -9,4 +9,8 @@ then
 	cd $curDir
 fi
 
+cd ../tools
+./installall.sh
+cd -
+
 mvn clean compile javadoc:javadoc war:war hibernate3:hbm2ddl assembly:assembly -Dmaven.test.skip  -Dresetdb=false -Pprod

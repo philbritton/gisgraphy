@@ -43,6 +43,7 @@ import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
+import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.vividsolutions.jts.geom.Point;
 
@@ -87,6 +88,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     protected void setup() {
         super.setup();
         //temporary disable logging when importing
+        FullTextSearchEngine.disableLogging=true;
         idGenerator.sync();
     }
     
@@ -292,6 +294,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     	super.tearDown();
     	String savedMessage = this.statusMessage;
     	try {
+    		 FullTextSearchEngine.disableLogging=true;
     		this.statusMessage = internationalisationService.getString("import.fulltext.optimize");
     		solRSynchroniser.optimize();
     	} finally {
