@@ -37,7 +37,7 @@ public class URLUtilsTest  {
     @Test
     public void createGoogleMapUrlShouldReturnCorrectURL() {
 	Point point = GisgraphyUtilsTestHelper.createPoint(2.33333F, 48.86667F);
-	String URL = URLUtils.createGoogleMapUrl(point, "Paris");
+	String URL = URLUtils.createGoogleMapUrl(point);
 	assertTrue(URL.contains("!q=48.896"));
 	assertTrue(URL.contains("+2.333"));
 
@@ -46,7 +46,7 @@ public class URLUtilsTest  {
     @Test
     public void createGoogleMapUrlShouldReturnDefaultGoogleURLIfPointIsNull() {
 	assertEquals(URLUtils.DEFAULT_GOOGLE_MAP_BASE_URL, URLUtils
-		.createGoogleMapUrl(null, null));
+		.createGoogleMapUrl(null));
     }
 
     @Test

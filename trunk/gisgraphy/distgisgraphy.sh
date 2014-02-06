@@ -42,6 +42,10 @@ else
 	 exit "address parser is not present"
 fi
 
+cd ../tools
+./installall.sh
+cd -
+
 mvn clean compile javadoc:javadoc war:war hibernate3:hbm2ddl assembly:assembly -Dmaven.test.skip  -Dresetdb=false -Pgisgraphy
 
 rm $curDir/data/libs/*

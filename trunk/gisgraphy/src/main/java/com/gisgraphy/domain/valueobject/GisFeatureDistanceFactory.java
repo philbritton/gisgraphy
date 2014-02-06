@@ -118,8 +118,7 @@ public class GisFeatureDistanceFactory {
      */
     public  void  updateFields(GisFeatureDistance gisFeatureDistance,Class clazz) {
    	gisFeatureDistance.setOpenstreetmap_map_url(URLUtils.createOpenstreetmapMapUrl(gisFeatureDistance.getLocation()));
-	gisFeatureDistance.setGoogle_map_url(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation(),
-		gisFeatureDistance.getName()));
+	gisFeatureDistance.setGoogle_map_url(URLUtils.createGoogleMapUrl(gisFeatureDistance.getLocation()));
 	gisFeatureDistance.setYahoo_map_url(URLUtils.createYahooMapUrl(gisFeatureDistance.getLocation()));
 	gisFeatureDistance.setCountry_flag_url(URLUtils.createCountryFlagUrl(gisFeatureDistance.getCountryCode()));
 	if (gisFeatureDistance.getLocation() != null) {

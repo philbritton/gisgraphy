@@ -40,8 +40,11 @@ import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextQueryHttpBuilder;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
+import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.fulltext.spell.SpellCheckerConfig;
+import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
+import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 
 /**
@@ -103,6 +106,12 @@ public class FulltextSearchAction extends SearchAction {
 	    setFrom(fulltextQuery.getFirstPaginationIndex());
 	    setTo(fulltextQuery.getLastPaginationIndex());
 	    this.responseDTO = fullTextSearchEngine.executeQuery(fulltextQuery);
+	    //manually add the urls
+	    for (SolrResponseDto dto :responseDTO.getResults()){
+	    	dto.setYahoo_map_url(URLUtils.createYahooMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
+	    	dto.setGoogle_map_url(URLUtils.createGoogleMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
+	    	dto.setOpenstreetmap_map_url(URLUtils.createGoogleMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
+	    }
 	} catch (RuntimeException e) {
 	    String exceptionMessage = "";
 	    if (e.getCause() != null && e.getCause().getCause() != null) {

@@ -574,6 +574,22 @@ public class SolrResponseDto {
 		return amenity;
 	}
 
+	public void setCountry_flag_url(String country_flag_url) {
+		this.country_flag_url = country_flag_url;
+	}
+
+	public void setGoogle_map_url(String google_map_url) {
+		this.google_map_url = google_map_url;
+	}
+
+	public void setYahoo_map_url(String yahoo_map_url) {
+		this.yahoo_map_url = yahoo_map_url;
+	}
+
+	public void setOpenstreetmap_map_url(String openstreetmap_map_url) {
+		this.openstreetmap_map_url = openstreetmap_map_url;
+	}
+
    
 
 }

@@ -358,7 +358,7 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(URLUtils.createCountryFlagUrl(p1.getCountryCode()),
 		gisFeatureDistance.getCountry_flag_url());
 	assertEquals(URLUtils
-		.createGoogleMapUrl(p1.getLocation(), p1.getName()),
+		.createGoogleMapUrl(p1.getLocation()),
 		gisFeatureDistance.getGoogle_map_url());
 	assertEquals(URLUtils.createYahooMapUrl(p1.getLocation()),
 		gisFeatureDistance.getYahoo_map_url());

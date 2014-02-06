@@ -80,8 +80,7 @@ public class GisFeatureDistanceFactoryTest extends AbstractIntegrationHttpSolrTe
     }
     
     private void checkupdateFields(GisFeatureDistance gisfeatureDistance){
-	 String gMapsURL =  URLUtils.createGoogleMapUrl(gisfeatureDistance.getLocation(),
-		    gisfeatureDistance.getName());
+	 String gMapsURL =  URLUtils.createGoogleMapUrl(gisfeatureDistance.getLocation());
 	   String yahooMapsUrl = URLUtils.createYahooMapUrl(gisfeatureDistance.getLocation());
 	   String openstreetmapMapsUrl = URLUtils.createOpenstreetmapMapUrl(gisfeatureDistance.getLocation());
 	   String countryflagurl = URLUtils.createCountryFlagUrl(gisfeatureDistance.getCountryCode());

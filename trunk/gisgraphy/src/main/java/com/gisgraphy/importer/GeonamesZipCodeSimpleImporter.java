@@ -41,6 +41,7 @@ import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.repository.IZipCodeDao;
 import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
+import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
@@ -451,6 +452,7 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
     @Override
     protected void setup() {
 	super.setup();
+	FullTextSearchEngine.disableLogging=true;
 	IdGenerator.sync();
     }
 
@@ -463,6 +465,7 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 	@Override
 	protected void tearDown() {
 		String savedMessage = this.statusMessage;
+		FullTextSearchEngine.disableLogging=false;
 		this.statusMessage = internationalisationService
 				.getString("import.teardown");
 		try {
