@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tail -f ./logs/gisgraphy.log
+tail -f -n300 ./logs/gisgraphy.log
 
 
 

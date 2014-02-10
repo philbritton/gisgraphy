@@ -74,8 +74,13 @@ public class FulltextSearchActionTest {
 	request.setParameter("q", "Paris");
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
-	EasyMock.replay(mockSolrResponseDto);
 	results.add(mockSolrResponseDto);
+	EasyMock.expect(mockSolrResponseDto.getLat()).andStubReturn(3D);
+	EasyMock.expect(mockSolrResponseDto.getLng()).andStubReturn(4D);
+	mockSolrResponseDto.setYahoo_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setGoogle_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setOpenstreetmap_map_url(EasyMock.anyObject(String.class));
+	EasyMock.replay(mockSolrResponseDto);
 	EasyMock.replay(mockResultDTO);
 	EasyMock.expect(
 		mockSearchEngine.executeQuery((FulltextQuery) EasyMock
@@ -95,6 +100,11 @@ public class FulltextSearchActionTest {
 	request.setParameter("q", "Paris");
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
+	EasyMock.expect(mockSolrResponseDto.getLat()).andStubReturn(3D);
+	EasyMock.expect(mockSolrResponseDto.getLng()).andStubReturn(4D);
+	mockSolrResponseDto.setYahoo_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setGoogle_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setOpenstreetmap_map_url(EasyMock.anyObject(String.class));
 	EasyMock.replay(mockSolrResponseDto);
 	results.add(mockSolrResponseDto);
 	EasyMock.replay(mockResultDTO);
@@ -139,6 +149,11 @@ public class FulltextSearchActionTest {
 	request.setParameter("q", "Paris");
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
+	EasyMock.expect(mockSolrResponseDto.getLat()).andStubReturn(3D);
+	EasyMock.expect(mockSolrResponseDto.getLng()).andStubReturn(4D);
+	mockSolrResponseDto.setYahoo_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setGoogle_map_url(EasyMock.anyObject(String.class));
+	mockSolrResponseDto.setOpenstreetmap_map_url(EasyMock.anyObject(String.class));
 	EasyMock.replay(mockSolrResponseDto);
 	results.add(mockSolrResponseDto);
 	EasyMock.replay(mockResultDTO);

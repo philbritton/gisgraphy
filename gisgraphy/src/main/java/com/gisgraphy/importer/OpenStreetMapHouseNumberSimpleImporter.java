@@ -76,10 +76,6 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 
 	protected IFullTextSearchEngine fullTextSearchEngine;
 
-	private Pattern DEFAULT_HOUSENUMBER_EXTRACTOR = Pattern.compile("([0-9]+)");
-	
-	private Pattern DEFAULTSK_CZ_HOUSENUMBER_EXTRACTOR = Pattern.compile("(?:[^/]?/)?([0-9]+)");
-	
 	private static final String ASSOCIATED_HOUSE_NUMBER_REGEXP = "([0-9]+)___([^_]*)___((?:(?!___).)*)___((?:(?!___).)*)___([NW])___([^_]*)(?:___)?";
 
 	private static final String INTERPOLATION_HOUSE_NUMBER_REGEXP = "([0-9]+)___([0-9])___((?:(?!___).)+)*___((?:(?!___).)+)*___((?:(?!___).)+)*(?:___)?";

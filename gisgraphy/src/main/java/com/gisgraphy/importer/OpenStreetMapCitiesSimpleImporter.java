@@ -190,7 +190,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			logger.error("can not parse population :"+fields[5]);
 		}
 	}
-	//countrycode
+	//zip code
 	if(!isEmptyField(fields, 4, false) && (city.getZipCodes()==null || !city.getZipCodes().contains(new ZipCode(fields[4])))){
 			city.addZipCode(new ZipCode(fields[4]));
 	}

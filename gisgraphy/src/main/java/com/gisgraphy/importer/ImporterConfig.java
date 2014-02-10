@@ -91,7 +91,7 @@ public class ImporterConfig {
     /**
      * The regexp to use to import all the feature class / code
      */
-    public final static String ACCEPT_ALL_REGEX_OPTION = ".*;";
+    public final static String ACCEPT_ALL_REGEX_OPTION = ".*";
 
     /**
      * Default value for {@link #maxInsertsBeforeFlush}
