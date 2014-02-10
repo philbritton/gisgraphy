@@ -240,7 +240,7 @@ public class ImportConfirmActionTest {
     	Assert.assertTrue(importerConfig.isRegexpCorrects());
     }
 
-
+    
     @Test
     public void enableRetrieveFile() {
 	ImporterConfig importerConfig = new ImporterConfig();

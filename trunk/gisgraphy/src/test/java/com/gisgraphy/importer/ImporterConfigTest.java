@@ -191,7 +191,7 @@ public class ImporterConfigTest {
 		//set Correct values
 		importerConfig.setGeonamesDir(accessiblePath);
 		importerConfig.setOpenStreetMapDir(accessiblePath);
-		importerConfig.setAcceptRegExString(ImporterConfig.BASE_ACCEPT_REGEX);
+		importerConfig.setAcceptRegExString(ImporterConfig.ACCEPT_ALL_REGEX_OPTION);
 		//test with wrong geonamesDir
 		importerConfig.setGeonamesDir(pathNotAccessible);
 		Assert.assertFalse("when geonames dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());

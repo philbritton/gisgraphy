@@ -113,7 +113,28 @@ public class GeonamesFeatureImporterTest {
 	assertTrue(importer.isPlaceTypeAccepted("city"));
 	assertTrue(importer.isPlaceTypeAccepted("ADM"));
 	assertTrue(importer.isPlaceTypeAccepted("CITY"));
+
+    }
+    
+    @Test
+    public void isPlacetypeAccepted_Accept_all() {
+	assertEquals(
+			"ADM|COUNTRY|CITY$",
+	ImporterConfig.DEFAULT_ACCEPT_REGEX_CITY);
+	ImporterConfig importerConfig = new ImporterConfig();
+	importerConfig.setAcceptRegExString(ImporterConfig.ACCEPT_ALL_REGEX_OPTION);
+	GeonamesFeatureSimpleImporter importer = new GeonamesFeatureSimpleImporter();
+	importer.setImporterConfig(importerConfig);
+	importer.setup();
 	
+	
+	// must be false
+	assertTrue(importer.isPlaceTypeAccepted("foo"));
+	assertTrue(importer.isPlaceTypeAccepted("Ci"));
+	// must be true
+	assertTrue(importer.isPlaceTypeAccepted("city"));
+	assertTrue(importer.isPlaceTypeAccepted("ADM"));
+	assertTrue(importer.isPlaceTypeAccepted("CITY"));
 
     }
     

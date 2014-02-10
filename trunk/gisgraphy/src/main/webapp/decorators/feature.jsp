@@ -26,14 +26,7 @@
 		<div class="divider"><div></div></div>
             <div id="main">
             <br/>
-      <script type="text/javascript"><!--
-		google_ad_client = "pub-7203216364107204";
-		google_ad_slot = "0481202012";
-		google_ad_width = 468;
-		google_ad_height = 15;
-		//-->
-	</script>
-	<span style="float:left;width:70px;">&nbsp;</span>
+ 	<span style="float:left;width:70px;">&nbsp;</span>
 	<span style="margin-left:30px;">
 <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 </span><div class="clear"><br/></div>
