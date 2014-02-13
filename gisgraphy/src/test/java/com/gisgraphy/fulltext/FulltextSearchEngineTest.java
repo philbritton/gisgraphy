@@ -30,8 +30,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -228,7 +231,11 @@ public class FulltextSearchEngineTest extends
 		LineString shape = GeolocHelper.createLineString("LINESTRING (30.001 30.001, 40 40)");
     	String isIn= "is_in";
     	String isInPlace="is_in_place";
-    	String isInZip="is_in_zip";
+    	Set<String> isInZip =new HashSet<String>();
+    	String zip1 = "is_in_zip";
+    	String zip2 = "is_in_zip2";
+    	isInZip.add(zip1);
+    	isInZip.add(zip2);
     	String isInAdm="is_in_adm";
     	String fullyQualifiedAddress="FQA";
 		
@@ -285,6 +292,7 @@ public class FulltextSearchEngineTest extends
 	    fail("can not get content of file " + file.getAbsolutePath());
 	}
 
+	Iterator<String> zipIterator = street.getIsInZip().iterator();
 	FeedChecker.assertQ("The query return incorrect values",
 		content,
 		"//*[@numFound='1']",
@@ -316,7 +324,9 @@ public class FulltextSearchEngineTest extends
 			"//*[@name='" + FullTextFields.IS_IN_PLACE.getValue()
 			+ "'][.='"+street.getIsInPlace()+"']",
 			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
-			+ "'][.='"+street.getIsInZip()+"']"
+			+ "'][./str[1]/.='"+zipIterator.next()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
+			+ "'][./str[2]/.='"+zipIterator.next()+"']"
 			/*,"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
 			+ "'][.='"+street.getFullyQualifiedAddress()+"']"*/
 		

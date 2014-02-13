@@ -45,7 +45,7 @@ public class CityTest {
 
 		List<ZipCode> zipcodes = new ArrayList<ZipCode>();
 		//Note that city has already a zipcode
-		Assert.assertTrue(city.getFullyQualifiedName(false).contains(city.getZipCodes().get(0).getCode()));
+		Assert.assertTrue(city.getFullyQualifiedName(false).contains(city.getZipCodes().iterator().next().getCode()));
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class CityTest {
 		cityToBePopulated.populate(city);
 		Assert.assertEquals("when populate is called, the name of the cities should be equals, maybe super is not called",city.getName(), cityToBePopulated.getName());
 		Assert.assertEquals("when populate is called, the zipcodes should be added",city.getZipCodes().size(),cityToBePopulated.getZipCodes().size());
-		Assert.assertEquals("when populate is called, the zipcodes should be associated to The features populated, not the 'arg one'",cityToBePopulated.getFeatureId(),cityToBePopulated.getZipCodes().get(0).getGisFeature().getFeatureId());
+		Assert.assertEquals("when populate is called, the zipcodes should be associated to The features populated, not the 'arg one'",cityToBePopulated.getFeatureId(),cityToBePopulated.getZipCodes().iterator().next().getGisFeature().getFeatureId());
 	}
 
 }

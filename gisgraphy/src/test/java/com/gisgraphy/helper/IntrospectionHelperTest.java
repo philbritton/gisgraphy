@@ -39,7 +39,6 @@ public class IntrospectionHelperTest  {
     public void getGisFeatureFieldsAsListShouldIgnoreAnnotedFields() {
 	List<String> fields = IntrospectionHelper
 		.getFieldsAsList(GisFeature.class);
-	assertEquals(24, fields.size());
 	assertTrue(fields.contains("id"));
 	assertTrue(fields.contains("featureId"));
 	assertTrue(fields.contains("name"));
@@ -62,6 +61,7 @@ public class IntrospectionHelperTest  {
 	assertTrue(fields.contains("timezone"));
 	assertTrue(fields.contains("amenity"));
 	assertTrue(fields.contains("openstreetmapId"));
+	assertEquals(24, fields.size());
     }
 
     @Test

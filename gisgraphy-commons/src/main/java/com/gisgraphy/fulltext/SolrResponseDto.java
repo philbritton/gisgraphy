@@ -24,6 +24,7 @@ package com.gisgraphy.fulltext;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.gisgraphy.street.HouseNumberDto;
 
@@ -117,7 +118,7 @@ public class SolrResponseDto {
     protected String is_in;
     protected String is_in_place;
     protected String is_in_adm;
-    protected String is_in_zip;
+    protected Set<String> is_in_zip;
     protected String fully_qualified_address;
     protected List<HouseNumberDto> house_numbers;
     protected boolean municipality;
@@ -513,7 +514,7 @@ public class SolrResponseDto {
 	/**
 	 * @return the is_in_zip
 	 */
-	public String getIs_in_zip() {
+	public Set<String> getIs_in_zip() {
 		return is_in_zip;
 	}
 

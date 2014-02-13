@@ -387,7 +387,9 @@ public class GeocodingService implements IGeocodingService {
 				if (!isEmptyString(is_in)) {
 					address.setCity(is_in);
 					address.setState(street.getIs_in_adm());
-					address.setZipCode(street.getIs_in_zip());
+					if (street.getIs_in_zip()!=null && street.getIs_in_zip().size()>=1){
+						address.setZipCode(street.getIs_in_zip().iterator().next());
+					}
 					address.setDependentLocality(street.getIs_in_place());
 				} else {
 					populateAddressFromCity(city, address);
@@ -515,7 +517,9 @@ public class GeocodingService implements IGeocodingService {
 					address.setStreetType(solrResponseDto.getStreet_type());
 					address.setCity(solrResponseDto.getIs_in());
 					address.setState(solrResponseDto.getIs_in_adm());
-					address.setZipCode(solrResponseDto.getIs_in_zip());
+					if (solrResponseDto.getIs_in_zip()!=null && solrResponseDto.getIs_in_zip().size()>=1){
+						address.setZipCode(solrResponseDto.getIs_in_zip().iterator().next());
+					}
 					address.setDependentLocality(solrResponseDto.getIs_in_place());
 
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(City.class.getSimpleName())){
@@ -557,8 +561,8 @@ public class GeocodingService implements IGeocodingService {
 			}
 			if (city.getZipcodes() != null && city.getZipcodes().size() > 0) {
 				address.setZipCode(city.getZipcodes().get(0));
-			} else if (city.getIs_in_zip()!=null){
-				address.setZipCode(city.getIs_in_zip());
+			} else if (city.getIs_in_zip()!=null && city.getIs_in_zip().size()>=1){
+				address.setZipCode(city.getIs_in_zip().iterator().next());
 			}
 			address.setCountryCode(city.getCountry_code());
 			address.setDependentLocality(city.getIs_in_place());

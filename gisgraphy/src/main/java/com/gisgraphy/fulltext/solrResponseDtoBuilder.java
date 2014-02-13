@@ -2,8 +2,10 @@ package com.gisgraphy.fulltext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.common.SolrDocument;
 
@@ -140,7 +142,7 @@ public class solrResponseDtoBuilder {
 	    solrResponseDto.openstreetmap_id = getFieldAsLong(solrDocument, FullTextFields.OPENSTREETMAP_ID.getValue());
 	    solrResponseDto.is_in = getFieldAsString(solrDocument, FullTextFields.IS_IN.getValue());
 	    solrResponseDto.is_in_place = getFieldAsString(solrDocument, FullTextFields.IS_IN_PLACE.getValue());
-	    solrResponseDto.is_in_zip = getFieldAsString(solrDocument, FullTextFields.IS_IN_ZIP.getValue());
+	    solrResponseDto.is_in_zip = getFieldsToSet(solrDocument, FullTextFields.IS_IN_ZIP.getValue());
 	    solrResponseDto.is_in_adm = getFieldAsString(solrDocument, FullTextFields.IS_IN_ADM.getValue());
 	    solrResponseDto.fully_qualified_address = getFieldAsString(solrDocument, FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue());
 	    solrResponseDto.house_numbers=getHouseNumber(solrDocument);
@@ -211,6 +213,25 @@ public class solrResponseDtoBuilder {
 	}
 	return list;
     }
+    
+    private Set<String> getFieldsToSet(SolrDocument solrDocument,
+    	    String fieldname) {
+    	Set<String> set = new HashSet<String>();
+    	if (solrDocument.getFieldValues(fieldname) != null) {
+    	    for (Object o : solrDocument.getFieldValues(fieldname)) {
+    		if (o == null) {
+    		    continue;
+    		} else if (o instanceof String) {
+    		    set.add(o.toString());
+    		} else {
+    		    throw new RepositoryException(fieldname
+    			    + " is not a String but a "
+    			    + o.getClass().getSimpleName());
+    		}
+    	    }
+    	}
+    	return set;
+        }
 
     private Integer getFieldAsInteger(SolrDocument solrDocument,
 	    String fieldname) {

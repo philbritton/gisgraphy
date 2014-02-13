@@ -23,7 +23,10 @@
 package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -132,7 +135,7 @@ public class OpenStreetMap {
     
     private String isInAdm;
     
-    private String isInZip;
+    private Set<String> isInZip;
     
     private String fullyQualifiedAddress;
 
@@ -572,16 +575,43 @@ public class OpenStreetMap {
 	/**
 	 * @return the zipcode where the street is located
 	 */
-	public String getIsInZip() {
+	//don't want to store it, just for fulltext purpose
+	@Transient
+	public Set<String> getIsInZip() {
 		return isInZip;
 	}
 
 	/**
 	 * @param isInZip the zipcode where the street is located.
 	 */
-	public void setIsInZip(String isInZip) {
+	public void setIsInZip(Set<String> isInZip) {
 		this.isInZip = isInZip;
 	}
+	
+    
+
+    /**
+     * add a zip
+     */
+    public void addZip(String zip) {
+	Set<String> currentZips = getIsInZip();
+	if (currentZips == null) {
+		currentZips = new HashSet<String>();
+	}
+	currentZips.add(zip);
+	this.setIsInZip(currentZips);
+    }
+
+    /**
+     * add zips
+     */
+    public void addZips(Collection<String> zips) {
+	if (zips != null) {
+	    for (String zip : zips) {
+	    	addZip(zip);
+	    }
+	}
+    }
 
 
 	public String getFullyQualifiedAddress() {

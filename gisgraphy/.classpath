@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry excluding="ApplicationResources_de.properties|ApplicationResources_fr.properties|ApplicationResources_ko.properties|ApplicationResources_nl.properties|ApplicationResources_no.properties|ApplicationResources_pt*.properties|ApplicationResources_tr.properties|ApplicationResources_zh*.properties|applicationContext-resources.xml|struts.xml|**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/main/webapp"/>
-	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/test/resources"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/main/webapp"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry excluding="**/*.java" kind="src" output="target/test-classes" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjlib/1.5.2a/aspectjlib-1.5.2a.jar"/>
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjtools/1.5.2a/aspectjtools-1.5.2a.jar"/>
@@ -86,7 +86,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/apache/solr/solr-solrj/3.6.0/solr-solrj-3.6.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.1/commons-io-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/wstx-asl/3.2.0/wstx-asl-3.2.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-codebehind-plugin/2.1.8/struts2-codebehind-plugin-2.1.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/struts/struts2-core/2.1.8/struts2-core-2.1.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/opensymphony/xwork-core/2.1.6/xwork-core-2.1.6.jar"/>

@@ -500,7 +500,7 @@ public class GeonamesZipCodeImporterTest {
     	Assert.assertEquals(countryCode, city.getCountryCode());
     	Assert.assertNotNull(city.getZipCodes());
     	Assert.assertEquals(1, city.getZipCodes().size());
-    	Assert.assertEquals(new ZipCode("post"), city.getZipCodes().get(0));
+    	Assert.assertEquals(new ZipCode("post"), city.getZipCodes().iterator().next());
     	EasyMock.verify(cityDaoMock);
     	EasyMock.verify(admDaoMock);
     	EasyMock.verify(idGenerator);

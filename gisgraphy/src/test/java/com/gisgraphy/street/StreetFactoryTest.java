@@ -22,7 +22,9 @@
 package com.gisgraphy.street;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,7 +51,11 @@ public class StreetFactoryTest {
 	String isIn = "los angeles";
 	String isInPlace = "french quater";
 	String isInAdm = "adm";
-	String isInZip = "zip";
+	Set<String> isInZip = new HashSet<String>();
+	String isInZip1 = "zip";
+	String isInZip2 = "zip2";
+	isInZip.add(isInZip1);
+	isInZip.add(isInZip2);
 	String fullyQualifiedAddress ="fullyQualifiedAddress";
 	StreetType streetType = StreetType.SECONDARY_LINK;
 	String countryCode = "FR";

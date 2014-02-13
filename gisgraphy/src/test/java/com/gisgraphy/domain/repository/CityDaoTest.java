@@ -23,6 +23,7 @@
 package com.gisgraphy.domain.repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -351,8 +352,9 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(p1.getTimezone(), gisFeatureDistance.getTimezone());
 	assertEquals("gisfeatureDistance should have the same number of zipCodes as the original features",p1.getZipCodes().size(),
 			gisFeatureDistance.getZipCodes().size());
-	assertTrue(gisFeatureDistance.getZipCodes().contains(p1.getZipCodes().get(0).getCode()));
-	assertTrue(gisFeatureDistance.getZipCodes().contains(p1.getZipCodes().get(1).getCode()));
+	Iterator<ZipCode> iterator = p1.getZipCodes().iterator();
+	assertTrue(gisFeatureDistance.getZipCodes().contains(iterator.next().getCode()));
+	assertTrue(gisFeatureDistance.getZipCodes().contains(iterator.next().getCode()));
 	assertEquals("city", gisFeatureDistance.getPlaceType());
 	// check transcient field
 	assertEquals(URLUtils.createCountryFlagUrl(p1.getCountryCode()),
