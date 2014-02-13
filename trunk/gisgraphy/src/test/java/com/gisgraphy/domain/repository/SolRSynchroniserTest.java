@@ -33,8 +33,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -57,6 +60,7 @@ import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.Language;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.geoloc.entity.event.GisFeatureDeleteAllEvent;
 import com.gisgraphy.domain.geoloc.entity.event.GisFeatureDeletedEvent;
 import com.gisgraphy.domain.geoloc.entity.event.GisFeatureStoredEvent;
@@ -692,6 +696,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 	    fail("can not get content of file " + file.getAbsolutePath());
 	}
 
+	Iterator<ZipCode> ZipIterator = paris.getZipCodes().iterator();
 	FeedChecker.assertQ(
 		"The query return incorrect values",
 		content,
@@ -771,10 +776,10 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			+ FullTextFields.POPULATION.getValue()
 			+ "'][.='10000000']",
 			"//*[@name='" + FullTextFields.ZIPCODE.getValue()
-			+ "'][./str[1][.='"+paris.getZipCodes().get(0).getCode()+"']]"
+			+ "'][./str[1][.='"+ZipIterator.next().getCode()+"']]"
 		, 
 		"//*[@name='" + FullTextFields.ZIPCODE.getValue()
-		+ "'][./str[2][.='"+paris.getZipCodes().get(1).getCode()+"']]"
+		+ "'][./str[2][.='"+ZipIterator.next().getCode()+"']]"
 		, 
 		"//*[@name='" + FullTextFields.NAMEASCII.getValue()
 			+ "'][.='ascii']",
@@ -1194,7 +1199,9 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 		String isIn = "los angeles";
 		String isInPlace = "french quarter";
 		String isInAdm = "california";
-		String isInZip = "90001";
+		Set<String> isInZip = new HashSet<String>();
+		isInZip.add("90001");
+		isInZip.add("90002");
 		String fullyQualifiedAddress = "fullyQualifiedAddress";
 		String altname1 = "alt name 1";
 		String altname2 = "alt name 2";
@@ -1271,6 +1278,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 	    fail("can not get content of file " + file.getAbsolutePath());
 	}
 
+	Iterator<String> zipIterator = street.getIsInZip().iterator();
 	FeedChecker.assertQ("The query return incorrect values",
 		content,
 		"//*[@numFound='1']",
@@ -1304,7 +1312,9 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
 			"//*[@name='" + FullTextFields.IS_IN_PLACE.getValue()
 			+ "'][.='"+street.getIsInPlace()+"']",
 			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
-			+ "'][.='"+street.getIsInZip()+"']",
+			+ "'][./str[1]/.='"+zipIterator.next()+"']",
+			"//*[@name='" + FullTextFields.IS_IN_ZIP.getValue()
+			+ "'][./str[2]/.='"+zipIterator.next()+"']",
 			/*"//*[@name='" + FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue()
 			+ "'][.='"+street.getFullyQualifiedAddress()+"']",*/
 			//we check the order too

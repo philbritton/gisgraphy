@@ -7,12 +7,13 @@ import net.sf.jstester.util.Assert;
 
 import org.junit.Test;
 
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.test.GisgraphyTestHelper;
 
 public class OpenStreetMapTest {
 
 	@Test
-	public void testAddAlternateNameShouldAddAndNotReplace() {
+	public void testAddHouseNumberShouldAddAndNotReplace() {
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
 		
@@ -35,7 +36,7 @@ public class OpenStreetMapTest {
 	}
 	
 	@Test
-	public void testAddAlternateNamewhenNoHouseNumberAlreadyAdded() {
+	public void testAddHouseNumberwhenNoHouseNumberAlreadyAdded() {
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
 		
@@ -51,7 +52,7 @@ public class OpenStreetMapTest {
 	}
 	
 	@Test
-	public void testAddAlternateNames() {
+	public void testAddHouseNumbers() {
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
 		
@@ -65,6 +66,45 @@ public class OpenStreetMapTest {
 		
 		//check doubleset
 		Assert.assertEquals("double set should be done",street, n1.getStreet());
+		
+	}
+	
+	
+	
+	@Test
+	public void testAddZips() {
+		OpenStreetMap street = new OpenStreetMap();
+		street.setId(1L);
+		
+		List<String> zips = new ArrayList<String>();
+		
+		zips.add("75000");
+		street.addZips(zips);
+		
+		Assert.assertEquals(1, street.getIsInZip().size());
+		street.addZip("78000");
+		Assert.assertEquals(2, street.getIsInZip().size());
+		
+		
+	}
+	
+	@Test
+	public void testAddAlternateNames() {
+		OpenStreetMap street = new OpenStreetMap();
+		street.setId(1L);
+		
+		List<AlternateOsmName> names = new ArrayList<AlternateOsmName>();
+		
+		names.add(new AlternateOsmName("foo", AlternateNameSource.OPENSTREETMAP));
+		street.addAlternateNames(names);
+		
+		Assert.assertEquals(1, street.getAlternateNames().size());
+		Assert.assertEquals("double set is not correct",street, street.getAlternateNames().get(0).getStreet());
+		
+		street.addAlternateName(new AlternateOsmName("bar", AlternateNameSource.OPENSTREETMAP));
+		Assert.assertEquals("add should add not replace",2, street.getAlternateNames().size());
+		
+		Assert.assertEquals("double set is not correct",street, street.getAlternateNames().get(1).getStreet());
 		
 	}
 

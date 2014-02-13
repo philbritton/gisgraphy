@@ -36,6 +36,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
@@ -258,8 +259,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     			street.setIsIn(cityByShape.getName());
     			street.setCityConfident(true);
     			street.setPopulation(cityByShape.getPopulation());
-    			if (cityByShape.getZipCodes() != null && cityByShape.getZipCodes().size() == 1) {
-    				street.setIsInZip(cityByShape.getZipCodes().get(0).getCode());
+    			if (cityByShape.getZipCodes() != null) {
+    				for (ZipCode zip:cityByShape.getZipCodes()){
+    					street.addZip(zip.getCode());
+    				}
     			}
     			if (cityByShape.getAdm()!=null){
     				street.setIsInAdm(cityByShape.getAdm().getName());
@@ -270,8 +273,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     		if (city != null) {
     			street.setPopulation(city.getPopulation());
     			street.setIsInAdm(getDeeperAdmName(city));
-    			if (city.getZipCodes() != null && city.getZipCodes().size() == 1) {
-    				street.setIsInZip(city.getZipCodes().get(0));
+    			if (city.getZipCodes() != null) {
+    				for (String zip:city.getZipCodes()){
+    					street.addZip(zip);
+    				}
     			}
     			if (city.getName() != null) {
     				street.setIsIn(pplxToPPL(city.getName()));
@@ -300,8 +305,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     				if (street.getIsInAdm() == null) {
     					street.setIsInAdm(getDeeperAdmName(city2));
     				}
-    				if (street.getIsInZip() == null && city2.getZipCodes() != null && city2.getZipCodes().size() == 1) {
-    					street.setIsInZip(city2.getZipCodes().get(0));
+    				if (street.getIsInZip() == null && city2.getZipCodes() != null ) {
+    					for (String zip:city2.getZipCodes()){
+        					street.addZip(zip);
+        				}
     				}
     		}
     	}

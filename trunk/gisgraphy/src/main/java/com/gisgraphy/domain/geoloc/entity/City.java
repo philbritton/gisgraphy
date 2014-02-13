@@ -23,6 +23,7 @@
 package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -109,10 +110,10 @@ public class City extends GisFeature implements ZipCodesAware {
 	public String getFullyQualifiedName(boolean withCountry) {
 		StringBuilder completeCityName = new StringBuilder();
 		completeCityName.append(getName());
-		List<ZipCode> zipCodes = getZipCodes();
+		Set<ZipCode> zipCodes = getZipCodes();
 		if (zipCodes != null && zipCodes.size() == 1) {
 			completeCityName.append(" (");
-			completeCityName.append(zipCodes.get(0));
+			completeCityName.append(zipCodes.iterator().next());
 			completeCityName.append(")");
 		}
 		if (getAdm2Name() != null && !getAdm2Name().trim().equals("")) {

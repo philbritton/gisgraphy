@@ -25,7 +25,9 @@ import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -281,7 +283,9 @@ public class GeocodingServiceTest {
 	EasyMock.expect(cityResult.getZipcodes()).andStubReturn(null);
 	EasyMock.expect(cityResult.getCountry_code()).andStubReturn("FR");
 	EasyMock.expect(cityResult.getFeature_id()).andStubReturn(123L);
-	EasyMock.expect(cityResult.getIs_in_zip()).andStubReturn("zip");
+	Set<String> zips = new HashSet<String>();
+	zips.add("zip");
+	EasyMock.expect(cityResult.getIs_in_zip()).andStubReturn(zips);
 	EasyMock.expect(cityResult.getIs_in_adm()).andStubReturn("isinAdm");
 	EasyMock.expect(cityResult.getIs_in_place()).andStubReturn("isinPlace");
 	EasyMock.replay(cityResult);
@@ -332,7 +336,9 @@ public class GeocodingServiceTest {
 	EasyMock.expect(cityResult.getZipcodes()).andStubReturn(null);
 	EasyMock.expect(cityResult.getCountry_code()).andStubReturn("FR");
 	EasyMock.expect(cityResult.getFeature_id()).andStubReturn(123L);
-	EasyMock.expect(cityResult.getIs_in_zip()).andStubReturn("zip");
+	Set<String> zips = new HashSet<String>();
+	zips.add("zip");
+	EasyMock.expect(cityResult.getIs_in_zip()).andStubReturn(zips);
 	EasyMock.expect(cityResult.getIs_in_adm()).andStubReturn("isinAdm");
 	EasyMock.expect(cityResult.getIs_in_place()).andStubReturn("isinPlace");
 	EasyMock.replay(cityResult);
@@ -721,7 +727,7 @@ public class GeocodingServiceTest {
 	Assert.assertEquals("city name is not correct", street.getIs_in(), address.getCity());
 	Assert.assertEquals("countrycode is not correct", street.getCountry_code(), address.getCountryCode());
 	
-	Assert.assertEquals("zip is not correct", street.getIs_in_zip(), address.getZipCode());
+	Assert.assertEquals("zip is not correct", street.getIs_in_zip().iterator().next(), address.getZipCode());
 	Assert.assertEquals("Adm Name should not be the deeper one but the is_inadm one", street.getIs_in_adm(), address.getState());
 	Assert.assertEquals("place is not correct", street.getIs_in_place(), address.getDependentLocality());
 	
@@ -941,7 +947,7 @@ public class GeocodingServiceTest {
 	Assert.assertEquals("street type is not correct", street.getStreet_type(), address.getStreetType());
 	Assert.assertEquals("city name is not correct", is_in, address.getCity());
 	
-	Assert.assertEquals("zipcode is not correct", street.getIs_in_zip(), address.getZipCode());
+	Assert.assertEquals("zipcode is not correct", street.getIs_in_zip().iterator().next(), address.getZipCode());
 	Assert.assertEquals("adm name is not correct", street.getIs_in_adm(), address.getState());
 	Assert.assertEquals("place is not correct", street.getIs_in_place(), address.getDependentLocality());
 	
@@ -972,7 +978,7 @@ public class GeocodingServiceTest {
 	Assert.assertEquals("street type is not correct", street.getStreet_type(), address.getStreetType());
 	Assert.assertEquals("city name is not correct",is_in, address.getCity());
 	
-	Assert.assertEquals("zipcode is not correct", street.getIs_in_zip(), address.getZipCode());
+	Assert.assertEquals("zipcode is not correct", street.getIs_in_zip().iterator().next(), address.getZipCode());
 	Assert.assertEquals("adm name is not correct", street.getIs_in_adm(), address.getState());
 	Assert.assertEquals("place is not correct", street.getIs_in_place(), address.getDependentLocality());
 	

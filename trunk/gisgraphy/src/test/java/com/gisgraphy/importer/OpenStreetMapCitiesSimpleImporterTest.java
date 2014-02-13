@@ -177,7 +177,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
 				Assert.assertEquals(1000000L, city.getPopulation().longValue());
 				Assert.assertEquals("admName", city.getAdm().getName());
-				Assert.assertEquals("5678", city.getZipCodes().get(0).getCode());
+				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
 				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
 			}
 		};
@@ -251,7 +251,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
 				Assert.assertEquals(1000000L, city.getPopulation().longValue());
 				Assert.assertEquals("admName", city.getAdm().getName());
-				Assert.assertEquals("5678", city.getZipCodes().get(0).getCode());
+				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
 				Assert.assertFalse("city should not be a municipality because it is a N and country FR",city.isMunicipality());
 			}
 		};

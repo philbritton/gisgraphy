@@ -29,6 +29,7 @@ import static com.gisgraphy.domain.valueobject.Pagination.paginate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -44,6 +45,7 @@ import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.Language;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICountryDao;
 import com.gisgraphy.domain.repository.ILanguageDao;
@@ -142,8 +144,9 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(city.getAdm2Name(), result.getAdm2_name());
 	assertEquals(city.getAdm3Name(), result.getAdm3_name());
 	assertEquals(city.getAdm4Name(), result.getAdm4_name());
-	assertEquals(city.getZipCodes().get(0).getCode(), result.getZipcodes().get(0));
-	assertEquals(city.getZipCodes().get(1).getCode(), result.getZipcodes().get(1));
+	Iterator<ZipCode> ZipIterator = city.getZipCodes().iterator();
+	assertEquals(ZipIterator.next().getCode(), result.getZipcodes().get(0));
+	assertEquals(ZipIterator.next().getCode(), result.getZipcodes().get(1));
 	assertEquals(city.getCountry().getName(), result.getCountry_name());
 	assertEquals(null,
 			result.getCountry_flag_url());

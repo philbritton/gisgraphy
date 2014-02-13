@@ -40,8 +40,10 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -282,7 +284,10 @@ public class GisgraphyTestHelper {
 	street.setTimezone("gmt+1");
 	street.setIsIn("los angeles");
 	street.setIsInPlace("los angeles quarter");
-	street.setIsInZip("zip LA");
+	Set<String> zips = new HashSet<String>();
+	zips.add("zip LA");
+	zips.add("zip LA2");
+	street.setIsInZip(zips);
 	street.setIsInAdm("los angeles ADM");
 	street.setFullyQualifiedAddress("los angeles FQA");
 	
@@ -627,7 +632,10 @@ public class GisgraphyTestHelper {
 	streetOSM.setIsIn("los angeles");
 	streetOSM.setIsInPlace("los angeles quater");
 	streetOSM.setIsInAdm("adm LA");
-	streetOSM.setIsInZip("zip LA");
+	Set<String> zips = new HashSet<String>();
+	zips.add("zip LA");
+	zips.add("zip LA2");
+	streetOSM.setIsInZip(zips);
 	streetOSM.setFullyQualifiedAddress("fullyqulified address LA");
 	return StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM);
 
@@ -642,7 +650,10 @@ public class GisgraphyTestHelper {
     	streetOSM.setStreetType(StreetType.FOOTWAY);
     	streetOSM.setIsIn("chicago");
     	streetOSM.setIsInPlace("foo quater");
-    	streetOSM.setIsInZip("zip PM");
+    	Set<String> zips = new HashSet<String>();
+    	zips.add("zip PM");
+    	zips.add("zip PM2");
+    	streetOSM.setIsInZip(zips);
     	streetOSM.setIsInAdm("adm PM");
     	streetOSM.setFullyQualifiedAddress("fullyQualifiedAddress");
     	streetOSM.setName("peter martin");
@@ -896,7 +907,9 @@ public class GisgraphyTestHelper {
     	zipcodes.add("zip1");
     	EasyMock.expect(city.getZipcodes()).andStubReturn(zipcodes);
     	EasyMock.expect(city.getPlacetype()).andStubReturn(City.class.getSimpleName());
-    	EasyMock.expect(city.getIs_in_zip()).andStubReturn("zip");
+    	Set<String> zips = new HashSet<String>();
+    	zips.add("zip");
+    	EasyMock.expect(city.getIs_in_zip()).andStubReturn(zips);
     	EasyMock.expect(city.getIs_in_adm()).andStubReturn("isinAdm");
     	EasyMock.expect(city.getIs_in_place()).andStubReturn("isinPlace");
     	EasyMock.replay(city);
@@ -1001,7 +1014,9 @@ public class GisgraphyTestHelper {
     	
     	EasyMock.expect(street.getIs_in_adm()).andStubReturn("isinadm");
     	EasyMock.expect(street.getIs_in_place()).andStubReturn("isinplace");
-    	EasyMock.expect(street.getIs_in_zip()).andStubReturn("isinzip");
+    	Set<String> zips = new HashSet<String>();
+    	zips.add("zip");
+    	EasyMock.expect(street.getIs_in_zip()).andStubReturn(zips);
     	List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
     	HouseNumberDto number1 = new HouseNumberDto(GeolocHelper.createPoint(2D, 3D), "1");
     	HouseNumberDto number2 = new HouseNumberDto(GeolocHelper.createPoint(4D, 5D), "2");
@@ -1029,7 +1044,9 @@ public class GisgraphyTestHelper {
     	
     	EasyMock.expect(street.getIs_in_adm()).andStubReturn("isinadm");
     	EasyMock.expect(street.getIs_in_place()).andStubReturn("isinplace");
-    	EasyMock.expect(street.getIs_in_zip()).andStubReturn("isinzip");
+    	Set<String> zips = new HashSet<String>();
+    	zips.add("zip");
+    	EasyMock.expect(street.getIs_in_zip()).andStubReturn(zips);
     	EasyMock.expect(street.getHouse_numbers()).andStubReturn(houseNumbers);
     	EasyMock.replay(street);
     	return street;

@@ -1677,7 +1677,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertNotNull("the city with one zip code should not be null",
 		cityWithOneZipCode);
 	assertEquals("city with FeatureId 2974678 should have a zipcode",
-		"02310", cityWithOneZipCode.getZipCodes().get(0).getCode());
+		"02310", cityWithOneZipCode.getZipCodes().iterator().next().getCode());
 	// city with two zipcode
 	City cityWithTwoZipCode = this.cityDao.getByFeatureId(3015490L);
 	assertNotNull("the city with two zip code should not be null",

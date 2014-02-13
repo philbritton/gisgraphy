@@ -2,6 +2,7 @@ package com.gisgraphy.domain.valueobject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class GisFeatureDistanceFactory {
 	    gisFeatureDistance.setOpenstreetmapId(gisFeature.getOpenstreetmapId());
 	    gisFeatureDistance.setAmenity(gisFeature.getAmenity());
 	    gisFeatureDistance.setZipCodes(new ArrayList<String>());//TODO tests zip without zipcode
-		List<ZipCode> gisFeatureZipCodes = gisFeature.getZipCodes();
+		Set<ZipCode> gisFeatureZipCodes = gisFeature.getZipCodes();
 			if (gisFeatureZipCodes != null){
 				for (ZipCode zipCode :gisFeatureZipCodes){
 				    gisFeatureDistance.getZipCodes().add(zipCode.getCode());
@@ -78,7 +79,10 @@ public class GisFeatureDistanceFactory {
 	gisFeatureDistance.setStreetType(street.getStreetType());
 	gisFeatureDistance.setIsIn(street.getIsIn());
 	gisFeatureDistance.setIsInAdm(street.getIsInAdm());
-	gisFeatureDistance.setIsInZip(street.getIsInZip());
+	if (street.getIsInZip()!=null && street.getIsInZip().size()>=1){
+		//we took the first one
+		gisFeatureDistance.setIsInZip(street.getIsInZip().iterator().next());
+	}
 	gisFeatureDistance.setIsInPlace(street.getIsInPlace());
 	gisFeatureDistance.setFullyQualifiedAddress(street.getFullyQualifiedAddress());
 	return gisFeatureDistance;

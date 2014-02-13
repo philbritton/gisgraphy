@@ -24,7 +24,9 @@ package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -178,7 +180,7 @@ public class GisFeature{
     @IntrospectionIgnoredField
     private Geometry shape;
     
-    private List<ZipCode> zipCodes;
+    private Set<ZipCode> zipCodes;
     
     private String amenity;
     
@@ -948,7 +950,7 @@ public class GisFeature{
 	    this.setPopulation(gisFeature.getPopulation());
 	    this.setSource(gisFeature.getSource());
 	    this.setTimezone(gisFeature.getTimezone());
-	    List<ZipCode> zipCodes = gisFeature.getZipCodes();
+	    Set<ZipCode> zipCodes = gisFeature.getZipCodes();
 		if (zipCodes!= null){
 			for (ZipCode zipCode : zipCodes){
 				this.addZipCode(zipCode);
@@ -1066,9 +1068,9 @@ public class GisFeature{
      * @param zipCode the zip code to add
      */
 	public void addZipCode(ZipCode zipCode) {
-		List<ZipCode> actualZipCodes = getZipCodes();
+		Set<ZipCode> actualZipCodes = getZipCodes();
 		if (actualZipCodes == null) {
-			actualZipCodes = new ArrayList<ZipCode>();
+			actualZipCodes = new HashSet<ZipCode>();
 		}
 		actualZipCodes.add(zipCode);
 		this.setZipCodes(actualZipCodes);
@@ -1097,7 +1099,7 @@ public class GisFeature{
 	@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	@Fetch(FetchMode.SELECT)
 	//TODO tests zip
-	public List<ZipCode> getZipCodes() {
+	public Set<ZipCode> getZipCodes() {
 		return zipCodes;
 	}
 
@@ -1112,7 +1114,7 @@ public class GisFeature{
      *                The zip codes for the City
      */
 	//TODO tests zip
-	public void setZipCodes(List<ZipCode> zipCodes) {
+	public void setZipCodes(Set<ZipCode> zipCodes) {
 		this.zipCodes = zipCodes;
 	}
 	

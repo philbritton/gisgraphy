@@ -20,7 +20,7 @@ touch $LOG_FILE
 echo "$NAME start debugging..."
 echo "Logs are outptut to $LOG_FILE"
 echo "Use the stop.sh script (in the same directory) to shutdown"
-java -DSTOP.PORT=8079 -DSTOP.KEY=stopkey -Dfile.encoding=UTF-8 -Xmx3048m -Xms512m -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar start.jar > $LOG_FILE 2>&1 &
+java -DSTOP.PORT=8079 -DSTOP.KEY=stopkey -Dfile.encoding=UTF-8 -Xmx2048m -Xms512m -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=n -jar start.jar > $LOG_FILE 2>&1 &
 PID=$!
 #echo "Saving PID" $PID " to " $PIDFILE
 if [ -z $PID ]; then

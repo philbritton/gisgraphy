@@ -339,8 +339,8 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 		    	if (((Street) gisFeature).getIsInAdm()!=null && !((Street) gisFeature).getIsInAdm().trim().equals("")){
 		    	    ex.setField(FullTextFields.IS_IN_ADM.getValue(), ((Street) gisFeature).getIsInAdm());
 		    	}
-		    	if (((Street) gisFeature).getIsInZip()!=null && !((Street) gisFeature).getIsInZip().trim().equals("")){
-		    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), ((Street) gisFeature).getIsInZip());
+		    	if (((Street) gisFeature).getIsInZip()!=null ){
+		    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), ((Street) gisFeature).getIsInZip() );
 		    	}
 		    	/*if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
 		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
@@ -417,7 +417,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 			    }
 			    adm = adm.getParent();
 			}
-				List<ZipCode> zipCodes =gisFeature.getZipCodes();
+				Set<ZipCode> zipCodes =gisFeature.getZipCodes();
 				if (zipCodes != null) {
 					List<String> zipCodesToAdd = new ArrayList<String>();
 					for (ZipCode zipCode:zipCodes){

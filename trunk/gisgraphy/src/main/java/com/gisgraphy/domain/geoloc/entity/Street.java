@@ -23,6 +23,7 @@
 package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -51,7 +52,7 @@ public class Street extends GisFeature {
     private String isIn;
     private String isInPlace;
     private String isInAdm;
-    private String isInZip;
+    private Set<String> isInZip;
     private String fullyQualifiedAddress;
     private List<HouseNumber> houseNumbers;
 
@@ -122,6 +123,7 @@ public class Street extends GisFeature {
     /**
      * @return The city or state or any information where the street is located
      */
+    //we don't sync it, the is_in field is only to transfer data from openstreetmap to street object 
     @Transient
     public String getIsIn() {
 	return isIn;
@@ -142,6 +144,7 @@ public class Street extends GisFeature {
 	 *  is filled and we got more specific details (generally quarter, neighborhood)
 	 */
     @Transient
+    //we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
 	public String getIsInPlace() {
 		return isInPlace;
 	}
@@ -158,6 +161,7 @@ public class Street extends GisFeature {
 	 * @return the adm (aka administrative division) where the street is located.
 	 */
 	@Transient
+	//we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
 	public String getIsInAdm() {
 		return isInAdm;
 	}
@@ -173,14 +177,15 @@ public class Street extends GisFeature {
 	 * @return the zipcode where the street is located
 	 */
 	@Transient
-	public String getIsInZip() {
+	//we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
+	public Set<String> getIsInZip() {
 		return isInZip;
 	}
 
 	/**
 	 * @param isInZip the zipcode where the street is located.
 	 */
-	public void setIsInZip(String isInZip) {
+	public void setIsInZip(Set<String> isInZip) {
 		this.isInZip = isInZip;
 	}
 
