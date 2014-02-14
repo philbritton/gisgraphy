@@ -49,6 +49,7 @@ import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocResultsDto;
+import com.gisgraphy.geoloc.GeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.StringHelper;
 import com.gisgraphy.street.StreetType;
@@ -101,6 +102,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
         super.setup();
         //temporary disable logging when importing
         FullTextSearchEngine.disableLogging=true;
+        GeolocSearchEngine.disableLogging=true;
         logger.info("reseting Openstreetmap generatedId");
         idGenerator.sync();
     }
@@ -456,15 +458,18 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     protected void tearDown() {
     	super.tearDown();
     	FullTextSearchEngine.disableLogging=false;
+    	GeolocSearchEngine.disableLogging=false;
     	String savedMessage = this.statusMessage;
     	try {
     		this.statusMessage = internationalisationService.getString("import.message.createIndex");
     		openStreetMapDao.createSpatialIndexes();
+    		this.statusMessage = internationalisationService.getString("import.fulltext.optimize");
+    		solRSynchroniser.optimize();
     	} catch (Exception e) {
     		logger.error("an error occured during spatial index creation, we ignore it but you have to manually run it to have good performances : "+e.getMessage(),e);
-    	}
-    	this.statusMessage = internationalisationService.getString("import.fulltext.optimize");
-    	solRSynchroniser.optimize();
+    	} finally{
+        	this.statusMessage=savedMessage;
+        }
     }
     
     /**

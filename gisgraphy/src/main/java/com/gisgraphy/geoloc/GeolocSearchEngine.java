@@ -56,6 +56,12 @@ import com.gisgraphy.stats.StatsUsageType;
  * 
  */
 public class GeolocSearchEngine implements IGeolocSearchEngine {
+	
+	/**
+	 * very usefull when import is running
+	 */
+	public static boolean disableLogging=false;
+	
 
     @Resource
     IStatsUsageService statsUsageService;
@@ -103,8 +109,10 @@ public class GeolocSearchEngine implements IGeolocSearchEngine {
 
 	long end = System.currentTimeMillis();
 	long qTime = end - start;
-	logger.info(query + " took " + (qTime) + " ms and returns "
-		+ results.size() + " results");
+	if (!disableLogging){
+		logger.info(query + " took " + (qTime) + " ms and returns "
+				+ results.size() + " results");
+	}
 	return new GeolocResultsDto(results, qTime);
 
     }
