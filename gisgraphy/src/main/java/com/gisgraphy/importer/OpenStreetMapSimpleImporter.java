@@ -33,6 +33,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
@@ -264,6 +265,13 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     					street.addZip(zip.getCode());
     				}
     			}
+    			if (cityByShape.getAlternateNames()!=null){
+    				for (AlternateName name : cityByShape.getAlternateNames() ){
+    					if (name!=null && name.getName()!=null){
+    						street.addIsInCitiesAlternateName(name.getName());
+    					}
+    				}
+    			}
     			if (cityByShape.getAdm()!=null){
     				street.setIsInAdm(cityByShape.getAdm().getName());
     			}
@@ -280,6 +288,14 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     			}
     			if (city.getName() != null) {
     				street.setIsIn(pplxToPPL(city.getName()));
+    			}
+    			City cityFromDb = cityDao.getByFeatureId(city.getFeatureId());
+    			if (cityFromDb!= null && cityFromDb.getAlternateNames()!=null){
+    				for (AlternateName name : cityFromDb.getAlternateNames() ){
+    					if (name!=null && name.getName()!=null){
+    						street.addIsInCitiesAlternateName(name.getName());
+    					}
+    				}
     			}
     		}
     		GisFeatureDistance city2 = getNearestCity(street.getLocation(), false);
@@ -309,6 +325,16 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     					for (String zip:city2.getZipCodes()){
         					street.addZip(zip);
         				}
+    				}
+    				if (city==null && city2!=null){//add AN only if there are not added yet
+	    				City city2FromDb = cityDao.getByFeatureId(city2.getFeatureId());
+	        			if (city2FromDb!= null && city2FromDb.getAlternateNames()!=null){
+	        				for (AlternateName name : city2FromDb.getAlternateNames() ){
+	        					if (name!=null && name.getName()!=null){
+	        						street.addIsInCitiesAlternateName(name.getName());
+	        					}
+	        				}
+	        			}
     				}
     		}
     	}

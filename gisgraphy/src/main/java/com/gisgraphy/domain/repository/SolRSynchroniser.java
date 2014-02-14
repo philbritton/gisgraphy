@@ -339,8 +339,11 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 		    	if (((Street) gisFeature).getIsInAdm()!=null && !((Street) gisFeature).getIsInAdm().trim().equals("")){
 		    	    ex.setField(FullTextFields.IS_IN_ADM.getValue(), ((Street) gisFeature).getIsInAdm());
 		    	}
-		    	if (((Street) gisFeature).getIsInZip()!=null ){
+		    	if (((Street) gisFeature).getIsInZip()!=null && ((Street) gisFeature).getIsInZip().size()>0){
 		    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), ((Street) gisFeature).getIsInZip() );
+		    	}
+		    	if (((Street) gisFeature).getIsInCityAlternateNames()!=null && ((Street) gisFeature).getIsInCityAlternateNames().size()>0){
+		    	    ex.setField(FullTextFields.IS_IN_CITIES.getValue(), ((Street) gisFeature).getIsInCityAlternateNames() );
 		    	}
 		    	/*if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
 		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
