@@ -4,7 +4,7 @@
 
 	<groupId>com.gisgraphy</groupId>
 	<artifactId>addressParser-commons</artifactId>
-	<version>3.0</version>
+	<version>4.0-beta1</version>
 	<packaging>jar</packaging>
 
 	<name>addressParser-commons</name>

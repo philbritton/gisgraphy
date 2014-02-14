@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +33,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.street.StreetType;
 
 /**
@@ -55,6 +58,13 @@ public class Street extends GisFeature {
     private Set<String> isInZip;
     private String fullyQualifiedAddress;
     private List<HouseNumber> houseNumbers;
+    
+    /**
+     * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+     */
+    @IntrospectionIgnoredField
+    private Set<String> isInCityAlternateNames;
 
     
 
@@ -206,4 +216,36 @@ public class Street extends GisFeature {
 	public void setHouseNumbers(List<HouseNumber> houseNumbers) {
 		this.houseNumbers = houseNumbers;
 	}
+	
+	/**
+	 * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+	 * 
+	 */
+	@Transient
+	public Set<String> getIsInCityAlternateNames() {
+		return isInCityAlternateNames;
+	}
+
+	public void setIsInCityAlternateNames(Set<String> isInCityAlternateNames) {
+		this.isInCityAlternateNames = isInCityAlternateNames;
+	}
+	
+
+    public void addIsInCitiesAlternateName(String isInCityAlternateName) {
+	Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
+	if (currentCitiesAlternateNames == null) {
+		currentCitiesAlternateNames = new HashSet<String>();
+	}
+	currentCitiesAlternateNames.add(isInCityAlternateName);
+	this.setIsInCityAlternateNames(currentCitiesAlternateNames);
+    }
+
+    public void addIsInCitiesAlternateNames(Collection<String> isInCityAlternateNames) {
+	if (isInCityAlternateNames != null) {
+	    for (String isInCityAlternateName : isInCityAlternateNames) {
+	    	addIsInCitiesAlternateName(isInCityAlternateName);
+	    }
+	}
+    }
 }

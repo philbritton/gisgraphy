@@ -65,6 +65,9 @@ public Street create(OpenStreetMap openstreetmap){
 			   
 		   }
 	   }
+	   if (openstreetmap.getIsInCityAlternateNames()!=null){
+			   street.addIsInCitiesAlternateNames(openstreetmap.getIsInCityAlternateNames());
+	   }
 	   return street;
        }
        return null;

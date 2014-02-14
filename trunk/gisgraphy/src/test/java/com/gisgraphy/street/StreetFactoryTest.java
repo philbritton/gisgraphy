@@ -22,6 +22,7 @@
 package com.gisgraphy.street;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,6 +87,11 @@ public class StreetFactoryTest {
 	alternateNames.add(new AlternateOsmName("altname2",AlternateNameSource.OPENSTREETMAP));
 	openStreetMap.addAlternateNames(alternateNames);
 	
+	Set<String> citiesAlternateNames = new HashSet<String>();
+	citiesAlternateNames.add("city1");
+	citiesAlternateNames.add("city2");
+	openStreetMap.addIsInCitiesAlternateNames(citiesAlternateNames);
+	
 	StreetFactory factory = new StreetFactory();
 	Street street = factory.create(openStreetMap);
 	
@@ -107,6 +113,9 @@ public class StreetFactoryTest {
 	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname"));
 	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname2"));
 	
+	Assert.assertTrue(alternateCitiesNamesContain(street.getIsInCityAlternateNames(), "city1"));
+	Assert.assertTrue(alternateCitiesNamesContain(street.getIsInCityAlternateNames(), "city2"));
+	
 	
     }
     
@@ -121,6 +130,20 @@ public class StreetFactoryTest {
     		return false;
     	}
     	Assert.fail("alternateNames doesn't contain "+name);
+    	return false;
+    }
+    
+    private boolean alternateCitiesNamesContain(Collection<String> names, String name){
+    	if (names!=null ){
+    		for(String nameToTest:names){
+    			if (nameToTest!=null && nameToTest.equals(name)){
+    				return true;
+    			}
+    		}
+    	} else {
+    		return false;
+    	}
+    	Assert.fail("cities alternateNames doesn't contain "+name);
     	return false;
     }
     

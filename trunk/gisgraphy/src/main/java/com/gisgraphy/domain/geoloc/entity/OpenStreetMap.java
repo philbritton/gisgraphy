@@ -135,6 +135,13 @@ public class OpenStreetMap {
     
     private String isInAdm;
     
+    /**
+     * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+     */
+    @IntrospectionIgnoredField
+    private Set<String> isInCityAlternateNames;
+    
     private Set<String> isInZip;
     
     private String fullyQualifiedAddress;
@@ -687,5 +694,37 @@ public class OpenStreetMap {
 	public void setCityConfident(boolean cityConfident) {
 		this.cityConfident = cityConfident;
 	}
+
+	/**
+	 * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+	 * 
+	 */
+	@Transient
+	public Set<String> getIsInCityAlternateNames() {
+		return isInCityAlternateNames;
+	}
+
+	public void setIsInCityAlternateNames(Set<String> isInCityAlternateNames) {
+		this.isInCityAlternateNames = isInCityAlternateNames;
+	}
+	
+
+    public void addIsInCitiesAlternateName(String isInCityAlternateName) {
+	Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
+	if (currentCitiesAlternateNames == null) {
+		currentCitiesAlternateNames = new HashSet<String>();
+	}
+	currentCitiesAlternateNames.add(isInCityAlternateName);
+	this.setIsInCityAlternateNames(currentCitiesAlternateNames);
+    }
+
+    public void addIsInCitiesAlternateNames(Collection<String> isInCityAlternateNames) {
+	if (isInCityAlternateNames != null) {
+	    for (String isInCityAlternateName : isInCityAlternateNames) {
+	    	addIsInCitiesAlternateName(isInCityAlternateName);
+	    }
+	}
+    }
 
 }

@@ -101,6 +101,7 @@ public enum FullTextFields {
 	IS_IN_ADM("is_in_adm"),
 	IS_IN_ZIP("is_in_zip"),
 	IS_IN("is_in"),
+	IS_IN_CITIES("is_in_cities"),
 	FULLY_QUALIFIED_ADDRESS("fully_qualified_address"),
 	HOUSE_NUMBERS("house_numbers");
 	//end of street only

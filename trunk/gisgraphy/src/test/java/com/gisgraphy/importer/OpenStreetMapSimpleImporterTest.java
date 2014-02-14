@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
@@ -48,6 +49,7 @@ import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
+import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisFeatureDistanceFactory;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
@@ -460,10 +462,17 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		EasyMock.replay(geolocSearchEngine);
 		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
 		
+		City cityFromDb = new City();
+		AlternateName an1 = new AlternateName("an1",AlternateNameSource.OPENSTREETMAP);
+		AlternateName an2 = new AlternateName("an2",AlternateNameSource.OPENSTREETMAP);
+		cityFromDb.addAlternateName(an1);
+		cityFromDb.addAlternateName(an2);
+		
     	String countryCode = "FR";
     	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
 		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
+		EasyMock.expect(cityDao.getByFeatureId(1L)).andReturn(cityFromDb);
 		EasyMock.replay(cityDao);
 		openStreetMapSimpleImporter.setCityDao(cityDao);
     	
@@ -477,6 +486,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.assertEquals("adm2name", street.getIsInAdm());
     	Assert.assertEquals("cityName", street.getIsIn());
     	Assert.assertEquals(null, street.getIsInPlace());
+    	Assert.assertTrue(street.getIsInCityAlternateNames().size()==2);
     	
     	EasyMock.verify(geolocSearchEngine);
     	EasyMock.verify(cityDao);
@@ -554,8 +564,15 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
     	String countryCode = "FR";
     	
+    	City cityFromDb = new City();
+		AlternateName an1 = new AlternateName("an1",AlternateNameSource.OPENSTREETMAP);
+		AlternateName an2 = new AlternateName("an2",AlternateNameSource.OPENSTREETMAP);
+		cityFromDb.addAlternateName(an1);
+		cityFromDb.addAlternateName(an2);
+    	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
     	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
+    	EasyMock.expect(cityDao.getByFeatureId(1L)).andReturn(cityFromDb);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 
@@ -571,6 +588,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.assertEquals("adm2name", street.getIsInAdm());
     	Assert.assertEquals("cityName", street.getIsIn());
     	Assert.assertEquals(null, street.getIsInPlace());
+    	Assert.assertTrue(street.getIsInCityAlternateNames().size()==2);
     	
     	EasyMock.verify(geolocSearchEngine);
     	EasyMock.verify(cityDao);
@@ -649,8 +667,15 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
     	String countryCode = "FR";
     	
+    	City cityFromDb = new City();
+		AlternateName an1 = new AlternateName("an1",AlternateNameSource.OPENSTREETMAP);
+		AlternateName an2 = new AlternateName("an2",AlternateNameSource.OPENSTREETMAP);
+		cityFromDb.addAlternateName(an1);
+		cityFromDb.addAlternateName(an2);
+    	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
 		EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
+		EasyMock.expect(cityDao.getByFeatureId(1L)).andReturn(cityFromDb);
 		EasyMock.replay(cityDao);
 		openStreetMapSimpleImporter.setCityDao(cityDao);
     	    	
@@ -666,6 +691,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.assertEquals("cityName", street.getIsIn());
     	Assert.assertEquals("isIn place should be filled if result are different and municipality is not the nearest",cityName2, street.getIsInPlace());
     	Assert.assertEquals("isIn should be filled with municipality if result are different and municipality is not the nearest",cityName, street.getIsIn());
+    	Assert.assertTrue(street.getIsInCityAlternateNames().size()==2);
     	
     	
     	EasyMock.verify(geolocSearchEngine);
@@ -747,8 +773,15 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		
     	String countryCode = "FR";
     	
+    	City cityFromDb = new City();
+		AlternateName an1 = new AlternateName("an1",AlternateNameSource.OPENSTREETMAP);
+		AlternateName an2 = new AlternateName("an2",AlternateNameSource.OPENSTREETMAP);
+		cityFromDb.addAlternateName(an1);
+		cityFromDb.addAlternateName(an2);
+    	
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
     	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
+    	EasyMock.expect(cityDao.getByFeatureId(1L)).andReturn(cityFromDb);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
 
@@ -765,6 +798,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.assertEquals("cityName", street.getIsIn());
     	Assert.assertEquals("isIn should not be filled with only isin if result are different and municipality is the nearest",cityName, street.getIsIn());
     	Assert.assertEquals("isIn place should not be filled if result are different and municipality is the nearest",null, street.getIsInPlace());
+    	Assert.assertTrue(street.getIsInCityAlternateNames().size()==2);
     	
     	EasyMock.verify(geolocSearchEngine);
     	EasyMock.verify(cityDao);
@@ -794,6 +828,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 				city.setName(cityName);
 				city.setPopulation(population);
 				city.setAdm2Name(adm2name);
+				city.setFeatureId(1L);
 				city.setZipCodes(zipCodes);
 				GisFeatureDistanceFactory factory = new GisFeatureDistanceFactory();
 				GisFeatureDistance gisFeatureDistance = factory.fromGisFeature(city,1D);
@@ -811,9 +846,16 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
 		openStreetMapSimpleImporter.setGeolocSearchEngine(geolocSearchEngine);
 		
     	String countryCode = "FR";
+    	
+    	City cityFromDb = new City();
+		AlternateName an1 = new AlternateName("an1",AlternateNameSource.OPENSTREETMAP);
+		AlternateName an2 = new AlternateName("an2",AlternateNameSource.OPENSTREETMAP);
+		cityFromDb.addAlternateName(an1);
+		cityFromDb.addAlternateName(an2);
 
     	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
     	EasyMock.expect(cityDao.getByShape(EasyMock.anyObject(Point.class),EasyMock.eq(true))).andReturn(null);
+    	EasyMock.expect(cityDao.getByFeatureId(1L)).andReturn(cityFromDb);
     	EasyMock.replay(cityDao);
     	openStreetMapSimpleImporter.setCityDao(cityDao);
     	
@@ -829,6 +871,7 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.assertEquals("adm2name", street.getIsInAdm());
     	Assert.assertEquals("cityName", street.getIsIn());
     	Assert.assertEquals(null, street.getIsInPlace());
+    	Assert.assertTrue(street.getIsInCityAlternateNames().size()==2);
     	
     	EasyMock.verify(geolocSearchEngine);
     	EasyMock.verify(cityDao);
