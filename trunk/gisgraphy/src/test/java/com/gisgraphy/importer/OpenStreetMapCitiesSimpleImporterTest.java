@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
@@ -29,6 +30,33 @@ import com.vividsolutions.jts.geom.Point;
 
 public class OpenStreetMapCitiesSimpleImporterTest {
 
+	@Test
+	public void populatezip(){
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
+		City city = new City();
+		importer.populateZip("23456", city);
+		Assert.assertEquals(1,city.getZipCodes().size());
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("23456")));
+		
+		city = new City();
+		importer.populateZip("23456,789", city);
+		Assert.assertEquals(2,city.getZipCodes().size());
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("23456")));
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("789")));
+		
+		city = new City();
+		importer.populateZip("23456;789", city);
+		Assert.assertEquals(2,city.getZipCodes().size());
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("23456")));
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("789")));
+		
+		city = new City();
+		importer.populateZip("23456;789;", city);
+		Assert.assertEquals(2,city.getZipCodes().size());
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("23456")));
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("789")));
+	}
+	
 	@Test
 	public void createNewCity() {
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();

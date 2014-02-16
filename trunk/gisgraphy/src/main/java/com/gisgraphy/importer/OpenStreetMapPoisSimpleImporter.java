@@ -40,6 +40,7 @@ import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
+import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
@@ -151,6 +152,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		String[] tags = splitTags(amenity);
 		List<GisFeature> pois = osmAmenityToPlacetype.getObjectsFromTags(tags);
 		for (GisFeature poi:pois){
+		poi.setSource(GISSource.OPENSTREETMAP);
 		//osmId
 		if (!isEmptyField(fields, 1, true)) {
 			String osmIdAsString =fields[1].trim();
