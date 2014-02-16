@@ -16,6 +16,7 @@ import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
+import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.vividsolutions.jts.geom.Point;
 
@@ -59,11 +60,13 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		Assert.assertEquals("Pfarrkirche Heiliger Johannes der Täufer", poi.getName());
 		Assert.assertEquals("AT", poi.getCountryCode());
 		Assert.assertEquals("place_of_worship", poi.getAmenity());
+		Assert.assertEquals(GISSource.OPENSTREETMAP, poi.getSource());;
 		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CODE, poi.getFeatureCode());
 		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CLASS, poi.getFeatureClass());
 		Assert.assertEquals(Religious.class, poi.getClass());
 		Assert.assertEquals(1234L, poi.getFeatureId().longValue());
 		Assert.assertNotNull(poi.getLocation());
+		
 		
 		//an
 		Assert.assertEquals(2, poi.getAlternateNames().size());

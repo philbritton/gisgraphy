@@ -192,7 +192,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	}
 	//zip code
 	if(!isEmptyField(fields, 4, false) && (city.getZipCodes()==null || !city.getZipCodes().contains(new ZipCode(fields[4])))){
-			city.addZipCode(new ZipCode(fields[4]));
+			populateZip(fields[4], city);
 	}
 	//place tag/amenity
 	if(!isEmptyField(fields, 8, false)){
@@ -245,6 +245,28 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	}
 
     }
+
+	protected void populateZip(String zipAsString, City city) {
+		if (zipAsString.contains(";")){
+			String[] zips = zipAsString.split(";");
+			for (int i = 0;i<zips.length;i++){
+				String zipTrimed = zips[i].trim();
+				if (!"".equals(zipTrimed)){
+					city.addZipCode(new ZipCode(zipTrimed));
+				}
+			}
+		} else if (zipAsString.contains(",")){
+			String[] zips = zipAsString.split(",");
+			for (int i = 0;i<zips.length;i++){
+				String zipTrimed = zips[i].trim();
+				if (!"".equals(zipTrimed)){
+					city.addZipCode(new ZipCode(zipTrimed));
+				}
+			}
+		} else {
+			city.addZipCode(new ZipCode(zipAsString));
+		}
+	}
 
 	void savecity(City city) {
 		cityDao.save(city);
