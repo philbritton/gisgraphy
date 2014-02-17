@@ -173,7 +173,9 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			if (city==null){
 				city = createNewCity(name,countrycode,location);
 				
-			} 
+			} else{ 
+				city.setSource(GISSource.GEONAMES_OPENSTREEMAP);
+			}
 	} else {
 		city = createNewCity(name,countrycode,location);
 	}
@@ -201,10 +203,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	//shape
 	if(!isEmptyField(fields, 7, false)){
 		try {
-			Geometry shape = (Point) GeolocHelper.convertFromHEXEWKBToGeometry(fields[7]);
+			Geometry shape = (Geometry) GeolocHelper.convertFromHEXEWKBToGeometry(fields[7]);
 			city.setShape(shape);
 		    } catch (RuntimeException e) {
-		    	logger.warn("can not parse shape for "+fields[7]+" : "+e);
+		    	logger.warn("can not parse shape for id "+fields[1]+" : "+e);
 		    }
 	}
 	//osmId
@@ -244,6 +246,23 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		logger.error("Can not save "+dumpFields(fields)+" we continue anyway but you should consider this",e);
 	}
 
+    }
+    
+    /**
+     * @param fields
+     *                The array to process
+     * @return a string which represent a human readable string of the Array but without shape because it is useless in logs
+     */
+    protected static String dumpFields(String[] fields) {
+	String result = "[";
+	for (int i=0;i<fields.length;i++) {
+		if (i==7){
+			result= result+"THE_SHAPE";
+		}else {
+	    result = result + fields[i] + ";";
+		}
+	}
+	return result + "]";
     }
 
 	protected void populateZip(String zipAsString, City city) {
