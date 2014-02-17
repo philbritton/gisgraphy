@@ -466,41 +466,53 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
      *                 if the fields is empty and required is true
      */
     protected static boolean isEmptyField(String[] fields, int position,
-	    boolean required) {
-	if (fields == null) {
-	    throw new MissingRequiredFieldException(
-		    "can not chek fields if the array is null");
-	}
-	if (position < 0) {
-	    throw new MissingRequiredFieldException(
-		    "position can not be < 0 => position = " + position);
-	}
-	if (fields.length == 0) {
-	    throw new MissingRequiredFieldException("fields is empty");
-	}
-	if (position > (fields.length - 1)) {
+    		boolean required) {
+    	if (fields == null) {
+    		if (!required) {
+    			return true;
+    		} else {
+    			throw new MissingRequiredFieldException(
+    					"can not chek fields if the array is null");
+    		}
+    	}
+    	if (position < 0) {
+    		if (!required) {
+    			return true;
+    		} else {
+    		throw new MissingRequiredFieldException(
+    				"position can not be < 0 => position = " + position);
+    		}
+    	}
+    	if (fields.length == 0) {
+    		if (!required) {
+    			return true;
+    		} else {
+    		throw new MissingRequiredFieldException("fields is empty");
+    		}
+    	}
+    	if (position > (fields.length - 1)) {
 
-	    if (!required) {
-		return true;
-	    } else {
-		throw new MissingRequiredFieldException("fields has "
-			+ (fields.length)
-			+ " element(s), can not get element with position "
-			+ (position) + " : " + dumpFields(fields));
-	    }
+    		if (!required) {
+    			return true;
+    		} else {
+    			throw new MissingRequiredFieldException("fields has "
+    					+ (fields.length)
+    					+ " element(s), can not get element with position "
+    					+ (position) + " : " + dumpFields(fields));
+    		}
 
-	}
-	String string = fields[position];
-	if (string != null && string.trim().equals("")) {
-	    if (!required) {
-		return true;
-	    } else {
-		throw new MissingRequiredFieldException("fields[" + position
-			+ "] is required for featureID " + fields[0] + " : "
-			+ dumpFields(fields));
-	    }
-	}
-	return false;
+    	}
+    	String string = fields[position];
+    	if (string != null && (string.trim().equals("") || string.equals("\"\""))) {
+    		if (!required) {
+    			return true;
+    		} else {
+    			throw new MissingRequiredFieldException("fields[" + position
+    					+ "] is required for featureID " + fields[0] + " : "
+    					+ dumpFields(fields));
+    		}
+    	}
+    	return false;
 
     }
 

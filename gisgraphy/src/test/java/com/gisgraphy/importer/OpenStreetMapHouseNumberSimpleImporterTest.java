@@ -54,6 +54,14 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	}
 	
 	@Test
+	public void parseAssociatedStreetHouseNumber_noMembers() {
+		String line = "A	1021328	";
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+			AssociatedStreetHouseNumber actual = importer.parseAssociatedStreetHouseNumber(line);
+			Assert.assertNull(actual);
+	}
+	
+	@Test
 	public void parseAssociatedStreetHouseNumberWrongType() {
 		String line = "X	" +
 				"2069647	1661205474___0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540___24___Avenue de Fontvieille___N___house___" +
@@ -161,6 +169,21 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 			line ="I	169508709	1806691488___0___0101000020E610000045C3BD8D28404DC0E08211A04B4D41C0___3702___Tinogasta___1806691490___1___0101000020E6100000C3FF0C2549404DC0F924C1655F4D41C0___3800___Tinogasta		even	actual";
 			Assert.assertNotNull(interpolation);
 			Assert.assertEquals(4,interpolation.getMembers().size());
+	}
+	
+	@Test
+	public void parseInterpolationHouseNumber_NoInterpolationType() {
+		String line = "I	168365171	1796478450___0___0101000020E61000009A023EE4525350C0959C137B682F38C0_________"
+				+"1796453793___2___0101000020E610000038691A144D5350C023ADE75A6A2F38C0___600___ba_r___"
+		  +"1366275082___1___0101000020E610000068661CD94B5350C0B055270C6F2F38C0______foo___"
+		 +"1796453794___3___0101000020E6100000F38F6390605350C028A6666A6D2F38C0___698___	sname		actual";
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+			InterpolationHouseNumber interpolation = importer.parseInterpolationHouseNumber(line);
+			InterpolationHouseNumber actual = interpolation;
+			//TODO wrong number of fields, null
+			Assert.assertEquals("168365171", actual.getWayId());
+			Assert.assertEquals("By default interpolation is all",InterpolationType.all,actual.getInterpolationType());
+			
 	}
 	
 	//parseNodeHouseNumber

@@ -221,7 +221,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	
 	//populate alternatenames
 	if (!isEmptyField(fields, 10, false)) {
-		String alternateNamesAsString=fields[4].trim();
+		String alternateNamesAsString=fields[10].trim();
 		populateAlternateNames(city,alternateNamesAsString);
 	}
 

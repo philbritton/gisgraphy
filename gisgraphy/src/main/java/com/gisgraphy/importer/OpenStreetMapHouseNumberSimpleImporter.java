@@ -368,7 +368,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				return;
 			}
 			OpenStreetMap osm = null;
-			if (house.getStreetName() != null && !"".equals(house.getStreetName().trim())) {
+			if (house.getStreetName() != null && !"".equals(house.getStreetName().trim()) && !"\"\"".equals(house.getStreetName().trim())) {
 				SolrResponseDto street = findNearestStreet(house.getStreetName(), members.get(0).getLocation());
 				if (street != null) {
 					Long openstreetmapId = street.getOpenstreetmap_id();
