@@ -60,7 +60,7 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		Assert.assertEquals("Pfarrkirche Heiliger Johannes der Täufer", poi.getName());
 		Assert.assertEquals("AT", poi.getCountryCode());
 		Assert.assertEquals("place_of_worship", poi.getAmenity());
-		Assert.assertEquals(GISSource.OPENSTREETMAP, poi.getSource());;
+		Assert.assertEquals(GISSource.OSM, poi.getSource());;
 		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CODE, poi.getFeatureCode());
 		Assert.assertEquals(OsmAmenityToPlacetype.DEFAULT_OSM_FEATURE_CLASS, poi.getFeatureClass());
 		Assert.assertEquals(Religious.class, poi.getClass());

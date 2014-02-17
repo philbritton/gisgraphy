@@ -152,7 +152,7 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		String[] tags = splitTags(amenity);
 		List<GisFeature> pois = osmAmenityToPlacetype.getObjectsFromTags(tags);
 		for (GisFeature poi:pois){
-		poi.setSource(GISSource.OPENSTREETMAP);
+		poi.setSource(GISSource.OSM);
 		//osmId
 		if (!isEmptyField(fields, 1, true)) {
 			String osmIdAsString =fields[1].trim();

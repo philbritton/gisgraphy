@@ -174,13 +174,13 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 				city = createNewCity(name,countrycode,location);
 				
 			} else{ 
-				city.setSource(GISSource.GEONAMES_OPENSTREEMAP);
+				city.setSource(GISSource.GEONAMES_OSM);
 			}
 	} else {
 		city = createNewCity(name,countrycode,location);
 	}
 	//set municipality if needed
-	city.setMunicipality(municipalityDetector.isMunicipality(countrycode, fields[8], fields[0], GISSource.OPENSTREETMAP));
+	city.setMunicipality(municipalityDetector.isMunicipality(countrycode, fields[8], fields[0], GISSource.OSM));
 	
 	//populate new fields
 	//population
@@ -295,7 +295,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		City city;
 		city = new City();
 		city.setFeatureId(idGenerator.getNextFeatureId());
-		city.setSource(GISSource.OPENSTREETMAP);
+		city.setSource(GISSource.OSM);
 		city.setName(name);
 		city.setLocation(location);
 		city.setCountryCode(countryCode);

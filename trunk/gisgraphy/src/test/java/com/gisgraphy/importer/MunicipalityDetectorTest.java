@@ -39,65 +39,65 @@ public class MunicipalityDetectorTest {
 		Assert.assertTrue(d.isMunicipality(null, null, null, null));
 		
 		Assert.assertTrue(d.isMunicipality("IN", null, null, GISSource.GEONAMES));
-		Assert.assertTrue(d.isMunicipality("IN", null, null, GISSource.OPENSTREETMAP));
+		Assert.assertTrue(d.isMunicipality("IN", null, null, GISSource.OSM));
 		
 		//test OSM
 		Assert.assertFalse(d.isMunicipality("CN", null, null, GISSource.GEONAMES));
-		Assert.assertTrue(d.isMunicipality("CN", null, null, GISSource.OPENSTREETMAP));
+		Assert.assertTrue(d.isMunicipality("CN", null, null, GISSource.OSM));
 		
 		//test R
 		Assert.assertFalse(d.isMunicipality("IT", null, null, GISSource.GEONAMES));
 		Assert.assertFalse("Even if it is R, it should be osm feature",d.isMunicipality("IT", null, "R", GISSource.GEONAMES));
 		
-		Assert.assertFalse(d.isMunicipality("IT", null, null, GISSource.OPENSTREETMAP));
-		Assert.assertFalse(d.isMunicipality("IT", null, "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("IT", null, "r", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("IT", null, "R", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("IT", null, "w", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("IT", null, "W", GISSource.OPENSTREETMAP));
+		Assert.assertFalse(d.isMunicipality("IT", null, null, GISSource.OSM));
+		Assert.assertFalse(d.isMunicipality("IT", null, "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("IT", null, "r", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("IT", null, "R", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("IT", null, "w", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("IT", null, "W", GISSource.OSM));
 		
 		//N
 		Assert.assertFalse(d.isMunicipality("FI", null, null, GISSource.GEONAMES));
 		Assert.assertFalse("Even if it is N, it should be osm feature",d.isMunicipality("FI", null, "N", GISSource.GEONAMES));
 		
-		Assert.assertFalse(d.isMunicipality("FI", null, null, GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("FI", null, "n", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("FI", null, "N", GISSource.OPENSTREETMAP));
+		Assert.assertFalse(d.isMunicipality("FI", null, null, GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("FI", null, "n", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("FI", null, "N", GISSource.OSM));
 		
 		//R_AND_N_CITY_VILLAGE_TOWN
 		//R
 		Assert.assertFalse(d.isMunicipality("SK", null, null, GISSource.GEONAMES));
 		Assert.assertFalse("Even if it is r, it should be osm feature",d.isMunicipality("SK", null, "R", GISSource.GEONAMES));
 		Assert.assertFalse("Even if it is N, it should be osm feature",d.isMunicipality("SK", null, "N", GISSource.GEONAMES));
-		Assert.assertTrue(d.isMunicipality("SK", null, "r", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", null, "R", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", null, "w", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", null, "W", GISSource.OPENSTREETMAP));
+		Assert.assertTrue(d.isMunicipality("SK", null, "r", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", null, "R", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", null, "w", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", null, "W", GISSource.OSM));
 		//N
 		Assert.assertFalse("Geonames should be ignore",d.isMunicipality("SK", "CiTy", "N", GISSource.GEONAMES));
-		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("SK", null, "N", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("SK", "foo", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", "CiTy", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", "ViLLaGe", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", "ToWn", "W", GISSource.OPENSTREETMAP));
+		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("SK", null, "N", GISSource.OSM));
+		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("SK", "foo", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", "CiTy", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", "ViLLaGe", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", "ToWn", "W", GISSource.OSM));
 		
 		//N_CITY_VILLAGE_TOWN
 		Assert.assertFalse("Geonames should be ignore",d.isMunicipality("TR", "CiTy", "N", GISSource.GEONAMES));
-		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("TR", null, "N", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("TR", "foo", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("TR", "CiTy", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("TR", "ViLLaGe", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("SK", "ToWn", "W", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("not a N",d.isMunicipality("TR", "CiTy", "R", GISSource.OPENSTREETMAP));
+		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("TR", null, "N", GISSource.OSM));
+		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("TR", "foo", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("TR", "CiTy", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("TR", "ViLLaGe", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("SK", "ToWn", "W", GISSource.OSM));
+		Assert.assertFalse("not a N",d.isMunicipality("TR", "CiTy", "R", GISSource.OSM));
 		
 		//N_CITY_VILLAGE_TOWN
 		Assert.assertFalse("Geonames should be ignore",d.isMunicipality("CO", "CiTy", "N", GISSource.GEONAMES));
-		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("CO", null, "N", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("CO", "foo", "N", GISSource.OPENSTREETMAP));
-		Assert.assertTrue(d.isMunicipality("CO", "CiTy", "N", GISSource.OPENSTREETMAP));
-		Assert.assertFalse(d.isMunicipality("CO", "ViLLaGe", "N", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("not a N",d.isMunicipality("CO", "ToWn", "W", GISSource.OPENSTREETMAP));
-		Assert.assertFalse("not a N",d.isMunicipality("CO", "CiTy", "R", GISSource.OPENSTREETMAP));
+		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("CO", null, "N", GISSource.OSM));
+		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("CO", "foo", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("CO", "CiTy", "N", GISSource.OSM));
+		Assert.assertFalse(d.isMunicipality("CO", "ViLLaGe", "N", GISSource.OSM));
+		Assert.assertFalse("not a N",d.isMunicipality("CO", "ToWn", "W", GISSource.OSM));
+		Assert.assertFalse("not a N",d.isMunicipality("CO", "CiTy", "R", GISSource.OSM));
 		
 		
 	}

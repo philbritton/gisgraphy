@@ -150,8 +150,8 @@
         }
         
  	doSearch= function(){
-         $('fulltextsearch')['from'].value=1;
-         $('fulltextsearch')['to'].value=10;
+         $('streetsearch')['from'].value=1;
+         $('streetsearch')['to'].value=10;
          return updatePopupResults();
     }  
  	
