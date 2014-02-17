@@ -83,7 +83,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
     private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
- public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";
+    public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";
     
     public static final Pattern ALTERNATENAMES_EXTRACTION_PATTERN = Pattern.compile(ALTERNATENAMES_EXTRACTION_REGEXP);
     
@@ -135,7 +135,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	// Line table has the following fields :
 	// --------------------------------------------------- 
 	//0: id; 1 name; 2 location; 3 length ;4 countrycode; 5 : gid ;
-	//6 type; 7 oneway; 8 : shape;
+	//6 type; 7 oneway; 8 : shape; 9 : Alternate names
 	//
 	checkNumberOfColumn(fields);
 	OpenStreetMap street = new OpenStreetMap();
@@ -215,7 +215,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	    
 	}
 	
-	if (fields.length == 10 && !isEmptyField(fields, 8, false)){
+	if (fields.length == 10 && !isEmptyField(fields, 9, false)){
 		populateAlternateNames(street,fields[9]);
 	}
 		
