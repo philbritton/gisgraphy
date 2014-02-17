@@ -200,11 +200,11 @@
 				<ref bean="geonamesAlternateNamesExtracter" />
 				<ref bean="geonamesAlternateNamesAdmImporter"/>
 				<ref bean="geonamesAlternateNamesImporter" />
-				<ref bean="geonamesZipCodeFileRetriever" />
-				<ref bean="geonamesZipCodeImporter" />
 				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="OpenStreetMapCitiesFileRetriever"/>
 				<ref bean="OpenStreetMapCitiesSimpleImporter"/>
+				<ref bean="geonamesZipCodeFileRetriever" />
+				<ref bean="geonamesZipCodeImporter" />
 				<ref bean="openstreetmapFileRetriever" />
 				<ref bean="openStreetMapImporter"/>
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>

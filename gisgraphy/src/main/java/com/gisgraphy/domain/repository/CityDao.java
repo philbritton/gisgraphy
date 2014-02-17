@@ -101,8 +101,13 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 			if (filterMunicipality){
 				queryString+=" and c.municipality=true";
 			}
+			queryString = queryString+ " order by area(c.shape)";
+			//we need to sort by distance due to error in osm data 
+			//eg : if we search for the nearest city of http://www.openstreetmap.org/way/27904415
+			// we can have 2 cities : http://www.openstreetmap.org/way/75509282 vs http://www.openstreetmap.org/relation/388250
+			//cause there is the city and the district
 
-			Query qry = session.createQuery(queryString);
+			Query qry = session.createQuery(queryString).setMaxResults(1);
 
 			//qry.setParameter("point2", location);
 			City result = (City) qry.uniqueResult();
