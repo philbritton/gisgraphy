@@ -29,5 +29,5 @@ package com.gisgraphy.domain.valueobject;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public enum GISSource {
-    PERSONAL, GEONAMES, GEONAMES_ZIP
+	 PERSONAL, GEONAMES, GEONAMES_ZIP, OSM, GEONAMES_OSM
 }

@@ -68,7 +68,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		
 		Point location = GeolocHelper.createPoint(3D, 2D);
 		City actual = importer.createNewCity("name","FR",location );
-		Assert.assertEquals(GISSource.OPENSTREETMAP, actual.getSource());
+		Assert.assertEquals(GISSource.OSM, actual.getSource());
 		Assert.assertEquals(1234L, actual.getFeatureId().longValue());
 		Assert.assertEquals("name", actual.getName());
 		Assert.assertEquals("FR", actual.getCountryCode());

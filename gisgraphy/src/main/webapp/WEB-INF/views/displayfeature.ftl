@@ -74,12 +74,7 @@
 					<br/>
 
 					<@s.text name="global.alternateNames"/> :
-					<br/><br/>
-					<#if result.length??>
-					<img src="/images/map_edit.png" alt="edit ${result.name} " />&nbsp;<@s.text name="search.correctFeaturesNames"/> <a href="http://www.openstreetmap.org/">Openstreetmap</a>
-					<#else>
-					<img src="/images/map_edit.png" alt="edit ${result.name} " />&nbsp;<@s.text name="search.correctFeaturesNames"/> <a href="http://www.geonames.org/${result.feature_id?c}/">geonames</a>
-					</#if>
+					<br/>
 					<p class="quote">
 					<@s.iterator value="result.name_alternates" status="name_wo_lang_status" id="name_alternate">
 							${name_alternate} <@s.if test="!#name_wo_lang_status.last"> - </@s.if> 
