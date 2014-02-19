@@ -117,4 +117,11 @@ public class AddressParserServlet extends AbstractAddressServlet {
 		this.statsUsageService = statsUsageService;
 	}
 
+
+
+	@Override
+	public boolean checkparameter() {
+		return true;
+	}
+
 }

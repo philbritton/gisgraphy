@@ -105,6 +105,10 @@ public class AbstractAddressServletTest {
 	public com.gisgraphy.addressparser.IAddressParserService getAddressParserService() {
 	    return mockAddressParserService;
 	};
+	@Override
+	public boolean checkparameter() {
+			return false;
+	}
 
 	@Override
 	public void sendCustomError(String arg0, OutputFormat arg1, HttpServletResponse arg2, HttpServletRequest arg3) {

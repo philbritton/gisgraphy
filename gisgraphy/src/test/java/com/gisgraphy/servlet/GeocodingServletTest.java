@@ -58,6 +58,12 @@ public class GeocodingServletTest {
        
        EasyMock.verify(geocodingService);
    }
+   
+   @Test
+   public void checkParameter() throws IOException{
+       GeocodingServlet geocodingServlet = new GeocodingServlet();
+       Assert.assertFalse(geocodingServlet.checkparameter());
+   }
     
     @Test
     public void ServletShouldStart() throws Exception{

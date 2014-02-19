@@ -410,7 +410,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 			//treet as node, it is often the case when associated with a relation and our script don't manage it so we link it here
 			if (houseMembers!=null){
 				String streetname = null;
-				boolean allhouseHaveTheSameStreetName = true;
+				boolean allHouseHaveTheSameStreetName = true;
 				SolrResponseDto street=null;
 				for (AssociatedStreetMember houseMember : houseMembers){
 					if (streetname==null && houseMember.getStreetName()!=null){
@@ -419,7 +419,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 						continue;
 					}else {
 						if (!houseMember.getStreetName().equals(streetname)){
-							allhouseHaveTheSameStreetName=false;
+							allHouseHaveTheSameStreetName=false;
 							street=null;
 							break;
 						}
@@ -428,7 +428,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 				
 			for (AssociatedStreetMember houseMember : houseMembers){
 				if (houseMember.getStreetName()!=null && !"".equals(houseMember.getStreetName().trim()) && houseMember.getLocation()!=null){
-					if (!allhouseHaveTheSameStreetName) {//we have to find for each one
+					if (!allHouseHaveTheSameStreetName) {//we have to find for each one
 						street = findNearestStreet(houseMember.getStreetName(),houseMember.getLocation());
 					}
 					if (street!=null){

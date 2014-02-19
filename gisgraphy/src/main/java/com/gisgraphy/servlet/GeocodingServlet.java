@@ -107,4 +107,11 @@ public class GeocodingServlet extends AbstractAddressServlet {
     	geocodingService.geocodeAndSerialize(query, resp.getOutputStream());
     }
 
+
+
+	@Override
+	public boolean checkparameter() {
+		return false;
+	}
+
 }

@@ -342,7 +342,7 @@ public class AddressQueryHttpBuilderTest {
 	request.setParameter(AbstractAddressServlet.APIKEY_PARAMETER, "apiKEY");
 	query =builder.buildFromRequest(request);
     assertEquals("api key Should Be set",
-	     "api key",query.getApikey());
+	     "apiKEY",query.getApikey());
 	
     }
 

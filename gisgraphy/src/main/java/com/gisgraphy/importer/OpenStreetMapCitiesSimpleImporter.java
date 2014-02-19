@@ -56,7 +56,6 @@ import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
-import com.sun.tools.javac.code.Source;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
@@ -167,7 +166,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	    }
 	}
 	City city=null;
-	SolrResponseDto  nearestCity = getNearestCity(location, name,countrycode);
+	SolrResponseDto  nearestCity = getNearestCity(location, name, countrycode);
 	if (nearestCity != null ){
 		city = cityDao.getByFeatureId(nearestCity.getFeature_id());
 			if (city==null){

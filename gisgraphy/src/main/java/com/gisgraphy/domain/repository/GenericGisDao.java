@@ -281,12 +281,11 @@ public class GenericGisDao<T extends GisFeature> extends
 				zipCodesFromMap.add((String)zipCode[0]);
 			    }
 			}
-			
 			}
 			List<GisFeatureDistance> results = ResultTransformerUtil
 			.transformToGisFeatureDistance(
 					aliasList,
-				queryResults,idToZipCodesMap,persistentClass);
+				queryResults,idToZipCodesMap,requiredClass);
 			return results;
 		    }
 		});
