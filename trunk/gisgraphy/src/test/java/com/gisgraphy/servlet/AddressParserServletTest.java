@@ -46,6 +46,12 @@ public class AddressParserServletTest {
     
     private static ServletTester servletTester;
     
+    @Test
+    public void checkParameter() throws IOException{
+    	AddressParserServlet addressParserServlet = new AddressParserServlet();
+        Assert.assertTrue(addressParserServlet.checkparameter());
+    }
+    
    @Test
    public void processRequestShouldCallAddressParserService() throws IOException{
        AddressParserServlet addressParserServlet = new AddressParserServlet();

@@ -89,7 +89,7 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 		});
     }
 
-	public City getByShape(final Point location,final boolean filterMunicipality) {
+	public City getByShape(final Point location,final String countryCode,final boolean filterMunicipality) {
 		Assert.notNull(location);
 		return (City) this.getHibernateTemplate().execute(new HibernateCallback() {
 
@@ -100,6 +100,9 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 				+ " as c where st_contains(c.shape,"+pointAsString+")=true ";
 			if (filterMunicipality){
 				queryString+=" and c.municipality=true";
+			}
+			if (countryCode!=null ){
+				queryString+=" and c.countryCode='"+countryCode+"'";
 			}
 			queryString = queryString+ " order by area(c.shape)";
 			//we need to sort by distance due to error in osm data 

@@ -47,9 +47,9 @@ public interface ICityDao extends IGisDao<City> {
     public List<City> listByZipCode(String zipcode, String countrycode);
     
     /**
-     * @return the city that the given point belongs by searching by shape
+     * @return the city that the given point belongs by searching by shape. the countrycode is optionnal
      * we can filter the result if the city is a municipality or not
      */
-    public City getByShape(Point location,boolean filterMunicipality);
+    public City getByShape(Point location,final String countryCode,boolean filterMunicipality);
 
 }

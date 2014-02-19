@@ -120,8 +120,6 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 		//nothing to do just check
 	}
 
-	
-
 	if (!isEmptyField(fields, 11, false)) {
 	    accuracy = new Integer(fields[11]);
 	}

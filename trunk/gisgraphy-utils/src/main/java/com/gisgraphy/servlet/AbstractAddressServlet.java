@@ -73,11 +73,11 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 	try {
 	    format = setResponseContentType(req, resp);
 	    // check empty query
+	    if (checkparameter()==true){
 	    if (HTMLHelper.isParametersEmpty(req, ADDRESS_PARAMETER,COUNTRY_PARAMETER)) {
-		sendCustomError(ResourceBundle.getBundle(
-			com.gisgraphy.addressparser.Constants.BUNDLE_KEY).getString(
-			"error.addressparser.requiredparameters"), format, resp,req);
+		sendCustomError("address and country parameters are required", format, resp,req);
 		return;
+	    }
 	    }
 	    
 		AddressQuery query = getAddressQueryHttpBuilder().buildFromRequest(req);
@@ -109,7 +109,9 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 	}
     }
 
-    public abstract void processRequest(AddressQuery query,HttpServletResponse resp) throws IOException ;
+    public abstract boolean checkparameter();
+
+	public abstract void processRequest(AddressQuery query,HttpServletResponse resp) throws IOException ;
 
     @Override
     public IoutputFormatVisitor getErrorVisitor(String errorMessage) {

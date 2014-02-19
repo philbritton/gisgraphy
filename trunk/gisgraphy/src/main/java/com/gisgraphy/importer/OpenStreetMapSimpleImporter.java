@@ -257,7 +257,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     protected void setIsInFields(OpenStreetMap street) {
     	if (street != null && street.getLocation() != null) {
     		//first searchByShape because it is the more reliable :
-    		City cityByShape = cityDao.getByShape(street.getLocation(),true);
+    		City cityByShape = cityDao.getByShape(street.getLocation(),street.getCountryCode(),true);
     		if (cityByShape != null){
     			street.setIsIn(cityByShape.getName());
     			street.setCityConfident(true);
