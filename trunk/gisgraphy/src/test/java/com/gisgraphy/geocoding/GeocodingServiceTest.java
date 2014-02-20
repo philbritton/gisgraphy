@@ -1315,7 +1315,7 @@ public class GeocodingServiceTest {
     }
 
   
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = GeocodingException.class)
     public void geocodeStructuredAdressShouldThrowIfCountryCodeIsNull() {
 	IGeocodingService geocodingService = new GeocodingService();
 	String countrycode = null;
@@ -1518,10 +1518,24 @@ public class GeocodingServiceTest {
     }
 
     @Test(expected = GeocodingException.class)
-    public void geocodeAddressShouldThrowIfCountryCodeIsNull() {
+    public void geocodeAddressShouldNotThrowIfCountryCodeIsNull() {
 	IGeocodingService geocodingService = new GeocodingService();
 	Address address = new Address();
 	geocodingService.geocode(address, null);
+    }
+    
+    @Test(expected = GeocodingException.class)
+    public void geocodeAddressShouldThrowIfCountryCodeHasOneLetter() {
+	IGeocodingService geocodingService = new GeocodingService();
+	Address address = new Address();
+	geocodingService.geocode(address, "a");
+    }
+    
+    @Test(expected = GeocodingException.class)
+    public void geocodeAddressShouldThrowIfCountryisEmpty() {
+	IGeocodingService geocodingService = new GeocodingService();
+	Address address = new Address();
+	geocodingService.geocode(address, " ");
     }
     
     @Test(expected = GeocodingException.class)
