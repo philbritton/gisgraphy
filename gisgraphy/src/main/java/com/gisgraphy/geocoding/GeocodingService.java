@@ -149,7 +149,7 @@ public class GeocodingService implements IGeocodingService {
 		}
 		logger.info(query.toString());
 		String countryCode = query.getCountry();
-		if (countryCode !=null  && countryCode.length() != 2) {
+		if (countryCode !=null  && countryCode.trim().length() != 2) {
 			throw new GeocodingException("countrycode should have two letters : " + countryCode);
 		}
 		if (query instanceof StructuredAddressQuery){
@@ -279,7 +279,7 @@ public class GeocodingService implements IGeocodingService {
 		if (address == null) {
 			throw new GeocodingException("Can not geocode a null address");
 		}
-		if (countryCode == null || "".equals(countryCode.trim()) || countryCode.length() != 2) {
+		if (countryCode!=null &&  countryCode.trim().length() != 2) {
 			throw new GeocodingException("wrong countrycode : " + countryCode);
 		}
 		if (isIntersection(address)) {
