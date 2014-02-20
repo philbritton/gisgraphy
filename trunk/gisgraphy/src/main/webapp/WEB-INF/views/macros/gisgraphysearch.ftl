@@ -350,7 +350,7 @@ doAjaxSearch = function(formName){
 						<@s.text name="global.longitude"/> : ${result.lng}<br/>
 						<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 						<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
-						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreemapMap"/></a>
+						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a>
 
 						<#if result.placeType.equals('City')>
 					<@s.url id="streetsearchurl" action="streetSearch" includeParams="none" namespace="/public" >
