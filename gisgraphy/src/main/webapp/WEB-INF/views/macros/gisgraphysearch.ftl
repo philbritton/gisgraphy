@@ -400,7 +400,7 @@ doAjaxSearch = function(formName){
 			<div style="padding-left:120px;"><@s.checkbox name="postal" fieldValue="true" label="search.geocoding.postal.mode" theme="simple"/><@s.text name="search.geocoding.postal.mode"/></div>
 		</#if>
 		<br/>
-		<b><@s.text name="search.select.country"/> :</b> </span><@s.select label="In " listKey="iso3166Alpha2Code" listValue="name" name="country" list="countries" headerValue="%{getText('global.select')}" headerKey="" multiple="false" required="false" labelposition="left" theme="simple" cssStyle="width:180px;"/> 
+		<b><@s.text name="search.select.country"/>(<@s.text name="search.optional"/>) :</b> </span><@s.select label="In " listKey="iso3166Alpha2Code" listValue="name" name="country" list="countries" headerValue="%{getText('global.select')}" headerKey="" multiple="false" required="false" labelposition="left" theme="simple" cssStyle="width:180px;"/> 
 		<#if url.contains('geocod')>
 			<@s.submit value="%{getText('search.geocode')} !" theme="simple" onclick=" return updatePopupResults()" cssStyle="margin-left:70px;" />
 			<#else>
@@ -489,10 +489,12 @@ doAjaxSearch = function(formName){
      {
  	    return false;
      }
+     <#if !url.contains('geocod')>
      if ($('addressform')['country'].value == ''){
     	 alert('<@s.text name="search.country.required"/>');
     	 return false;
      }
+     </#if>
 	<@s.url id="addresspopupurl" includeParams="none" method="searchpopup" namespace="/public" />
     var savedAction = $('addressform').action;
     $('addressform').action='${addresspopupurl}';

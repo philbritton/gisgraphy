@@ -16,12 +16,14 @@ public class StructuredAddressQuery extends AddressQuery {
 			throw new IllegalArgumentException(
 					"structured address can not be nul");
 		}
-		if (country == null || country.trim().equals("")) {
-			throw new IllegalArgumentException(
-					"country can not be nul or empty");
+		if (country != null && !country.trim().equals("")) {
+			setCountry(country);
 		}
 		this.structuredAddress = address;
-		setCountry(country);
+	}
+	
+	public StructuredAddressQuery(Address address) {
+		this(address,null);
 	}
 
 	@Override

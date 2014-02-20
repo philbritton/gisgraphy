@@ -69,7 +69,8 @@ public class AddressQueryHttpBuilder {
 		// country parameter
 		String countryParameter = req.getParameter(AbstractAddressServlet.COUNTRY_PARAMETER);
 		if (countryParameter == null || countryParameter.trim().length() == 0) {
-			throw new AddressParserException("country parameter is not specified or empty");
+			//throw new AddressParserException("country parameter is not specified or empty");
+			countryParameter=null;
 		}
 		// address Parameter
 		String adressParameter = req.getParameter(AbstractAddressServlet.ADDRESS_PARAMETER);

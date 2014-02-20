@@ -99,12 +99,76 @@ public class GeocodingServiceTest {
 	geocodingService.geocode(query);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void geocodeRawAdressShouldThrowIfCountryCodeIsNull() {
+    @Test(expected = GeocodingException.class)
+    public void geocodeRawAdressShouldThrowIfCountryCodehasOnlyOneLetter() {
 	IGeocodingService geocodingService = new GeocodingService();
 	String rawAddress = "t";
-	AddressQuery query = new AddressQuery(rawAddress, null);
+	AddressQuery query = new AddressQuery(rawAddress, "d");
 	geocodingService.geocode(query);
+    }
+    
+    @Test(expected = GeocodingException.class)
+    public void geocodeRawAdressShouldThrowIfCountryCodehasThreeLetters() {
+	IGeocodingService geocodingService = new GeocodingService();
+	String rawAddress = "t";
+	AddressQuery query = new AddressQuery(rawAddress, "ddd");
+	geocodingService.geocode(query);
+    }
+    
+    @Test
+    public void geocodeRawAdressShouldNotThrowIfCountryCodeisEmpty() {
+    	GeocodingService geocodingService = new GeocodingService(){
+    	    @Override
+    	    protected List<SolrResponseDto> findStreetInText(String text, String countryCode, Point point) {
+    	        return new ArrayList<SolrResponseDto>();
+    	    }
+    	   @Override
+    	protected List<SolrResponseDto> findExactMatches(String text,
+    			String countryCode) {
+    		   return new ArrayList<SolrResponseDto>();
+    	}
+    	};
+    	ImporterConfig config  = new ImporterConfig();
+    	config.setOpenStreetMapFillIsIn(true);
+    	geocodingService.setImporterConfig(config);
+    	geocodingService.setGisgraphyConfig(gisgraphyConfig);
+    	geocodingService.setStatsUsageService(statsUsageService);
+    	IAddressParserService mockAddressParserService = EasyMock.createMock(IAddressParserService.class);
+    	EasyMock.expect(mockAddressParserService.execute((AddressQuery) EasyMock.anyObject())).andStubThrow(new AddressParserException());
+    	geocodingService.setStatsUsageService(statsUsageService);
+    	EasyMock.replay(mockAddressParserService);
+    	geocodingService.setAddressParser(mockAddressParserService);
+    	String rawAddress = "t";
+	AddressQuery query = new AddressQuery(rawAddress, " ");
+	geocodingService.geocode(query);
+    }
+    
+    @Test
+    public void geocodeRawAdressShouldNotThrowIfCountryCodeisNull() {
+    	GeocodingService geocodingService = new GeocodingService(){
+    	    @Override
+    	    protected List<SolrResponseDto> findStreetInText(String text, String countryCode, Point point) {
+    	        return new ArrayList<SolrResponseDto>();
+    	    }
+    	   @Override
+    	protected List<SolrResponseDto> findExactMatches(String text,
+    			String countryCode) {
+    		   return new ArrayList<SolrResponseDto>();
+    	}
+    	};
+    	ImporterConfig config  = new ImporterConfig();
+    	config.setOpenStreetMapFillIsIn(true);
+    	geocodingService.setImporterConfig(config);
+    	geocodingService.setGisgraphyConfig(gisgraphyConfig);
+    	geocodingService.setStatsUsageService(statsUsageService);
+    	IAddressParserService mockAddressParserService = EasyMock.createMock(IAddressParserService.class);
+    	EasyMock.expect(mockAddressParserService.execute((AddressQuery) EasyMock.anyObject())).andStubThrow(new AddressParserException());
+    	geocodingService.setStatsUsageService(statsUsageService);
+    	EasyMock.replay(mockAddressParserService);
+    	geocodingService.setAddressParser(mockAddressParserService);
+    	String rawAddress = "t";
+    	AddressQuery query = new AddressQuery(rawAddress, null);
+    	geocodingService.geocode(query);
     }
 
     @Test(expected = GeocodingException.class)

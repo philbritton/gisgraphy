@@ -54,14 +54,25 @@ public class AddressQueryTest {
     }
     
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void constructorWithNullCountrycode(){
-    	new AddressQuery("address",null);
+    	AddressQuery query  = new AddressQuery("address",null);
+    	Assert.assertEquals("address", query.getAddress());
+    	Assert.assertEquals(null, query.getCountry());
     }
     
-    @Test(expected=IllegalArgumentException.class)
+    @Test
+    public void constructorWithOnlyAddress(){
+    	AddressQuery query  = new AddressQuery("address");
+    	Assert.assertEquals("address", query.getAddress());
+    	Assert.assertEquals(null, query.getCountry());
+    }
+    
+    @Test
     public void constructorWithEmptyCountrycode(){
-    	new AddressQuery("address"," ");
+    	AddressQuery query  = new AddressQuery("address"," ");
+    	Assert.assertEquals("address", query.getAddress());
+    	Assert.assertEquals(null, query.getCountry());
     }
     
     @Test

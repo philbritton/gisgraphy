@@ -116,11 +116,14 @@ public class AddressQuery {
 	if (address == null || address.trim().equals("")) {
 	    throw new IllegalArgumentException("address can not be nul or empty");
 	}
-	if (country == null || country.trim().equals("")) {
-	    throw new IllegalArgumentException("country can not be nul or empty");
+	if (country != null && !country.trim().equals("")) {
+		this.country = country;
 	}
 	this.address = address;
-	this.country = country;
+    }
+    
+    public AddressQuery(String address) {
+    	this(address,null);
     }
 
     public String getApikey() {

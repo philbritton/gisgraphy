@@ -114,7 +114,7 @@
 			<span class="searchfieldlabel"><@s.text name="search.pagination.from"/> : </span><@s.textfield size="5" maxlength="3" name="from" required="false"  theme="simple"/> 
 		</span>
 		<span class="searchfield">
-			<span class="searchfieldlabel"><@s.text name="search.pagination.to"/> : </span><@s.textfield size="50" maxlength="3" name="to" required="false"  theme="simple"/> 
+			<span class="searchfieldlabel"><@s.text name="search.pagination.to"/> : </span><@s.textfield size="5" maxlength="3" name="to" required="false"  theme="simple"/> 
 		</span>
 		
 	</fieldset>

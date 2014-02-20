@@ -222,6 +222,9 @@ public class GeolocHelper {
      */
     public static Float parseInternationalDouble(String number)
 	    throws ParseException {
+    	if (number!=null){
+    		number=number.trim();
+    	}
 	NumberFormat nffrench = NumberFormat.getInstance(Locale.FRENCH);
 	NumberFormat nfus = NumberFormat.getInstance(Locale.US);
 
