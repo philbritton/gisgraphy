@@ -94,9 +94,7 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 	} catch (AddressParserException e) {
 	    logger.error("error while execute an address query from http request : " + e);
 	    String errorMessage = isDebugMode() ? " : " + e.getMessage() : "";
-	    sendCustomError(ResourceBundle
-		    .getBundle(com.gisgraphy.addressparser.Constants.BUNDLE_KEY).getString(
-			    "error.error")
+	    sendCustomError("Internal error : "
 		    + errorMessage, format, resp,req);
 	}
 	catch (RuntimeException e) {

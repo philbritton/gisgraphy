@@ -674,7 +674,15 @@
 			</action>
 			
 			<action dev="David Masclet" type="add">
-				beter management of alphabet (e.g:Duchnovičová)
+				better management of alphabet (e.g:Duchnovičová)
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				country code is no longuer mandatory for geocoding
+			</action>
+			
+			<action dev="David Masclet" type="fix">
+				latitude or longitude could now starts with space
 			</action>
 			
 			

@@ -109,8 +109,13 @@ public class GeocodingServlet extends AbstractAddressServlet {
 
 
 
+	/* (non-Javadoc)
+	 * @see com.gisgraphy.servlet.AbstractAddressServlet#checkparameter()
+	 */
 	@Override
 	public boolean checkparameter() {
+		//we do not check parameter because address parameter is not required since we can provide structured address
+		//and country parameter is not required since v 4.0
 		return false;
 	}
 

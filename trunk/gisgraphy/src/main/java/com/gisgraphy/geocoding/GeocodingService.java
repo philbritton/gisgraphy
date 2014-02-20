@@ -149,8 +149,8 @@ public class GeocodingService implements IGeocodingService {
 		}
 		logger.info(query.toString());
 		String countryCode = query.getCountry();
-		if (isEmptyString(countryCode) || countryCode.length() != 2) {
-			throw new GeocodingException("countrycode is mandatory and should have two letters : " + countryCode);
+		if (countryCode !=null  && countryCode.length() != 2) {
+			throw new GeocodingException("countrycode should have two letters : " + countryCode);
 		}
 		if (query instanceof StructuredAddressQuery){
 			Address address = ((StructuredAddressQuery)query).getStructuredAddress();

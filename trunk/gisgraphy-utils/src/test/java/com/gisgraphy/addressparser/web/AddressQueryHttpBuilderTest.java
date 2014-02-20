@@ -26,8 +26,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -69,6 +67,7 @@ public class AddressQueryHttpBuilderTest {
     public void buildFromRequest(){
     AddressQueryHttpBuilder builder = AddressQueryHttpBuilder.getInstance();
 	MockHttpServletRequest request = new MockHttpServletRequest();
+	AddressQuery query;
 	//without parameters
 	try {
 		builder.buildFromRequest(request);
@@ -80,33 +79,22 @@ public class AddressQueryHttpBuilderTest {
 	//without country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("without coutry parameter the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	query = builder.buildFromRequest(request);
+    Assert.assertNull("country parameter is not required",query.getCountry());
+
 	//with empty country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, " ");
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("with empty country equals to space, the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	query = builder.buildFromRequest(request);
+	Assert.assertNull("with empty country equals to space, the country should be considered as null",query.getCountry());
 	
 	//with empty country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "");
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("with empty string the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	builder.buildFromRequest(request);
+	Assert.assertNull("with empty country, the country should be considered as null",query.getCountry());
 	
 	//address
 	//without address nor structured
@@ -156,7 +144,7 @@ public class AddressQueryHttpBuilderTest {
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
-	AddressQuery query = builder.buildFromRequest(request);
+	query = builder.buildFromRequest(request);
 	Assert.assertEquals("address", query.getAddress());
 	Assert.assertEquals("us", query.getCountry());
 	
@@ -351,6 +339,7 @@ public class AddressQueryHttpBuilderTest {
     public void buildStructuredFromRequest(){
     AddressQueryHttpBuilder builder = AddressQueryHttpBuilder.getInstance();
 	MockHttpServletRequest request = new MockHttpServletRequest();
+	AddressQuery query;
 	//without parameters
 	try {
 		builder.buildFromRequest(request);
@@ -362,33 +351,25 @@ public class AddressQueryHttpBuilderTest {
 	//without country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("without coutry parameter the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	query = builder.buildFromRequest(request);
+	Assert.assertNull("country parameter is not required",query.getCountry());
+	Assert.assertEquals("address", query.getAddress());
+
 	//with empty country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, " ");
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("with empty country equals to space, the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	query = builder.buildFromRequest(request);
+	Assert.assertNull("with empty country equals to space, the builder should set countrycode to null",query.getCountry());
+	Assert.assertEquals("address", query.getAddress());
 	
 	//with empty country
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "");
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
-	try {
-		builder.buildFromRequest(request);
-		Assert.fail("with empty string the builder should throws");
-	} catch (AddressParserException e) {
-		//ignore
-	}
+	query = builder.buildFromRequest(request);
+	Assert.assertNull("with empty country , the builder should set countrycode to null",query.getCountry());
+	Assert.assertEquals("address", query.getAddress());
 	
 	//address
 	//without address
@@ -447,7 +428,7 @@ public class AddressQueryHttpBuilderTest {
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
-	AddressQuery query = builder.buildFromRequest(request);
+	query = builder.buildFromRequest(request);
 	assertEquals("When no " + AbstractAddressServlet.OUTPUT_FORMAT_PARAMETER
 		+ " is specified, the  parameter should be set to  "
 		+ OutputFormat.getDefault(), OutputFormat.getDefault(), query

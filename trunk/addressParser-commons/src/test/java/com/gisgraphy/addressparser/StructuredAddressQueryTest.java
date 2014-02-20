@@ -18,16 +18,36 @@ public class StructuredAddressQueryTest {
 		new StructuredAddressQuery(null, "FR");
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void constructorWithNullCountry() {
 		Address address = new Address();
-		new StructuredAddressQuery(address, null);
+		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address, null);
+		Assert.assertNotNull(addressQuery.getStructuredAddress());
+		Assert.assertNull(addressQuery.getCountry());
 	}
 	
-	@Test(expected=RuntimeException.class)
+	@Test
 	public void constructorWithEmptyCountry() {
 		Address address = new Address();
-		new StructuredAddressQuery(address, "");
+		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address, "");
+		Assert.assertNotNull(addressQuery.getStructuredAddress());
+		Assert.assertNull("empty countrycode should be considered as null",addressQuery.getCountry());
+	}
+	
+	@Test
+	public void constructorWithOnlyAddress() {
+		Address address = new Address();
+		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address);
+		Assert.assertNotNull(addressQuery.getStructuredAddress());
+		Assert.assertNull(addressQuery.getCountry());
+	}
+	
+	@Test
+	public void constructorWithSpaceCountry() {
+		Address address = new Address();
+		StructuredAddressQuery addressQuery = new StructuredAddressQuery(address, " ");
+		Assert.assertNotNull(addressQuery.getStructuredAddress());
+		Assert.assertNull("empty countrycode should be considered as null",addressQuery.getCountry());
 	}
 	
 	@Test(expected=RuntimeException.class)

@@ -140,6 +140,90 @@ public class AbstractAddressServletTest {
 	MockHttpServletRequest request = new MockHttpServletRequest();
 	servlet.doGet(request, response);
 	Assert.assertTrue(customErrorSended);
+    }
+    
+    
+    @Test
+    public void doGetWithoutParameter_without_checkParameter() throws AddressParserException, IOException {
+    AbstractAddressServlet servlet = new AbstractAddressServlet() {
+    			public com.gisgraphy.addressparser.IAddressParserService getAddressParserService() {
+    			    return mockAddressParserService;
+    			};
+    			@Override
+    			public boolean checkparameter() {
+    					return false;
+    			}
+
+    			@Override
+    			public void sendCustomError(String arg0, OutputFormat arg1, HttpServletResponse arg2, HttpServletRequest arg3) {
+    			    customErrorSended = false;
+    			}
+
+    			@Override
+    			protected AddressQueryHttpBuilder getAddressQueryHttpBuilder() {
+    			    return mockAddressQueryHttpBuilder;
+    			}
+
+    			@Override
+    			public void processRequest(AddressQuery query, HttpServletResponse resp) throws IOException {
+    			    processRequest=true;
+    			}
+
+    			@Override
+    			public GisgraphyServiceType getGisgraphyServiceType() {
+    			    return GisgraphyServiceType.ADDRESS_PARSER;
+    			};
+    			
+    			
+    		    };
+    	
+	MockHttpServletResponse response = new MockHttpServletResponse();
+
+	MockHttpServletRequest request = new MockHttpServletRequest();
+	servlet.doGet(request, response);
+	Assert.assertFalse(customErrorSended);
+
+    }
+    
+    @Test
+    public void doGetWithoutParameter_with_checkParameter() throws AddressParserException, IOException {
+    AbstractAddressServlet servlet = new AbstractAddressServlet() {
+    			public com.gisgraphy.addressparser.IAddressParserService getAddressParserService() {
+    			    return mockAddressParserService;
+    			};
+    			@Override
+    			public boolean checkparameter() {
+    					return true;
+    			}
+
+    			@Override
+    			public void sendCustomError(String arg0, OutputFormat arg1, HttpServletResponse arg2, HttpServletRequest arg3) {
+    			    customErrorSended = false;
+    			}
+
+    			@Override
+    			protected AddressQueryHttpBuilder getAddressQueryHttpBuilder() {
+    			    return mockAddressQueryHttpBuilder;
+    			}
+
+    			@Override
+    			public void processRequest(AddressQuery query, HttpServletResponse resp) throws IOException {
+    			    processRequest=true;
+    			}
+
+    			@Override
+    			public GisgraphyServiceType getGisgraphyServiceType() {
+    			    return GisgraphyServiceType.ADDRESS_PARSER;
+    			};
+    			
+    			
+    		    };
+    	
+	MockHttpServletResponse response = new MockHttpServletResponse();
+
+	MockHttpServletRequest request = new MockHttpServletRequest();
+	servlet.doGet(request, response);
+	Assert.assertFalse(customErrorSended);
 
     }
 

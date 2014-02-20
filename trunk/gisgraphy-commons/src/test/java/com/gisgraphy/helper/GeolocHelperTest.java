@@ -108,6 +108,9 @@ public class GeolocHelperTest {
 	    Assert.assertEquals(
 		    "parseInternationalDouble should accept numeric value that ends with comma ",
 		    3.0F, GeolocHelper.parseInternationalDouble("3,"),0.1);
+	    Assert.assertEquals(
+			    "parseInternationalDouble should accept numeric value that are not trimmed ",
+			    3.0F, GeolocHelper.parseInternationalDouble(" 3,1"),0.1);
 	} catch (ParseException e) {
 	    Assert.fail();
 	}
