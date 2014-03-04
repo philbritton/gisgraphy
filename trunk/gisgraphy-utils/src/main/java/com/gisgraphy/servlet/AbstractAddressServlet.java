@@ -22,7 +22,7 @@
 package com.gisgraphy.servlet;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,18 +92,15 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 	    
 	    processRequest(query,resp);
 	} catch (AddressParserException e) {
-	    logger.error("error while execute an address query from http request : " + e);
+	    logger.error("error while execute an address query from http request : "+dumpRequestParameters(req)+" : " + e);
 	    String errorMessage = isDebugMode() ? " : " + e.getMessage() : "";
 	    sendCustomError("Internal error : "
 		    + errorMessage, format, resp,req);
 	}
 	catch (RuntimeException e) {
-	    logger.error("error while execute a Parser query from http request : " + e);
+	    logger.error("error while execute a Parser query from http request "+dumpRequestParameters(req)+" : " + e);
 	    String errorMessage = isDebugMode() ? " : " + e.getMessage() : "";
-	    sendCustomError(ResourceBundle
-		    .getBundle(com.gisgraphy.addressparser.Constants.BUNDLE_KEY).getString(
-			    "error.error")
-		    + errorMessage, format, resp,req);
+	    sendCustomError(errorMessage, format, resp,req);
 	}
     }
 
@@ -118,5 +115,21 @@ public abstract class AbstractAddressServlet extends GisgraphyServlet {
 
     @Override
     public abstract GisgraphyServiceType getGisgraphyServiceType();
+    
+    public String dumpRequestParameters(HttpServletRequest request){
+    	StringBuffer sb =new StringBuffer("REQUEST : [");
+		if  (request!=null){
+			Enumeration parameterNames = request.getParameterNames();
+			if (parameterNames!=null){
+    		while( parameterNames.hasMoreElements()){
+    			String parameterName = (String)parameterNames.nextElement();
+				if (request.getParameter(parameterName)!=null){
+    				sb.append(parameterName).append(" : '").append(request.getParameter(parameterName)).append("' ; ");
+    			}
+    		}
+    	}}
+		sb.append("]");
+		return sb.toString();
+    }
 
 }
