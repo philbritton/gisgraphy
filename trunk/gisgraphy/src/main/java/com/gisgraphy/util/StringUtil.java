@@ -23,6 +23,7 @@
 package com.gisgraphy.util;
 
 import java.security.MessageDigest;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
@@ -34,6 +35,9 @@ import org.apache.commons.logging.LogFactory;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 public final class StringUtil {
+	
+	private static Pattern  DIGIT_PATTERN = Pattern.compile("[0-9]+");
+	
     private static final Log log = LogFactory.getLog(StringUtil.class);
 
     /**
@@ -103,8 +107,8 @@ public final class StringUtil {
      * @return the encoded string
      */
     public static String encodeString(String str) {
-	Base64 encoder = new Base64();
-	return String.valueOf(encoder.encode(str.getBytes())).trim();
+    	Base64 encoder = new Base64();
+    	return String.valueOf(encoder.encode(str.getBytes())).trim();
     }
 
     /**
@@ -119,4 +123,12 @@ public final class StringUtil {
 	return String.valueOf(dec.decode(str));
 	   
     }*/
+    
+    public static boolean containsDigit(String text){
+    	if (text!=null && DIGIT_PATTERN.matcher(text).find()){
+    		return true;
+    	} 
+    	return false;
+    	
+    }
 }

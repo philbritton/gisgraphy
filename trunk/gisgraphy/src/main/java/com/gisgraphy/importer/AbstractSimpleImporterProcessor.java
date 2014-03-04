@@ -660,7 +660,7 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
      * @see ImporterConfig#setMaxInsertsBeforeFlush(int)
      */
     protected int getMaxInsertsBeforeFlush() {
-	return importerConfig.getMaxInsertsBeforeFlush();
+    	return importerConfig.getMaxInsertsBeforeFlush();
     }
 
     public void resetStatus() {

@@ -137,7 +137,7 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 				if (exception != null) {
 					throw exception;
 				}
-				logger.info("wait for " + this.getClass().getSimpleName() + " is finished");
+				logger.info("wait for " + this.getClass().getSimpleName() + " to be finished");
 				Thread.sleep(5000);
 			}
 		} catch (InterruptedException e) {

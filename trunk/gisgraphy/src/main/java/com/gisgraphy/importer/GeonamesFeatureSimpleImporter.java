@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
@@ -54,6 +55,8 @@ import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.helper.FeatureClassCodeHelper;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.util.StringUtil;
+import com.sun.mail.handlers.text_html;
 
 /**
  * Import the Features from a Geonames dump file.
@@ -83,6 +86,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
     
     @Autowired
     protected IMunicipalityDetector municipalityDetector;
+    
 
     /**
      * Default constructor
@@ -160,8 +164,10 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	} catch (RuntimeException e) {
 	}
 	GisFeature featureObject;
+	String name = fields[1];
 	if (featureCode_ != null ) {
 	    featureObject = (GisFeature) featureCode_.getObject();
+	    featureObject = correctPlaceType(featureObject, name);
 	    if (featureObject!=null && !isPlaceTypeAccepted(featureObject.getClass().getSimpleName())){
 	    	return;
 	    }
@@ -177,7 +183,7 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 
 	// set names
 	if (!isEmptyField(fields, 1, true)) {
-	    gisFeature.setName(fields[1].trim());
+	    gisFeature.setName(name.trim());
 	}
 
 	gisFeature.setAsciiName(fields[2].trim());
@@ -350,6 +356,13 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	// }
 
     }
+
+	protected GisFeature correctPlaceType(GisFeature featureObject, String name) {
+		if (StringUtil.containsDigit(name) && featureObject!=null && featureObject!=null && featureObject.getClass()==City.class){
+	    	featureObject= new CitySubdivision();
+	    }
+		return featureObject;
+	}
     
     protected boolean isAdmMode() {
         return false;
@@ -609,10 +622,10 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
      */
     @Override
     protected void setCommitFlushMode() {
-	this.cityDao.setFlushMode(FlushMode.COMMIT);
-	this.gisFeatureDao.setFlushMode(FlushMode.COMMIT);
-	this.alternateNameDao.setFlushMode(FlushMode.COMMIT);
-	this.admDao.setFlushMode(FlushMode.COMMIT);
+    	this.cityDao.setFlushMode(FlushMode.COMMIT);
+    	this.gisFeatureDao.setFlushMode(FlushMode.COMMIT);
+    	this.alternateNameDao.setFlushMode(FlushMode.COMMIT);
+    	this.admDao.setFlushMode(FlushMode.COMMIT);
     }
 
     /*
@@ -622,10 +635,10 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
      */
     @Override
     protected void flushAndClear() {
-	this.cityDao.flushAndClear();
-	this.gisFeatureDao.flushAndClear();
-	this.alternateNameDao.flushAndClear();
-	this.admDao.flushAndClear();
+    	this.cityDao.flushAndClear();
+    	this.gisFeatureDao.flushAndClear();
+    	this.alternateNameDao.flushAndClear();
+    	this.admDao.flushAndClear();
     }
 
     /*

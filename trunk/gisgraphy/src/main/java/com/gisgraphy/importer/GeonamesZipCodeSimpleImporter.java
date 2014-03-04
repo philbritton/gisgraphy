@@ -449,9 +449,9 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
      */
     @Override
     protected void setup() {
-	super.setup();
-	FullTextSearchEngine.disableLogging=true;
-	IdGenerator.sync();
+    	super.setup();
+    	FullTextSearchEngine.disableLogging=true;
+    	IdGenerator.sync();
     }
 
     /*
