@@ -113,7 +113,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
      */
     @Override
     protected File[] getFiles() {
-	return ImporterHelper.listCountryFilesToImport(importerConfig.getOpenStreetMapDir());
+    	return ImporterHelper.listCountryFilesToImport(importerConfig.getOpenStreetMapDir());
     }
 
     /* (non-Javadoc)
@@ -121,7 +121,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
      */
     @Override
     protected int getNumberOfColumns() {
-	return 10;
+    	return 10;
     }
 
     /* (non-Javadoc)
@@ -448,10 +448,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     }
     
     
-    @Required
-    public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
-        this.openStreetMapDao = openStreetMapDao;
-    }
+   
     
     @Override
     //TODO test
@@ -494,6 +491,10 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     	return importerConfig.isGeonamesImporterEnabled() && importerConfig.isOpenStreetMapFillIsIn(); 
     }
     
+    @Required
+    public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
+        this.openStreetMapDao = openStreetMapDao;
+    }
    
 
     @Required

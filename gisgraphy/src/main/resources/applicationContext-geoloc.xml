@@ -114,7 +114,7 @@
 	</bean>
 
 	<bean id="geonamesAlternateNamesImporter"
-		class="com.gisgraphy.importer.GeonamesAlternateNames${classifier}Importer"
+		class="com.gisgraphy.importer.GeonamesAlternateNamesSimpleImporter"
 		parent="abstractSimpleImporterProcessor">
 		<property name="gisFeatureDao" ref="gisFeatureDao" />
 		<property name="alternateNameDao" ref="alternateNameDao" />
@@ -163,7 +163,7 @@
 		class="com.gisgraphy.importer.OpenStreetMapHouseNumberFileRetriever" >
 	</bean>
 	
-	<bean id="openStreetMapHouseNumberSimpleImporter" class="com.gisgraphy.importer.OpenStreetMapHouseNumberSimpleImporter"
+	<bean id="openStreetMapHouseNumberSimpleImporter" class="com.gisgraphy.importer.OpenStreetMapHouseNumber${classifier}Importer"
 	parent="abstract${classifier}ImporterProcessor">
 		<property name="openStreetMapDao" ref= "openStreetMapDao" />
 		<property name="solRSynchroniser" ref="solRSynchroniser"/>
@@ -220,7 +220,7 @@
 	</bean>
 	
 	<bean id="OpenStreetMapPoisSimpleImporter"
-		class="com.gisgraphy.importer.OpenStreetMapPoisSimpleImporter" parent="abstract${classifier}ImporterProcessor" >
+		class="com.gisgraphy.importer.OpenStreetMapPois${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
 	
 	
@@ -229,7 +229,7 @@
 	</bean>
 	
 	<bean id="OpenStreetMapCitiesSimpleImporter"
-		class="com.gisgraphy.importer.OpenStreetMapCitiesSimpleImporter" parent="abstract${classifier}ImporterProcessor" >
+		class="com.gisgraphy.importer.OpenStreetMapCities${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
 	
 

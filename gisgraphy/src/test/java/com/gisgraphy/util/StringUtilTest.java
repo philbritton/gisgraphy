@@ -24,15 +24,25 @@ package com.gisgraphy.util;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class StringUtilTest {
    
-     @Test
-    public void testEncodePassword() throws Exception {
-	String password = "tomcat";
-	String encrypted = "536c0b339345616c1b33caf454454d8b8a190d6c";
-	assertEquals(StringUtil.encodePassword(password, "SHA"), encrypted);
-    }
+	@Test
+	public void testEncodePassword() throws Exception {
+		String password = "tomcat";
+		String encrypted = "536c0b339345616c1b33caf454454d8b8a190d6c";
+		assertEquals(StringUtil.encodePassword(password, "SHA"), encrypted);
+	}
   
+    @Test
+    public void testContainsDigit(){
+    	Assert.assertTrue(StringUtil.containsDigit("1"));
+    	Assert.assertTrue(StringUtil.containsDigit("a1"));
+    	Assert.assertTrue(StringUtil.containsDigit("2a"));
+    	Assert.assertFalse(StringUtil.containsDigit("aa"));
+    	Assert.assertFalse(StringUtil.containsDigit(null));
+    	
+    }
 }

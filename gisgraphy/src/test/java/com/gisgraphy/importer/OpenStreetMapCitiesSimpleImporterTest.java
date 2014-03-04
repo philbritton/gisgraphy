@@ -12,8 +12,10 @@ import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
+import com.gisgraphy.domain.repository.CitySubdivisionDao;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
@@ -119,7 +121,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		
 		importer.setFullTextSearchEngine(mockfullFullTextSearchEngine);
 		
-		SolrResponseDto actual = importer.getNearestCity(location, text, countryCode);
+		SolrResponseDto actual = importer.getNearestCity(location, text, countryCode,ONLY_CITY_PLACETYPE);
 		Assert.assertEquals(solrResponseDto, actual);
 		EasyMock.verify(mockfullFullTextSearchEngine);
 	}
@@ -128,15 +130,15 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 	public void getNearestCityWithNullName(){
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
 		Point location = GeolocHelper.createPoint(3F, 4F);
-		Assert.assertNull(importer.getNearestCity(location, "", "FR"));
-		Assert.assertNull(importer.getNearestCity(location, " ", "FR"));
-		Assert.assertNull(importer.getNearestCity(location, null, "FR"));
+		Assert.assertNull(importer.getNearestCity(location, "", "FR",ONLY_CITY_PLACETYPE));
+		Assert.assertNull(importer.getNearestCity(location, " ", "FR",ONLY_CITY_PLACETYPE));
+		Assert.assertNull(importer.getNearestCity(location, null, "FR",ONLY_CITY_PLACETYPE));
 	}
 	
 	@Test
 	public void getNearestCityWithNullLocation(){
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
-		Assert.assertNull(importer.getNearestCity(null, "paris", "FR"));
+		Assert.assertNull(importer.getNearestCity(null, "paris", "FR",ONLY_CITY_PLACETYPE));
 		
 	}
 	
@@ -179,7 +181,8 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.expect(solrResponseDtoAdm.getName()).andReturn("admName");
 		EasyMock.replay(solrResponseDtoAdm);
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
-			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode) {
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
 				if (!name.equals("paris") || !countryCode.equals("FR")){
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
@@ -194,7 +197,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				return solrResponseDtoAdm;
 			}
 			@Override
-			void savecity(City city) {
+			void savecity(GisFeature city) {
 				super.savecity(city);
 				Assert.assertEquals("city", city.getAmenity());
 				Assert.assertEquals("paris", city.getName());
@@ -206,7 +209,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				Assert.assertEquals(1000000L, city.getPopulation().longValue());
 				Assert.assertEquals("admName", city.getAdm().getName());
 				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
-				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
+				Assert.assertFalse("city shouldn't be a municipality because it is NOT present in both db",((City)city).isMunicipality());
 			}
 		};
 		
@@ -242,6 +245,78 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 	}
 	
 	@Test
+	public void processWithknownCityAndAdm_citySubdivision(){
+		final SolrResponseDto solrResponseDtoCity = EasyMock.createMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDtoCity.getFeature_id()).andReturn(123L);
+
+		EasyMock.replay(solrResponseDtoCity);
+		
+		final SolrResponseDto solrResponseDtoAdm = EasyMock.createMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDtoAdm.getFeature_id()).andReturn(4356L);
+		EasyMock.replay(solrResponseDtoAdm);
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
+				if (!name.equals("paris 02") || !countryCode.equals("FR") || placetype != Constants.ONLY_CITYSUBDIVISION_PLACETYPE){
+					throw new RuntimeException("the function is not called with the correct parameter");
+				}
+				return solrResponseDtoCity;
+			};
+			
+			@Override
+			protected SolrResponseDto getAdm(String name, String countryCode) {
+				if (!name.equals("Europe") || !countryCode.equals("FR")){
+					throw new RuntimeException("the function is not called with the correct parameter");
+				}
+				return solrResponseDtoAdm;
+			}
+			
+			@Override
+			void savecity(GisFeature city) {
+				super.savecity(city);
+				Assert.assertEquals("city", city.getAmenity());
+				Assert.assertEquals("When a city is already present, we keep the name","initial name", city.getName());
+				Assert.assertEquals("When a city is already present, we keep the countrycode","DE", city.getCountryCode());
+				Assert.assertEquals("When a city is already present, we keep the lat",20D, city.getLatitude().doubleValue(),0.01);
+				Assert.assertEquals("When a city is already present, we keep the long",30D, city.getLongitude().doubleValue(),0.01);
+				
+				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
+				Assert.assertEquals(1000000L, city.getPopulation().longValue());
+				Assert.assertEquals("admName", city.getAdm().getName());
+				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
+			}
+		};
+		
+		CitySubdivisionDao citySubdivisionDao = EasyMock.createMock(CitySubdivisionDao.class);
+		CitySubdivision city=new CitySubdivision();
+		city.setName("initial name");
+		city.setCountryCode("DE");
+		city.setLocation(GeolocHelper.createPoint(30D, 20D));
+		city.setFeatureId(123L);
+		EasyMock.expect(citySubdivisionDao.getByFeatureId(123L)).andReturn(city);
+		EasyMock.expect(citySubdivisionDao.save(city)).andReturn(city);
+		EasyMock.replay(citySubdivisionDao);
+		importer.setCitySubdivisionDao(citySubdivisionDao);
+		
+		
+		IAdmDao admDao = EasyMock.createMock(IAdmDao.class);
+		Adm adm = new Adm(2);
+		adm.setName("admName");
+		EasyMock.expect(admDao.getByFeatureId(4356L)).andReturn(adm);
+		EasyMock.replay(admDao);
+		importer.setAdmDao(admDao);
+		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
+		
+		String line= "N\t1234\tparis 02\tFR\t5678\t1000000\t0101000020E61000004070F0E0825F30405F65C80CAF1A4840\t\tcity\tEurope\tParis2";
+		
+		importer.processData(line);
+		
+		EasyMock.verify(citySubdivisionDao);
+		EasyMock.verify(admDao);
+	}
+	
+	@Test
 	public void processWithknownCityAndAdm(){
 		final SolrResponseDto solrResponseDtoCity = EasyMock.createMock(SolrResponseDto.class);
 		EasyMock.expect(solrResponseDtoCity.getFeature_id()).andReturn(123L);
@@ -252,7 +327,8 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.expect(solrResponseDtoAdm.getFeature_id()).andReturn(4356L);
 		EasyMock.replay(solrResponseDtoAdm);
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
-			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode) {
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
 				if (!name.equals("paris") || !countryCode.equals("FR")){
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
@@ -268,7 +344,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			}
 			
 			@Override
-			void savecity(City city) {
+			void savecity(GisFeature city) {
 				super.savecity(city);
 				Assert.assertEquals("city", city.getAmenity());
 				Assert.assertEquals("When a city is already present, we keep the name","initial name", city.getName());
@@ -280,7 +356,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 				Assert.assertEquals(1000000L, city.getPopulation().longValue());
 				Assert.assertEquals("admName", city.getAdm().getName());
 				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
-				Assert.assertFalse("city should not be a municipality because it is a N and country FR",city.isMunicipality());
+				Assert.assertFalse("city should not be a municipality because it is a N and country FR",((City)city).isMunicipality());
 			}
 		};
 		
@@ -317,7 +393,8 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 	public void processWithunKnownCityAndUnknownAdm(){
 		
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
-			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode) {
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
 				if (!name.equals("paris") || !countryCode.equals("FR")){
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
@@ -333,9 +410,9 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			}
 			
 			@Override
-			void savecity(City city) {
+			void savecity(GisFeature city) {
 				super.savecity(city);
-				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",city.isMunicipality());
+				Assert.assertFalse("city shouldn't be a municipality because it is present NOT in both db",((City)city).isMunicipality());
 			}
 		};
 		
@@ -374,7 +451,8 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		EasyMock.replay(solrResponseDtoCity);
 		
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
-			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode) {
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
 				if (!name.equals("paris") || !countryCode.equals("FR")){
 					throw new RuntimeException("the function is not called with the correct parameter");
 				}
@@ -390,9 +468,9 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 			}
 			
 			@Override
-			void savecity(City city) {
+			void savecity(GisFeature city) {
 				super.savecity(city);
-				Assert.assertTrue("city should be a municipality because it is a relation and countrycode is FR",city.isMunicipality());
+				Assert.assertTrue("city should be a municipality because it is a relation and countrycode is FR",((City)city).isMunicipality());
 			}
 		};
 		

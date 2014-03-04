@@ -34,6 +34,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.Lake;
 import com.gisgraphy.domain.repository.ICityDao;
@@ -138,5 +139,17 @@ public class GeonamesFeatureImporterTest {
 
     }
     
+    @Test
+    public void correctPlaceType(){
+    	GeonamesFeatureSimpleImporter importer = new GeonamesFeatureSimpleImporter();
+    	Assert.assertTrue(importer.correctPlaceType(new City(), "a1").getClass() == CitySubdivision.class);
+    	Assert.assertTrue(importer.correctPlaceType(new City(), null).getClass() == City.class);
+    	Assert.assertTrue(importer.correctPlaceType(new City(), "a").getClass() == City.class);
+    	Assert.assertTrue(importer.correctPlaceType(new GisFeature(), "a").getClass() == GisFeature.class);
+    	
+    	Assert.assertNull(importer.correctPlaceType(null, "a"));
+    	Assert.assertTrue(importer.correctPlaceType(new GisFeature(), "a").getClass()== GisFeature.class);
+    	Assert.assertNull(importer.correctPlaceType(null, null));
+    }
 
 }
