@@ -23,6 +23,7 @@
 package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -1084,7 +1085,7 @@ public class GisFeature{
      *  * @param zipCodes the zip codes to add
      */
 	//TODO tests zip with null, and so on
-	public void addZipCodes(List<ZipCode> zipCodes) {
+	public void addZipCodes(Collection<ZipCode> zipCodes) {
 		if (zipCodes != null) {
 		    for (ZipCode zipCode : zipCodes) {
 			addZipCode(zipCode);

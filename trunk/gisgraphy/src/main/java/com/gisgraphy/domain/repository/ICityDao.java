@@ -51,5 +51,6 @@ public interface ICityDao extends IGisDao<City> {
      * we can filter the result if the city is a municipality or not
      */
     public City getByShape(Point location,final String countryCode,boolean filterMunicipality);
-
+    
+  
 }

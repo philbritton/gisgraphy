@@ -88,6 +88,9 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 		    }
 		});
     }
+    
+   
+    
 
 	public City getByShape(final Point location,final String countryCode,final boolean filterMunicipality) {
 		Assert.notNull(location);

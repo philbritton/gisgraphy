@@ -63,7 +63,9 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor {
 	
-    @Autowired
+    public static final int DISTANCE = 40000;
+
+	@Autowired
     protected IIdGenerator idGenerator;
     
     @Autowired
@@ -173,15 +175,16 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	if (!isEmptyField(fields, 4, false)) {
 	    street.setCountryCode(fields[4].trim());
 	}
-		if (!isEmptyField(fields, 5, false)) {
-			street.setIsIn(fields[5].trim());
-		} else if (shouldFillIsInField()) {
-			setIsInFields(street);
-		}
-	
-		long generatedId= idGenerator.getNextGId();
-		street.setGid(new Long(generatedId));
-	
+		
+	if (!isEmptyField(fields, 5, false)) {
+		street.setIsIn(fields[5].trim());
+	} else if (shouldFillIsInField()) {
+		setIsInFields(street);
+	}
+
+	long generatedId= idGenerator.getNextGId();
+	street.setGid(new Long(generatedId));
+
 	if (!isEmptyField(fields, 6, false)) {
 	    StreetType type;
 	    try {
@@ -279,34 +282,35 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     			}
     			return;
     		}
-    		GisFeatureDistance city = getNearestCity(street.getLocation(), true);
+    		City city = getNearestCity(street.getLocation(),street.getCountryCode(), true);
     		if (city != null) {
     			street.setPopulation(city.getPopulation());
     			street.setIsInAdm(getDeeperAdmName(city));
     			if (city.getZipCodes() != null) {
-    				for (String zip:city.getZipCodes()){
-    					street.addZip(zip);
+    				for (ZipCode zip:city.getZipCodes()){
+    					if (zip != null && zip.getCode()!=null){
+    						street.addZip(zip.getCode());
+    					}
     				}
     			}
     			if (city.getName() != null) {
     				street.setIsIn(pplxToPPL(city.getName()));
     			}
-    			City cityFromDb = cityDao.getByFeatureId(city.getFeatureId());
-    			if (cityFromDb!= null && cityFromDb.getAlternateNames()!=null){
-    				for (AlternateName name : cityFromDb.getAlternateNames() ){
+    			if (city.getAlternateNames()!=null){
+    				for (AlternateName name : city.getAlternateNames() ){
     					if (name!=null && name.getName()!=null){
     						street.addIsInCitiesAlternateName(name.getName());
     					}
     				}
     			}
     		}
-    		GisFeatureDistance city2 = getNearestCity(street.getLocation(), false);
+    		City city2 = getNearestCity(street.getLocation(),street.getCountryCode(), false);
     		if (city2 != null) {
     			if (city != null){
     					if (city.getFeatureId() == city2.getFeatureId()) {
     						return;
     					}
-    					if (city2.getDistance()>city.getDistance()){
+    					if (city2.getLocation()!=null && city.getLocation()!=null && GeolocHelper.distance(street.getLocation(),city2.getLocation())>GeolocHelper.distance(street.getLocation(),city.getLocation())){
     						return;
     					}
     			}
@@ -324,14 +328,15 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     					street.setIsInAdm(getDeeperAdmName(city2));
     				}
     				if (street.getIsInZip() == null && city2.getZipCodes() != null ) {
-    					for (String zip:city2.getZipCodes()){
-        					street.addZip(zip);
+    					for (ZipCode zip:city2.getZipCodes()){
+    						if (zip!=null && zip.getCode()!=null){
+    							street.addZip(zip.getCode());
+    						}
         				}
     				}
     				if (city==null && city2!=null){//add AN only if there are not added yet
-	    				City city2FromDb = cityDao.getByFeatureId(city2.getFeatureId());
-	        			if (city2FromDb!= null && city2FromDb.getAlternateNames()!=null){
-	        				for (AlternateName name : city2FromDb.getAlternateNames() ){
+	        			if (city2!= null && city2.getAlternateNames()!=null){
+	        				for (AlternateName name : city2.getAlternateNames() ){
 	        					if (name!=null && name.getName()!=null){
 	        						street.addIsInCitiesAlternateName(name.getName());
 	        					}
@@ -343,7 +348,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     }
 
 	//todo test
-	protected String getDeeperAdmName(GisFeatureDistance city) {
+	protected String getDeeperAdmName(City city) {
 		if (city != null) {
 			if (city.getAdm5Name() != null) {
 				return city.getAdm5Name();
@@ -364,18 +369,11 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	}
     
    
-	protected GisFeatureDistance getNearestCity(Point location, boolean filterMunicipality) {
+	protected City getNearestCity(Point location, String countryCode, boolean filterMunicipality) {
 		if (location ==null){
 			return null;
 		}
-		GeolocQuery query = (GeolocQuery) new GeolocQuery(location).withDistanceField(true).withPlaceType(City.class).withMunicipalityFilter(filterMunicipality);
-		GeolocResultsDto results = geolocSearchEngine.executeQuery(query);
-		if (results != null){
-			for (GisFeatureDistance gisFeatureDistance : results.getResult()) {
-				return gisFeatureDistance;
-			}
-		}
-		return null;
+		return cityDao.getNearest(location, countryCode, filterMunicipality, DISTANCE);
 	}
     
     /**
@@ -413,6 +411,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     @Override
     protected void setCommitFlushMode() {
     	this.openStreetMapDao.setFlushMode(FlushMode.COMMIT);
+    	this.cityDao.setFlushMode(FlushMode.COMMIT);
     }
 
     /* (non-Javadoc)

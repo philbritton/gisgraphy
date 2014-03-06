@@ -60,6 +60,7 @@ import com.gisgraphy.domain.geoloc.entity.event.GisFeatureStoredEvent;
 import com.gisgraphy.domain.geoloc.entity.event.PlaceTypeDeleteAllEvent;
 import com.gisgraphy.domain.valueobject.Constants;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
+import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.fulltext.FullTextFields;
 import com.gisgraphy.fulltext.IsolrClient;
 import com.gisgraphy.helper.GeolocHelper;
@@ -613,5 +614,32 @@ public class GenericGisDao<T extends GisFeature> extends
 			    }
 			});
     }
+    
+    public T getNearest(final Point location,final String countryCode,final boolean filterMunicipality,final int distance) {
+		Assert.notNull(location);
+		return (T) this.getHibernateTemplate().execute(new HibernateCallback() {
+
+		    public Object doInHibernate(Session session)
+			    throws PersistenceException {
+		    String pointAsString = "ST_GeometryFromText('POINT("+location.getX()+" "+location.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+			String queryString = "from " + persistentClass.getSimpleName()
+				+ " as c  where distance(c.location,"+pointAsString+") < "+distance;//left outer join c.zipCodes z
+			if (filterMunicipality){
+				queryString+=" and c.municipality=true";
+			}
+			if (countryCode!=null ){
+				queryString+=" and c.countryCode='"+countryCode+"'";
+			}
+			queryString = queryString+ " order by distance(c.location,"+pointAsString+")";
+
+			Query qry = session.createQuery(queryString).setMaxResults(1);
+
+			//qry.setParameter("point2", location);
+			City result = (City) qry.uniqueResult();
+
+			return result;
+		    }
+		});
+	}
 
 }
