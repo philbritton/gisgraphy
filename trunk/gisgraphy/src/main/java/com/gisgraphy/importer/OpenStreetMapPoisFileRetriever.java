@@ -37,7 +37,7 @@ import com.gisgraphy.helper.Untar;
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
-public class OpenStreetMapPoiFileRetriever extends AbstractFileRetriever {
+public class OpenStreetMapPoisFileRetriever extends AbstractFileRetriever {
 
     private Untar untar;
     

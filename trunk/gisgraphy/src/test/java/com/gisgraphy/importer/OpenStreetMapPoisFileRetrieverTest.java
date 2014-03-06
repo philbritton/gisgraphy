@@ -19,7 +19,7 @@ import com.gisgraphy.helper.FileHelper;
 import com.gisgraphy.service.IInternationalisationService;
 import com.gisgraphy.test.GisgraphyTestHelper;
 
-public class OpenStreetMapPoiFileRetrieverTest {
+public class OpenStreetMapPoisFileRetrieverTest {
 
 	 @Test
 	    public void processShouldExtractFilesEvenIfRetrieveFileIsFalse(){
@@ -27,7 +27,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 		 final String downloadFlag = "download";
 		 final String decompressFlag = "decompress";
 		
-		OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever(){
+		OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever(){
 		    @Override
 		    protected void downloadFiles() {
 			methodCalled.add(downloadFlag);
@@ -54,7 +54,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 		 final String downloadFlag = "download";
 		 final String decompressFlag = "decompress";
 		
-		 OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever(){
+		 OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever(){
 		    @Override
 		    protected void downloadFiles() {
 			methodCalled.add(downloadFlag);
@@ -82,7 +82,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 		 final String downloadFlag = "download";
 		 final String decompressFlag = "decompress";
 		
-		 OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever(){
+		 OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever(){
 		    @Override
 		    protected void downloadFiles() {
 			methodCalled.add(downloadFlag);
@@ -105,7 +105,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    
 	    @Test
 	    public void process() {
-	    	OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
+	    	OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever();
 		openStreetMapPoiFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setOpenstreetMapPoisDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
@@ -184,7 +184,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    
 	    @Test
 	    public void processWhenNotExistingFile() {
-	    OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
+	    OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever();
 	    openStreetMapPoiFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setOpenstreetMapPoisDownloadURL("http://download.gisgraphy.com/openstreetmap/version_3_0/");
@@ -228,7 +228,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    
 	    @Test
 	    public void StatusShouldBeEqualsToSkipedIfRetrieveFileIsFalse(){
-	    	OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever(){
+	    	OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever(){
 		    @Override
 		    public void decompressFiles() throws IOException {
 		       return;
@@ -246,7 +246,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    
 	    @Test
 	    public void StatusShouldBeEqualsToPROCESSEDIfNoError(){
-	    	OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
+	    	OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever();
 		openStreetMapPoiFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
 		EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true).times(2);
@@ -268,7 +268,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 	    public void shouldBeSkipShouldReturnCorrectValue(){
 		ImporterConfig importerConfig = new ImporterConfig();
 		
-		OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
+		OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever();
 		openStreetMapPoiFileRetriever.setImporterConfig(importerConfig);
 		
 		importerConfig.setOpenstreetmapImporterEnabled(false);
@@ -288,7 +288,7 @@ public class OpenStreetMapPoiFileRetrieverTest {
 		List<String> filesToDownload =new ArrayList<String>();
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setOpenStreetMapPoisFilesToDownload(fileTobeDownload);
-		OpenStreetMapPoiFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoiFileRetriever();
+		OpenStreetMapPoisFileRetriever openStreetMapPoiFileRetriever = new OpenStreetMapPoisFileRetriever();
 		openStreetMapPoiFileRetriever.setImporterConfig(importerConfig);
 		Assert.assertEquals("getFilesToDownload should return the importerConfig Option",filesToDownload, openStreetMapPoiFileRetriever.getFilesToDownload());
 		
