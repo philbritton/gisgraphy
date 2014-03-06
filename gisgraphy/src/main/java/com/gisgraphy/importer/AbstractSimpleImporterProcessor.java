@@ -420,7 +420,10 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
     txDefinition = new DefaultTransactionDefinition();
 	    txDefinition
 		    .setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+	    txDefinition.setIsolationLevel(Isolation.READ_UNCOMMITTED.value());
+	    txDefinition.setReadOnly(false);
 	txStatus = transactionManager.getTransaction(txDefinition);
+	
     }
 
     /**
