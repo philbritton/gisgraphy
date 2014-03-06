@@ -27,6 +27,7 @@ package com.gisgraphy.domain.repository;
 
 import java.util.List;
 
+import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.vividsolutions.jts.geom.Point;
@@ -208,5 +209,15 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
      * Create the database GIST index for the column 'location' for this entity
      */
     public void createGISTIndexForLocationColumn();
+    
+    /**
+     * @param location The point from which we want to find GIS Object
+     * @param countryCode restrict the search to a given country code (useful for feature near a frontier
+     * @param filterMunicipality if  we should  filter municipality or not
+     * @param distance te distance in meter
+     * @return the nearest city differ from getnearestAndDistance because doesn't return distance field and with zip and alternateNames are populated
+     */
+    public T getNearest(final Point location,final String countryCode,final boolean filterMunicipality,final int distance);
+
 
 }

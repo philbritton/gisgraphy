@@ -112,7 +112,7 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
     }
 
     public void flush(StatsUsageType statsUsageType) {
-	statsUsageDao.flushAndClear();
+	/*statsUsageDao.flushAndClear();
 	StatsUsage statsUsage = statsUsageDao.getByUsageType(statsUsageType);
 	if (statsUsage==null){
 	    statsUsage= initCounter(statsUsageType);
@@ -125,7 +125,7 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
 	txStatus = transactionManager.getTransaction(txDefinition);
 	statsUsage.setUsage(counterMap.get(statsUsageType.toString()));
 	statsUsageDao.save(statsUsage);
-	transactionManager.commit(txStatus);
+	transactionManager.commit(txStatus);*/
     }
 
 
