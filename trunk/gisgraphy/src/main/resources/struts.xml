@@ -197,6 +197,7 @@
    		<action name="importconfirm" class="com.gisgraphy.webapp.action.ImportConfirmAction">
             <interceptor-ref name="adminCheck"/>
             <result name="success" type="freemarker">/WEB-INF/views/import.ftl</result>
+            <result name="errorconfig" type="freemarker">/WEB-INF/views/import.ftl</result>
             <result name="status" type="redirect">import!status.html</result>
             <result name="error"  type="freemarker">/WEB-INF/views/importError.ftl</result>
             <result name="import" type="redirectAction">

@@ -23,11 +23,14 @@
 package com.gisgraphy.domain.repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -348,14 +351,16 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 		    	/*if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
 		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
 		    	}*/
-		    	List<HouseNumber> houseNumbers = ((Street) gisFeature).getHouseNumbers();
-				if (houseNumbers!=null && houseNumbers.size()!=0){
-					 List<String> houseNumbersToAdd= new ArrayList<String>();
-					 Collections.sort(houseNumbers,houseNumberComparator);
-		    		for (HouseNumber houseNumber:houseNumbers){
-		    			houseNumbersToAdd.add(houseNumberListSerializer.serialize(houseNumber));
-		    		}
-		    		ex.setField(FullTextFields.HOUSE_NUMBERS.getValue(),houseNumbersToAdd );
+		    	SortedSet<HouseNumber> houseNumbersFromEntity = ((Street) gisFeature).getHouseNumbers();
+		    	if (houseNumbersFromEntity!=null && houseNumbersFromEntity.size()!=0){
+			    	//SortedSet<HouseNumber> houseNumbers = new TreeSet<HouseNumber>(houseNumberComparator);
+					//houseNumbers.addAll(houseNumbersFromEntity);
+						 List<String> houseNumbersToAdd= new ArrayList<String>();
+						// Collections.sort(houseNumbers,houseNumberComparator);
+			    		for (HouseNumber houseNumber:houseNumbersFromEntity){
+			    			houseNumbersToAdd.add(houseNumberListSerializer.serialize(houseNumber));
+			    		}
+			    		ex.setField(FullTextFields.HOUSE_NUMBERS.getValue(),houseNumbersToAdd );
 		    	}
 				populateAlternateNamesForStreet(gisFeature.getAlternateNames(),ex);
 		    } else {
@@ -432,7 +437,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 
 			// No prefix for cities
 
-			List<AlternateName> alternatenames = gisFeature.getAlternateNames();
+			Collection<AlternateName> alternatenames = gisFeature.getAlternateNames();
 			populateAlternateNames(FullTextFields.NAME.getValue(), alternatenames,
 				ex);
 
@@ -508,7 +513,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
     }
     
     //Same as gisfeature but ignore language 
-    private void populateAlternateNamesForStreet(List<AlternateName> alternateNames, SolrInputDocument ex) {
+    private void populateAlternateNamesForStreet(Collection<AlternateName> alternateNames, SolrInputDocument ex) {
     	if (alternateNames == null || alternateNames.size() == 0) {
     	    return;
     	}
@@ -529,7 +534,7 @@ public class SolRSynchroniser implements ISolRSynchroniser {
     
     
     private void populateAlternateNames(String fieldPrefix,
-	    List<AlternateName> alternateNames, SolrInputDocument ex) {
+	    Collection<AlternateName> alternateNames, SolrInputDocument ex) {
 	if (alternateNames == null || alternateNames.size() == 0) {
 	    return;
 	}

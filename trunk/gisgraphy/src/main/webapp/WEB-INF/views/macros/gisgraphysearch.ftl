@@ -625,6 +625,7 @@ doAjaxSearch = function(formName){
 			&nbsp;&nbsp;<a href="http://maps.google.fr/maps?q=${showAllOnMapsURL?url('UTF-8')}%26format%3DATOM" target="_blank"><img src="/images/map_go.png" alt="map"/> <@s.text name="search.viewResultsOnMap"/></a>
 					<#list streetResponseDTO.result as result>
 	 				<div class="bodyResults">
+					
 						<div class="flag" >
 							<img src="/images/flags/${result.countryCode}.png" alt=" country flag"/>
 						</div>
@@ -655,8 +656,11 @@ doAjaxSearch = function(formName){
 						<br/>
 						</#if>
 					<#if result.isIn??><@s.text name="global.is.in"/> : ${result.isIn};<br/></#if>
+					<#if result.isInPlace??><@s.text name="global.is.inplace"/> : ${result.isInPlace};<br/></#if>
+					<#if result.isInAdm??><@s.text name="global.is.inadm"/> : ${result.isInAdm};<br/></#if>
+					<#if result.isInZip??><@s.text name="global.is.inzip"/> : ${result.isInZip};<br/></#if>
 					<#if result.openstreetmapId??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmapId?c};<br/></#if>
-						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${streetURL}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewStreet"/></a>
+						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.openstreetmapUrl}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewStreet"/></a>
 						</div>
 					</div>
 					<div class="clear"></div>

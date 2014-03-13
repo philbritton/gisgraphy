@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 
 import junit.framework.Assert;
@@ -528,117 +529,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 	}
     }
 
-    @Test
-    public void testImportAdm2WithWrongNumberOfFieldsThrowsOptionsToTrueShouldThrows() {
-	// save option
-	boolean savedWNOFOption = importerConfig.isWrongNumberOfFieldsThrows();
-	String savedAdmFileName = importerConfig.getAdm2FileName();
-	AdmExtracterStrategyOptions admStrategy = importerConfig
-		.getAdm2ExtracterStrategyIfAlreadyExists();
-	// set option
-
-	this.importerConfig
-		.setAdm2FileName(ADM2_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS);
-	this.importerConfig
-		.setAdm2ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions.skip);
-
-	processAndCheckGeonamesAdmExtracter(false);
-	processAndCheckGeonamesLanguageImporter();
-	processAndCheckGeonamesCountryImporter();
-	processAndCheckGeonamesAdm1Importer(true);
-	this.importerConfig.setWrongNumberOfFieldsThrows(true);
-	try {
-	    processAndCheckGeonamesAdm2Importer();
-	    fail("the wrongNumberOfFieldsThrows option should be set to true and is "
-		    + importerConfig.isWrongNumberOfFieldsThrows()
-		    + " and should has been throws");
-	} catch (ImporterException e) {
-	    assertEquals(
-		    "the cause of the exception is not of type WrongNumberOfFieldsException",
-		    e.getCause().getClass(), WrongNumberOfFieldsException.class);
-
-	} finally {
-	    // restore option
-	    importerConfig.setWrongNumberOfFieldsThrows(savedWNOFOption);
-	    importerConfig.setAdm2FileName(savedAdmFileName);
-	    importerConfig.setAdm2ExtracterStrategyIfAlreadyExists(admStrategy);
-	}
-    }
-
-    @Test
-    public void testImportAdm3WithWrongNumberOfFieldsThrowsOptionsToTrueShouldThrows() {
-	// save option
-	boolean savedWNOFOption = importerConfig.isWrongNumberOfFieldsThrows();
-	String savedAdmFileName = importerConfig.getAdm3FileName();
-	AdmExtracterStrategyOptions admStrategy = importerConfig
-		.getAdm3ExtracterStrategyIfAlreadyExists();
-
-	processAndCheckGeonamesAdmExtracter(false);
-	processAndCheckGeonamesLanguageImporter();
-	processAndCheckGeonamesCountryImporter();
-	processAndCheckGeonamesAdm1Importer(true);
-	processAndCheckGeonamesAdm2Importer();
-	// set option
-	this.importerConfig
-		.setAdm3FileName(ADM3_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS);
-	this.importerConfig.setWrongNumberOfFieldsThrows(true);
-	this.importerConfig
-		.setAdm3ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions.skip);
-	try {
-	    processAndCheckGeonamesAdm3Importer();
-	    fail("the wrongNumberOfFieldsThrows option should be set to true and is "
-		    + importerConfig.isWrongNumberOfFieldsThrows()
-		    + " and should has been throws");
-	} catch (ImporterException e) {
-	    assertEquals(
-		    "The cause of the exception is not of type WrongNumberOfFieldsException",
-		    e.getCause().getClass(), WrongNumberOfFieldsException.class);
-
-	} finally {
-	    // restore option
-	    importerConfig.setWrongNumberOfFieldsThrows(savedWNOFOption);
-	    importerConfig.setAdm3FileName(savedAdmFileName);
-	    importerConfig.setAdm3ExtracterStrategyIfAlreadyExists(admStrategy);
-	}
-    }
-
-    @Test
-    public void testImportAdm4WithWrongNumberOfFieldsThrowsOptionsToTrueShouldThrows() {
-	// save option
-	boolean savedWNOFOption = importerConfig.isWrongNumberOfFieldsThrows();
-	String savedAdmFileName = importerConfig.getAdm4FileName();
-	AdmExtracterStrategyOptions admStrategy = importerConfig
-		.getAdm4ExtracterStrategyIfAlreadyExists();
-
-	processAndCheckGeonamesAdmExtracter(false);
-	processAndCheckGeonamesLanguageImporter();
-	processAndCheckGeonamesCountryImporter();
-	processAndCheckGeonamesAdm1Importer(true);
-	processAndCheckGeonamesAdm2Importer();
-	processAndCheckGeonamesAdm3Importer();
-	// set options
-	this.importerConfig
-		.setAdm4FileName(ADM4_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS);
-	this.importerConfig.setWrongNumberOfFieldsThrows(true);
-	this.importerConfig
-		.setAdm4ExtracterStrategyIfAlreadyExists(AdmExtracterStrategyOptions.skip);
-	try {
-	    processAndCheckGeonamesAdm4Importer();
-	    fail("the wrongNumberOfFieldsThrows option should be set to true and is "
-		    + importerConfig.isWrongNumberOfFieldsThrows()
-		    + " and should has been throws");
-	} catch (ImporterException e) {
-	    assertEquals(
-		    "The cause of the exception is not of type WrongNumberOfFieldsException",
-		    e.getCause().getClass(), WrongNumberOfFieldsException.class);
-
-	} finally {
-	    // restore option
-	    importerConfig.setWrongNumberOfFieldsThrows(savedWNOFOption);
-	    importerConfig.setAdm4FileName(savedAdmFileName);
-	    importerConfig.setAdm4ExtracterStrategyIfAlreadyExists(admStrategy);
-	}
-    }
+  
 
     @Test
     public void testImportFeaturesWithWrongNumberOfFieldsThrowsOptionsToTrueShouldThrows() {
@@ -1273,6 +1164,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
     private int processAndCheckGeonamesFeatureImporter() {
 	long countCountry;
 	Country country;
+
 	this.geonamesFeatureImporter.process();
 	commitAndOptimize();
 
@@ -1388,12 +1280,12 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 
 	// check alternatenames depending on
 	// ImportGisFeatureEmbededAlternateNames option
-	List<AlternateName> alternateNames = country.getAlternateNames();
+	Set<AlternateName> alternateNames = country.getAlternateNames();
 	if (importerConfig.isImportGisFeatureEmbededAlternateNames()) {
 	    assertNotNull(
 		    "the alternateNames for country should not be null for "
 			    + country, alternateNames);
-	    assertEquals("", 121, alternateNames.size());
+	    assertEquals("duplicate alternatename should be removed 121 added but only 93 should be kept", 93, alternateNames.size());
 	    for (AlternateName alternateName : alternateNames) {
 		assertEquals("The source of AlternateName " + alternateName
 			+ " should be set to Embeded ",
@@ -1689,7 +1581,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 	// TODO test pplx have a zipcode
 
 	// check alternateNames
-	List<AlternateName> alternateNames0 = cityWithNoZipCode
+	Set<AlternateName> alternateNames0 = cityWithNoZipCode
 		.getAlternateNames();
 	assertNotNull(
 		"The city with featureId 0000001 (0 zipcode and 1 alternateNames) should have alternateNames ",
@@ -1700,17 +1592,17 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 		    "According to the ImportGisFeatureEmbededAlternateNames option, he city with featureId 0000001 (0 zipcode and 1 alternateNames) should have 1 alternateNames",
 		    1, alternateNames0.size());
 	    // check alternateNames for one zipcode
-	    List<AlternateName> alternateNames1 = cityWithOneZipCode
+	    Set<AlternateName> alternateNames1 = cityWithOneZipCode
 		    .getAlternateNames();
 	    assertNotNull(
 		    "The city with featureId 2974678 (one zipcode and 6 alternateNames) should have alternateNames ",
 		    alternateNames1);
 	    assertEquals(
-		    "The city with featureId 2974678 (one zipcode and 6 alternateNames) should have 7 alternateNames",
-		    7, alternateNames1.size());
+		    "The city with featureId 2974678 (one zipcode and 5 alternateNames) should have 6 alternateNames",
+		    6, alternateNames1.size());
 
 	    // check alternate names for two zipcodes
-	    List<AlternateName> alternateNames2 = cityWithTwoZipCode
+	    Set<AlternateName> alternateNames2 = cityWithTwoZipCode
 		    .getAlternateNames();
 	    assertNotNull(
 		    "The city with featureId 3015490 (two zipcodes and a name) should have alternateNames ",
@@ -2061,7 +1953,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 	// check that Adm1 has been updated
 	assertEquals("wrong AsciiName for " + adm, "Region Ile-de-France", adm
 		.getAsciiName());
-	List<AlternateName> alternateNames = adm.getAlternateNames();
+	Set<AlternateName> alternateNames = adm.getAlternateNames();
 	if (importerConfig.isImportGisFeatureEmbededAlternateNames()) {
 	    assertNotNull(
 		    "The alternateNames should not be null because ImportGisFeatureEmbededAlternateNames="

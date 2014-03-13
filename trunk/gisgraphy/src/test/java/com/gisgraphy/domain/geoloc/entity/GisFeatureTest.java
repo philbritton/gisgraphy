@@ -62,11 +62,26 @@ public class GisFeatureTest extends AbstractIntegrationHttpSolrTestCase {
 		.createGisFeatureWithAlternateNames("toto", 3);
 	List<AlternateName> alternateNames = new ArrayList<AlternateName>();
 	AlternateName a1 = new AlternateName();
+	a1.setName("foo");
 	AlternateName a2 = new AlternateName();
+	a2.setName("bar");
 	alternateNames.add(a1);
 	alternateNames.add(a2);
 	gisFeature.addAlternateNames(alternateNames);
 	assertEquals(5, gisFeature.getAlternateNames().size());
+    }
+    
+    @Test
+    public void testAddAlternateNamesShouldNotHaveDuplicates() {
+	GisFeature gisFeature = GisgraphyTestHelper
+		.createGisFeatureWithAlternateNames("toto", 3);
+	AlternateName a1 = new AlternateName();
+	a1.setName("foo");
+	AlternateName a2 = new AlternateName();
+	a2.setName("foo");
+	gisFeature.addAlternateName(a1);
+	gisFeature.addAlternateName(a2);
+	assertEquals(4, gisFeature.getAlternateNames().size());
     }
 
     @Test
@@ -75,9 +90,11 @@ public class GisFeatureTest extends AbstractIntegrationHttpSolrTestCase {
 		.createGisFeatureWithAlternateNames("toto", 3);
 	List<AlternateName> alternateNames = new ArrayList<AlternateName>();
 	AlternateName a1 = new AlternateName();
+	a1.setName("foo");
 	AlternateName a2 = new AlternateName();
-	alternateNames.add(a1);
+	a2.setName("bar");
 	alternateNames.add(a2);
+	alternateNames.add(a1);
 	gisFeature.addAlternateNames(alternateNames);
 	assertEquals(5, gisFeature.getAlternateNames().size());
 	for (AlternateName alternateName : gisFeature.getAlternateNames()) {

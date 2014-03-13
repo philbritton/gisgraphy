@@ -74,7 +74,7 @@ public class ImportConfirmActionTest {
 	IImporterManager mockImporterManager = createImporterManagerThatThrowsWhenIsAlreadyDoneIsCalled(ErrorMessage);
 	ImportConfirmAction action = new ImportConfirmAction();
 	action.setImporterManager(mockImporterManager);
-	assertEquals(ImportConfirmAction.ERROR, action.execute());
+	assertEquals(ImportConfirmAction.ERRORCONFIG, action.execute());
 	assertEquals("incorect eror message ", ErrorMessage, action.getErrorMessage());
     }
 

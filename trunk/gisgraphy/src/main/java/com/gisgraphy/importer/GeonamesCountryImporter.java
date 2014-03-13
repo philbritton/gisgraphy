@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.FlushMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Country;
@@ -43,6 +45,8 @@ import com.gisgraphy.helper.GeolocHelper;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class GeonamesCountryImporter extends AbstractSimpleImporterProcessor {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesCountryImporter.class);
 
     private ICountryDao countryDao;
 

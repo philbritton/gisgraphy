@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.FlushMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Language;
@@ -39,6 +41,8 @@ import com.gisgraphy.domain.valueobject.NameValueDTO;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class GeonamesLanguageImporter extends AbstractSimpleImporterProcessor {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesLanguageImporter.class);
 
     private ILanguageDao languageDao;
 

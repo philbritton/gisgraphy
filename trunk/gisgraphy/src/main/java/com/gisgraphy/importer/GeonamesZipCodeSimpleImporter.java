@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.FlushMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
@@ -55,6 +57,8 @@ import com.vividsolutions.jts.geom.Point;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcessor {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesZipCodeSimpleImporter.class);
 
     protected IGisFeatureDao gisFeatureDao;
 

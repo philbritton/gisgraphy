@@ -29,6 +29,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gisgraphy.helper.Untar;
 
 
@@ -38,6 +41,8 @@ import com.gisgraphy.helper.Untar;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class OpenStreetMapFileRetriever extends AbstractFileRetriever {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapFileRetriever.class);
 
     private Untar untar;
     

@@ -110,7 +110,7 @@ public class FulltextSearchAction extends SearchAction {
 	    for (SolrResponseDto dto :responseDTO.getResults()){
 	    	dto.setYahoo_map_url(URLUtils.createYahooMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
 	    	dto.setGoogle_map_url(URLUtils.createGoogleMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
-	    	dto.setOpenstreetmap_map_url(URLUtils.createGoogleMapUrl(GeolocHelper.createPoint(dto.getLng(), dto.getLat())));
+	    	dto.setOpenstreetmap_map_url(URLUtils.createOpenstreetmapMapUrl((GeolocHelper.createPoint(dto.getLng(), dto.getLat()))));
 	    }
 	} catch (RuntimeException e) {
 	    String exceptionMessage = "";

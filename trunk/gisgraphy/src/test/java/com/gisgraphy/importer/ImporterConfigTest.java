@@ -81,6 +81,39 @@ public class ImporterConfigTest {
 	}
 
 	@Test
+	public void setOpenStreetMapImporterShouldDisableHouseNumber() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		//setup
+		importerConfig.setOpenstreetmapImporterEnabled(true);
+		importerConfig.setOpenstreetmapHouseNumberImporterEnabled(true);
+		
+		assertTrue(importerConfig.isOpenstreetmapHouseNumberImporterEnabled());
+		assertTrue(importerConfig.isOpenstreetmapImporterEnabled());
+		
+		//exercise
+		importerConfig.setOpenstreetmapImporterEnabled(false);
+		
+		//check
+		assertFalse(importerConfig.isOpenstreetmapHouseNumberImporterEnabled());
+		assertFalse(importerConfig.isOpenstreetmapImporterEnabled());
+	}
+	
+	
+	@Test
+	public void setOpenStreetMapHouseNumberImporterShouldNotBeEnabledIfOpenstreetmapIsDisabled() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		//setup
+		importerConfig.setOpenstreetmapImporterEnabled(false);
+		
+		//exercise
+		importerConfig.setOpenstreetmapHouseNumberImporterEnabled(true);
+		
+		//check
+		assertFalse(importerConfig.isOpenstreetmapHouseNumberImporterEnabled());
+		assertFalse(importerConfig.isOpenstreetmapImporterEnabled());
+	}
+	
+	@Test
 	public void isOpenStreetMapDownloadDirectoryAccessible() {
 		ImporterConfig importerConfig = new ImporterConfig();
 		importerConfig.setOpenStreetMapDir(accessiblePath);

@@ -24,6 +24,7 @@ package com.gisgraphy.domain.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.easymock.EasyMock;
@@ -498,7 +499,7 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
     	
     	
     	OpenStreetMap retrievedStreet = openStreetMapDao.get(street.getId());
-    	List<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
+    	SortedSet<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
 		Assert.assertNotNull(houseNumbers);
     	Assert.assertEquals("the street should have the housenumber associated",1, houseNumbers.size());
     }

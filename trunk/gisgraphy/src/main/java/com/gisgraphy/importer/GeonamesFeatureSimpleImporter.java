@@ -31,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -65,6 +67,8 @@ import com.sun.mail.handlers.text_html;
  */
 public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcessor {
 
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesFeatureSimpleImporter.class);
+	
     protected ICityDao cityDao;
 
     protected IGisFeatureDao gisFeatureDao;
@@ -248,8 +252,9 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	// importer
 	if (!isEmptyField(fields, 3, false)
 		&& importerConfig.isImportGisFeatureEmbededAlternateNames()) {
-	    gisFeature.addAlternateNames(splitAlternateNames(fields[3],
-		    gisFeature));
+	    List<AlternateName> splitedAlternateNames = splitAlternateNames(fields[3],
+		    gisFeature);
+		gisFeature.addAlternateNames(splitedAlternateNames);
 	}
 
 	//TODO  //NAI list countryid

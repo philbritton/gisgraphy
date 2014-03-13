@@ -615,7 +615,8 @@ public class GenericGisDao<T extends GisFeature> extends
 			});
     }
     
-    public T getNearest(final Point location,final String countryCode,final boolean filterMunicipality,final int distance) {
+    @SuppressWarnings("unchecked")
+	public T getNearest(final Point location,final String countryCode,final boolean filterMunicipality,final int distance) {
 		Assert.notNull(location);
 		return (T) this.getHibernateTemplate().execute(new HibernateCallback() {
 

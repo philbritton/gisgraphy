@@ -2,6 +2,8 @@ package com.gisgraphy.domain.geoloc.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.sf.jstester.util.Assert;
 
@@ -17,7 +19,7 @@ public class OpenStreetMapTest {
 		OpenStreetMap street = new OpenStreetMap();
 		street.setId(1L);
 		
-		List<HouseNumber> houseNumbers = new ArrayList<HouseNumber>();
+		SortedSet<HouseNumber> houseNumbers = new TreeSet<HouseNumber>();
 		HouseNumber n1 = GisgraphyTestHelper.createHouseNumber();
 		
 		houseNumbers.add(n1);
@@ -30,6 +32,27 @@ public class OpenStreetMapTest {
 		
 		Assert.assertEquals("add street should add street, not replace",2, street.getHouseNumbers().size());
 		
+		//check doubleset
+		Assert.assertEquals("double set should be done",street, n2.getStreet());
+		
+	}
+	
+	@Test
+	public void testAddHouseNumberShouldSort() {
+		OpenStreetMap street = new OpenStreetMap();
+		street.setId(1L);
+		
+		HouseNumber n1 = GisgraphyTestHelper.createHouseNumber();
+		n1.setNumber("10");
+		street.addHouseNumber(n1);
+		Assert.assertEquals(1, street.getHouseNumbers().size());
+		
+		HouseNumber n2 = new HouseNumber();
+		n2.setNumber("2");
+		street.addHouseNumber(n2);
+		
+		Assert.assertEquals("add street should add street, not replace",2, street.getHouseNumbers().size());
+		Assert.assertEquals(n2, street.getHouseNumbers().first());
 		//check doubleset
 		Assert.assertEquals("double set should be done",street, n2.getStreet());
 		

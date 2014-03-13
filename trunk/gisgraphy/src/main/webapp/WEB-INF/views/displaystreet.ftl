@@ -28,6 +28,9 @@
 						<@s.text name="global.length"/> : ${result.length} m(s); 
 						<br/>
 						<#if result.isIn??><@s.text name="global.is.in"/> : ${result.isIn};<br/></#if>
+					        <#if result.isInPlace??><@s.text name="global.is.inplace"/> : ${result.isInPlace};<br/></#if>
+					        <#if result.isInAdm??><@s.text name="global.is.inadm"/> : ${result.isInAdm};<br/></#if>
+					        <#if result.isInZip??><@s.text name="global.is.inzip"/> : ${result.isInZip};<br/></#if>
 						<br/>
 						<#if result.openstreetmapId??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmapId?c};<br/></#if>
 						<br/>
@@ -41,6 +44,14 @@
 							</#if>
 						<br/>
 						</#if>
+						<#if result.houseNumbers??>
+							<@s.text name="address.houseNumber"/> : 
+							<#list result.houseNumbers as house>
+							${house.number},
+							</#list>;
+							<br/><br/>
+						</#if>
+						
 						<@gisgraphysearch.googleStreetView width="700" heigth="400" 
 						googleMapAPIKey=googleMapAPIKey CSSClass="center" />
 						<br/><br/>

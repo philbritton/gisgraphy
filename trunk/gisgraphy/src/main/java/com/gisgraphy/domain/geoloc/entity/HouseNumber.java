@@ -42,6 +42,7 @@ import org.hibernate.annotations.Type;
 import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
+import com.gisgraphy.street.HouseNumberComparator;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -52,7 +53,7 @@ import com.vividsolutions.jts.geom.Point;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @SequenceGenerator(name = "housenumbersequence", sequenceName = "housenumber_sequence")
-public class HouseNumber {
+public class HouseNumber implements Comparable<HouseNumber>{
 	
 
     public static final String LOCATION_COLUMN_NAME = "location";
@@ -72,6 +73,9 @@ public class HouseNumber {
     
     @IntrospectionIgnoredField
     private HouseNumberType type;
+    
+    @IntrospectionIgnoredField
+    private static final HouseNumberComparator comparator = new HouseNumberComparator();
 
     private String name;
 
@@ -310,6 +314,11 @@ public class HouseNumber {
 		} else if (!street.equals(other.street))
 			return false;
 		return true;
+	}
+
+	public int compareTo(HouseNumber o) {
+		
+		return comparator.compare(this, o);
 	}
 
    

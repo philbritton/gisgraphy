@@ -28,7 +28,7 @@
 	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-utils/4.0-beta1/gisgraphy-utils-4.0-beta1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser/3.0/universalserialiser-3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser/3.0/universalserialiser-3.0.jar" sourcepath="/universal_serializer"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/activation/activation/1.1/activation-1.1.jar"/>

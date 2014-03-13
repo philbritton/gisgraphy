@@ -685,6 +685,10 @@
 				latitude or longitude could now starts with space
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				alternatenames doesn't contain duplicates
+			</action>
+			
 			
 			</release>
 			

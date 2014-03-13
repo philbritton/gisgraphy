@@ -155,7 +155,6 @@
 		<property name="openStreetMapDao" ref= "openStreetMapDao" />
 		<property name="importerConfig" ref="importerConfig" />
 		<property name="solRSynchroniser" ref="solRSynchroniser"/>
-		<property name="geolocSearchEngine" ref="geolocSearchEngine"/>
 		<property name="municipalityDetector" ref="municipalityDetector" />
 	</bean>
 	
@@ -209,14 +208,14 @@
 				<ref bean="openStreetMapImporter"/>
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>
 				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
-				<ref bean="OpenStreetMapPoiFileRetriever"/>
+				<ref bean="OpenStreetMapPoisFileRetriever"/>
 				<ref bean="OpenStreetMapPoisSimpleImporter"/>
 			</list>
 		</constructor-arg>
 	</bean>
 	
-	<bean id="OpenStreetMapPoiFileRetriever"
-		class="com.gisgraphy.importer.OpenStreetMapPoiFileRetriever" parent="abstractFileRetriever" >
+	<bean id="OpenStreetMapPoisFileRetriever"
+		class="com.gisgraphy.importer.OpenStreetMapPoisFileRetriever" parent="abstractFileRetriever" >
 	</bean>
 	
 	<bean id="OpenStreetMapPoisSimpleImporter"
@@ -229,7 +228,7 @@
 	</bean>
 	
 	<bean id="OpenStreetMapCitiesSimpleImporter"
-		class="com.gisgraphy.importer.OpenStreetMapCities${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
+		class="com.gisgraphy.importer.OpenStreetMapCitiesSimpleImporter" parent="abstractSimpleImporterProcessor" >
 	</bean>
 	
 

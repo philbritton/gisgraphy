@@ -156,11 +156,37 @@ width:450px;
     text-shadow: 0 1px 1px #777;
     font-weight:bold;
     font-family:"Century Gothic", Helvetica, sans-serif;
-    font-size:22px;
     -moz-box-shadow:0px 0px 3px #aaa;
     -webkit-box-shadow:0px 0px 3px #aaa;
     box-shadow:0px 0px 3px #aaa;
     background:#4797ED;
+}
+
+.premiumsection {
+	border:none;
+	outline:none;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    color: #ffffff;
+    cursor:pointer;
+    clear:both;
+    padding: 7px 25px;
+    text-shadow: 0 1px 1px #777;
+    font-weight:bold;
+    font-family:"Century Gothic", Helvetica, sans-serif;
+    -moz-box-shadow:0px 0px 3px #aaa;
+    -webkit-box-shadow:0px 0px 3px #aaa;
+    box-shadow:0px 0px 3px #aaa;
+    background:#4797ED;
+   display:block;margin:0 auto;
+   width:260px;;
+   font-size:1.2em;
+color:#FFFFFF;
+}
+
+.premiumsection a{
+color:#FFFFFF;
 }
 
 .gotostep {

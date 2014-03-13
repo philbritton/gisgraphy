@@ -26,6 +26,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 
 /**
@@ -37,6 +40,8 @@ import com.gisgraphy.domain.valueobject.NameValueDTO;
  */
 public class GeonamesAdm1Importer extends GeonamesFeatureSimpleImporter {
 
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesAdm1Importer.class);
 	
 	 /*
      * (non-Javadoc)

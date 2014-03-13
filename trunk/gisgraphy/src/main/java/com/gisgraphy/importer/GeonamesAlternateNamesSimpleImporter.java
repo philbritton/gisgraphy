@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.FlushMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
@@ -48,6 +50,8 @@ import com.gisgraphy.fulltext.spell.ISpellCheckerIndexer;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class GeonamesAlternateNamesSimpleImporter extends AbstractSimpleImporterProcessor {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesAlternateNamesSimpleImporter.class);
 
 	protected IGisFeatureDao gisFeatureDao;
 
@@ -185,12 +189,12 @@ public class GeonamesAlternateNamesSimpleImporter extends AbstractSimpleImporter
 	    }
 	}
 
-	List<AlternateName> alternateNames = gisFeature.getAlternateNames();
+	/*List<AlternateName> alternateNames = gisFeature.getAlternateNames();
 	if (alternateNames == null) {
 	    alternateNames = new ArrayList<AlternateName>();
 	}
-	alternateNames.add(alternateName);
-	gisFeature.setAlternateNames(alternateNames);
+	alternateNames.add(alternateName);*/
+	gisFeature.addAlternateName(alternateName);
 
 	this.gisFeatureDao.save(gisFeature);
 

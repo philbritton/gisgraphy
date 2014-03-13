@@ -39,6 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -810,9 +811,9 @@ public class GisgraphyTestHelper {
 
     }
 
-    public static List<AlternateName> createAlternateNames(int nombres,
+    public static Set<AlternateName> createAlternateNames(int nombres,
 	    GisFeature gisFeature) {
-	List<AlternateName> alternateNames = new ArrayList<AlternateName>();
+	Set<AlternateName> alternateNames = new HashSet<AlternateName>();
 	for (int i = 0; i < nombres; i++) {
 	    AlternateName alternateName = new AlternateName();
 	    alternateName.setName("lutece"+i);
@@ -833,7 +834,7 @@ public class GisgraphyTestHelper {
 	City city = createCityAtSpecificPoint(asciiName, null, null);
 
 	if (nbAlternateNames > 0) {
-	    List<AlternateName> alternateNames = createAlternateNames(
+	    Set<AlternateName> alternateNames = createAlternateNames(
 		    nbAlternateNames, city);
 	    city.setAlternateNames(alternateNames);
 	}
@@ -847,7 +848,7 @@ public class GisgraphyTestHelper {
 	GisFeature gisFeature = createGisFeature(asciiName, null, null, null);
 
 	if (nbAlternateNames > 0) {
-	    List<AlternateName> alternateNames = createAlternateNames(
+	    Set<AlternateName> alternateNames = createAlternateNames(
 		    nbAlternateNames, gisFeature);
 	    gisFeature.setAlternateNames(alternateNames);
 	}
@@ -1115,5 +1116,16 @@ public class GisgraphyTestHelper {
     	houseNumber.setType(ASSOCIATED);
     	return houseNumber;
     }
+    
+    public static boolean alternateNameContains(Collection<AlternateName> alternateNames,String name){
+		if (alternateNames!=null){
+			for (AlternateName alternateName:alternateNames){
+				if (alternateName.getName().equals(name)){
+					return true;
+				}
+			}
+			
+		} return false;
+	}
     
 }
