@@ -19,11 +19,30 @@ if (disable=='true'){
 }
 }
 
+function checkHOusenumber(){
+	if ($('disableOpenstreetmaptrue').checked){
+		//$('disableHouseNumbertrue').enable();
+		//$('disableHouseNumberfalse').enable();
+	} else {
+		//$('disableHouseNumbertrue').disable();
+		//$('disableHouseNumberfalse').disable();
+		$('disableHouseNumberfalse').setValue('true');
+	}
+}
+
+
 <#if step!=1>
 goToStep(${step});
 </#if>
 </script>
-            <h1>Importer wizard</h1>
+            <h1><@s.text name="import.wizard"/></h1>
+
+<#if configGotProblems.toString()=='true'>
+<div class="tip redtip">
+<@s.text name="import.config.error"/>
+</div>
+<br/>
+</#if>
         <div id="sliding">
  <div id="navigation" style="display:none;">
 
@@ -175,7 +194,8 @@ goToStep(${step});
 						<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
 					</@s.else>
 						<div style="margin-left: 100px;" >
-							<@s.checkbox value="%{geonamesImporterEnabled}" name="geonamesImporterEnabled" id="disableGeonames" theme="simple"/> <@s.text name="import.geonames"/>
+						<@s.text name="import.geonames"/> : <@s.radio name="geonamesImporterEnabled" value="%{geonamesImporterEnabled}" list="%{#@java.util.LinkedHashMap@{'true' : getText('global.yes'), 'false': getText('global.no')}}" id="disableGeonames" theme="simple"  />
+							<!--<@s.checkbox value="%{geonamesImporterEnabled}" name="geonamesImporterEnabled" id="disableGeonames" theme="simple"/><@s.text name="import.geonames"/>--> 
 						</div>
 					<br/>
 					<@s.text name="import.dataset.status"><@s.param>Openstreetmap</@s.param></@s.text> :&nbsp;
@@ -186,7 +206,8 @@ goToStep(${step});
 					<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
 					</@s.else>
 					<div style="margin-left: 100px;" >
-							<@s.checkbox value="%{openStreetMapImporterEnabled}" name="openStreetMapImporterEnabled" id="disableGeonames" theme="simple"/> <@s.text name="import.openstreetmap"/>
+							<@s.text name="import.openstreetmap"/> : <@s.radio name="openStreetMapImporterEnabled" value="%{openStreetMapImporterEnabled}" list="%{#@java.util.LinkedHashMap@{'true' : getText('global.yes'), 'false': getText('global.no')}}" id="disableOpenstreetmap" theme="simple" onclick="checkHOusenumber()" />
+							 <!--<@s.checkbox value="%{openStreetMapImporterEnabled}" name="openStreetMapImporterEnabled" id="disableOpenstreetmap" theme="simple" onclick="checkHOusenumber()"/> <@s.text name="import.openstreetmap"/>-->
 					</div>
 					<br/>
 					<@s.text name="import.dataset.status"><@s.param><@s.text name="global.housenumbers"/></@s.param></@s.text> &nbsp;:&nbsp;
@@ -197,7 +218,8 @@ goToStep(${step});
 						<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
 					</@s.else>
 						<div style="margin-left: 100px;" >
-							<@s.checkbox value="%{housenumberImporterEnabled}" name="houseNumberImporterEnabled" id="disableHouseNumber" theme="simple"/> <@s.text name="import.houseNumbers"/>
+						<@s.text name="import.houseNumbers"/> : <@s.radio name="housenumberImporterEnabled" value="%{housenumberImporterEnabled}" list="%{#@java.util.LinkedHashMap@{'true' : getText('global.yes'), 'false': getText('global.no')}}" id="disableHouseNumber" theme="simple"  />
+							<!--<@s.checkbox value="%{housenumberImporterEnabled}" name="houseNumberImporterEnabled" id="disableHouseNumber" theme="simple"/> <@s.text name="import.houseNumbers"/>-->
 						</div>
 					<br/>
 						
@@ -513,22 +535,24 @@ goToStep(${step});
                                          
 			<fieldset class="step">
                             <legend><@s.text name="global.confirm"/></legend>
-				<div class="sectionHeader"><@s.text name="importer.check.config"/></div>
-			    <p>
-			   	 <input type="button" value="<@s.text name="importer.check.config"/>" onClick="checkConfig()"/>
-			   	 <span id="configCheckplaceholder" style="padding-left:20px;"></span>
+				<div class="sectionHeader">Premium</div>
+			    	<p>
+			   	<@s.text name="import.finalstep"/>. <@s.text name="premium.desc"/>
 				</p>
+				<div class="premiumsection">
+				<a href="http://www.gisgraphy.com/premium" id="gopremium"><@s.text name="premium.learn.more"/></a>
+					</div>
+				
 				<div class="sectionHeader"><@s.text name="global.confirm"/></div>
 				<p>
-         				<@s.text name="import.confirm.sentence"/>                                                                                                                        
+					<@s.text name="import.confirm.sentence"/> 
 					<@s.url id="importUrl" action="import" method="import" includeParams="all" /> 
+				</p>
 					<div class="submit">
-						<@s.form action="${importUrl}" method="get" id="runImport"><@s.submit  value="%{getText('menu.admin.import')}" theme="simple" /></@s.form>&nbsp; &nbsp;
+						<@s.form action="${importUrl}" method="get" id="runImport"><@s.submit  value="%{getText('menu.admin.import')}" theme="simple" /></@s.form>&nbsp; &nbsp; 
 					</div>
-					<div class="submit">
-					 <@s.form action="/mainMenu.html" method="get" id="dontRunImport"><@s.submit  value="%{getText('menu.admin.dontImport')}" theme="simple"  /></@s.form><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-					</div>
-			</p>
+					
+			
 <div class="navigationtoolbar">
 <span class="prev"><input type="button" onclick="goToStep(7);" value="<@s.text name="global.prev.step" />" class="gotostep"/></span></span>
 </div>

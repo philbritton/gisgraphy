@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -78,7 +80,7 @@ public class StreetFactoryTest {
 	HouseNumber houseNumber = new HouseNumber();
 	houseNumber.setLocation(GeolocHelper.createPoint(10.3F, 9.6F));
 	houseNumber.setNumber("1");
-	List<HouseNumber> houseNumbers = new ArrayList<HouseNumber>();
+	SortedSet<HouseNumber> houseNumbers = new TreeSet<HouseNumber>();
 	houseNumbers.add(houseNumber);
 	openStreetMap.setHouseNumbers(houseNumbers);
 	
@@ -110,8 +112,8 @@ public class StreetFactoryTest {
 	Assert.assertEquals(fullyQualifiedAddress, street.getFullyQualifiedAddress());
 	Assert.assertEquals(houseNumbers, street.getHouseNumbers());
 	Assert.assertEquals(2, street.getAlternateNames().size());
-	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname"));
-	Assert.assertTrue(alternateNamesContain(street.getAlternateNames(), "altname2"));
+	Assert.assertTrue(alternateNamesContains(street.getAlternateNames(), "altname"));
+	Assert.assertTrue(alternateNamesContains(street.getAlternateNames(), "altname2"));
 	
 	Assert.assertTrue(alternateCitiesNamesContain(street.getIsInCityAlternateNames(), "city1"));
 	Assert.assertTrue(alternateCitiesNamesContain(street.getIsInCityAlternateNames(), "city2"));
@@ -119,7 +121,7 @@ public class StreetFactoryTest {
 	
     }
     
-    private boolean alternateNamesContain(List<AlternateName> names, String name){
+    private boolean alternateNamesContains(Collection<AlternateName> names, String name){
     	if (names!=null ){
     		for(AlternateName nameToTest:names){
     			if (nameToTest!=null && nameToTest.getName().equals(name)){

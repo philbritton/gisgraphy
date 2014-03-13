@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,11 +47,14 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Type;
 
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
+import com.gisgraphy.street.HouseNumberComparator;
 import com.gisgraphy.street.StreetSearchMode;
 import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.LineString;
@@ -64,6 +69,9 @@ import com.vividsolutions.jts.geom.Point;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @SequenceGenerator(name = "streetosmsequence", sequenceName = "street_osm_sequence")
 public class OpenStreetMap {
+	
+	@Transient
+	private static final HouseNumberComparator houseNumberComparator = new HouseNumberComparator();
 	
 
     public static final String SHAPE_COLUMN_NAME = "shape";
@@ -150,7 +158,8 @@ public class OpenStreetMap {
 
     private Double length;
     
-    private List<HouseNumber> houseNumbers;
+    //@Sort(comparator=HouseNumberComparator.class,type=SortType.COMPARATOR)
+    private SortedSet<HouseNumber> houseNumbers;
 
     @IntrospectionIgnoredField
     private String partialSearchName;
@@ -193,13 +202,15 @@ public class OpenStreetMap {
      *                the alternateName to add
      */
     public void addAlternateName(AlternateOsmName alternateName) {
-	List<AlternateOsmName> currentAlternateNames = getAlternateNames();
-	if (currentAlternateNames == null) {
-	    currentAlternateNames = new ArrayList<AlternateOsmName>();
-	}
-	currentAlternateNames.add(alternateName);
-	this.setAlternateNames(currentAlternateNames);
-	alternateName.setStreet(this);
+    	if (alternateName!=null){
+    		List<AlternateOsmName> currentAlternateNames = getAlternateNames();
+    		if (currentAlternateNames == null) {
+    			currentAlternateNames = new ArrayList<AlternateOsmName>();
+    		}
+    		currentAlternateNames.add(alternateName);
+    		this.setAlternateNames(currentAlternateNames);
+    		alternateName.setStreet(this);
+    	}
     }
 
     /**
@@ -643,14 +654,15 @@ public class OpenStreetMap {
 	@OneToMany(cascade = { CascadeType.ALL }, mappedBy = "street")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Fetch(FetchMode.SELECT)
-	public List<HouseNumber> getHouseNumbers() {
+	@Sort(comparator=HouseNumberComparator.class,type=SortType.COMPARATOR)
+	public SortedSet<HouseNumber> getHouseNumbers() {
 		return houseNumbers;
 	}
 
 	/**
 	 * @param houseNumbers the houseNumbers to set
 	 */
-	public void setHouseNumbers(List<HouseNumber> houseNumbers) {
+	public void setHouseNumbers(SortedSet<HouseNumber> houseNumbers) {
 		this.houseNumbers = houseNumbers;
 	}
 	
@@ -661,15 +673,17 @@ public class OpenStreetMap {
      * @param alternateName
      *                the alternateName to add
      */
-    public void addHouseNumber(HouseNumber houseNumber) {
-	List<HouseNumber> currentHouseNumbers = getHouseNumbers();
-	if (currentHouseNumbers == null) {
-		currentHouseNumbers = new ArrayList<HouseNumber>();
+	public void addHouseNumber(HouseNumber houseNumber) {
+		if (houseNumber!=null){
+			SortedSet<HouseNumber> currentHouseNumbers = getHouseNumbers();
+			if (currentHouseNumbers == null) {
+				currentHouseNumbers = new TreeSet<HouseNumber>(houseNumberComparator);
+			}
+			currentHouseNumbers.add(houseNumber);
+			this.setHouseNumbers(currentHouseNumbers);
+			houseNumber.setStreet(this);
+		}
 	}
-	currentHouseNumbers.add(houseNumber);
-	this.setHouseNumbers(currentHouseNumbers);
-	houseNumber.setStreet(this);
-    }
 
     /**
      * Do a double set : add (not replace !) the AlternateNames to the current
@@ -710,14 +724,16 @@ public class OpenStreetMap {
 	}
 	
 
-    public void addIsInCitiesAlternateName(String isInCityAlternateName) {
-	Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
-	if (currentCitiesAlternateNames == null) {
-		currentCitiesAlternateNames = new HashSet<String>();
+	public void addIsInCitiesAlternateName(String isInCityAlternateName) {
+		if (isInCityAlternateName!=null){
+			Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
+			if (currentCitiesAlternateNames == null) {
+				currentCitiesAlternateNames = new HashSet<String>();
+			}
+			currentCitiesAlternateNames.add(isInCityAlternateName);
+			this.setIsInCityAlternateNames(currentCitiesAlternateNames);
+		}
 	}
-	currentCitiesAlternateNames.add(isInCityAlternateName);
-	this.setIsInCityAlternateNames(currentCitiesAlternateNames);
-    }
 
     public void addIsInCitiesAlternateNames(Collection<String> isInCityAlternateNames) {
 	if (isInCityAlternateNames != null) {

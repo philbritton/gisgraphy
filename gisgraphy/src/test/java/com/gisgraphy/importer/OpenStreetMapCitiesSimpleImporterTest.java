@@ -2,15 +2,19 @@ package com.gisgraphy.importer;
 
 import static com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE;
 import static com.gisgraphy.importer.OpenStreetMapCitiesSimpleImporter.MINIMUM_OUTPUT_STYLE;
+import static com.gisgraphy.test.GisgraphyTestHelper.alternateNameContains;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
@@ -28,6 +32,7 @@ import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.test.GisgraphyTestHelper;
 import com.vividsolutions.jts.geom.Point;
 
 public class OpenStreetMapCitiesSimpleImporterTest {
@@ -85,16 +90,18 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		GisFeature poi = new GisFeature();
 		poi = importer.populateAlternateNames(poi, RawAlternateNames);
 		Assert.assertEquals(4, poi.getAlternateNames().size());
-		Assert.assertEquals("Karl-Franzens-Universität Graz",poi.getAlternateNames().get(0).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(0).getSource());
-		Assert.assertEquals("Universidad de Graz",poi.getAlternateNames().get(1).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(1).getSource());
-		Assert.assertEquals("Université de Graz",poi.getAlternateNames().get(2).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(2).getSource());
-		Assert.assertEquals("Грацский университет имени Карла и Франца",poi.getAlternateNames().get(3).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(3).getSource());
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Karl-Franzens-Universität Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Universidad de Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Université de Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Грацский университет имени Карла и Франца"));
+		
+		Iterator<AlternateName> iterator = poi.getAlternateNames().iterator();
+		while (iterator.hasNext()){
+			Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,iterator.next().getSource());
+		}
 		
 	}
+	
 
 	@Test
 	public void getNearestCity(){

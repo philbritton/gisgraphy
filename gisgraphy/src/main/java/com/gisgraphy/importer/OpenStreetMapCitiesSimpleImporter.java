@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
@@ -73,7 +75,8 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterProcessor {
 	
-    
+	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapCitiesSimpleImporter.class);
+	
     public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
     
     public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";

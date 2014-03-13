@@ -164,18 +164,16 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		.get("FR").get(0));
 
 	assertEquals(2, result.getAdm1_names_alternate().size());
-	assertEquals(city.getAdm().getParent().getParent().getAlternateNames()
-		.get(0).getName(), result.getAdm1_names_alternate().get(0));
+	Assert.assertTrue(result.getAdm1_names_alternate().contains(city.getAdm().getParent().getParent().getAlternateNames().iterator().next().getName()));
 	assertEquals("admGGPalternate2", result.getAdm1_names_alternate()
 		.get(1));
 
 	assertEquals(1, result.getAdm2_names_alternate().size());
-	assertEquals(city.getAdm().getParent().getAlternateNames().get(0)
-		.getName(), result.getAdm2_names_alternate().get(0));
+	assertTrue(result.getAdm2_names_alternate().contains(city.getAdm().getParent().getAlternateNames().iterator().next().getName()));
 
 	assertEquals(1, result.getCountry_names_alternate().size());
-	assertEquals(city.getCountry().getAlternateNames().get(0).getName(),
-		result.getCountry_names_alternate().get(0));
+	assertTrue(result.getAdm2_names_alternate().contains(city.getAdm().getParent().getAlternateNames().iterator().next().getName()));
+	assertTrue(result.getCountry_names_alternate().contains(city.getCountry().getAlternateNames().iterator().next().getName()));
 
 	assertEquals(1, result.getCountry_names_alternate_localized().size());
 	assertEquals("franciaFR", result.getCountry_names_alternate_localized()
@@ -207,6 +205,7 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	AlternateName alternateName = new AlternateName("alternate",AlternateNameSource.ALTERNATENAMES_FILE);
 	country.addAlternateName(alternateName);
 	country.addAlternateName(alternateNameLocalized);
+	Assert.assertEquals(2,country.getAlternateNames().size());
 	countryDao.save(country);
 	this.solRSynchroniser.commit();
 	Pagination pagination = paginate().from(1).to(10);
@@ -261,8 +260,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 
 	assertEquals(1, result.getCountry_names_alternate().size());
 	assertNotNull(result.getCountry_names_alternate().get(0));
-	assertEquals(country.getAlternateNames().get(0).getName(),
-		result.getCountry_names_alternate().get(0));
+	assertTrue(result.getCountry_names_alternate().contains("alternate"));
+			
 
 	assertEquals(1, result.getCountry_names_alternate_localized().size());
 	assertNotNull(result.getCountry_names_alternate_localized()
@@ -385,13 +384,14 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	    Assert.assertEquals("The openstreetmap id is not correct", street.getOpenstreetmapId(),
 			    result.getOpenstreetmap_id());
 	    
-	    Assert.assertEquals("The houseNumber latitude location  is not correct", street.getHouseNumbers().get(0).getLocation().getY(),
+	    HouseNumber first = street.getHouseNumbers().first();
+		Assert.assertEquals("The houseNumber latitude location  is not correct", first.getLocation().getY(),
 			    result.getHouse_numbers().get(0).getLatitude());
 	    
-	    Assert.assertEquals("The houseNumber longitude location  is not correct", street.getHouseNumbers().get(0).getLocation().getX(),
+	    Assert.assertEquals("The houseNumber longitude location  is not correct", first.getLocation().getX(),
 			    result.getHouse_numbers().get(0).getLongitude());
 	    
-	    Assert.assertEquals("The house number is not correct", street.getHouseNumbers().get(0).getNumber(),
+	    Assert.assertEquals("The house number is not correct", first.getNumber(),
 			    result.getHouse_numbers().get(0).getNumber());
 	
 	

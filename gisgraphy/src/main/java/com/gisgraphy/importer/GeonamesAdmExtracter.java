@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gisgraphy.domain.valueobject.Constants;
@@ -49,6 +51,8 @@ import com.gisgraphy.domain.valueobject.NameValueDTO;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public class GeonamesAdmExtracter extends AbstractSimpleImporterProcessor {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesAdmExtracter.class);
 
     private File adm1file;
 

@@ -26,6 +26,7 @@
 package com.gisgraphy.domain.repository;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import net.sf.jstester.util.Assert;
 
@@ -75,10 +76,10 @@ public class HouseNumberDaoTest extends AbstractIntegrationHttpSolrTestCase {
     	Assert.assertNotNull(retrieved);
     	
     	OpenStreetMap retrievedStreet = openStreetMapDao.get(street.getId());
-    	List<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
+    	SortedSet<HouseNumber> houseNumbers = retrievedStreet.getHouseNumbers();
 		Assert.assertNotNull(houseNumbers);
     	Assert.assertEquals("the street should have the housenumber associated",1, houseNumbers.size());
-    	Assert.assertEquals(retrieved.getId(), houseNumbers.get(0).getId());
+    	Assert.assertEquals(retrieved.getId(), houseNumbers.first().getId());
     	
     }
     

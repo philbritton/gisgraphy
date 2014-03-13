@@ -50,6 +50,8 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+    
+    public static boolean disabled = false;
 
 
     @PostConstruct
@@ -78,7 +80,7 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
      * @see com.gisgraphy.service.IStatsUsageService#GetNumberOfCounter()
      */
     public int getNumberOfCounter() {
-	return counterMap.size();
+    	return counterMap.size();
     }
 
     /*
@@ -87,7 +89,7 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
      * @see com.gisgraphy.service.IStatsUsageService#GetUsage(com.gisgraphy.stats.StatsUsageType)
      */
     public Long getUsage(StatsUsageType statsUsageType) {
-	return counterMap.get(statsUsageType.toString());
+    	return counterMap.get(statsUsageType.toString());
     }
 
     /*
@@ -96,36 +98,39 @@ public class StatsUsageServiceImpl implements IStatsUsageService {
      * @see com.gisgraphy.service.IStatsUsageService#increaseUsage(com.gisgraphy.stats.StatsUsageType)
      */
     public void increaseUsage(StatsUsageType statsUsageType) {
-	long newValue = counterMap.get(statsUsageType.toString()) + 1;
-	counterMap.put(statsUsageType.toString(), newValue);
-	if (newValue % IStatsUsageService.FLUSH_THRESHOLD == 0) {
-	    flush(statsUsageType);
-	}
-
+    	if (!disabled){
+    		long newValue = counterMap.get(statsUsageType.toString()) + 1;
+    		counterMap.put(statsUsageType.toString(), newValue);
+    		if (newValue % IStatsUsageService.FLUSH_THRESHOLD == 0) {
+    			flush(statsUsageType);
+    		}
+    	}
     }
 
     public void resetUsage(StatsUsageType statsUsageType) {
-
-	counterMap.put(statsUsageType.toString(), RESET_COUNTER_VALUE);
-	flush(statsUsageType);
-
+    	if (!disabled){
+    		counterMap.put(statsUsageType.toString(), RESET_COUNTER_VALUE);
+    		flush(statsUsageType);
+    	}
     }
 
     public void flush(StatsUsageType statsUsageType) {
-	/*statsUsageDao.flushAndClear();
-	StatsUsage statsUsage = statsUsageDao.getByUsageType(statsUsageType);
-	if (statsUsage==null){
-	    statsUsage= initCounter(statsUsageType);
-	}
-	TransactionStatus txStatus = null;
-	DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
-	txDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-	txDefinition.setReadOnly(false);
+    	if (!disabled){
+    		statsUsageDao.flushAndClear();
+    		StatsUsage statsUsage = statsUsageDao.getByUsageType(statsUsageType);
+    		if (statsUsage==null){
+    			statsUsage= initCounter(statsUsageType);
+    		}
+    		TransactionStatus txStatus = null;
+    		DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
+    		txDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+    		txDefinition.setReadOnly(false);
 
-	txStatus = transactionManager.getTransaction(txDefinition);
-	statsUsage.setUsage(counterMap.get(statsUsageType.toString()));
-	statsUsageDao.save(statsUsage);
-	transactionManager.commit(txStatus);*/
+    		txStatus = transactionManager.getTransaction(txDefinition);
+    		statsUsage.setUsage(counterMap.get(statsUsageType.toString()));
+    		statsUsageDao.save(statsUsage);
+    		transactionManager.commit(txStatus);
+    	}
     }
 
 

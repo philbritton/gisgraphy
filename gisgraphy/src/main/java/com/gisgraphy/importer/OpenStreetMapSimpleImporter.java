@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -43,12 +45,9 @@ import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
-import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.geocoloc.IGeolocSearchEngine;
-import com.gisgraphy.geoloc.GeolocQuery;
-import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.geoloc.GeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.StringHelper;
@@ -63,6 +62,8 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor {
 	
+	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapSimpleImporter.class);
+	
     public static final int DISTANCE = 40000;
 
 	@Autowired
@@ -73,9 +74,6 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     
     @Autowired
     protected ISolRSynchroniser solRSynchroniser;
-    
-    @Autowired
-    protected IGeolocSearchEngine geolocSearchEngine;
     
     @Autowired
     protected IMunicipalityDetector municipalityDetector;
@@ -172,13 +170,23 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	    street.setLength(new Double(fields[3].trim()));
 	}
 	
+	if (!isEmptyField(fields, 8, true)) {
+	    try {
+		street.setShape((LineString)GeolocHelper.convertFromHEXEWKBToGeometry(fields[8]));
+	    } catch (RuntimeException e) {
+		logger.warn("can not parse shape for "+fields[8] +" : "+e);
+		return;
+	    }
+	    
+	}
 	if (!isEmptyField(fields, 4, false)) {
 	    street.setCountryCode(fields[4].trim());
 	}
 		
 	if (!isEmptyField(fields, 5, false)) {
 		street.setIsIn(fields[5].trim());
-	} else if (shouldFillIsInField()) {
+	} if (shouldFillIsInField()) {
+		//we try to process is_in fields, because we want to fill adm and zip too
 		setIsInFields(street);
 	}
 
@@ -208,15 +216,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 	    
 	}
 	
-	if (!isEmptyField(fields, 8, true)) {
-	    try {
-		street.setShape((LineString)GeolocHelper.convertFromHEXEWKBToGeometry(fields[8]));
-	    } catch (RuntimeException e) {
-		logger.warn("can not parse shape for "+fields[8] +" : "+e);
-		return;
-	    }
-	    
-	}
+	
 	
 	if (fields.length == 10 && !isEmptyField(fields, 9, false)){
 		populateAlternateNames(street,fields[9]);
@@ -293,7 +293,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     					}
     				}
     			}
-    			if (city.getName() != null) {
+    			if (city.getName() != null && street.getIsIn()==null) {//only if it has not be set by the openstreetmap is_in field
+    				//we can here have some concordance problem if the city found is not the one populate in the osm is_in fields.
     				street.setIsIn(pplxToPPL(city.getName()));
     			}
     			if (city.getAlternateNames()!=null){
@@ -327,7 +328,8 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     				if (street.getIsInAdm() == null) {
     					street.setIsInAdm(getDeeperAdmName(city2));
     				}
-    				if (street.getIsInZip() == null && city2.getZipCodes() != null ) {
+    				if (city2.getZipCodes() != null ) {//we merge the zipcodes for is_in and is_in_place, so we don't check
+    					//if zipcodes are already filled
     					for (ZipCode zip:city2.getZipCodes()){
     						if (zip!=null && zip.getCode()!=null){
     							street.addZip(zip.getCode());
@@ -335,7 +337,7 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
         				}
     				}
     				if (city==null && city2!=null){//add AN only if there are not added yet
-	        			if (city2!= null && city2.getAlternateNames()!=null){
+	        			if (city2.getAlternateNames()!=null){
 	        				for (AlternateName name : city2.getAlternateNames() ){
 	        					if (name!=null && name.getName()!=null){
 	        						street.addIsInCitiesAlternateName(name.getName());
@@ -506,10 +508,6 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
         this.idGenerator = idGenerator;
     }
 
-    @Required
-	public void setGeolocSearchEngine(IGeolocSearchEngine geolocSearchEngine) {
-		this.geolocSearchEngine = geolocSearchEngine;
-	}
 
     @Required
     public void setMunicipalityDetector(IMunicipalityDetector municipalityDetector) {

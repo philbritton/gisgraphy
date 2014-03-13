@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 
 import org.hibernate.FlushMode;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -57,6 +59,7 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProcessor {
 	
+	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapPoisSimpleImporter.class);
     
     public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
     

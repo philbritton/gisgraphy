@@ -450,6 +450,9 @@ public class ImporterConfig {
     @Required
     public void setOpenstreetmapImporterEnabled(boolean openstreetmapImporterEnabled) {
     	this.openstreetmapImporterEnabled = openstreetmapImporterEnabled;
+    	if (!openstreetmapImporterEnabled){
+    		this.openstreetmapHouseNumberImporterEnabled = false;
+    	}
     }
     
     /**
@@ -586,6 +589,9 @@ public class ImporterConfig {
     @Required
     public void setOpenstreetmapHouseNumberImporterEnabled(boolean openstreetmapHouseNumberImporterEnabled) {
     	this.openstreetmapHouseNumberImporterEnabled = openstreetmapHouseNumberImporterEnabled;
+    	if (!openstreetmapImporterEnabled){
+    		this.openstreetmapHouseNumberImporterEnabled = false;
+    	}
     }
     
     /**

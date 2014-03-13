@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
@@ -57,7 +58,7 @@ public class Street extends GisFeature {
     private String isInAdm;
     private Set<String> isInZip;
     private String fullyQualifiedAddress;
-    private List<HouseNumber> houseNumbers;
+    private SortedSet<HouseNumber> houseNumbers;
     
     /**
      * This field is only for relevance and allow to search for street<->cities in 
@@ -209,11 +210,11 @@ public class Street extends GisFeature {
 	}
 	
 	@Transient
-    public List<HouseNumber> getHouseNumbers() {
+    public SortedSet<HouseNumber> getHouseNumbers() {
 		return houseNumbers;
 	}
 
-	public void setHouseNumbers(List<HouseNumber> houseNumbers) {
+	public void setHouseNumbers(SortedSet<HouseNumber> houseNumbers) {
 		this.houseNumbers = houseNumbers;
 	}
 	

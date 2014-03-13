@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +123,7 @@ public class IntrospectionHelper {
 		for (Field f : flds) {
 		    int foundMods = f.getModifiers();
 		    if ((foundMods & searchMods) == searchMods
-			    && !f.isSynthetic() && f.getType() != List.class && f.getType() != Set.class
+			    && !f.isSynthetic() && f.getType() != List.class && f.getType() != Set.class && f.getType() != SortedSet.class
 			    && !isIgnoreField(f) && !Modifier.isFinal(foundMods)) {
 			introspectedFields.add(f.getName());
 		    }

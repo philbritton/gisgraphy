@@ -1,5 +1,8 @@
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.test.GisgraphyTestHelper.alternateNameContains;
+
+import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -7,6 +10,7 @@ import junit.framework.Assert;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
+import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.Religious;
@@ -29,14 +33,15 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		GisFeature poi = new GisFeature();
 		poi = importer.populateAlternateNames(poi, RawAlternateNames);
 		Assert.assertEquals(4, poi.getAlternateNames().size());
-		Assert.assertEquals("Karl-Franzens-Universität Graz",poi.getAlternateNames().get(0).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(0).getSource());
-		Assert.assertEquals("Universidad de Graz",poi.getAlternateNames().get(1).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(1).getSource());
-		Assert.assertEquals("Université de Graz",poi.getAlternateNames().get(2).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(2).getSource());
-		Assert.assertEquals("Грацский университет имени Карла и Франца",poi.getAlternateNames().get(3).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(3).getSource());
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Karl-Franzens-Universität Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Universidad de Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Université de Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Грацский университет имени Карла и Франца"));
+		
+		Iterator<AlternateName> iterator = poi.getAlternateNames().iterator();
+		while (iterator.hasNext()){
+			Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,iterator.next().getSource());
+		}
 		
 	}
 
@@ -70,11 +75,14 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		
 		//an
 		Assert.assertEquals(2, poi.getAlternateNames().size());
-		Assert.assertEquals("Pfarrkirche Heiliger Johannes der Täufer",poi.getAlternateNames().get(0).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(0).getSource());
-		Assert.assertEquals("Parish church Saint John Baptist",poi.getAlternateNames().get(1).getName());
-		Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,poi.getAlternateNames().get(1).getSource());
 		
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Pfarrkirche Heiliger Johannes der Täufer"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Parish church Saint John Baptist"));
+		
+		Iterator<AlternateName> iterator = poi.getAlternateNames().iterator();
+		while (iterator.hasNext()){
+			Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,iterator.next().getSource());
+		}
 		
 	}
 	

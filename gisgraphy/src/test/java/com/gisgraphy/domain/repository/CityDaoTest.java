@@ -784,6 +784,8 @@ public class CityDaoTest extends AbstractIntegrationHttpSolrTestCase {
     	Assert.assertNull("the city should be null cause we filters by municipality",actual);
     	actual = cityDao.getByShape(location,null,false);
     	Assert.assertEquals("the city should be found cause we don't filter by municipality",city1.getFeatureId(), actual.getFeatureId());
+    	Assert.assertNotNull(actual.getZipCodes());
+    	Assert.assertEquals(1,actual.getZipCodes().size());
     	
     	actual = cityDao.getByShape(location,"FR",false);
     	Assert.assertEquals("the city should be found cause we don't filter by municipality and countrycode is correct",city1.getFeatureId(), actual.getFeatureId());

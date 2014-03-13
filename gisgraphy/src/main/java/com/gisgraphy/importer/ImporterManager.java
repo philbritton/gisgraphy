@@ -41,6 +41,7 @@ import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.ImporterStatusDto;
 import com.gisgraphy.fulltext.IsolrClient;
 import com.gisgraphy.helper.FileHelper;
+import com.gisgraphy.service.impl.StatsUsageServiceImpl;
 
 /**
  * Do the importing stuff
@@ -108,6 +109,8 @@ public class ImporterManager implements IImporterManager {
 	importerStatusListDao.delete();
 	try {
 	    solrClient.setSolRLogLevel(Level.WARNING);
+	    logger.info("temporarily disabling stats");
+	    StatsUsageServiceImpl.disabled=true;
 	    this.inProgress = true;
 	    for (IImporterProcessor importer : importers) {
 		logger.info("will now process "
@@ -116,18 +119,20 @@ public class ImporterManager implements IImporterManager {
 	    }
 	    logger.info("end of import");
 	} finally {
-	    try {
-		this.importerStatusListDao.saveOrUpdate(ComputeStatusDtoList());
-	    } catch (RuntimeException e) {
-		logger.error("Can not save statusDtoList : " + e.getMessage(),e);
-	    }
-	    try {
-		this.endTime = System.currentTimeMillis();
-		this.inProgress = false;
-		setAlreadyDone(true);
-	    } catch (Exception e) {
-		logger.error("The import is done but we can not persist the already done status : "+e.getMessage(),e);
-	    }
+		try {
+			logger.info("re-enabling stats");
+			StatsUsageServiceImpl.disabled=false;
+			this.importerStatusListDao.saveOrUpdate(ComputeStatusDtoList());
+		} catch (RuntimeException e) {
+			logger.error("Can not save statusDtoList : " + e.getMessage(),e);
+		}
+		try {
+			this.endTime = System.currentTimeMillis();
+			this.inProgress = false;
+			setAlreadyDone(true);
+		} catch (Exception e) {
+			logger.error("The import is done but we can not persist the already done status : "+e.getMessage(),e);
+		}
 	}
     }
 

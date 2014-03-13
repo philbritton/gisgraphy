@@ -88,4 +88,26 @@ public class AssociatedStreetHouseNumber {
 		}
 		return houses;
 	}
+	@Override
+	public String toString() {
+		final int maxLen = 10;
+		StringBuilder builder = new StringBuilder();
+		builder.append("AssociatedStreetHouseNumber [");
+		if (relationID != null)
+			builder.append("relationID=").append(relationID).append(", ");
+		if (associatedStreetMember != null)
+			builder.append("associatedStreetMember=")
+					.append(associatedStreetMember.subList(0,
+							Math.min(associatedStreetMember.size(), maxLen)))
+					.append(", ");
+		if (streets != null)
+			builder.append("streets=")
+					.append(streets.subList(0, Math.min(streets.size(), maxLen)))
+					.append(", ");
+		if (house != null)
+			builder.append("house=").append(
+					house.subList(0, Math.min(house.size(), maxLen)));
+		builder.append("]");
+		return builder.toString();
+	}
 }

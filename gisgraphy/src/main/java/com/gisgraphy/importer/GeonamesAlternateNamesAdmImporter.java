@@ -24,6 +24,9 @@ package com.gisgraphy.importer;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Import the Alternate names.
  * 
@@ -31,6 +34,8 @@ import java.io.File;
  */
 public class GeonamesAlternateNamesAdmImporter extends GeonamesAlternateNamesSimpleImporter {
 
+	protected static final Logger logger = LoggerFactory.getLogger(GeonamesAlternateNamesAdmImporter.class);
+	
 		 @Override
 		    protected File[] getFiles() {
 			if (importerConfig.isImportGisFeatureEmbededAlternateNames()) {

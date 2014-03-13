@@ -18,7 +18,7 @@ public class HouseNumberTest {
 		same.setStreet(street);
 		same.setNumber("1");
 		
-		Assert.assertTrue("not same number=>not equals",hn1.equals(same));
+		Assert.assertTrue("same number and street=>equals",hn1.equals(same));
 		
 		
 		HouseNumber hnNotSameNumber = new HouseNumber();
@@ -40,6 +40,7 @@ public class HouseNumberTest {
 		hnNotSameStreet.setStreet(street2);
 		
 		Assert.assertFalse("not same street=>not equals",hn1.equals(hnNotSameStreet));
+		
 		//now we put the same openstreetmapid
 		hn1.setOpenstreetmapId(openstreetmapId);
 		hnNotSameStreet.setOpenstreetmapId(openstreetmapId);

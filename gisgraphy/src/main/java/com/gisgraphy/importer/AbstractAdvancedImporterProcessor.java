@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.tools.ant.taskdefs.Sleep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,10 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 		for (File file : splitedFiles) {
 			Runnable task = createTask(file);
 			logger.info("creating task " + task);
+			try {
+				Thread.sleep(2000);//for progressive starting
+			} catch (InterruptedException e) {
+			}
 			threadPoolTaskExecutor.execute(task);
 		}
 		try {
@@ -137,8 +142,8 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 				if (exception != null) {
 					throw exception;
 				}
-				logger.info("wait for " + this.getClass().getSimpleName() + " to be finished");
-				Thread.sleep(5000);
+				logger.info("wait for " + this.getClass().getSimpleName() + " to be finished ("+threadPoolTaskExecutor.getThreadPoolExecutor().getActiveCount()+" active threads)");
+				Thread.sleep(10000);
 			}
 		} catch (InterruptedException e) {
 			logger.warn(this.getClass().getSimpleName() + "has been interrupted");
@@ -149,6 +154,7 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 				if (this.status != ImporterStatus.ERROR) {
 					this.statusMessage = "";
 				}
+				clean();
 			} catch (Exception e) {
 				this.status = ImporterStatus.ERROR;
 				String teardownErrorMessage = "An error occured on teardown (the import is done but maybe not optimzed) :" + e.getMessage();
@@ -158,6 +164,15 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 		}
 		logger.info(this.getClass().getSimpleName() + " is finished");
 
+	}
+
+	private void clean() {
+		try {
+			threadPoolTaskExecutor.destroy();
+			threadPoolTaskExecutor = null;
+		} catch (Exception e) {
+			logger.error("an error has occured when cleaning thread executor"+e.getMessage(),e);
+		}
 	}
 
 	public abstract Runnable createTask(File file);

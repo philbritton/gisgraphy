@@ -55,6 +55,7 @@ public class ImportConfirmAction extends ActionSupport {
 
 	protected static final String IMPORT_VIEW_NAME = "import";
 	protected static final String CHECK_CONFIG_VIEW_NAME = "checkconfig";
+	protected static final String ERRORCONFIG = "errorconfig";
 
 	private static Logger logger = LoggerFactory.getLogger(ImportConfirmAction.class);
 
@@ -84,6 +85,9 @@ public class ImportConfirmAction extends ActionSupport {
 	private List<String> placetypes;
 
 	private int step = 1;
+	
+	private boolean configGotProblems= false;
+	
 
 	/*
 	 * (non-Javadoc)
@@ -100,7 +104,7 @@ public class ImportConfirmAction extends ActionSupport {
 			}
 		} catch (ImporterMetaDataException e) {
 			errorMessage = e.getMessage();
-			return ERROR;
+			return ERRORCONFIG;
 		}
 		return super.execute();
 	}
@@ -394,8 +398,20 @@ public class ImportConfirmAction extends ActionSupport {
 	
 	
 	public boolean isConfigOk(){
-		return importerConfig.isConfigCorrectForImport() && isFulltextSearchEngineAlive();
+		boolean configOK =(importerConfig.isConfigCorrectForImport() && isFulltextSearchEngineAlive());
+		configGotProblems = ! configOK;
+		return configOK;
 		
 	}
+
+	public boolean isConfigGotProblems() {
+		return configGotProblems;
+	}
+
+	public void setConfigGotProblems(boolean configGotProblems) {
+		this.configGotProblems = configGotProblems;
+	}
+
+	
 
 }

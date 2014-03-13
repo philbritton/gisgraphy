@@ -131,7 +131,7 @@ public class GisFeature{
 
     private String asciiName;
 
-    private List<AlternateName> alternateNames;
+    private Set<AlternateName> alternateNames;
 
     private Point location;
     
@@ -574,7 +574,7 @@ public class GisFeature{
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "gisFeature")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Fetch(FetchMode.SELECT)
-    public List<AlternateName> getAlternateNames() {
+    public Set<AlternateName> getAlternateNames() {
 	return alternateNames;
     }
 
@@ -582,7 +582,7 @@ public class GisFeature{
      * @param alternateNames
      *                The {@link AlternateName}s for this GisFeature
      */
-    public void setAlternateNames(List<AlternateName> alternateNames) {
+    public void setAlternateNames(Set<AlternateName> alternateNames) {
 	this.alternateNames = alternateNames;
     }
 
@@ -594,13 +594,15 @@ public class GisFeature{
      *                the alternateName to add
      */
     public void addAlternateName(AlternateName alternateName) {
-	List<AlternateName> currentAlternateNames = getAlternateNames();
-	if (currentAlternateNames == null) {
-	    currentAlternateNames = new ArrayList<AlternateName>();
-	}
-	currentAlternateNames.add(alternateName);
-	this.setAlternateNames(currentAlternateNames);
-	alternateName.setGisFeature(this);
+    	if (alternateName!=null){
+    		alternateName.setGisFeature(this);
+    		Set<AlternateName> currentAlternateNames = getAlternateNames();
+    		if (currentAlternateNames == null) {
+    			currentAlternateNames = new HashSet<AlternateName>();
+    		}
+    		currentAlternateNames.add(alternateName);
+    		this.setAlternateNames(currentAlternateNames);
+    	}
     }
 
     /**
@@ -1069,14 +1071,15 @@ public class GisFeature{
      * @param zipCode the zip code to add
      */
 	public void addZipCode(ZipCode zipCode) {
-		Set<ZipCode> actualZipCodes = getZipCodes();
-		if (actualZipCodes == null) {
-			actualZipCodes = new HashSet<ZipCode>();
+		if (zipCode!=null){
+			Set<ZipCode> actualZipCodes = getZipCodes();
+			if (actualZipCodes == null) {
+				actualZipCodes = new HashSet<ZipCode>();
+			}
+			actualZipCodes.add(zipCode);
+			this.setZipCodes(actualZipCodes);
+			zipCode.setGisFeature(this);
 		}
-		actualZipCodes.add(zipCode);
-		this.setZipCodes(actualZipCodes);
-		zipCode.setGisFeature(this);
-
 	}
 
 	/**

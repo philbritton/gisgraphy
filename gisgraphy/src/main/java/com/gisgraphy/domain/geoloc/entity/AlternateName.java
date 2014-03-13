@@ -252,51 +252,37 @@ public class AlternateName {
 	this.language = language == null ? language : language.toUpperCase();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
-    public int hashCode() {
-	final int PRIME = 31;
-	int result = super.hashCode();
-	result = PRIME * result
-		+ ((gisFeature == null) ? 0 : gisFeature.hashCode());
-	result = PRIME * result + ((name == null) ? 0 : name.hashCode());
-	return result;
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((language == null) ? 0 : language.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AlternateName other = (AlternateName) obj;
+		if (language == null) {
+			if (other.language != null)
+				return false;
+		} else if (!language.equals(other.language))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	final AlternateName other = (AlternateName) obj;
-	if (gisFeature == null) {
-	    if (other.gisFeature != null) {
-		return false;
-	    }
-	} else if (!gisFeature.equals(other.gisFeature)) {
-	    return false;
-	}
-	if (name == null) {
-	    if (other.name != null) {
-		return false;
-	    }
-	} else if (!name.equals(other.name)) {
-	    return false;
-	}
-	return true;
-    }
 
     /*
      * (non-Javadoc)

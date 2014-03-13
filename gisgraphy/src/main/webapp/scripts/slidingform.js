@@ -19,7 +19,7 @@ jQuery(s = function() {
         var jQuerystep 		= jQuery(this);
 		widths[i]  		= stepsWidth;
         stepsWidth	 	+= jQuerystep.width();
-	stepsWidth+=24;
+	stepsWidth+=22;
     });
 	jQuery('#steps').width(stepsWidth);
 	
