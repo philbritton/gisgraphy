@@ -340,11 +340,11 @@ public class FulltextClient implements IFullTextSearchEngine {
 	}
 
 	public void executeAndSerialize(FulltextQuery arg0, OutputStream arg1) throws ServiceException {
-		throw new RuntimeException("executeQueryToDatabaseObjects is not implemented");
+		throw new RuntimeException("executeAndSerialize is not implemented");
 	}
 
 	public String executeQueryToString(FulltextQuery arg0) throws ServiceException {
-		throw new RuntimeException("executeQueryToDatabaseObjects is not implemented");
+		throw new RuntimeException("executeQueryToString is not implemented");
 	}
 
 	public List<?> executeQueryToDatabaseObjects(FulltextQuery query) throws ServiceException {
