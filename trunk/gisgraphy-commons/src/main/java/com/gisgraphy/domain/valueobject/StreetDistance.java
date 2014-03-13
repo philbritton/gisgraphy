@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.domain.valueobject;
 
+import java.util.SortedSet;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,6 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gisgraphy.helper.URLUtils;
+import com.gisgraphy.street.HouseNumberDto;
 import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.Point;
 
@@ -172,6 +176,8 @@ public class StreetDistance {
     private String isInZip;
     
     private String fullyQualifiedAddress;
+    
+   // private SortedSet<HouseNumberDto> housenumbers;
 
    
 
@@ -303,7 +309,17 @@ public class StreetDistance {
 		return fullyQualifiedAddress;
 	}
 	
-	
+	 public String getOpenstreetmapUrl(){
+	    	return URLUtils.createOpenstreetmapMapUrlForStreet(location);
+	 }
+
+	/*public SortedSet<HouseNumberDto> getHousenumbers() {
+		return housenumbers;
+	}
+
+	public void setHousenumbers(SortedSet<HouseNumberDto> housenumbers) {
+		this.housenumbers = housenumbers;
+	}*/
 
 	
 
