@@ -1,5 +1,7 @@
 package com.gisgraphy.street;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.vividsolutions.jts.geom.Point;
 
@@ -12,6 +14,7 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class HouseNumberDto {
 
+	@XmlTransient
 	private Point location;
 	private String number;
 	
