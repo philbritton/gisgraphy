@@ -46,83 +46,84 @@ public class SolrResponseDto {
 
   
    // @Transient
-    protected Double distance;
+    Double distance;
     
-    protected String name;
-    protected List<String> name_alternates;
-    protected Map<String, List<String>> name_alternates_localized;
+    public String name;
+    public Float score;
+    public List<String> name_alternates;
+    public Map<String, List<String>> name_alternates_localized;
 
-    protected Long feature_id;
-    protected String feature_class;
-    protected String feature_code;
-    protected String name_ascii;
-    protected Integer elevation;
-    protected Integer gtopo30;
-    protected String timezone;
-    protected String fully_qualified_name;
-    protected String placetype;
-    protected Integer population;
-    protected Double lat;
-    protected Double lng;
-    protected String adm1_code;
-    protected String adm2_code;
-    protected String adm3_code;
-    protected String adm4_code;
+    public Long feature_id;
+    public String feature_class;
+    public String feature_code;
+    public String name_ascii;
+    public Integer elevation;
+    public Integer gtopo30;
+    public String timezone;
+    public String fully_qualified_name;
+    public String placetype;
+    public Integer population;
+    public Double lat;
+    public Double lng;
+    public String adm1_code;
+    public String adm2_code;
+    public String adm3_code;
+    public String adm4_code;
     
     //country specific fields
-    protected String continent;
-    protected String currency_code;
-    protected String currency_name;
-    protected String fips_code;
-    protected String isoalpha2_country_code;
-    protected String isoalpha3_country_code;
+    public String continent;
+    public String currency_code;
+    public String currency_name;
+    public String fips_code;
+    public String isoalpha2_country_code;
+    public String isoalpha3_country_code;
    
 
-    protected String postal_code_mask;
-    protected String postal_code_regex;
-    protected String phone_prefix;
-    protected List<String> spoken_languages;
-    protected String tld;
-    protected String capital_name;
-    protected Double area;
+    public String postal_code_mask;
+    public String postal_code_regex;
+    public String phone_prefix;
+    public List<String> spoken_languages;
+    public String tld;
+    public String capital_name;
+    public Double area;
     
     //Adm only
-    protected Integer level;
+    public Integer level;
 
-    protected String adm1_name;
-    protected List<String> adm1_names_alternate;
-    protected Map<String, List<String>> adm1_names_alternate_localized;
+    public String adm1_name;
+    public List<String> adm1_names_alternate;
+    public Map<String, List<String>> adm1_names_alternate_localized;
 
-    protected String adm2_name;
-    protected List<String> adm2_names_alternate;
-    protected Map<String, List<String>> adm2_names_alternate_localized;
+    public String adm2_name;
+    public List<String> adm2_names_alternate;
+    public Map<String, List<String>> adm2_names_alternate_localized;
 
-    protected String adm3_name;
-    protected String adm4_name;
-    protected List<String> zipcodes;
-    protected String country_code;
+    public String adm3_name;
+    public String adm4_name;
+    public List<String> zipcodes;
+    public String country_code;
 
-    protected String country_name;
-    protected List<String> country_names_alternate;
-    protected Map<String, List<String>> country_names_alternate_localized;
+    public String country_name;
+    public List<String> country_names_alternate;
+    public Map<String, List<String>> country_names_alternate_localized;
 
-    protected String country_flag_url;
-    protected String google_map_url;
-    protected String yahoo_map_url;
-    protected String openstreetmap_map_url;
+    public String country_flag_url;
+    public String google_map_url;
+    public String yahoo_map_url;
+    public String openstreetmap_map_url;
     
-    protected boolean one_way;
-    protected Double length;
-    protected String  street_type;
-    protected Long openstreetmap_id;
-    protected String is_in;
-    protected String is_in_place;
-    protected String is_in_adm;
-    protected Set<String> is_in_zip;
-    protected String fully_qualified_address;
-    protected List<HouseNumberDto> house_numbers;
-    protected boolean municipality;
-    protected String amenity;
+    public boolean one_way;
+    public Double length;
+    public String  street_type;
+    public Long openstreetmap_id;
+    public String is_in;
+    public String is_in_place;
+    public String is_in_adm;
+    public Set<String> is_in_zip;
+    public String fully_qualified_address;
+    public List<HouseNumberDto> house_numbers;
+    public boolean municipality;
+    public String amenity;
    
 
 	/**
@@ -589,6 +590,10 @@ public class SolrResponseDto {
 
 	public void setOpenstreetmap_map_url(String openstreetmap_map_url) {
 		this.openstreetmap_map_url = openstreetmap_map_url;
+	}
+
+	public Float getScore() {
+		return score;
 	}
 
    
