@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,12 +24,16 @@ import com.gisgraphy.rest.RestClientException;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.service.ServiceException;
 import com.gisgraphy.servlet.GisgraphyServlet;
+import com.gisgraphy.street.HouseNumberDeserializer;
+import com.gisgraphy.street.HouseNumberDto;
 
 public class FulltextClient implements IFullTextSearchEngine {
 
 	private String baseUrl;
 
 	private ObjectMapper mapper = new ObjectMapper();
+	
+	private HouseNumberDeserializer houseNumberDeserializer = new HouseNumberDeserializer();
 
 	private IRestClient restClient = new RestClient();
 
@@ -319,11 +324,35 @@ public class FulltextClient implements IFullTextSearchEngine {
 			if (doc.get(FullTextFields.IS_IN.getValue()) != null) {
 				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN.getValue()).toString();
 			}
+			if (doc.get(FullTextFields.IS_IN_ADM.getValue()) != null) {
+				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN_ADM.getValue()).toString();
+			}
+			if (doc.get(FullTextFields.IS_IN_ZIP.getValue()) != null) {
+				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN_ZIP.getValue()).toString();
+			}
+			
+			if (doc.get(FullTextFields.HOUSE_NUMBERS.getValue()) != null) {
+				solrResponseDto.house_numbers = getHouseNumber((List)doc.get(FullTextFields.HOUSE_NUMBERS.getValue()));
+			}
+			
 
 			results.add(solrResponseDto);
 		}
 		dto.results = results;
 		return dto;
+	}
+
+	private List<HouseNumberDto> getHouseNumber(List<String> houseNumberAsList) {
+		List<HouseNumberDto> houseNumbers = new ArrayList<HouseNumberDto>();
+		if (houseNumberAsList!=null){
+			for (String hnAsString: houseNumberAsList){
+				HouseNumberDto dto = houseNumberDeserializer.deserialize(hnAsString);
+				if (dto !=null){
+					houseNumbers.add(dto);
+				}
+			}
+		}
+		return houseNumbers;
 	}
 
 	private void getAlternateNamesMap( Entry entry,Map<String,List<String>> map) {
@@ -364,7 +393,7 @@ public class FulltextClient implements IFullTextSearchEngine {
 
 	protected String fulltextQueryToQueryString(FulltextQuery query) {
 		StringBuffer sb = new StringBuffer("?");
-		addParameter(sb, FulltextQuery.QUERY_PARAMETER, query.getQuery());
+		addParameter(sb, FulltextQuery.QUERY_PARAMETER, URLEncoder.encode(query.getQuery()));
 		addParameter(sb, FulltextQuery.LAT_PARAMETER, query.getLatitude());
 		addParameter(sb, FulltextQuery.LONG_PARAMETER, query.getLongitude());
 		addParameter(sb, FulltextQuery.RADIUS_PARAMETER, query.getRadius());
