@@ -322,9 +322,12 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 	
 	
 	@Test
-	public void findNearestStreet(){
+	public void findNearestStreet_oneResult(){
 		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
-		SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
+		SolrResponseDto solrResponseDto = EasyMock.createMock(SolrResponseDto.class);
+		long openstreetmapId = 233L;
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
+		EasyMock.replay(solrResponseDto);
 		results.add(solrResponseDto);
 		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
 		EasyMock.expect(mockResultDTO.getResultsSize()).andReturn(1);
@@ -338,14 +341,75 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		query.around(point);
 		query.withRadius(OpenStreetMapHouseNumberSimpleImporter.SEARCH_DISTANCE);
 		query.withAllWordsRequired(false).withoutSpellChecking();
+		
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		EasyMock.expect(osmDaoMock.getByOpenStreetMapId(openstreetmapId)).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		
 
 		IFullTextSearchEngine fulltextEngine = EasyMock.createMock(IFullTextSearchEngine.class);
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
 		EasyMock.expect(fulltextEngine.executeQuery(query)).andStubReturn(mockResultDTO);
 		EasyMock.replay(fulltextEngine);
 		importer.setFullTextSearchEngine(fulltextEngine);
-		System.out.println(query);
-		importer.findNearestStreet(streetName, point);
+		importer.setOpenStreetMapDao(osmDaoMock);
+		OpenStreetMap result = importer.findNearestStreet(streetName, point);
+		Assert.assertEquals(osm, result);
+		EasyMock.verify(fulltextEngine);
+	}
+	
+	
+	@Test
+	public void findNearestStreet_severalResults(){
+		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
+		SolrResponseDto solrResponseDto = EasyMock.createMock(SolrResponseDto.class);
+		long openstreetmapId = 233L;
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
+		EasyMock.replay(solrResponseDto);
+		results.add(solrResponseDto);
+		
+		
+		SolrResponseDto solrResponseDto2 = EasyMock.createMock(SolrResponseDto.class);
+		long openstreetmapId2 = 344L;
+		EasyMock.expect(solrResponseDto2.getOpenstreetmap_id()).andStubReturn(openstreetmapId2);
+		EasyMock.replay(solrResponseDto2);
+		results.add(solrResponseDto2);
+		
+		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
+		EasyMock.expect(mockResultDTO.getResultsSize()).andReturn(2);
+		EasyMock.expect(mockResultDTO.getResults()).andReturn(results);
+		EasyMock.replay(mockResultDTO);
+		
+		String streetName="streetname";
+		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, OpenStreetMapHouseNumberSimpleImporter.MEDIUM_OUTPUT, 
+				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		Point point = GeolocHelper.createPoint(2F,	3F);
+		query.around(point);
+		query.withRadius(OpenStreetMapHouseNumberSimpleImporter.SEARCH_DISTANCE);
+		query.withAllWordsRequired(false).withoutSpellChecking();
+		
+		OpenStreetMap osm = new OpenStreetMap();
+		osm.setOpenstreetmapId(openstreetmapId);
+		IOpenStreetMapDao osmDaoMock = EasyMock.createMock(IOpenStreetMapDao.class);
+		List<Long> ids = new ArrayList<Long>();
+		ids.add(openstreetmapId);
+		ids.add(openstreetmapId2);
+		EasyMock.expect(osmDaoMock.getNearestByosmIds(point, ids )).andStubReturn(osm);
+		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
+		EasyMock.replay(osmDaoMock);
+		
+
+		IFullTextSearchEngine fulltextEngine = EasyMock.createMock(IFullTextSearchEngine.class);
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		EasyMock.expect(fulltextEngine.executeQuery(query)).andStubReturn(mockResultDTO);
+		EasyMock.replay(fulltextEngine);
+		importer.setFullTextSearchEngine(fulltextEngine);
+		importer.setOpenStreetMapDao(osmDaoMock);
+		OpenStreetMap result = importer.findNearestStreet(streetName, point);
+		Assert.assertEquals(osm, result);
 		EasyMock.verify(fulltextEngine);
 	}
 	
@@ -379,9 +443,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		EasyMock.expect(osmDaoMock.save(osm)).andReturn(osm);
 		EasyMock.replay(osmDaoMock);
 		
-		final SolrResponseDto solrResponseDto = EasyMock.createNiceMock(SolrResponseDto.class);
-		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andStubReturn(openstreetmapId);
-		EasyMock.replay(solrResponseDto);
+		final OpenStreetMap openStreetMap = new OpenStreetMap();
 		
 		final Point point = (Point)GeolocHelper.convertFromHEXEWKBToGeometry("0101000020E6100000046DBC85BFA81D40DA7D22AA4BDD4540");
 		final AssociatedStreetHouseNumber associatedStreetHouseNumber = new AssociatedStreetHouseNumber();
@@ -392,11 +454,11 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		buildHouseNumberFromAssociatedHouseNumberCalled=false;
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
 			@Override
-			protected SolrResponseDto findNearestStreet(String streetName,
+			protected OpenStreetMap findNearestStreet(String streetName,
 					Point location) {
 				if ("Avenue de Fontvieille".equals(streetName) && location==point){
 					findNearestStreetCalled=true;
-					return solrResponseDto;
+					return openStreetMap;
 				} else {
 					Assert.fail("find nearest street is not called with the correct parameters");
 					return null;
@@ -423,7 +485,6 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		
 		//verify
 		EasyMock.verify(osmDaoMock);
-		EasyMock.verify(solrResponseDto);
 		Assert.assertTrue(findNearestStreetCalled);
 		Assert.assertTrue(buildHouseNumberFromAssociatedHouseNumberCalled);
 	}
@@ -443,7 +504,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		findNearestStreetCalled=false;
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
 			@Override
-			protected SolrResponseDto findNearestStreet(String streetName,
+			protected OpenStreetMap findNearestStreet(String streetName,
 					Point location) {
 				if ("Avenue de Fontvieille".equals(streetName) && location==point){
 					findNearestStreetCalled=true;
@@ -587,7 +648,7 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		houseNumber.setOpenstreetmapId(openstreetmapId);
 		
 		
-		OpenStreetMap osm = EasyMock.createMock(OpenStreetMap.class);
+		final OpenStreetMap osm = EasyMock.createMock(OpenStreetMap.class);
 		EasyMock.expect(osm.getOpenstreetmapId()).andStubReturn(openstreetmapId);
 		osm.addHouseNumber(houseNumber);
 		EasyMock.replay(osm);
@@ -601,11 +662,11 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		findNearestStreetCalled=false;
 		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter(){
 			@Override
-			protected SolrResponseDto findNearestStreet(String streetName,
+			protected OpenStreetMap findNearestStreet(String streetName,
 					Point location) {
 				if ("streetName".equals(streetName) && location==point){
 					findNearestStreetCalled=true;
-					return solrResponseDto;
+					return osm;
 				} else {
 					Assert.fail("find nearest street is not called with the correct parameters");
 					return null;
@@ -720,9 +781,6 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		Assert.assertEquals(HouseNumberType.INTERPOLATION, houseNumbers.get(6).getType());
 		
 	}
-	
-	
-	
 	
 	
 

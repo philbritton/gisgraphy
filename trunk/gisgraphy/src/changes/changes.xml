@@ -689,6 +689,10 @@
 				alternatenames doesn't contain duplicates
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				fulltext engine (dto) now return the score
+			</action>
+			
 			
 			</release>
 			

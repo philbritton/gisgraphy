@@ -24,6 +24,7 @@ public class solrResponseDtoBuilder {
     public SolrResponseDto build(SolrDocument solrDocument) {
 	SolrResponseDto solrResponseDto = new SolrResponseDto();
 	if (solrDocument != null) {
+		solrResponseDto.score= getFieldAsFloat(solrDocument, "score");
 	    solrResponseDto.name = getFieldAsString(solrDocument, FullTextFields.NAME
 		    .getValue());
 	    solrResponseDto.feature_id = getFieldAsLong(solrDocument,
@@ -171,7 +172,7 @@ public class solrResponseDtoBuilder {
 		}
 		return housenumbers;
 	}
-
+	
     private Map<String, List<String>> getFieldsToMap(SolrDocument solrDocument,
 	    String fieldNamePrefix) {
 	Map<String, List<String>> result = new HashMap<String, List<String>>();

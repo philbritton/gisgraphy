@@ -82,8 +82,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
     @Test
     public void testAllfulltextfieldsShouldBeMapped(){
     	//there is some fields present in fulltextfields but stored=false,some Fulltextfields are suffix, distance is calculated in solrdto
-    	//but not in ftf.. the difference beetween FulltextFields and dto is 2
-    	int numFieldDifference = 3;
+    	//but not in ftf and the score is not mapped.. the difference beetween FulltextFields and dto is 2
+    	int numFieldDifference = 2;
     	FullTextFields[] fulltextfields = 	FullTextFields.class.getEnumConstants();
     	Field[] dtoFields = SolrResponseDto.class.getDeclaredFields();
     	List<String> dtoFieldsName = new ArrayList<String>();
@@ -119,6 +119,7 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		+ city.getName(), results.size() == 1);
 	SolrResponseDto result = results.get(0);
 	assertEquals(city.getName(), result.getName());
+	assertNotNull(result.getScore());
 	assertEquals(city.getCountryCode(), result.getCountry_code());
 	assertEquals(city.getFeatureId(), result.getFeature_id());
 	assertEquals(city.getFeatureClass(), result.getFeature_class());
@@ -164,7 +165,9 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 		.get("FR").get(0));
 
 	assertEquals(2, result.getAdm1_names_alternate().size());
-	Assert.assertTrue(result.getAdm1_names_alternate().contains(city.getAdm().getParent().getParent().getAlternateNames().iterator().next().getName()));
+	
+	Assert.assertTrue(result.getAdm1_names_alternate().contains("admGGPalternate"));
+	Assert.assertTrue(result.getAdm1_names_alternate().contains("admGGPalternate2"));
 	assertEquals("admGGPalternate2", result.getAdm1_names_alternate()
 		.get(1));
 
@@ -173,7 +176,7 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 
 	assertEquals(1, result.getCountry_names_alternate().size());
 	assertTrue(result.getAdm2_names_alternate().contains(city.getAdm().getParent().getAlternateNames().iterator().next().getName()));
-	assertTrue(result.getCountry_names_alternate().contains(city.getCountry().getAlternateNames().iterator().next().getName()));
+	assertTrue(result.getCountry_names_alternate().contains("francia"));
 
 	assertEquals(1, result.getCountry_names_alternate_localized().size());
 	assertEquals("franciaFR", result.getCountry_names_alternate_localized()
