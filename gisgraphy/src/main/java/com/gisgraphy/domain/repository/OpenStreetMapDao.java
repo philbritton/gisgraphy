@@ -479,6 +479,105 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
     public void setStreetFactory(IStreetFactory streetFactory) {
         this.streetFactory = streetFactory;
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<OpenStreetMap> getNearestFrom(
+	    final Point point, final double distance,
+	    final int firstResult, final int maxResults,
+	    final StreetType streetType, final Boolean oneWay ,final String name, final StreetSearchMode streetSearchMode,final boolean includeDistanceField) {
+	if (streetSearchMode==StreetSearchMode.FULLTEXT && !GisgraphyConfig.STREET_SEARCH_FULLTEXT_MODE){
+		throw new GisgraphyException("The fulltext mode has been removed in gisgraphy v 3.0 and has been replaced by fulltext webservice with placetype=street. please Consult user guide.");
+	}
+	if (name != null && streetSearchMode==null){
+		throw new IllegalArgumentException("streetSearchmode can not be null if name is provided");
+	}
+	if (point == null && streetSearchMode==StreetSearchMode.CONTAINS){
+		throw new IllegalArgumentException("you must specify lat/lng when streetsearchmode = "+StreetSearchMode.CONTAINS);
+	}
+	return (List<OpenStreetMap>) this.getHibernateTemplate().execute(
+		new HibernateCallback() {
+
+		    public Object doInHibernate(Session session)
+			    throws PersistenceException {
+		    	String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+		    	String queryString = "from " + OpenStreetMap.class.getSimpleName()
+						+ " as c  where distance_sphere("+pointAsString+",ST_line_interpolate_point(c."+OpenStreetMap.SHAPE_COLUMN_NAME+
+								",st_line_locate_point(c."+OpenStreetMap.SHAPE_COLUMN_NAME+","+pointAsString+"))) < "+distance;
+		    
+		    	if (streetType != null) {
+		    		queryString = queryString+" and c.streetType='"+streetType+"'";
+				}
+		    	
+		    	Query qry = session.createQuery(queryString);
+		    	if (maxResults > 0) {
+		    		qry = qry.setMaxResults(maxResults);
+		    	}
+		    	if (firstResult >= 1) {
+		    		qry = qry.setFirstResult(firstResult - 1);
+		    	}
+		    	if (oneWay != null) {
+		    		if (oneWay){
+		    			queryString = queryString+" and c.oneWay="+1;
+		    		} else {
+		    			queryString = queryString+" and c.oneWay="+0;
+		    		}
+				}
+		    	
+		    	
+		    	
+/*			
+			
+			
+			if (point!=null){
+			    Polygon polygonBox = GeolocHelper.createPolygonBox(point.getX(), point.getY(), distance);
+			    criteria = criteria.add(new IntersectsRestriction(OpenStreetMap.SHAPE_COLUMN_NAME, polygonBox));
+			}
+			if (name != null) {
+					if (streetSearchMode==StreetSearchMode.CONTAINS){
+					    	criteria = criteria.add(Restrictions.isNotNull("name"));//optimisation!
+					    	criteria = criteria.add(Restrictions.ilike(OpenStreetMap.FULLTEXTSEARCH_PROPERTY_NAME, "%"+name+"%"));
+					    	//criteria = criteria.add(new PartialWordSearchRestriction(OpenStreetMap.PARTIALSEARCH_VECTOR_COLUMN_NAME, name));
+					} else if (streetSearchMode == StreetSearchMode.FULLTEXT){
+						  criteria = criteria.add(new FulltextRestriction(OpenStreetMap.FULLTEXTSEARCH_VECTOR_PROPERTY_NAME, name));
+					} else {
+						throw new NotImplementedException(streetSearchMode+" is not implemented for street search");
+					}
+			}
+			
+			if (oneWay != null) {
+			    criteria = criteria.add(Restrictions.eq("oneWay",oneWay));
+			}
+			criteria.setCacheable(true);*/
+			// List<Object[]> queryResults =testCriteria.list();
+			List<?> queryResults = qry.list();
+			
+			if (queryResults != null && queryResults.size()!=0){
+				/*	    String[] propertiesNameArray ;
+			    if (includeDistanceField && point!=null){
+			propertiesNameArray = (String[]) ArrayUtils
+			    	.add(
+			    		IntrospectionHelper
+			    			.getFieldsAsArray(OpenStreetMap.class),
+			    		"distance");
+			    } else  {
+				propertiesNameArray = IntrospectionHelper
+	    			.getFieldsAsArray(OpenStreetMap.class);
+			    }
+			List<StreetDistance> results = ResultTransformerUtil
+				.transformToStreetDistance(
+					propertiesNameArray,
+					queryResults);*/
+			return queryResults;
+			} else {
+			    return new ArrayList<OpenStreetMap>();
+			}
+			
+		    }
+		});
+    }
+    
+    
+    
 
 
 
