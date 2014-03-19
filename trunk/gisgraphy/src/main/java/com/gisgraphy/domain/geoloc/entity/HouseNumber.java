@@ -43,6 +43,7 @@ import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.street.HouseNumberComparator;
+import com.gisgraphy.util.StringUtil;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -64,7 +65,18 @@ public class HouseNumber implements Comparable<HouseNumber>{
     public HouseNumber() {
     }
 
-    @IntrospectionIgnoredField
+    public HouseNumber(String number, Point location) {
+    	if (number==null || "".equals(number.trim())){
+    		throw new IllegalArgumentException("wrong number given for housenumber");
+    	}
+    	if (location==null){
+    		throw new IllegalArgumentException("wrong location for housenumber");
+    	}
+    	this.number = number;
+		this.location = location;
+	}
+
+	@IntrospectionIgnoredField
     private Long id;
 
     private Long openstreetmapId;

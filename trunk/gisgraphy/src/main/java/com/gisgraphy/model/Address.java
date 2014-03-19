@@ -34,6 +34,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * This class is used to represent an address with address, city, province and
  * postal-code information.
  * 
+ * !!!!THIS CLASS IS AN OLD CLASS TO STORE USER INFORMATION, DO NOT USE FOR GEOCODING OR GIS!!!!
+ * 
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 @Embeddable

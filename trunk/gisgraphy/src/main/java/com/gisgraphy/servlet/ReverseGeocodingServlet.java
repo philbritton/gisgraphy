@@ -36,27 +36,24 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.gisgraphy.domain.valueobject.Constants;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocErrorVisitor;
 import com.gisgraphy.geoloc.GeolocQuery;
-import com.gisgraphy.geoloc.GeolocQueryHttpBuilder;
 import com.gisgraphy.helper.HTMLHelper;
+import com.gisgraphy.reversegeocoding.IReverseGeocodingService;
+import com.gisgraphy.reversegeocoding.ReverseGeocodingQuery;
+import com.gisgraphy.reversegeocoding.ReverseGeocodingQueryHttpBuilder;
 import com.gisgraphy.serializer.common.IoutputFormatVisitor;
 import com.gisgraphy.serializer.common.OutputFormat;
 
 /**
- * Provides a servlet Wrapper around The Gisgraphy geoloc Service, it Maps web
- * parameters to create a {@linkplain GeolocQuery}
+ * Provides a servlet Wrapper around The Gisgraphy Reverse geocoding Service, it Maps web
+ * parameters to create a {@linkplain ReverseGeocodingQuery}
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
-public class GeolocServlet extends GisgraphyServlet {
+public class ReverseGeocodingServlet extends GisgraphyServlet {
 
    
-    
-    
-
-
     /*
      * (non-Javadoc)
      * 
@@ -68,13 +65,13 @@ public class GeolocServlet extends GisgraphyServlet {
 	    super.init();
 	    WebApplicationContext springContext = WebApplicationContextUtils
 		    .getWebApplicationContext(getServletContext());
-	    geolocSearchEngine = (IGeolocSearchEngine) springContext
-		    .getBean("geolocSearchEngine");
+	    reverseGeocodingService = (IReverseGeocodingService) springContext
+		    .getBean("reverseGeocodingService");
 	    logger
 		    .info("geolocSearchEngine is injected :"
-			    + geolocSearchEngine);
+			    + reverseGeocodingService);
 	} catch (Exception e) {
-	    logger.error("Can not start GeolocServlet : " + e.getMessage(),e);
+	    logger.error("Can not start ReverseGeocodingServlet : " + e.getMessage(),e);
 	}
     }
 
@@ -87,10 +84,10 @@ public class GeolocServlet extends GisgraphyServlet {
      * The logger
      */
     protected static final Logger logger = LoggerFactory
-	    .getLogger(GeolocServlet.class);
+	    .getLogger(ReverseGeocodingServlet.class);
   
 
-    private IGeolocSearchEngine geolocSearchEngine;
+    private IReverseGeocodingService reverseGeocodingService;
 
     /*
      * (non-Javadoc)
@@ -112,21 +109,21 @@ public class GeolocServlet extends GisgraphyServlet {
 			"error.emptyLatLong"), format, resp,req);
 		return;
 	    }
-	    GeolocQuery query = GeolocQueryHttpBuilder.getInstance().buildFromHttpRequest(req);
+	    ReverseGeocodingQuery query = ReverseGeocodingQueryHttpBuilder.getInstance().buildFromHttpRequest(req);
 	    if (logger.isDebugEnabled()){
 	    logger.debug("query=" + query);
-	    logger.debug("geolocSearchEngine=" + geolocSearchEngine);
+	    logger.debug("reverse geocoding engine=" + reverseGeocodingService);
 	    }
 	    String UA = req.getHeader("User-Agent");
 	    String referer = req.getHeader("Referer");
 	    if (logger.isInfoEnabled()){
-		logger.info("A geoloc request from "+req.getRemoteHost()+" / "+req.getRemoteAddr()+" was received , Referer : "+referer+" , UA : "+UA);
+		logger.info("A reverse  geocoding request from "+req.getRemoteHost()+" / "+req.getRemoteAddr()+" was received , Referer : "+referer+" , UA : "+UA);
 	    }
 
-	    geolocSearchEngine.executeAndSerialize(query, resp
+	    reverseGeocodingService.executeAndSerialize(query, resp
 		    .getOutputStream());
 	} catch (RuntimeException e) {
-	    logger.error("error while execute a geoloc query from http request : " + e,e);
+	    logger.error("error while execute a reverse geocoding query from http request : " + e,e);
 	    String errorMessage = isDebugMode() ? " : " + e.getMessage() : "";
 	    sendCustomError(ResourceBundle
 		    .getBundle(Constants.BUNDLE_ERROR_KEY).getString(
@@ -138,25 +135,12 @@ public class GeolocServlet extends GisgraphyServlet {
     }
 
 
- 
-
-   
-    /**
-     * @param geolocSearchEngine
-     *                the geolocSearchEngine to set
-     */
-    public void setGeolocSearchEngine(IGeolocSearchEngine geolocSearchEngine) {
-	this.geolocSearchEngine = geolocSearchEngine;
-    }
-
-   
-
     /* (non-Javadoc)
      * @see com.gisgraphy.servlet.GisgraphyServlet#getGisgraphyServiceType()
      */
     @Override
     public GisgraphyServiceType getGisgraphyServiceType() {
-	return GisgraphyServiceType.GEOLOC;
+	return GisgraphyServiceType.REVERSEGEOCODING;
     }
 
 
@@ -167,5 +151,12 @@ public class GeolocServlet extends GisgraphyServlet {
     public IoutputFormatVisitor getErrorVisitor(String errorMessage) {
 	return new GeolocErrorVisitor(errorMessage);
     }
+
+
+
+	public void setReverseGeocodingService(
+			IReverseGeocodingService reverseGeocodingService) {
+		this.reverseGeocodingService = reverseGeocodingService;
+	}
 
 }

@@ -743,4 +743,19 @@ public class OpenStreetMap {
 	}
     }
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("OpenStreetMap [");
+		if (openstreetmapId != null)
+			builder.append("openstreetmapId=").append(openstreetmapId)
+					.append(", ");
+		if (name != null)
+			builder.append("name=").append(name).append(", ");
+		if (location != null)
+			builder.append("location=").append(location);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }

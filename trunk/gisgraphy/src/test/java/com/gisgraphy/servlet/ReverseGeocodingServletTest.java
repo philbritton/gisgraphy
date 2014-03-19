@@ -39,39 +39,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gisgraphy.domain.valueobject.Constants;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.fulltext.AbstractIntegrationHttpSolrTestCase;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
-import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.helper.OutputFormatHelper;
+import com.gisgraphy.reversegeocoding.IReverseGeocodingService;
+import com.gisgraphy.reversegeocoding.ReverseGeocodingQuery;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.test.FeedChecker;
 
-public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
+public class ReverseGeocodingServletTest extends AbstractIntegrationHttpSolrTestCase {
 
     private static ServletTester servletTester;
-    private static String geolocServletUrl;
+    private static String reverseGeocodingServletUrl;
 
     @Autowired
-    private IGeolocSearchEngine geolocSearchEngine;
+    private IReverseGeocodingService reverseGeocodingService;
 
-    public static final String GEOLOC_SERVLET_CONTEXT = "/geoloc";
+    public static final String REVERSE_GECODOING_SERVLET_CONTEXT = "/reversegeocoding";
 
-    private static boolean geolocServletStarted = false;
+    private static boolean reverseGeocodingServletStarted = false;
 
     @Override
     public void onSetUp() throws Exception {
 	super.onSetUp();
 
-	if (!geolocServletStarted) {
+	if (!reverseGeocodingServletStarted) {
 	    // we only launch geoloc servlet once
 	    servletTester = new ServletTester();
 	    servletTester.setContextPath("/");
 	    ServletHolder holder = servletTester.addServlet(
-		    GeolocServlet.class, GEOLOC_SERVLET_CONTEXT + "/*");
-	    geolocServletUrl = servletTester.createSocketConnector(true);
+	    		ReverseGeocodingServlet.class, REVERSE_GECODOING_SERVLET_CONTEXT + "/*");
+	    reverseGeocodingServletUrl = servletTester.createSocketConnector(true);
 	    servletTester.start();
-	    GeolocServlet geolocServlet = (GeolocServlet) holder.getServlet();
-	    geolocServlet.setGeolocSearchEngine(geolocSearchEngine);
-	    geolocServletStarted = true;
+	    ReverseGeocodingServlet reverseGeocodingServlet = (ReverseGeocodingServlet) holder.getServlet();
+	    reverseGeocodingServlet.setReverseGeocodingService(reverseGeocodingService);
+	    reverseGeocodingServletStarted = true;
 	}
     }
 
@@ -90,10 +90,10 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     public void testInitShouldTakeTheDebugParameterWhenTrue() throws Exception {
 
 	ServletTester servletTester = new ServletTester();
-	ServletHolder sh = servletTester.addServlet(GeolocServlet.class, "/*");
+	ServletHolder sh = servletTester.addServlet(ReverseGeocodingServlet.class, "/*");
 	sh.setInitParameter(GisgraphyServlet.DEBUG_MODE_PARAMETER_NAME, "true");
 	servletTester.start();
-	GeolocServlet servlet = (GeolocServlet) sh.getServlet();
+	ReverseGeocodingServlet servlet = (ReverseGeocodingServlet) sh.getServlet();
 	Assert.assertTrue(servlet.isDebugMode());
 	servletTester.stop();
 
@@ -103,10 +103,10 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     public void testInitShouldTakeTheDebugParameterWhenIncorrect() throws Exception {
 
 	ServletTester servletTester = new ServletTester();
-	ServletHolder sh = servletTester.addServlet(GeolocServlet.class, "/*");
+	ServletHolder sh = servletTester.addServlet(ReverseGeocodingServlet.class, "/*");
 	sh.setInitParameter(GisgraphyServlet.DEBUG_MODE_PARAMETER_NAME, "foo");
 	servletTester.start();
-	GeolocServlet servlet = (GeolocServlet) sh.getServlet();
+	ReverseGeocodingServlet servlet = (ReverseGeocodingServlet) sh.getServlet();
 	Assert.assertFalse(servlet.isDebugMode());
 	servletTester.stop();
 
@@ -116,22 +116,22 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     public void testDebugParameterShouldBeFalseByDefault() throws Exception {
 
 	ServletTester servletTester = new ServletTester();
-	ServletHolder sh = servletTester.addServlet(GeolocServlet.class, "/*");
+	ServletHolder sh = servletTester.addServlet(ReverseGeocodingServlet.class, "/*");
 	servletTester.start();
-	GeolocServlet servlet = (GeolocServlet) sh.getServlet();
+	ReverseGeocodingServlet servlet = (ReverseGeocodingServlet) sh.getServlet();
 	Assert.assertFalse(servlet.isDebugMode());
     }
 
     @Test
     public void testShouldReturnCorrectContentTypeForSupportedFormat() {
-	String url = geolocServletUrl + GEOLOC_SERVLET_CONTEXT
-		+ "/geolocsearch";
+	String url = reverseGeocodingServletUrl + REVERSE_GECODOING_SERVLET_CONTEXT
+		+ "/search";
 
 	String queryString;
 	for (OutputFormat format : OutputFormat.values()) {
 	    GetMethod get = null;
 	    try {
-		queryString = GeolocQuery.LAT_PARAMETER+"=3&"+GeolocQuery.LONG_PARAMETER+"=4&format=" + format.toString();
+		queryString = ReverseGeocodingQuery.LAT_PARAMETER+"=3&"+ReverseGeocodingQuery.LONG_PARAMETER+"=4&format=" + format.toString();
 		HttpClient client = new HttpClient();
 		get = new GetMethod(url);
 
@@ -140,10 +140,9 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
 		// result = get.getResponseBodyAsString();
 		
 		Header contentType = get.getResponseHeader("Content-Type");
-		OutputFormat expectedformat = OutputFormatHelper.getDefaultForServiceIfNotSupported(format,GisgraphyServiceType.GEOLOC);
+		OutputFormat expectedformat = OutputFormatHelper.getDefaultForServiceIfNotSupported(format,GisgraphyServiceType.REVERSEGEOCODING);
 		assertTrue(contentType.getValue().equals(
 			expectedformat.getContentType()));
-
 	    } catch (IOException e) {
 		fail("An exception has occured " + e.getMessage());
 	    } finally {
@@ -157,14 +156,14 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     
     @Test
     public void testShouldReturnCorrectContentTypeForSupportedFormatWhenErrorOccured() {
-	String url = geolocServletUrl + GEOLOC_SERVLET_CONTEXT
-		+ "/geolocsearch";
+	String url = reverseGeocodingServletUrl + REVERSE_GECODOING_SERVLET_CONTEXT
+		+ "/search";
 
 	String queryStringWithMissingLat;
 	for (OutputFormat format : OutputFormat.values()) {
 	    GetMethod get = null;
 	    try {
-		queryStringWithMissingLat = GeolocQuery.LONG_PARAMETER+"=4&format=" + format.toString();
+		queryStringWithMissingLat = ReverseGeocodingQuery.LONG_PARAMETER+"=4&format=" + format.toString();
 		HttpClient client = new HttpClient();
 		get = new GetMethod(url);
 
@@ -173,7 +172,7 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
 		// result = get.getResponseBodyAsString();
 		
 		Header contentType = get.getResponseHeader("Content-Type");
-		OutputFormat expectedformat = OutputFormatHelper.getDefaultForServiceIfNotSupported(format,GisgraphyServiceType.GEOLOC);
+		OutputFormat expectedformat = OutputFormatHelper.getDefaultForServiceIfNotSupported(format,GisgraphyServiceType.REVERSEGEOCODING);
 		assertEquals("The content-type is not correct",expectedformat.getContentType(),contentType.getValue());
 
 	    } catch (IOException e) {
@@ -188,13 +187,13 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     }
     @Test
     public void testShouldReturnCorrectStatusCode() {
-	String url = geolocServletUrl + GEOLOC_SERVLET_CONTEXT
+	String url = reverseGeocodingServletUrl + REVERSE_GECODOING_SERVLET_CONTEXT
 		+ "/geolocsearch";
 
 	String queryStringWithMissingLat;
 	    GetMethod get = null;
 	    try {
-		queryStringWithMissingLat = GeolocQuery.LONG_PARAMETER+"=4&format=" + OutputFormat.JSON.toString();
+		queryStringWithMissingLat = ReverseGeocodingQuery.LONG_PARAMETER+"=4&format=" + OutputFormat.JSON.toString();
 		HttpClient client = new HttpClient();
 		get = new GetMethod(url);
 
@@ -218,8 +217,8 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     public void testShouldReturnCorrectJSONError() {
 
 	JsTester jsTester = null;
-	String url = geolocServletUrl + GEOLOC_SERVLET_CONTEXT
-		+ "/geolocsearch";
+	String url = reverseGeocodingServletUrl + REVERSE_GECODOING_SERVLET_CONTEXT
+		+ "/search";
 
 	String result;
 	String queryString;
@@ -260,8 +259,8 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     @Test
     public void testShouldReturnCorrectXMLError() {
 
-	String url = geolocServletUrl + GEOLOC_SERVLET_CONTEXT
-		+ "/fulltextsearch";
+	String url = reverseGeocodingServletUrl + REVERSE_GECODOING_SERVLET_CONTEXT
+		+ "/search";
 
 	String result;
 	String queryString;
@@ -292,8 +291,8 @@ public class GeolocServletTest extends AbstractIntegrationHttpSolrTestCase {
     
     @Test
     public void testGetGisgraphyServiceTypeShouldReturnTheCorrectValue(){
-	GisgraphyServlet servlet = new GeolocServlet();
-    	assertEquals(GisgraphyServiceType.GEOLOC, servlet.getGisgraphyServiceType());
+	GisgraphyServlet servlet = new ReverseGeocodingServlet();
+    	assertEquals(GisgraphyServiceType.REVERSEGEOCODING, servlet.getGisgraphyServiceType());
 
     }
 }

@@ -4,8 +4,33 @@ import net.sf.jstester.util.Assert;
 
 import org.junit.Test;
 
+import com.gisgraphy.helper.GeolocHelper;
+
 public class HouseNumberTest {
 
+	@Test
+	public void testConstructorPointNumber(){
+		HouseNumber houseNumber = new HouseNumber("foo",GeolocHelper.createPoint(3D, 4D));
+		Assert.assertEquals("foo", houseNumber.getNumber());
+		Assert.assertNotNull(houseNumber.getLocation());
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorPointNumber_NullNumber(){
+		new HouseNumber(null,GeolocHelper.createPoint(3D, 4D));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorPointNumber_EmptyNumber(){
+		new HouseNumber("",GeolocHelper.createPoint(3D, 4D));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testConstructorPointNumber_NullLocation(){
+		new HouseNumber("foo",null);
+	}
+	
+	
 	@Test
 	public void testEquals() {
 		HouseNumber hn1 = new HouseNumber();

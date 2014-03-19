@@ -133,34 +133,21 @@ public interface IOpenStreetMapDao extends IDao<OpenStreetMap, java.lang.Long> {
     public long getMaxGid();
     
     /**
-     * base method for all findNearest but return the Database objects
+     * find the nearest street based on the shape, not the middle point
      * 
      * @param point
-     *                The point from which we want to find GIS Object
-     * @param distance
-     *                The radius in meters
-     * @param firstResult
-     *                the firstResult index (for pagination), numbered from 1,
-     *                if < 1 : it will not be taken into account
-     * @param maxResults
-     *                The Maximum number of results to retrieve (for
-     *                pagination), if <= 0 : it will not be taken into acount
-     * @param streetType
-     *                The type of street
-     * @param oneWay
-     *                whether the street should be oneway or not
-     * @param name
-     *                the name the street name must contains
-     * 
-     * @param streetSearchMode if we search in fulltext or contain mode
-     * @param includeDistanceField if we have to calculate the distance or not
-     * @return A List of StreetDistance with the nearest elements or an
-     *         empty list (never return null), ordered by distance.
-     * @see StreetDistance
+     *                The point from which we want to find street
      */
-    public List<OpenStreetMap> getNearestFrom(
-    	    final Point point, final double distance,
-    	    final int firstResult, final int maxResults,
-    	    final StreetType streetType, final Boolean oneWay ,final String name, final StreetSearchMode streetSearchMode,final boolean includeDistanceField) ;
+    public OpenStreetMap getNearestFrom(
+    	    final Point point) ;
+    
+    /**
+     * find the nearest road based on the shape, not the middle point and exclude footway
+     * 
+     * @param point
+     *                The point from which we want to find street
+     */
+    public OpenStreetMap getNearestRoadFrom(
+    	    final Point point);
     
 }
