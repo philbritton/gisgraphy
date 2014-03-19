@@ -36,6 +36,8 @@ public class OutputFormatHelper {
     
     private final static OutputFormat[] ADDRESS_PARSER_SUPPORTED_FORMAT = { OutputFormat.XML, OutputFormat.JSON, OutputFormat.PHP,OutputFormat.RUBY,OutputFormat.PYTHON,OutputFormat.YAML };
     
+    private final static OutputFormat[] REVERSEGEOCODING_SUPPORTED_FORMAT = ADDRESS_PARSER_SUPPORTED_FORMAT;
+    
     private final static OutputFormat[] GEOCODING_SUPPORTED_FORMAT = { OutputFormat.XML, OutputFormat.JSON, OutputFormat.PHP,OutputFormat.RUBY,OutputFormat.PYTHON,OutputFormat.YAML };
     
 	/**
@@ -58,6 +60,8 @@ public class OutputFormatHelper {
 		return ADDRESS_PARSER_SUPPORTED_FORMAT;
 	    case GEOCODING:
 		return GEOCODING_SUPPORTED_FORMAT;
+	    case REVERSEGEOCODING:
+			return REVERSEGEOCODING_SUPPORTED_FORMAT;
 	    default:
 		throw new RuntimeException("The service type "
 			+ serviceType + " is not implemented");
@@ -90,6 +94,8 @@ public class OutputFormatHelper {
 		return isFormatSupported(format,serviceType)==true?format:OutputFormat.getDefault();
 	    case GEOCODING:
 		return isFormatSupported(format,serviceType)==true?format:OutputFormat.getDefault();
+	    case REVERSEGEOCODING:
+			return isFormatSupported(format,serviceType)==true?format:OutputFormat.getDefault();
 	    default:
 		throw new UnsupportedFormatException("The service type "
 			+ serviceType + " is not implemented");
