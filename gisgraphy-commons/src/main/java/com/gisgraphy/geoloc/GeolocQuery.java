@@ -50,56 +50,7 @@ public class GeolocQuery extends AbstractGisQuery {
     public static final int DEFAULT_MAX_RESULTS = 10;
    
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = super.hashCode();
-	result = prime * result
-		+ ((placeType == null) ? 0 : placeType.hashCode());
-	result = prime * result + ((point == null) ? 0 : point.hashCode());
-	long temp;
-	temp = Double.doubleToLongBits(radius);
-	result = prime * result + (int) (temp ^ (temp >>> 32));
-	return result;
-    }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (!super.equals(obj))
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	final GeolocQuery other = (GeolocQuery) obj;
-	if (placeType == null) {
-	    if (other.placeType != null)
-		return false;
-	} else if (!placeType.equals(other.placeType))
-	    return false;
-	if (point == null) {
-	    if (other.point != null)
-		return false;
-	} else if (point.getX() != (other.point.getX())){
-	    return false;
-	}
-	else if (point.getY() != (other.point.getY())){
-	    return false;
-	}
-	else if (municipalityFilter != (other.municipalityFilter)){
-	    return false;
-	}
-	if (Double.doubleToLongBits(radius) != Double
-		.doubleToLongBits(other.radius))
-	    return false;
-	return true;
-    }
 
     /**
      * needed by CGlib
@@ -313,6 +264,57 @@ public class GeolocQuery extends AbstractGisQuery {
     public GeolocQuery withMunicipalityFilter(boolean municipality) {
         this.municipalityFilter = municipality;
         return this;
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result
+		+ ((placeType == null) ? 0 : placeType.hashCode());
+	result = prime * result + ((point == null) ? 0 : point.hashCode());
+	long temp;
+	temp = Double.doubleToLongBits(radius);
+	result = prime * result + (int) (temp ^ (temp >>> 32));
+	return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (!super.equals(obj))
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	final GeolocQuery other = (GeolocQuery) obj;
+	if (placeType == null) {
+	    if (other.placeType != null)
+		return false;
+	} else if (!placeType.equals(other.placeType))
+	    return false;
+	if (point == null) {
+	    if (other.point != null)
+		return false;
+	} else if (point.getX() != (other.point.getX())){
+	    return false;
+	}
+	else if (point.getY() != (other.point.getY())){
+	    return false;
+	}
+	else if (municipalityFilter != (other.municipalityFilter)){
+	    return false;
+	}
+	if (Double.doubleToLongBits(radius) != Double
+		.doubleToLongBits(other.radius))
+	    return false;
+	return true;
     }
   
     

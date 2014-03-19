@@ -51,5 +51,5 @@ package com.gisgraphy.domain.valueobject;
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  */
 public enum GisgraphyServiceType {
-    FULLTEXT, GEOLOC, STREET,ADDRESS_PARSER,GEOCODING
+    FULLTEXT, GEOLOC, STREET,ADDRESS_PARSER,GEOCODING,REVERSEGEOCODING
 }
