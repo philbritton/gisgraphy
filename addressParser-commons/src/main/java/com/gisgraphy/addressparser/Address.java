@@ -74,6 +74,7 @@ public class Address {
     private String district;
     private String dependentLocality;
     private String city;
+    private String citySubdivision;
     private String postTown;
     private String state;
     private String prefecture;//mainly for china
@@ -83,6 +84,8 @@ public class Address {
     private GeocodingLevels geocodingLevel = GeocodingLevels.NONE;
     
     private String confidence;
+    
+    private Double distance;
     
     public String getCountry() {
         return country;
@@ -210,7 +213,15 @@ public class Address {
 	this.city = city;
     }
 
-    public String getState() {
+    public String getCitySubdivision() {
+		return citySubdivision;
+	}
+
+	public void setCitySubdivision(String citySubdivision) {
+		this.citySubdivision = citySubdivision;
+	}
+
+	public String getState() {
 	return state;
     }
 
@@ -891,6 +902,18 @@ public class Address {
 
 	public void setConfidence(String confidence) {
 		this.confidence = confidence;
+	}
+
+	public Double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(Double distance) {
+		this.distance = distance;
+	}
+
+	public void setGeocodingLevel(GeocodingLevels geocodingLevel) {
+		this.geocodingLevel = geocodingLevel;
 	}
 
 }
