@@ -693,6 +693,11 @@
 				fulltext engine (dto) now return the score
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add a dedicated Reversegeocoding service that return address (Street search only returns street, and now v 4.0 is roof top, so 
+				we need something more precise)
+			</action>
+			
 			
 			</release>
 			

@@ -638,6 +638,7 @@ public class GisgraphyTestHelper {
 	zips.add("zip LA2");
 	streetOSM.setIsInZip(zips);
 	streetOSM.setFullyQualifiedAddress("fullyqulified address LA");
+	streetOSM.setCountryCode("XX");
 	return StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM);
 
     }
@@ -660,6 +661,7 @@ public class GisgraphyTestHelper {
     	streetOSM.setName("peter martin");
     	streetOSM.setOpenstreetmapId(12346L);
     	streetOSM.setLocation(GeolocHelper.createPoint(30.001F, 40F));
+    	streetOSM.setCountryCode("XX");
         return StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM);
     	
         }
@@ -881,6 +883,14 @@ public class GisgraphyTestHelper {
 	request.addParameter(GeolocQuery.LONG_PARAMETER, "3.0");
 	return request;
     }
+    
+    public static MockHttpServletRequest createMockHttpServletRequestForReverseGeocoding() {
+    	MockHttpServletRequest request = new MockHttpServletRequest();
+    	request.addParameter(GisgraphyServlet.FORMAT_PARAMETER, "XML");
+    	request.addParameter(GeolocQuery.LAT_PARAMETER, "1.0");
+    	request.addParameter(GeolocQuery.LONG_PARAMETER, "2.0");
+    	return request;
+        }
     
     public static MockHttpServletRequest createMockHttpServletRequestForStreetGeoloc() {
 	MockHttpServletRequest request = new MockHttpServletRequest();

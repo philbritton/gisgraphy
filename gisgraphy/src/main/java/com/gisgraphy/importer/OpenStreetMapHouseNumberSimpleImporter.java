@@ -680,8 +680,12 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		}
 
 	protected OpenStreetMap findNearestStreet(String streetName, Point location) {
-		if (streetName==null || "".equals(streetName.trim()) || "\"\"".equals(streetName.trim()) || location == null){
+		//Openstreetmap has sometimes, for a  same street, several segment, so we do a fulltext search and then search for the nearest based on shape,not nearest point
+		if (location == null){
 			return null;
+		}
+		if (streetName==null || "".equals(streetName.trim()) || "\"\"".equals(streetName.trim()) ){
+			return openStreetMapDao.getNearestFrom(location);
 		}
 		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, MEDIUM_OUTPUT, 
 				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);

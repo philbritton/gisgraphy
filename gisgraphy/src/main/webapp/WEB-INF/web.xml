@@ -223,6 +223,24 @@
 		<url-pattern>/geoloc/*</url-pattern>
 	</servlet-mapping>
 	
+ 	  <servlet>
+		<servlet-name>reverse geocoding service</servlet-name>
+		<servlet-class>
+			com.gisgraphy.servlet.ReverseGeocodingServlet
+		</servlet-class>
+		 <init-param>
+		 <!-- if true the output field error will contains the exception message. Default to false -->
+			<param-name>debugMode</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>reverse geocoding service</servlet-name>
+		<url-pattern>/reversegeocoding/*</url-pattern>
+	</servlet-mapping>
+	
 	 <servlet>
 		<servlet-name>address parser service</servlet-name>
 		<servlet-class>

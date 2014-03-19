@@ -123,7 +123,7 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 		openStreetMapDao.save(streetOSM);
 		assertNotNull(openStreetMapDao.get(streetOSM.getId()));
 		
-		//we create a multilineString a little bit closest than the first one 
+		//we create a multilineString a little bit closest to the first one 
 		OpenStreetMap streetOSM2 = new OpenStreetMap();
 		LineString shape2 = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.9154734)");
 		shape2.setSRID(SRID.WGS84_SRID.getSRID());
@@ -170,7 +170,7 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	openStreetMapDao.save(streetOSM);
 	assertNotNull(openStreetMapDao.get(streetOSM.getId()));
 	
-	//we create a multilineString a little bit closest than the first one 
+	//we create a multilineString a little bit closest to the first one 
 	OpenStreetMap streetOSM2 = new OpenStreetMap();
 	LineString shape2 = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.9154734)");
 	shape2.setSRID(SRID.WGS84_SRID.getSRID());
@@ -359,16 +359,12 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	
     }
     
-
-
     
     @Test
     public void testUpdateTS_vectorColumnForStreetNameSearch(){
     	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
     	openStreetMapDao.save(streetOSM);
     	assertNotNull(openStreetMapDao.get(streetOSM.getId()));
-    	
-    	
     	    	
     	Point searchPoint = GeolocHelper.createPoint(30.1F, 30.1F);
     	
@@ -505,7 +501,7 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
     }
     
     @Test
-    public void testGetNearestFromShouldReturnValidDTO() {
+    public void testGetNearestFrom() {
     LineString shape = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.99999)");
     shape.setSRID(SRID.WGS84_SRID.getSRID());
 	
@@ -528,21 +524,83 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	streetOSM2.setStreetType(StreetType.FOOTWAY);
 	streetOSM2.setName("John Kenedy");
 	streetOSM2.setOpenstreetmapId(123456L);
+	HouseNumber houseNumber = new HouseNumber("3",GeolocHelper.createPoint(6.94130446F , 50.91544866F));
+	houseNumber.setNumber("3");
+	streetOSM2.addHouseNumber(houseNumber);
+	
 	StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM2);
 	openStreetMapDao.save(streetOSM2);
 	assertNotNull(openStreetMapDao.get(streetOSM2.getId()));
 	
 	int numberOfLineUpdated = openStreetMapDao.updateTS_vectorColumnForStreetNameSearch();
-	
-			assertEquals("It should have 2 lines updated : (streetosm +streetosm2) for fulltext",2, numberOfLineUpdated);
-	
+    assertEquals("It should have 2 lines updated : (streetosm +streetosm2) for fulltext",2, numberOfLineUpdated);
 	
 	Point searchPoint = GeolocHelper.createPoint(6.9412748F, 50.9155829F);
 	
-	List<OpenStreetMap> nearestStreet = openStreetMapDao.getNearestFrom(searchPoint, 10000, 1, 1, StreetType.FOOTWAY,false, null,null,true);
-	assertEquals(1,nearestStreet.size());
+	OpenStreetMap nearestStreet = openStreetMapDao.getNearestFrom(searchPoint);
+	List<StreetDistance> list = openStreetMapDao.getNearestAndDistanceFrom(searchPoint, 1000, 1,1, null, null, null, null, true);
+	assertEquals("The street is not the expected one, there is probably a problem with the distance",streetOSM2,nearestStreet);
+	Double distanceFromNearestPointOnStreet = list.get(0).getDistance();
+	double distanceFromMiddleOfStreet = GeolocHelper.distance(searchPoint, nearestStreet.getLocation());
+	//System.out.println("distanceFromMiddleOfStreet="+distanceFromMiddleOfStreet+", distanceFromNearestPointOnStreet="+distanceFromNearestPointOnStreet);
+	Assert.assertTrue("the distance from the middle of the street should be greater than the one from the nearest point",distanceFromMiddleOfStreet>distanceFromNearestPointOnStreet);
+	Assert.assertNotNull("The housenumbers shouldBe retrieved",nearestStreet.getHouseNumbers());
+	Assert.assertEquals("The housenumbers shouldBe retrieved",1,nearestStreet.getHouseNumbers().size());
     }
 
+    
+    @Test
+    public void testGetNearestRoadFrom() {
+    LineString shape = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.99999)");
+    shape.setSRID(SRID.WGS84_SRID.getSRID());
+	
+	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+	streetOSM.setShape(shape);
+	openStreetMapDao.save(streetOSM);
+	assertNotNull(openStreetMapDao.get(streetOSM.getId()));
+	
+	//we create a multilineString a little bit closest than the first one 
+	OpenStreetMap streetOSM2 = new OpenStreetMap();
+	LineString shape2 = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.9154734)");
+	shape2.setSRID(SRID.WGS84_SRID.getSRID());
+	
+	
+	streetOSM2.setShape(shape2);
+	streetOSM2.setGid(2L);
+	//Simulate middle point
+	streetOSM2.setLocation(GeolocHelper.createPoint(6.94130445F , 50.91544865F));
+	streetOSM2.setOneWay(false);
+	streetOSM2.setStreetType(StreetType.SECONDARY);
+	streetOSM2.setName("John Kenedy");
+	streetOSM2.setOpenstreetmapId(123456L);
+	HouseNumber houseNumber = new HouseNumber("3",GeolocHelper.createPoint(6.94130446F , 50.91544866F));
+	houseNumber.setNumber("3");
+	streetOSM2.addHouseNumber(houseNumber);
+	
+	StringHelper.updateOpenStreetMapEntityForIndexation(streetOSM2);
+	openStreetMapDao.save(streetOSM2);
+	assertNotNull(openStreetMapDao.get(streetOSM2.getId()));
+	
+	int numberOfLineUpdated = openStreetMapDao.updateTS_vectorColumnForStreetNameSearch();
+    assertEquals("It should have 2 lines updated : (streetosm +streetosm2) for fulltext",2, numberOfLineUpdated);
+	
+	Point searchPoint = GeolocHelper.createPoint(6.9412748F, 50.9155829F);
+	
+	OpenStreetMap nearestRoad = openStreetMapDao.getNearestRoadFrom(searchPoint);
+	assertEquals("The street is not the expected one, there is probably a problem with the distance",streetOSM2,nearestRoad);
+	//System.out.println("distanceFromMiddleOfStreet="+distanceFromMiddleOfStreet+", distanceFromNearestPointOnStreet="+distanceFromNearestPointOnStreet);
+	Assert.assertNotNull("The housenumbers shouldBe retrieved",nearestRoad.getHouseNumbers());
+	Assert.assertEquals("The housenumbers shouldBe retrieved",1,nearestRoad.getHouseNumbers().size());
+	
+	//now we change the StreetType
+	streetOSM2.setStreetType(StreetType.FOOTWAY);
+	openStreetMapDao.save(streetOSM2);
+	
+	nearestRoad = openStreetMapDao.getNearestRoadFrom(searchPoint);
+	Assert.assertNull("Road should be null because it is a footway street",nearestRoad);
+    }
+
+    
     
     public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
         this.openStreetMapDao = openStreetMapDao;
