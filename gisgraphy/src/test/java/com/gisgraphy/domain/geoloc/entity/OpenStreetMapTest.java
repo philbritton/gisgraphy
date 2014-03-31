@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import net.sf.jstester.util.Assert;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
@@ -128,6 +129,26 @@ public class OpenStreetMapTest {
 		Assert.assertEquals("add should add not replace",2, street.getAlternateNames().size());
 		
 		Assert.assertEquals("double set is not correct",street, street.getAlternateNames().get(1).getStreet());
+		
+	}
+	
+	@Test
+	public void testAddAlternateNamesShouldNotAddTooLongNames() {
+		OpenStreetMap street = new OpenStreetMap();
+		street.setId(1L);
+		
+		List<AlternateOsmName> names = new ArrayList<AlternateOsmName>();
+		
+		names.add(new AlternateOsmName("foo", AlternateNameSource.OPENSTREETMAP));
+		street.addAlternateNames(names);
+		
+		Assert.assertEquals(1, street.getAlternateNames().size());
+		Assert.assertEquals("double set is not correct",street, street.getAlternateNames().get(0).getStreet());
+		
+		street.addAlternateName(new AlternateOsmName(StringUtils.repeat("a", OpenStreetMap.MAX_ALTERNATENAME_SIZE+1), AlternateNameSource.OPENSTREETMAP));
+		Assert.assertEquals("add should add not too long names",1, street.getAlternateNames().size());
+		
+		Assert.assertEquals("double set is not correct",street, street.getAlternateNames().get(0).getStreet());
 		
 	}
 

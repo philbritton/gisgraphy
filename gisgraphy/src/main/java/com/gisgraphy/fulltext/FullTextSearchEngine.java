@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -104,6 +105,10 @@ public class FullTextSearchEngine implements IFullTextSearchEngine {
 	    throws FullTextSearchException {
 	Assert.notNull(multiThreadedHttpConnectionManager,
 		"multiThreadedHttpConnectionManager can not be null");
+	HttpConnectionManagerParams p = new HttpConnectionManagerParams();
+	p.setSoTimeout(0);
+	p.setConnectionTimeout(0);
+	multiThreadedHttpConnectionManager.setParams(p);
 	this.httpClient = new HttpClient(multiThreadedHttpConnectionManager);
 	if (this.httpClient == null) {
 	    throw new FullTextSearchException(

@@ -41,7 +41,6 @@ import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.repository.IhouseNumberDao;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.domain.valueobject.Output;
@@ -69,7 +68,6 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImporterProcessor {
 
-	private static final int SCORE_THRESOLD = 10;
 
 	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapHouseNumberSimpleImporter.class);
 
@@ -687,8 +685,14 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		if (streetName==null || "".equals(streetName.trim()) || "\"\"".equals(streetName.trim()) ){
 			return openStreetMapDao.getNearestFrom(location);
 		}
-		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, MEDIUM_OUTPUT, 
-				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		FulltextQuery query;
+		try {
+			query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, MEDIUM_OUTPUT, 
+					com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		} catch (IllegalArgumentException e) {
+			logger.error("can not create a fulltext query for "+streetName+", will return the nearest");
+			return openStreetMapDao.getNearestFrom(location);
+		}
 		query.withAllWordsRequired(false).withoutSpellChecking();
 		query.around(location);
 			query.withRadius(SEARCH_DISTANCE);

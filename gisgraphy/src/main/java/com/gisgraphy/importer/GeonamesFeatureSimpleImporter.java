@@ -58,7 +58,6 @@ import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.helper.FeatureClassCodeHelper;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.util.StringUtil;
-import com.sun.mail.handlers.text_html;
 
 /**
  * Import the Features from a Geonames dump file.

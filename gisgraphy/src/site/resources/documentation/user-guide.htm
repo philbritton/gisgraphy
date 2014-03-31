@@ -1,5 +1,7 @@
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gisgraphy user guide</title>
  <style type="text/css" media="all">
 @import url("./css/site.css");
 
@@ -70,7 +72,7 @@ To suggest a change or a correction to any part of the documentation, please sen
 </div>
 <div>
 <div class="masterTopic">Quick access to webservices documentation : </div>
-<a href="#geocodingservice">Geocoding</a> | <a href="./addressparser.htm">Address parser</a> | <a href="#streetservice">Reverse geocoding / street service</a> | <a href="#geolocservice">Find nearby</a> | <a href="#fulltextservice">Fulltext</a>
+<a href="#geocodingservice">Geocoding</a> | <a href="http://address-parser.net">Address parser</a> | <a href="#reversegeocodingservice">Reverse geocoding </a> | <a href="#streetservice"> street service</a> | <a href="#geolocservice">Find nearby</a> | <a href="#fulltextservice">Fulltext</a>
 </div>
 
 <div class="masterTopic">Table of content : </div>
@@ -93,7 +95,16 @@ To suggest a change or a correction to any part of the documentation, please sen
 <div class="indexlevel3"><a href="#geocodingserviceoutputfieldsdescription" />Output fields description</a></div>
 <div class="indexlevel3"><a href="#geocodingservicejavaapi" />Java API</a></div>
 <div class="indexlevel2"><a href="#addressparser" />AdressParser</a></div>
-<div class="indexlevel2"><a href="#streetservice" />Reverse geocoding / street service</a></div>
+
+<div class="indexlevel2"><a href="#reversegeocodingservice" />Reverse geocoding</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingservicedescription" />Description</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingserviceoutputformat" />Output formats and languages</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingserviceparameters" />Parameters</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingwebservice" />Web service</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingserviceoutputfieldsdescription" />Output fields description</a></div>
+<div class="indexlevel3"><a href="#reversegeocodingservicejavaapi" />Java API</a></div>
+
+<div class="indexlevel2"><a href="#streetservice" />street service</a></div>
 <div class="indexlevel3"><a href="#streetservicedescription" />Description</a></div>
 <div class="indexlevel3"><a href="#streetserviceoutputformat" />Output formats and languages</a></div>
 <div class="indexlevel3"><a href="#streetserviceparameters" />Parameters</a></div>
@@ -146,7 +157,7 @@ This documentation is for the last version of gisgraphy (snapshots, nightly buil
 <h3>About</h3>
  Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices.
   Because geocoding is nothing without data, it provides an easy to use importer that will automagically download and import the necessary 
-  (free) data to your local database (<a href="http://www.geonames.org/" target="_blank">Geonames</a> and <a href="www.openstreetmap.org" target="_blank">OpenStreetMap</a> : 42 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a gisgraphy client...<a href="/documentation/quick-start.htm">read more</a>
+  (free) data to your local database (<a href="http://www.geonames.org/" target="_blank">Geonames</a> and <a href="www.openstreetmap.org" target="_blank">OpenStreetMap</a> : >100 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a gisgraphy client...<a href="/documentation/quick-start.htm">read more</a>
  Here are the main functionalities  :
 <ul>
 <li> Importers from geonames CSV files. Just give the country(ies) you wish to import and / or the <a href="/placetype.htm">placetypes</a>, and Gisgraphy download the files  and import them with all the alternateNames (optional), and sync the database with the fulltext search engine</li>
@@ -181,9 +192,10 @@ Please consult the last <a href="http://www.gisgraphy.com//documentation/quick-s
 <ul>
 <li>70 GO of free disk space</li>
 <li>Internet access to download data files (you can skip it)</li>
-<li>Java 1.5 or greater</li>
-<li> <a href="http://www.postgresql.org/">PostgreSQL</a> with <a href="http://postgis.refractions.net/">Postgis</a> extension (It is HIGHLY recommended to have postgis 1.3.1 or greater for good performances... <a href="/documentation/user-guide.htm#postgis1.1.3">more</a> ).</li>
-<li>512M (1G is better for performance) of Memory.</li>
+<li>Java 1.6 or greater (1.5 is acceptable but not optimized)
+<li>A 64 bit platform is strongly recommended since Solr use <a href="http://blog.thetaphi.de/2012/07/use-lucenes-mmapdirectory-on-64bit.html">Memorymap</a> )</li></li>
+<li> <a href="http://www.postgresql.org/">PostgreSQL</a> with <a href="http://postgis.refractions.net/">Postgis</a> extension (It is HIGHLY recommended to have postgis 1.3.1 or greater for good performances... <a href="/documentation/user-guide.htm#postgis1.1.3">more</a>.</li>
+<li>4G of Memory is required for the import process, it can be decrease to 2Go for the webservices only. the amount of memory depends on the amount of data. </li>
 <li>A servlet container if you want to use it as a Servlet (Not programatically). Actually Gisgraphy has been tested on <a href="http://tomcat.apache.org/">Tomcat</a> and <a href="http://www.mortbay.org/">Jetty</a> but any Servlet container should be OK</li>
 </ul>
 <a name="technologiesused"></a>
@@ -712,7 +724,7 @@ Two versions are deployed : one on gisgraphy server and one on Google appengine.
 
 <div align="right"><a href="#top">[top]</a></div>
 <h4>addressParser.class</h4>
-The (Java) class of the address parser client. this option can be changed to put your own implementation
+The (Java) class of the address parser client. this option can be changed to put your own implementation.This parameter is usefull when you <a href="http://www.address-parser.net">buy a license</a> of the parser and so use it intenally (without the webservices)
 <div class="code">
 Examples : <br/>
 addressParser.class=com.gisgraphy.addressparser.AddressParserClient<br/>
@@ -771,7 +783,7 @@ spellchecker.collateResults=false
 
 <div align="right"><a href="#top">[top]</a></div>
 <h4>googleMapAPIKey</h4>
-The google maps api key. Required if you want to use Google maps  to display gisgraphy search results in the demo pages. in any case Gisgraphy use google to do search!. See more on the <a href="http://code.google.com/apis/maps/signup.html">Google Maps page</a> to sign up.
+The google maps API key. Required if you want to use Google maps  to display gisgraphy search results in the demo pages. in any case Gisgraphy use google to do search!. See more on the <a href="http://code.google.com/apis/maps/signup.html">Google Maps page</a> to sign up.
 <div class="code">
 Examples : <br/>
 googleMapAPIKey=ABQIAAAAC0kUg2SfDYBO-AEagcTgvhQ5aXWj7Kef4ih_G0qG0UGxHdmrpFrmSD7sGMwTJIN1g7C45waZ5ybiQ<br/>
@@ -796,7 +808,7 @@ googleMapAPIKey=ABQIAAAAC0GGGDYBO-AEagcTgvhQ5aXWj7Kef4ih_G0qG0UGxHdmrpFrmSD7sGMw
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Description</h3>
 <br/>
-The Gisgraphy geocoding service allows to transform street address or other description (a street, a city, a postal code, a country, or a combination) of a location into a (latitude, longitude) coordinate. The goal is to give a free opensource alternative to <a href="http://maps.google.com/" target="_blank" />Google maps</a>, and <a href="http://nominatim.openstreetmap.org/">nominatim</a> that is not really usable (words should be comma separated, poor relevance,...<br/>
+The Gisgraphy geocoding service allows to transform postal address or other description (a street, a city, a postal code, a country, or a combination) of a location into a (latitude, longitude) coordinate. The goal is to give a free opensource alternative to <a href="http://maps.google.com/" target="_blank" />Google maps</a>, and <a href="http://nominatim.openstreetmap.org/">nominatim</a> that is not really usable (words should be comma separated, poor relevance,...<br/>
 
 <a name="geocodingserviceoutputformat"></a>
 <div align="right"><a href="#top">[top]</a></div>
@@ -817,7 +829,7 @@ The following languages are supported :
 <h3>Parameters</h3>
 <ul>
 <a name="addressgeocoding"></a>
-<li>The address (required) : can be a postal address, a street, a city, a postal code, a country, or a combination.
+<li>The address (required) : a postal address, strucrured or not, a street, a city, a postal code, a country, or a combination.
 <br/> Examples :
 <ul>
 <li>101 Avenue des Champs-Elysées 75008 Paris</li>
@@ -826,8 +838,10 @@ The following languages are supported :
 <li>paris</li>
 </ul>
 </li>
+You can also specify a structured by speciying the separate parts of the address : houseNumber, streetName, streetType, city, state, zipCode, etc.
+a full list can be found <a href=https://code.google.com/p/gisgraphy/source/browse/trunk/addressParser-commons/src/main/java/com/gisgraphy/addressparser/Address.java" target="_blank">here</a>
 <br/>
-
+<br/>
 
 <a name="countrygeocoding"></a>
 <li>The country (required) : The country where the Place/address is. it is used to determine the postal address format and to improve performance. it will probably be optionnal in next version to ease the usability. The value must be the <a href="http://en.wikipedia.org/wiki/ISO_3166">ISO 3166 Alpha 2 code</a> of the country
@@ -839,11 +853,11 @@ The following languages are supported :
 </ul>
 </li>
 <br/>
-
+<br/>
 
 <a name="postalgeocoding"></a>
-<li>The postal  : whether the given address is a postal address. default to false. In other words, if the address follow the <a href="http://www.upu.int"> specifications or if it is a well formed address as it was writen on an envelop.
-this parameter will enable the parsing of the address by the address parser before geocoding, this way, the relevance will be better because we will know the meaning of each word.
+<li>postal  : whether the given address is a postal address. default to false. In other words, if the address follow the <a href="http://www.upu.int"> specifications</a> or if it is a well formed address as it was writen on an envelop.
+this parameter will enable the parsing of the address by the address parser before geocoding, this way, the relevance will be better because because if parsing is sucessful, we will know the meaning of each word. note that you can also <a href="#addressgeocoding">specify each fields</a> if you already know them
 <br/> Examples :
 <ul>
 <li>true</li>
@@ -852,7 +866,7 @@ this parameter will enable the parsing of the address by the address parser befo
 </ul>
 </li>
 <br/>
-
+<br/>
 
 
 
@@ -877,7 +891,7 @@ this parameter will enable the parsing of the address by the address parser befo
 
 <br/>
 <a name="apikeygeocoding"></a>
-<li>the apikey (optional) : the apikey to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
+<li>the API key (optional) : the API key to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
 <br/><br/>
 </ul>
 <a name="geocodingwebservice"></a>
@@ -896,12 +910,13 @@ Here is a summary of the Web parameters mapping : <br/>
 <table class="smallsizetable smartborder">
 <th>Parameter description</th><th>Web parameter name</th>
 <tr><td>address</td><td>address</td></tr>
+<tr><td>A structured address</td><td>Any field that can describe an address. a list of fields can be foud at <a href="https://code.google.com/p/gisgraphy/source/browse/trunk/addressParser-commons/src/main/java/com/gisgraphy/addressparser/Address.java" target="_blank">here</a></td></tr>
 <tr><td>country<td>country</td></tr>
 <tr><td>postal</td><td>postal</td></tr>
 <tr><td>Callback method name</td><td>callback</td></tr>
 <tr><td>Output format</td><td>format</td></tr>
 <tr><td>Indent</td><td>indent</td></tr>
-<tr><td>apikey</td><td>apikey (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
+<tr><td>apikey</td><td>api key (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
 </table>
 <br/>
 <div class="code">
@@ -1009,22 +1024,200 @@ You can output results to an OutputStream (useful for servlet use) or a String.
 <a name="addressparser"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2>Adress Parser</h2>
-The International address parser is based on a modular engine, where each country has a list of syntax. So we can add a new country or add a new syntax for a country very simply. some librairies and dictionary make the engine very customisable and give the ability to work quickly.
-
-The address Parser has its own <a href="http://www.gisgraphy.com/documentation/addressparser.htm">documentation page</a>
+<div class="tip yellowtip">
+The International address parser is based on a modular engine, The address-parser is now a spin off and has his dedicated site:
+<a href="http://address-parser.net/try.php">http://address-parser.net</a>
+</div>
+You can <a href="http://address-parser.net/try.php">try it</a> for free
 <!-- end address parser -->
 
+
+
+<!-- Reverse geocoding-->
+<a name="reversegeocodingservice"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h2>Reverse geocoding service</h2>
+<a name="reversegeocodingservicedescription"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Description</h3>
+<br/>
+The Reverse geocoding service allows to search for an address for a given GPS position.<br/>
+
+<a name="reversegeocodingserviceoutputformat"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Output formats and languages</h3>
+The following languages are supported :
+<ul>
+<li>XML</li>
+<li>Json</li>
+<li>Php</li>
+<li>Ruby</li>
+<li>Python</li>
+<li>Georss</li>
+</ul>
+<br/>
+<a name="reversegeocodingserviceparameters"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Parameters</h3>
+<ul>
+<a name="latitudereversegeocoding"></a>
+<li>The latitude (north-south) for the location point to search around. The value is a float, between -90 and +90. It use GPS coordinates. This parameter is required
+<br/> Examples : 
+<ul>
+<li>-4.2</li>
+<li>+4,2</li>
+</ul>
+</li>
+<br/>
+
+
+<a name="longitudereversegeocoding"></a>
+<li>The longitude (east-West) for the location point to search around. The value is a float between -180 and +180. It use GPS coordinates.This parameter is required
+<br/> Examples : 
+<ul>
+<li>3.6</li>
+<li>3,6</li>
+</ul>
+</li>
+<br/>
+
+
+<a name="callbackreversegeocoding"></a>
+<li>The callback method name (optional), use to wrap the content into a method name, must be alphanumeric and operate only for script outputformat (json,php,ruby,python)
+<br/> Examples : 
+<ul>
+<li>executeCallback :(will output "executeCallback(RESULT_FEED);" then if you evaluate this string the method will be called implicitly)</li>
+</ul>
+</li>
+<br/>
+<a name="outputformatreversegeocoding"></a>
+<li>The output format (optional) : The formats available are :<br/>
+<ul>
+<li>XML (Default)</li>
+<li>JSON</li>
+<li>Python</li>
+<li>Ruby </li>
+<li>PHP</li>
+<li>YAML</li>
+</ul>
+</li>
+<br>
+
+<a name="indentreversegeocoding"></a>
+<li>The indentation (optional) : indents the results. Default to false. Possible values are true|false. If you use a checkbox in a web form to indent the results, the value will be "on" or "off", so for a simple use : the value of indent, for the web service can be "true" or "on".</li>
+<br/>
+
+<div class="tip yellowtip">
+ Actually, only XML can be indented. It is not a bug :  Indent JSON is possible but decrease performance.
+</div>
+<br/><br/>
+
+<br/>
+<a name="apikeyreversegeocoding"></a>
+<li>the API key (optional) : the API key to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
+<br/>
+
+</ul>
+<a name="reversegeocodingwebservice"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Web service</h3>
+
+The reverse geocoding web service use a servlet to wrap the Java API. It links web parameters to a reverse geocoding query and output the results via HTTP.
+<br/>
+All the parameters should be case insensitive. if you've got some problems with case, please <a href="/issue-tracking.html">notify a bug</a>.
+
+<div class="tip yellowtip">
+ All the parameters should be encoded in <a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> and the URL MUST be <a href="http://www.w3schools.com/TAGS/ref_urlencode.asp">encoded</a>.
+</div>
+<br/><br/>
+Here is a summary of the Web parameters mapping : <br/>
+<table class="smallsizetable smartborder">
+<th>Parameter description</th><th>Web parameter name</th>
+<tr><td>Latitude</td><td>lat</td></tr>
+<tr><td>Longitude<td>lng</td></tr>
+<tr><td>Callback method name</td><td>callback</td></tr>
+<tr><td>Output format</td><td>format</td></tr>
+<tr><td>Indent</td><td>indent</td></tr>
+<tr><td>apikey</td><td>api key(only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
+</table>
+<br/>
+<div class="code">
+Examples : <br/>
+http://localhost:8080/reversegeocoding/search?lat=4.5&lng=5.7&format=json&callback=doit&indent=true<br/><br/>
+http://localhost:8080/reversegeocoding/search?lat=4.5&lng=5.7<br/><br/>
+</div>
+<br/>
+
+<a name="reversegeocodingserviceoutputfieldsdescription"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Output fields description</h3>
+Here is a description of all the output fields,  :<br/>
+<table class="mediumsizetable smartborder">
+<th>Field</th><th>Description</th><th>Applicable for</th>
+<tr><td><span color="red">error</span></td><td>A String only present if an error occured (e.g : empty Latitude or longitude)</td><td>When error occured</td></tr>
+<tr><td>numFound</td><td>The number of results display with this query (actually always 1)</td><td></td></tr>
+<tr><td>QTime</td><td>The execution time of the query in ms</td><td></td></tr>
+<tr><td>distance</td><td>The distance beetween the point and the address found</td><td></td></tr>
+<tr><td>houseNumber</td><td>The house Number of the address</td><td></td></tr>
+<tr><td>name</td><td>The name of the address (could be a shop name, etc)</td><td></td></tr>
+<tr><td>streetName</td><td>The name of street of the address (could be a shop name, etc), it could be null (even if the house number is not), if the name of the street is unknown</td><td></td></tr>
+<tr><td>city</td><td>The city of the address</td><td></td></tr>
+<tr><td>citySubdivision</td><td>a more precise information than the city (quater, place,...)</td><td></td></tr>
+<tr><td>state</td><td>The state of the address</td><td></td></tr>
+<tr><td>countryCode</td><td>The countryCode of the address</td><td></td></tr>
+<tr><td>geocodingLevel</td><td>information on how deep the reverse geocoding was able to do (housenumber, street, city)</td><td></td></tr>
+<tr><td>lat</td><td>The latitude of the middle of the street(north-south)</td><td></td></tr>
+<tr><td>lng</td><td>The longitude of the middle of the street(east-west)</td><td></td></tr>
+</table>
+<br/><br/>
+
+
+<a name="reversegeocodingservicejavaapi"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Java API</h3>
+
+The geoloc API looks like this
+<div class="code">
+<pre>
+			Point point = GeolocHelper.createPoint(<a href="#longitudereversegeocoding">LONGITUDE</a>, <a href="#latitudereversegeocoding">LATITUDE</a>);
+			Output output = Output.withFormat(<a href="#outputformatreversegeocoding">OUTPUTFORMAT</a>)
+								  .<a href="#indentreversegeocoding">WithIndentation</a>();
+			ReverseGeocodingQuery query = new ReverseGeocodingQuery(point, Output.withFormat(OutputFormat.JSON).withIndentation());
+    			ReverseGeocodingService service = new ReverseGeocodingService();
+    			AddressResultsDto result = service.executeQuery(query);
+    			System.out.println("reverse geocoding took "+result.getQTime()+" ms");
+    			System.out.println("reverse geocoding find address "+result.getResult()+" ms");
+</pre>
+</div>
+
+<div class="tip greentip">
+Click on the UPPERCASE parameters above to see the description of the parameter.
+</div>
+
+</div>
+<br/>
+<div class="tip greentip">
+The methods are designed with <a href="http://www.infoq.com/articles/internal-dsls-java">DSL</a> (Domain Specific Language), and can be chained as shown in the example above.
+</div>
+<br/>
+
+<br/>
+You can output results to an OutputStream (useful for servlet use) or a String.
+<br/> The API is thread safe.
+<br/> It is possible to create a query directly from a HTTP servlet request
+<br/>
+<!-- end reversegeocoding-->
 
 
 <!-- Street-->
 <a name="streetservice"></a>
 <div align="right"><a href="#top">[top]</a></div>
-<h2>Reverse geocoding / street service</h2>
+<h2>street service</h2>
 <a name="streetservicedescription"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Description</h3>
 <br/>
-The Reverse geocoding / street service allows to search for street by name or GPS position (or both).<br/>
+The street service allows to search for street by name or GPS position (or both).<br/>
 you can : 
 <ul>
 	<li> Specify GPS position</li>
@@ -1035,7 +1228,10 @@ you can :
 	<li> Paginate the results</li>
 	<li> Tells if you want the output to be indented (currently, apply only for XML, not json for performance reasons. may change in next version) </li> 
 </ul>
-
+<br/>
+The street search service search the nearest street based on the shape of the streets, not the middle point. It is recommended to use this service for OpenGTS or if you want to search the nearest distance to a street. It is recommended to use the fulltext search engine with placetype=street to search by name, the fulltext engine search arround a point, it is more like a restriction and distance is the one to the middle of the street. street search service is the one to use when GPS is more important than name.<br><br>
+Actually the street search doesn't return house numbers (probably in next version). if you want house numbers you have to use the <a href="#fulltextservice">fulltext service</a>
+<br/>
 Gisgraphy is designed to allow search with auto suggestion and auto completion : 
 <ul>
 <li>To search for streets by entire name use the fulltext search (you can also specify GPS coordinate, and change the 'allwords required' option to esae the search).</li>
@@ -1158,7 +1354,7 @@ IMPORTANT TIPS : If you need to do a fulltext search and you don't care about di
 
 <br/>
 <a name="apikeystreet"></a>
-<li>the apikey (optional) : the apikey to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
+<li>the API key (optional) : the API key to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
 <br/>
 
 </ul>
@@ -1189,7 +1385,7 @@ Here is a summary of the Web parameters mapping : <br/>
 <tr><td>Output format</td><td>format</td></tr>
 <tr><td>Distance field </td><td>distance</td></tr>
 <tr><td>Indent</td><td>indent</td></tr>
-<tr><td>apikey</td><td>apikey(only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
+<tr><td>apikey</td><td>api key(only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
 </table>
 <br/>
 <div class="code">
@@ -1561,7 +1757,7 @@ All the parameters should be case insensitive. if you've got some problems with 
 
 <br/>
 <a name="apikeyfulltext"></a>
-<li>the apikey (optional) : the apikey to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
+<li>the API key (optional) : the API key to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
 <br/>
 
 
@@ -1583,7 +1779,7 @@ Here is a summary of the Web parameters mapping : <br/>
 <tr><td>country code</td><td>country</td><td></td></tr>
 <tr><td>indent</td><td>indent</td><td></td></tr>
 <tr><td>spellchecking</td><td>spellchecking</td><td></td></tr>
-<tr><td>apikey</td><td>apikey (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
+<tr><td>api key</td><td>api key (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
 </table>
 <br/>
 
@@ -1620,21 +1816,26 @@ Here is a description of all the output fields :<br/>
 <tr><td><span color="red">error</span></td><td>A String only present if an error occured (e.g : empty query)<br/>The field 'error' appears in the path response/responseHeader/error </td><td><span color="red">ERROR</span></td></tr>
 <tr><td>feature_id</td><td>A unique id that identify the feature</td><td>SHORT</td></tr>
 <tr><td>name</td><td>The name of the feature</td><td>SHORT</td></tr>
+<tr><td>score</td><td>a number that indicates the relevance of the result</td><td>SHORT</td></tr>
 <tr><td>fully_qualified_name</td><td>A name of the form : (adm1Name et adm2Name are printed) Paris, D&eacute;partement de Ville-De-Paris, Ile-De-France, (FR)</td><td>SHORT</td></tr>
 <tr><td>placetype</td><td>The <a href="/placetype.htm">place Type</a> of the Feature</td><td>SHORT</td></tr>
 <tr><td>country_code</td><td>The <a href="http://en.wikipedia.org/wiki/ISO_3166">ISO 3166</a> country code</td><td>SHORT</td></tr>
 <tr><td>country_name</td><td>The name of the country the features belongs to</td><td>SHORT</td></tr>
-
-
-
 <tr><td>zipcode</td><td>The zipcodes</td><td>SHORT</td></tr>
 <tr><td>google_map_url</td><td>The URL to get the location on <a href="http://maps.google.com/">Google Map</a></td><td>MEDIUM</td></tr>
-<tr><td>openstreetmap_map_url</td><td>The URL to get the location on <a href="http://openstreetmap.org/">Openstreetmap.org</a>(since v3.0 beta3)</td><td>MEDIUM</td></tr>
+<tr><td>openstreetmap_map_url</td><td>The URL to get the location on <a href="http://openstreetmap.org/">Openstreetmap.org</a></td><td>MEDIUM</td></tr>
 <tr><td>yahoo_map_url</td><td>The URL to get the location on <a href="http://maps.yahoo.com/">Yahoo Map</a></td><td>MEDIUM</td></tr>
 <tr><td>one_way</td><td>whether the street is one way or not (only for placetype street)</td><td>MEDIUM</td></tr>
 <tr><td>Length</td><td>The length of the street (only for placetype street)</td><td>MEDIUM</td></tr>
 <tr><td>openstreetmap_id</td><td>The openstreetmap unique id of the street (only for placetype street)</td><td>MEDIUM</td></tr>
 <tr><td>is_in</td><td>Information of the city where the street is (depends on <a href="http://tagstat.hypercube.telascience.org/tagdetails.php?tag=is_in">openstreetmap 'is_in' field</a>), the city in general (only for placetype street)</td><td>MEDIUM</td></tr>
+<tr><td>is_in_place</td><td>Information of the place where the street is (quater, common place). Generally a place at a lower level than city</td><td>MEDIUM</td></tr>
+<tr><td>is_in_adm</td><td>Information of the administration division where the street is (only for placetype street)</td><td>MEDIUM</td></tr>
+<tr><td>is_in_zip</td><td>Information of the zipcode where the street is (only for placetype street)</td><td>MEDIUM</td></tr>
+<tr><td>house_numbers</td><td>a list of all the house numbers and their coordinates (only for placetype street)</td><td>MEDIUM</td></tr>
+<tr><td>municipality</td><td>if the place is a municipality. it is usefull for geonames feature that <a href="http://forum.geonames.org/gforum/posts/list/1893.page">don't have concept of 'city' </a> but a populated place (that can be a quater)</td><td>MEDIUM</td></tr>
+<tr><td>is_in_zip</td><td>Information of the zipcode where the street is (only for placetype street)</td><td>MEDIUM</td></tr>
+<tr><td>amenity</td><td>Informations on category of <a href="http://wiki.openstreetmap.org/wiki/Key:amenity">Openstreetmap POIs</a></td><td>MEDIUM</td></tr>
 <tr><td>street_type</td><td>The type of the street (only for placetype street)</td><td>MEDIUM</td></tr>
 <tr><td>country_flag_url</td><td>The relative URL to get the country flag image</td><td>MEDIUM</td></tr>
 <tr><td>feature_class</td><td>The feature Class. <a href="http://download.geonames.org/export/dump/featureCodes.txt">More</a>...</td><td>MEDIUM</td></tr>
@@ -1864,7 +2065,7 @@ See a full list and explanation of placetype : <a href="/placetype.htm">here</a>
 
 <br/>
 <a name="apikeygeoloc"></a>
-<li>the apikey (optional) : the apikey to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
+<li>the API key (optional) : the API key to use if you use <a href="http://www.gisgraphy.com/premium">premium webservices</a> this parameter is useless for local installation</li>
 <br/>
 
 
@@ -1895,7 +2096,7 @@ Here is a summary of the Web parameters mapping : <br/>
 <tr><td>Placetype</td><td>placetype</td></tr>
 <tr><td>Distance field </td><td>distance</td></tr>
 <tr><td>Indent</td><td>indent</td></tr>
-<tr><td>apikey</td><td>apikey (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
+<tr><td>apikey</td><td>api key (only for <a href="http://www.gisgraphy.com/premium">premium webservices</a>, useless for local installation)</td></tr>
 </table>
 <br/>
 <div class="code">

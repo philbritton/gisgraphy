@@ -24,10 +24,9 @@
 
 <div  style="line-height:1.5em;">
  <@s.text name="search.addressparser.desc"/>.
- <@s.text name="search.openstreetmap.data"><@s.param>http://openstreetmap.org</@s.param></@s.text>.
  <@s.text name="search.docandinstall">
- 	<@s.param>http://www.gisgraphy.com/documentation/addressparser.htm</@s.param>
- 	<@s.param>http://www.gisgraphy.com/documentation/installation/index.htm</@s.param>
+ 	<@s.param>http://address-parser.net/documentation/documentation.php</@s.param>
+ 	<@s.param>http://address-parser.net/product-java.php</@s.param>
  </@s.text>.
 </div><br/>
 <@s.url id="geocodingSearchUrl" action="geocoding" includeParams="none" namespace="/public" />

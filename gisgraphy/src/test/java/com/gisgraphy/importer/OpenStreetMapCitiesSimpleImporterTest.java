@@ -7,7 +7,6 @@ import static com.gisgraphy.test.GisgraphyTestHelper.alternateNameContains;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -32,11 +31,75 @@ import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.test.GisgraphyTestHelper;
 import com.vividsolutions.jts.geom.Point;
 
 public class OpenStreetMapCitiesSimpleImporterTest {
 
+	@Test
+	public void testNoName(){
+		
+		final SolrResponseDto solrResponseDtoAdm = EasyMock.createMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDtoAdm.getFeature_id()).andReturn(4356L);
+		EasyMock.expect(solrResponseDtoAdm.getName()).andReturn("admName");
+		EasyMock.replay(solrResponseDtoAdm);
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter(){
+			@Override
+			protected SolrResponseDto getNearestCity(Point location, String name, String countryCode,Class[]placetype) {
+				if (!name.equals("paris") || !countryCode.equals("FR")){
+					throw new RuntimeException("the function is not called with the correct parameter");
+				}
+				return null;
+			};
+			
+			@Override
+			protected SolrResponseDto getAdm(String name, String countryCode) {
+				if (!name.equals("Europe") || !countryCode.equals("FR")){
+					throw new RuntimeException("the function is not called with the correct parameter");
+				}
+				return solrResponseDtoAdm;
+			}
+			@Override
+			void savecity(GisFeature city) {
+				super.savecity(city);
+				Assert.assertEquals("city", city.getAmenity());
+				Assert.assertEquals("paris", city.getName());
+				Assert.assertEquals("FR", city.getCountryCode());
+				Assert.assertEquals(48.2, city.getLatitude().doubleValue(),0.1);
+				Assert.assertEquals(16.3, city.getLongitude().doubleValue(),0.1);
+				
+				Assert.assertEquals(1234L, city.getOpenstreetmapId().longValue());
+				Assert.assertEquals(1000000L, city.getPopulation().longValue());
+				Assert.assertEquals("admName", city.getAdm().getName());
+				Assert.assertEquals("5678", city.getZipCodes().iterator().next().getCode());
+				Assert.assertFalse("city shouldn't be a municipality because it is NOT present in both db",((City)city).isMunicipality());
+			}
+		};
+		
+		ICityDao cityDao = EasyMock.createMock(ICityDao.class);
+		EasyMock.replay(cityDao);
+		importer.setCityDao(cityDao);
+		
+		IIdGenerator idGenerator = EasyMock.createMock(IIdGenerator.class);
+		EasyMock.replay(idGenerator);
+		importer.setIdGenerator(idGenerator);
+		
+		IAdmDao admDao = EasyMock.createMock(IAdmDao.class);
+		EasyMock.replay(admDao);
+		importer.setAdmDao(admDao);
+		
+		importer.setMunicipalityDetector(new MunicipalityDetector());
+		
+		
+		String line= "N	273488974	                     	BG			0101000020E610000061C8EA56CFD33A404202EBDDC4DB4540		town	Исперих,Разград,България	Isperih";
+		
+		importer.processData(line);
+		
+		EasyMock.verify(cityDao);
+		EasyMock.verify(admDao);
+		EasyMock.verify(idGenerator);
+	
+	}
+	
 	@Test
 	public void populatezip(){
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
@@ -94,6 +157,26 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Universidad de Graz"));
 		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Université de Graz"));
 		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Грацский университет имени Карла и Франца"));
+		
+		Iterator<AlternateName> iterator = poi.getAlternateNames().iterator();
+		while (iterator.hasNext()){
+			Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,iterator.next().getSource());
+		}
+		
+	}
+	
+	@Test
+	public void populateAlternateNames_nameWithCommaOrSemiColumn() {
+		String RawAlternateNames="Karl-Franzens-Universität Graz___Cheka Jedid,Chekia Atiq:Chekia Jedide;Chekia Jedidé";
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
+		GisFeature poi = new GisFeature();
+		poi = importer.populateAlternateNames(poi, RawAlternateNames);
+		Assert.assertEquals(5, poi.getAlternateNames().size());
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Karl-Franzens-Universität Graz"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Cheka Jedid"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Chekia Atiq"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Chekia Jedide"));
+		Assert.assertTrue(alternateNameContains(poi.getAlternateNames(),"Chekia Jedidé"));
 		
 		Iterator<AlternateName> iterator = poi.getAlternateNames().iterator();
 		while (iterator.hasNext()){

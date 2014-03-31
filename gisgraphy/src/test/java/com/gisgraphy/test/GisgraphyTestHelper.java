@@ -56,6 +56,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
+import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.Country;
@@ -1130,6 +1131,17 @@ public class GisgraphyTestHelper {
     public static boolean alternateNameContains(Collection<AlternateName> alternateNames,String name){
 		if (alternateNames!=null){
 			for (AlternateName alternateName:alternateNames){
+				if (alternateName.getName().equals(name)){
+					return true;
+				}
+			}
+			
+		} return false;
+	}
+    
+    public static boolean alternateOsmNameContains(Collection<AlternateOsmName> alternateNames,String name){
+		if (alternateNames!=null){
+			for (AlternateOsmName alternateName:alternateNames){
 				if (alternateName.getName().equals(name)){
 					return true;
 				}

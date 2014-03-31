@@ -11,18 +11,12 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
-import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.Religious;
-import com.gisgraphy.domain.geoloc.entity.Shop;
-import com.gisgraphy.domain.repository.IAdmDao;
-import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GISSource;
-import com.gisgraphy.fulltext.SolrResponseDto;
-import com.vividsolutions.jts.geom.Point;
 
 public class OpenStreetMapPoisSimpleImporterTest {
 

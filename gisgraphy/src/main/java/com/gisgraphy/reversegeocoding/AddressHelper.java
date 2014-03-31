@@ -22,7 +22,6 @@
  *******************************************************************************/
 package com.gisgraphy.reversegeocoding;
 
-import java.util.List;
 import java.util.SortedSet;
 
 import org.springframework.stereotype.Service;
@@ -130,6 +129,12 @@ public class AddressHelper {
 			return null;
 		}
 		Address address = buildAddressFromOpenstreetMap(houseNumberDistance.getHouseNumber().getStreet());
+		if (houseNumberDistance.getHouseNumber().getLatitude()!=null){
+			address.setLat(houseNumberDistance.getHouseNumber().getLatitude());
+		}
+		if (houseNumberDistance.getHouseNumber().getLongitude()!=null){
+			address.setLng(houseNumberDistance.getHouseNumber().getLongitude());
+		}
 		if (houseNumberDistance.getHouseNumber().getNumber()!=null){
 			address.setHouseNumber(houseNumberDistance.getHouseNumber().getNumber());
 		}

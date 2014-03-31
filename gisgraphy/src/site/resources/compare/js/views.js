@@ -130,10 +130,10 @@ var Yonder = Yonder || {};
     // Call geocode for the collection, triggering updates for every model
     geocode: function() {
       var addr = $('input#geocode-address').val();
-	if($('#countrylist').val()==""){
+	/*if($('#countrylist').val()==""){
 	    alert("Please select a country");
 	    return;
-	}
+	}*/
 
       if (addr) {
         // Triggers a fetch for each model in the collection

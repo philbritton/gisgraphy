@@ -24,7 +24,6 @@ package com.gisgraphy.domain.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.gisgraphy.domain.geoloc.entity.Dentist;
 import com.gisgraphy.domain.geoloc.entity.Doctor;
 
 /**

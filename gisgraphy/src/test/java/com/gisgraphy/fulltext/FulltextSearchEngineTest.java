@@ -62,7 +62,6 @@ import com.gisgraphy.fulltext.spell.ISpellCheckerIndexer;
 import com.gisgraphy.fulltext.spell.SpellCheckerConfig;
 import com.gisgraphy.helper.FileHelper;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.service.IStatsUsageService;
 import com.gisgraphy.stats.StatsUsageType;

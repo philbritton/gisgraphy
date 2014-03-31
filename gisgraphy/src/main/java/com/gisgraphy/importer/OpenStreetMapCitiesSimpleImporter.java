@@ -154,12 +154,13 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	
 	// name
 	if (!isEmptyField(fields, 2, false)) {
-	    name=fields[2].trim();
-	    if (name==null){
-	    	return;
-	    }
-	    
+		name=fields[2].trim();
 	}
+
+	if (name==null){
+		return;
+	}
+	
 	//countrycode
 	if (!isEmptyField(fields, 3, true)) {
 	    countrycode=fields[3].trim().toUpperCase();
@@ -208,7 +209,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	//population
 	if(city.getPopulation()==null && !isEmptyField(fields, 5, false)){
 		try {
-			int population = Integer.parseInt(fields[5].trim());
+			int population = Integer.parseInt(fields[5].replaceAll("\\s+", ""));
 			city.setPopulation(population);
 		} catch (NumberFormatException e) {
 			logger.error("can not parse population :"+fields[5]);
@@ -279,7 +280,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	String result = "[";
 	for (int i=0;i<fields.length;i++) {
 		if (i==7){
-			result= result+"THE_SHAPE";
+			result= result+"THE_SHAPE;";
 		}else {
 	    result = result + fields[i] + ";";
 		}
@@ -354,7 +355,14 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			}
 			String alternateName = matcher.group(1);
 			if (alternateName!= null && !"".equals(alternateName.trim())){
+				if (alternateName.contains(",")|| alternateName.contains(";")|| alternateName.contains(":")){
+					String[] alternateNames = alternateName.split("[;\\:,]");
+					for (String name:alternateNames){
+						feature.addAlternateName(new AlternateName(name.trim(),AlternateNameSource.OPENSTREETMAP));
+					}
+				} else {
 				feature.addAlternateName(new AlternateName(alternateName.trim(),AlternateNameSource.OPENSTREETMAP));
+				}
 			}
 		}
 		return feature;
@@ -366,7 +374,13 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		if (location ==null || name==null || "".equals(name.trim())){
 			return null;
 		}
-		FulltextQuery query = (FulltextQuery) new FulltextQuery(name).withPlaceTypes(placetypes).around(location).withoutSpellChecking().withPagination(Pagination.ONE_RESULT).withOutput(MINIMUM_OUTPUT_STYLE);
+		FulltextQuery query;
+		try {
+			query = (FulltextQuery) new FulltextQuery(name).withPlaceTypes(placetypes).around(location).withoutSpellChecking().withPagination(Pagination.ONE_RESULT).withOutput(MINIMUM_OUTPUT_STYLE);
+		} catch (IllegalArgumentException e) {
+			logger.error("can not create a fulltext query for "+name);
+			return null;
+		}
 		if (countryCode != null){
 			query.limitToCountryCode(countryCode);
 		}
@@ -383,8 +397,14 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		if (name==null){
 			return null;
 		}
-		FulltextQuery query = (FulltextQuery)new FulltextQuery(name).withAllWordsRequired(false).withoutSpellChecking().
-				withPlaceTypes(ONLY_ADM_PLACETYPE).withOutput(MINIMUM_OUTPUT_STYLE).withPagination(Pagination.ONE_RESULT);
+		FulltextQuery query;
+		try {
+			query = (FulltextQuery)new FulltextQuery(name).withAllWordsRequired(false).withoutSpellChecking().
+					withPlaceTypes(ONLY_ADM_PLACETYPE).withOutput(MINIMUM_OUTPUT_STYLE).withPagination(Pagination.ONE_RESULT);
+		} catch (IllegalArgumentException e) {
+			logger.error("can not create a fulltext query for "+name);
+			return null;
+		}
 		if (countryCode != null){
 			query.limitToCountryCode(countryCode);
 		}

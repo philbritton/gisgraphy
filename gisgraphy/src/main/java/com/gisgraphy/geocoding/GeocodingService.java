@@ -261,7 +261,7 @@ public class GeocodingService implements IGeocodingService {
 	}
 
 	protected boolean isGeocodable(Address address) {
-		if (isEmptyString(address.getStreetName()) && isEmptyString(address.getCity()) && isEmptyString(address.getZipCode()) && isEmptyString(address.getPostTown())) {
+		if (isEmptyString(address.getStreetName()) && isEmptyString(address.getState()) && isEmptyString(address.getCity()) && isEmptyString(address.getZipCode()) && isEmptyString(address.getPostTown())) {
 			logger.info(address+" is no geocodable");
 			return false;
 		}

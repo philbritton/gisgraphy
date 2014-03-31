@@ -40,8 +40,10 @@
 			<ul>
 				<li><a href="${geocodingSearchUrl}"><@s.text name="search.geocoding.breadcrumbs"/></a></li>
 				<li><a href="${geocodingAutocompleteUrl}"><@s.text name="search.geocoding.breadcrumbs"/> <@s.text name="by.autocompletion.breadcrumbs"/></a></li>
-				<li><a href="${reverseGeocodingSearchUrl}"><@s.text name="search.geocoding.reverse.breadcrumbs"/></a></li>
 			</ul>
+		</li>
+		<li >
+			<a href="${reverseGeocodingSearchUrl}"><@s.text name="search.geocoding.reverse.breadcrumbs"/></a>
 		</li>
 		<li >
 			<a href="${addressparserurl}"><@s.text name="address.parser.breadcrumbs"/></a>
@@ -143,7 +145,7 @@
 </#macro>
 
 
-<#macro streetsearchTooltip advancedSearchURLParam="">
+<#macro streetsearchTooltip advancedSearchURLParam="" docAnchor="streetservice">
 <div id="tooltip">
 			<#if advancedSearchURLParam!="">
 			 	<@s.url id="advancedSearchUrl" action="${advancedSearchURLParam}" includeParams="all" >
@@ -152,7 +154,7 @@
 					<a href="${advancedSearchUrl}" onclick="$('advancedsearch').toggle();return false;"><@s.text name="search.advanced"/></a>
 					<br/>
 				</#if>
-				<a href="http://www.gisgraphy.com/documentation/user-guide.htm#streetservice" ><@s.text name="global.xml.api"/></a>
+				<a href="http://www.gisgraphy.com/documentation/user-guide.htm#${docAnchor}" ><@s.text name="global.xml.api"/></a>
 				<br/>
 			  	<@s.url id="servicesDescription" action="servicesdescription" includeParams="all" namespace="/public" />
 				<a href="${servicesDescription}"><@s.text name="search.servicesdescription.title"/></a>

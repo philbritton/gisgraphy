@@ -52,7 +52,9 @@ If you already have Java installed, you can skip this section
 <h3>Install Java</h3>
 Open a shell and type : 
 <div class="code">
-sudo apt-get install sun-java6-bin sun-java6-fonts sun-java6-javadb sun-java6-jdk sun-java6-jre sun-java6-source ia32-sun-java6-bin
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
 </div> 
 Valid screen (tab + OK) :<br/>
 <a href="images/jvm2.jpg" ><img src="images/thumb/jvm2.jpg" class="imagethumb" /></a>
@@ -85,17 +87,17 @@ Open a shell and type :
 <div class="code">sudo update-java-alternatives --set ia32-java-6-sun</div>
 <br/>
 You may have this message if you are on a 64 bits machine :
-Impossible de find alternative « /usr/lib/jvm/ia32-java-6-sun/jre/plugin/i386/ns7/libjavaplugin_oji.so ". thats not important. that's because there is no applet in 64 bits.
+Impossible de find alternative « /usr/lib/jvm/java-7-oracle/jre/jre/plugin/i386/ns7/libjavaplugin_oji.so ". thats not important. that's because there is no applet in 64 bits.
 
  <div class="tip greentip">
- To see if java is well configured type "ls -l  /etc/alternatives/java" you should see "/usr/lib/jvm/java-6-sun/jre/bin/java" 
+ To see if java is well configured type "ls -l  /etc/alternatives/java" you should see "//usr/lib/jvm/java-7-oracle/jre/bin/java" 
  </div>
  <br/>
  We now need to add a JAVA_HOME environement variable  : 
  <ul>
  <li>add this line to .bashrc in your home directoy</li>
  <div class="code">
- export JAVA_HOME=/usr/lib/jvm/java-6-sun-1.6.0.06/
+ export JAVA_HOME=/usr/lib/jvm/java-7-oracle/
  </div>
  <br/>
  <li>execute "source ~/.bashrc" in a shell to take the changes into account.</li>
@@ -109,9 +111,13 @@ The JVM is now well installed
 <div class="tip greentip">
 If you already have Postgresql AND Postgis installed, you can skip this section
 </div>
+
+<div class="tip yellowtip">
+Gisgraphy is not compatible with postgis 2.0
+</div>
 <h3>Install the debian / ubuntu package</h3>
 Open a shell and type :
-<div class=code>sudo apt-get install postgresql-8.3 postgresql-8.3-postgis </div>
+<div class=code>sudo apt-get install postgresql-9.1 postgresql-9.1-postgis </div>
 <br/>
 <div class="tip yellowtip">
 It is HIGHLY recommended to have postgis 1.3.1 or greater and postgresql-8.3 for good performances....<br/>Those packages are availables from ubuntu hardy, it is recommended to update your ubuntu distribution if you have a lesser version
@@ -130,12 +136,12 @@ psql -U <i>YOURUSER</i>  -h <i>YOURIP</i> -c  "CREATE DATABASE gisgraphy ENCODIN
 createlang -U YOURUSER -h YOURIP plpgsql gisgraphy 
 
 #create postgis function
-psql -U YOURUSER -h YOURIP -d gisgraphy -f /usr/share/postgresql-YOURPOSTGRESVERSION-postgis/lwpostgis.sql
-psql -U YOURUSER -h YOURIP -d gisgraphy -f /usr/share/postgresql-YOURPOSTGRESVERSION-postgis/spatial_ref_sys.sql
+psql -U YOURUSER -h YOURIP -d gisgraphy -f -f /usr/share/postgresql/YOURPOSTGRESVERSION/contrib/postgis-1.5/postgis.sql
+psql -U YOURUSER -h YOURIP -d gisgraphy -f psql -U postgres  -h 127.0.0.1 -d gisgraphy -f /usr/share/postgresql/YOURPOSTGRESVERSION/contrib/postgis-1.5/spatial_ref_sys.sql
 
 
 </pre>
-Where YOURUSER is a postgresql user with admin rights,YOURIP is the ip adress of your server(127.0.0.1 in most case) and YOURPOSTGRESVERSION is your postgres version (8.3 in this tutorial) <br/>
+Where YOURUSER is a postgresql user with admin rights,YOURIP is the ip adress of your server(127.0.0.1 in most case) and YOURPOSTGRESVERSION is your postgres version (9.1 in this tutorial) <br/>
 </div>
 
 <div class="tip greentip">
@@ -160,7 +166,7 @@ and give the new password you've just type
 <br/>
 <li>Check postgresql conf :</li>
 
-<div class=code>vim /etc/postgresql/8.3/main/pg_hba.conf</div>
+<div class=code>vim /etc/postgresql/9.1/main/pg_hba.conf</div>
 and edit it in order to have (at least) those 2 lines (at the beginning of the file) : 
 <div class=code>
 <pre>
@@ -177,7 +183,7 @@ Now you've changed the password for your postgresql user, we have to tell postgr
 <br/><br/>
 <li>Update postgres conf </li>
 Open a shell and Type : 
-<div class=code> vim /etc/postgresql/8.3/main/pg_hba.conf</div>
+<div class=code> vim /etc/postgresql/9.1/main/pg_hba.conf</div>
 And edit in order to have (at least) those two lines :
 <div class=code>
 <pre>
@@ -191,7 +197,7 @@ We must restart postresql to take our changes into account :<br/>
 Close your postgres 's Linux session, type :
  <div class=code>exit</div>
 Restart postgres : 
-<div class=code>sudo /etc/init.d/postgresql-8.3 restart</div>
+<div class=code>sudo service postgresql restart</div>
 </ul>
 <div class="tip greentip">
 Tips : Install PGAdmin. It will be more user friendly than command line. 

@@ -237,7 +237,7 @@ doAjaxSearch = function(formName){
 					<br/>
 					<#if result.street_type??><@s.text name="${result.street_type}" /><br/></#if>
 					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a></#if>
-						<#if result.placetype.equals('Street')>
+						<#if result.placetype?? && result.placetype.equals('Street')>
 						<@s.url id="streetURL" action="displaystreet" includeParams="none" namespace="/public" >
 				  					<@s.param name="gid" value="${result.feature_id?c}" />
 				 		</@s.url>
@@ -248,7 +248,7 @@ doAjaxSearch = function(formName){
 			 		</@s.url>
 					 | <a href="${proximitySearchUrl}" class="greenlink"><@s.text name="global.findNearestCity"/></a>
 					</#if>
-					<#if result.placetype.equals('City')>
+					<#if result.placetype?? && result.placetype.equals('City')>
 					<@s.url id="streetsearchurl" action="streetSearch" includeParams="none" namespace="/public" >
 						<@s.param name="lat" value="${result.lat?c}" />
 			  			<@s.param name="lng" value="${result.lng?c}" />
@@ -352,7 +352,7 @@ doAjaxSearch = function(formName){
 						<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
 						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a>
 
-						<#if result.placeType.equals('City')>
+						<#if result.placetype?? && result.placeType.equals('City')>
 					<@s.url id="streetsearchurl" action="streetSearch" includeParams="none" namespace="/public" >
 						<@s.param name="lat" value="${result.lat?c}" />
 			  			<@s.param name="lng" value="${result.lng?c}" />
@@ -390,7 +390,7 @@ doAjaxSearch = function(formName){
 	<@s.form action="${url}" method="get" id="addressform" cssStyle="background-color:#ebf5fc;padding-top:25px;">
 		<div id="simplesearch" style="width:600px;">
 		<#if !url.contains('geocod')>
-				<@s.text name="user.address.address" /> (<span id="searchexample">e.g. Champs Elysees Paris</span>)
+				<@s.text name="user.address.address" /> : (<span id="searchexample">e.g. 650 Castro Street Mountain View, CA, 94041-2021 USA</span>)
 			<#else>
 				<@s.text name="search.geocoder.field" /> :
 		</#if>
@@ -400,14 +400,89 @@ doAjaxSearch = function(formName){
 			<div style="padding-left:120px;"><@s.checkbox name="postal" fieldValue="true" label="search.geocoding.postal.mode" theme="simple"/><@s.text name="search.geocoding.postal.mode"/></div>
 		</#if>
 		<br/>
-		<b><@s.text name="search.select.country"/>(<@s.text name="search.optional"/>) :</b> </span><@s.select label="In " listKey="iso3166Alpha2Code" listValue="name" name="country" list="countries" headerValue="%{getText('global.select')}" headerKey="" multiple="false" required="false" labelposition="left" theme="simple" cssStyle="width:180px;"/> 
+		<b><@s.text name="search.select.country"/> <#if !url.contains('geocod')>(<@s.text name="search.optional"/>)</#if> :</b> </span>
+<#if !url.contains('geocod')>
+<select name="country" id="addressform_country" style="width:180px;">
+    <option value=""
+    >Sélectionnez</option>
+		<option value="AN">Netherlands Antilles (AN)</option>
+		<option value="AO">Angola (AO)</option>
+		<option value="AR">Argentina (AR)</option>
+		<option value="AS">American Samoa (AS)</option>
+		<option value="AT">Austria (AT)</option>
+		 <option value="AU">Australia (AU)</option>
+		 <option value="AW">Aruba (AW)</option>
+		 <option value="BE">Belgium (BE)</option>
+		 <option value="BQ">BQ (BQ)</option>
+		 <option value="BR">Brazil (BR)</option>
+		 <option value="CA">Canada (CA)</option>
+		 <option value="CD">Congo (CD)</option>
+		 <option value="CH">Switzerland (CH)</option>
+		 <option value="CM">Cameroon (CM)</option>
+		 <option value="CN">China (CN)</option>
+		 <option value="CW">CW (CW)</option>
+		 <option value="DE">Germany (DE)</option>
+		 <option value="DK">Denmark (DK)</option>
+		 <option value="DZ">Algeria (DZ)</option>
+		 <option value="ES">Spain (ES)</option>
+		 <option value="FI">Finland (FI)</option>
+		 <option value="FK">Falkland Islands (FK)</option>
+		 <option value="FO">Faroe Islands (FO)</option>
+		 <option value="FR">France (FR)</option>
+		 <option value="GB">United Kingdom (GB)</option>
+	 	 <option value="GF">French Guiana (GF)</option>
+		 <option value="GG">Guernsey (GG)</option>
+		 <option value="GI">Gibraltar (GI)</option>
+		 <option value="GL">Greenland (GL)</option>
+		 <option value="GP">Guadeloupe (GP)</option>
+		 <option value="GS">S Georgia and the S Sandwich Islands (GS)</option>
+		 <option value="HK">Hong Kong (HK)</option>
+		 <option value="HU">Hungary (HU)</option>
+		 <option value="ID">Indonesia (ID)</option>
+		 <option value="IM">Isle of Man (IM)</option>
+		 <option value="IN">India (IN)</option>
+		 <option value="IR">Iran (IR)</option>
+		 <option value="IT">Italy (IT)</option>
+		 <option value="JE">Jersey (JE)</option>
+		 <option value="KZ">Kazakhstan (KZ)</option>
+		 <option value="MA">Morocco (MA)</option>
+		 <option value="MF">Saint Martin (MF)</option>
+		 <option value="MP">Northern Mariana Islands (MP)</option>
+		 <option value="MQ">Martinique (MQ)</option>
+		 <option value="NL">Netherlands the (NL)</option>
+	 	 <option value="NO">Norway (NO)</option>
+		 <option value="PL">Poland (PL)</option>
+		 <option value="PM">Saint Pierre and Miquelon (PM)</option>
+		 <option value="PR">Puerto Rico (PR)</option>
+		 <option value="PT">Portugal (PT)</option>
+		 <option value="RE">Reunion (RE)</option>
+		 <option value="RU">Russia (RU)</option>
+		 <option value="SA">Saudi Arabia (SA)</option>
+		 <option value="SD">Sudan (SD)</option>
+		 <option value="SE">Sweden (SE)</option>
+		 <option value="SG">Singapore (SG)</option>
+		 <option value="SH">Saint Helena (SH)</option>
+		 <option value="SM">San Marino (SM)</option>
+		 <option value="SN">Senegal (SN)</option>
+		 <option value="SX">SX (SX)</option>
+		 <option value="TC">Turks and Caicos Islands (TC)</option>
+		 <option value="TN">Tunisia (TN)</option>
+		 <option value="TR">Turkey (TR)</option>
+		 <option value="UA">Ukraine (UA)</option>
+		 <option value="UM">US Minor Outlying Islands (UM)</option>
+		 <option value="US">USA (US)</option>
+		 <option value="VA">Vatican (VA)</option>
+		 <option value="VI">US Virgin Islands (VI)</option>
+	</select>
+<#else>
+<@s.select label="In " listKey="iso3166Alpha2Code" listValue="name" name="country" list="countries" headerValue="%{getText('global.select')}" headerKey="" multiple="false" required="false" labelposition="left" theme="simple" cssStyle="width:180px;"/> 
+</#if> 
 		<#if url.contains('geocod')>
 			<@s.submit value="%{getText('search.geocode')} !" theme="simple" onclick=" return updatePopupResults()" cssStyle="margin-left:70px;" />
 			<#else>
 				<@s.submit value="%{getText('search.parse')} !" theme="simple" onclick=" return updatePopupResults()" cssStyle="margin-left:70px;" />
 				</#if>
 
-		<!--<@breadcrumbs.streetsearchTooltip />-->
 	</div>
 	<#if !url.contains('geocod')>
 					<@s.text name="addressparser.view.implemented.country" >
@@ -542,9 +617,11 @@ doAjaxSearch = function(formName){
 						  					<@s.param name="gid" value="${result.id?c}" />
 						 				</@s.url>
 									</#if>
-								         <a <#if result.id?? && result.id!=0 >href="${displayURL}"</#if> ><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if> </a> 
+									
+								        <#if result.id?? && result.id!=0 ><a href="${displayURL}"></#if>
+										<#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if> <#if result.id?? && result.id!=0 ></a></#if>  
 									</div>
-									<#if result.city??><div class="resultheaderright">${result.city?cap_first}</div></#if>
+									<#if result.distance??><div class="resultheaderright">${result.distance} m</div></#if>
 								<#else>
 									<#if result.id?? && result.id!=0 > 
 									<@s.url id="displayURL" action="displayfeature" includeParams="none" namespace="/public" >
@@ -559,17 +636,27 @@ doAjaxSearch = function(formName){
 						<div class="separator"><hr/></div>
 
 						<div class="summary">
+							<#if result.confidence?? ><li><@s.text name="address.confidence"/> : ${result.confidence}</li></#if>
 							<#if result.lat??><li><@s.text name="global.latitude"/> : ${result.lat}</li></#if>
 							<#if result.lng??><li><@s.text name="global.longitude"/> : ${result.lng}</li></#if>
+							<#if result.name??><li><@s.text name="global.name"/> : ${result.name}</li></#if>
+							<#if result.recipientName??><li><@s.text name="global.name"/> : ${result.recipientName}</li></#if>
 							<#if result.houseNumber??><li><@s.text name="address.houseNumber"/> : ${result.houseNumber}</li></#if>
 							<#if result.houseNumberInfo?? ><li><@s.text name="address.houseNumberInfo"/> : ${result.houseNumberInfo}</li></#if>
+							<#if result.civicNumberSuffix?? ><li><@s.text name="address.civicNumberSuffix"/> : ${result.civicNumberSuffix}</li></#if>
 							<#if result.streetType??><li><@s.text name="search.type.of.street"/> : <@s.text name="${result.streetType}"/><br/></li></#if>
 							<#if result.dependentLocality?? ><li><@s.text name="address.dependentLocality"/> : ${result.dependentLocality}</li></#if>
 							<#if result.PostTown?? ><li><@s.text name="address.PostTown"/> : ${result.PostTown}</li></#if>
+							<#if result.city??><li><@s.text name="global.city"/> :  ${result.city}</li></#if>
+							<#if result.zipCode??><li><@s.text name="global.zipCode"/> :  ${result.zipCode}</li></#if>
 							<#if result.state?? ><li><@s.text name="address.state"/> : ${result.state}</li></#if>
+							<#if result.prefecture?? ><li><@s.text name="address.prefecture"/> : ${result.prefecture}</li></#if>
 							<#if result.district?? ><li><@s.text name="address.district"/> : ${result.district}</li></#if>
 							<#if result.quarter?? ><li><@s.text name="address.quarter"/> : ${result.quarter}</li></#if>
 							<#if result.extraInfo?? ><li><@s.text name="address.extraInfo"/> : ${result.extraInfo}</li></#if>
+							<#if result.suiteType?? ><li><@s.text name="address.suiteType"/> : ${result.suiteType}</li></#if>
+							<#if result.suiteNumber?? ><li><@s.text name="address.suiteNumber"/> : ${result.suiteNumber}</li></#if>
+							<#if result.floor?? ><li><@s.text name="address.floor"/> : ${result.floor}</li></#if>
 							<#if result.POBox?? ><li><@s.text name="address.POBox"/> : ${result.POBox}</li></#if>
 							<#if result.POBoxInfo?? ><li><@s.text name="address.POBoxInfo"/> : ${result.POBoxInfo}</li></#if>
 							<#if result.POBoxAgency?? ><li><@s.text name="address.POBoxAgency"/> : ${result.POBoxAgency}</li></#if>
@@ -579,13 +666,10 @@ doAjaxSearch = function(formName){
 							<#if result.streetTypeIntersection?? ><li><@s.text name="address.streetTypeIntersection"/> : ${result.streetTypeIntersection}</li></#if>
 							<#if result.preDirectionIntersection?? ><li><@s.text name="address.preDirectionIntersection"/> : ${result.preDirectionIntersection}</li></#if>
 							<#if result.postDirectionIntersection?? ><li><@s.text name="address.postDirectionIntersection"/> : ${result.postDirectionIntersection}</li></#if>
-							<#if result.civicNumberSuffix?? ><li><@s.text name="address.civicNumberSuffix"/> : ${result.civicNumberSuffix}</li></#if>
-							<#if result.floor?? ><li><@s.text name="address.floor"/> : ${result.floor}</li></#if>
 							<#if result.sector?? ><li><@s.text name="address.sector"/> : ${result.sector}</li></#if>
 							<#if result.quadrant?? ><li><@s.text name="address.quadrant"/> : ${result.quadrant}</li></#if>
 							<#if result.block?? ><li><@s.text name="address.block"/> : ${result.block}</li></#if>
 							<#if result.country?? ><li><@s.text name="address.country"/> : ${result.country}</li></#if>
-							<#if result.zipCode??><li><@s.text name="global.zipCode"/> :  ${result.zipCode}</li></#if>
 
 <#if result.id??>
 <@s.url id="gmapsUrl" action="displaystreet" includeParams="none" namespace="/public" >
@@ -783,7 +867,8 @@ doAjaxSearch = function(formName){
 			});
 		     var map = new GMap2(document.getElementById("streetview"));
 			var latlong = new GLatLng(lat, lng);
-			map.setCenter(latlong, 15);
+			var latlongcenter = new GLatLng(lat+0.0005, lng);
+			map.setCenter(latlongcenter, 17);
 			svOverlay = new GStreetviewOverlay();
 			map.addOverlay(svOverlay);
 			 var baseIcone = new google.maps.Icon();

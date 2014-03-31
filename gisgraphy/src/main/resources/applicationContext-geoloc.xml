@@ -114,8 +114,8 @@
 	</bean>
 
 	<bean id="geonamesAlternateNamesImporter"
-		class="com.gisgraphy.importer.GeonamesAlternateNamesSimpleImporter"
-		parent="abstractSimpleImporterProcessor">
+		class="com.gisgraphy.importer.GeonamesAlternateNames${classifier}Importer"
+		parent="abstract${classifier}ImporterProcessor">
 		<property name="gisFeatureDao" ref="gisFeatureDao" />
 		<property name="alternateNameDao" ref="alternateNameDao" />
 		<property name="cityDao" ref="cityDao" />
@@ -188,9 +188,14 @@
 		<constructor-arg>
 		<list>
 				<ref bean="geonamesFileRetriever"/>
-				<ref bean="geonamesAdmExtracter" />
+				<ref bean="OpenStreetMapCitiesFileRetriever"/>
+				<ref bean="geonamesZipCodeFileRetriever" />
+				<ref bean="openstreetmapFileRetriever" />
+				<ref bean="openStreetMapHouseNumberFileRetriever"/>
+				<ref bean="OpenStreetMapPoisFileRetriever"/>
 				<ref bean="geonamesLanguageImporter" />
 				<ref bean="geonamesCountryImporter" />
+				<ref bean="geonamesAdmExtracter" />
 				<ref bean="geonamesAdm1Importer" />
 				<ref bean="geonamesAdm2Importer" />
 				<ref bean="geonamesAdm3Importer" />
@@ -199,16 +204,11 @@
 				<ref bean="geonamesAlternateNamesExtracter" />
 				<ref bean="geonamesAlternateNamesAdmImporter"/>
 				<ref bean="geonamesAlternateNamesImporter" />
-				<ref bean="geonamesDatabaseIndexer" />
-				<ref bean="OpenStreetMapCitiesFileRetriever"/>
 				<ref bean="OpenStreetMapCitiesSimpleImporter"/>
-				<ref bean="geonamesZipCodeFileRetriever" />
 				<ref bean="geonamesZipCodeImporter" />
-				<ref bean="openstreetmapFileRetriever" />
+				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="openStreetMapImporter"/>
-				<ref bean="openStreetMapHouseNumberFileRetriever"/>
 				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
-				<ref bean="OpenStreetMapPoisFileRetriever"/>
 				<ref bean="OpenStreetMapPoisSimpleImporter"/>
 			</list>
 		</constructor-arg>

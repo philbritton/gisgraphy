@@ -43,8 +43,6 @@ import com.gisgraphy.importer.ImporterManager;
 import com.gisgraphy.importer.ImporterMetaDataException;
 import com.opensymphony.xwork2.ActionSupport;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 /**
  * Action that retrieve the configuration and
  * 

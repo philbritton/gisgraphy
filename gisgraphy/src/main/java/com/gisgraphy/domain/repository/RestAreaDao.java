@@ -24,7 +24,6 @@ package com.gisgraphy.domain.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.gisgraphy.domain.geoloc.entity.Camp;
 import com.gisgraphy.domain.geoloc.entity.RestArea;
 
 /**

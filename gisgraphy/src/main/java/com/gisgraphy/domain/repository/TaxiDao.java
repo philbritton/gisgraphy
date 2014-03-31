@@ -24,7 +24,6 @@ package com.gisgraphy.domain.repository;
 
 import org.springframework.stereotype.Repository;
 
-import com.gisgraphy.domain.geoloc.entity.SwimmingPool;
 import com.gisgraphy.domain.geoloc.entity.Taxi;
 
 /**

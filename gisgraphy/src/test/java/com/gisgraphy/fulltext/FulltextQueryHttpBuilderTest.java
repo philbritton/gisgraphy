@@ -43,7 +43,6 @@ import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.fulltext.spell.SpellCheckerConfig;
 import com.gisgraphy.serializer.common.OutputFormat;
-import com.gisgraphy.service.AbstractGisQuery;
 import com.gisgraphy.servlet.FulltextServlet;
 import com.gisgraphy.servlet.GisgraphyServlet;
 import com.gisgraphy.test.GisgraphyTestHelper;

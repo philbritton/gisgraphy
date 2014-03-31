@@ -2,7 +2,7 @@
 // dummy example of basic query. 
 
 //geocoding
-$query = RestClient::get("http://services.gisgraphy.com/geocoding/geocode",array('format'=>'php','address'=>'1 avenue des champs elysees 75003 paris','countrycode'=>'FR'));
+$query = RestClient::get("http://services.gisgraphy.com/geocoding/geocode",array('format'=>'php','address'=>'1 avenue des champs elysees 75003 paris','country'=>'FR'));
 //address parser
 $query = RestClient::get("http://services.gisgraphy.com/addressparser/parse",array('format'=>'php','address'=>'1 avenue des champs elysees 75003 paris','country'='FR'));
 //street search

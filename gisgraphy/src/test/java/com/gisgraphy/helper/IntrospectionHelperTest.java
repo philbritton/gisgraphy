@@ -27,14 +27,24 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import com.gisgraphy.addressparser.Address;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.test.FakeBean;
 
 public class IntrospectionHelperTest  {
 
+	@Test
+    public void getFieldsAsListShouldIgnoreSerialVersionUID() {
+	List<String> fields = IntrospectionHelper
+			.getFieldsAsList(Address.class);
+	Assert.assertFalse(fields.contains("SerialVersionUID"));
+	}
+	
+	
     @Test
     public void getGisFeatureFieldsAsListShouldIgnoreAnnotedFields() {
 	List<String> fields = IntrospectionHelper
@@ -142,5 +152,7 @@ public class IntrospectionHelperTest  {
 		.getFieldsAsList(GisFeature.class);
 	assertEquals(24, fields.size());
     }
+    
+    
 
 }

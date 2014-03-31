@@ -1,2 +1,2 @@
 #!/bin/bash
-./launch.sh;./logs.sh
+./start.sh;./logs.sh

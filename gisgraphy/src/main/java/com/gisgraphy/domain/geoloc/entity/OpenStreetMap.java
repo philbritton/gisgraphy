@@ -50,8 +50,9 @@ import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.street.HouseNumberComparator;
@@ -70,11 +71,16 @@ import com.vividsolutions.jts.geom.Point;
 @SequenceGenerator(name = "streetosmsequence", sequenceName = "street_osm_sequence")
 public class OpenStreetMap {
 	
+	 protected static final Logger logger = LoggerFactory
+			    .getLogger(OpenStreetMap.class);
+	
 	@Transient
 	private static final HouseNumberComparator houseNumberComparator = new HouseNumberComparator();
 	
 
     public static final String SHAPE_COLUMN_NAME = "shape";
+    
+    public static final int MAX_ALTERNATENAME_SIZE = 200;
 
     /**
      * Name of the column that is equals to to_tsvector(
@@ -203,6 +209,9 @@ public class OpenStreetMap {
      */
     public void addAlternateName(AlternateOsmName alternateName) {
     	if (alternateName!=null){
+    		if (alternateName.getName() != null && alternateName.getName().length() > MAX_ALTERNATENAME_SIZE){
+    			logger.warn("alternate name "+ alternateName.getName()+" is too long");
+    		} else {
     		List<AlternateOsmName> currentAlternateNames = getAlternateNames();
     		if (currentAlternateNames == null) {
     			currentAlternateNames = new ArrayList<AlternateOsmName>();
@@ -210,6 +219,7 @@ public class OpenStreetMap {
     		currentAlternateNames.add(alternateName);
     		this.setAlternateNames(currentAlternateNames);
     		alternateName.setStreet(this);
+    	}
     	}
     }
 
@@ -234,7 +244,6 @@ public class OpenStreetMap {
      * 
      * @see StreetSearchMode#CONTAINS
      * @return the partialSearchName
-     * @see GisgraphyConfig#PARTIAL_SEARH_EXPERIMENTAL
      */
     @Column(unique = false, nullable = true, columnDefinition = "text")
     public String getPartialSearchName() {
@@ -667,11 +676,11 @@ public class OpenStreetMap {
 	}
 	
 	/**
-     * Do a double set : add the alternate name to the current GisFeature and set
-     * this GisFeature as the GisFeature of the specified AlternateName
+     * Do a double set : add the house number to the current street and set
+     * this street as the street of the specified AlternateName
      * 
-     * @param alternateName
-     *                the alternateName to add
+     * @param houseNumber
+     *                the houseNumber to add
      */
 	public void addHouseNumber(HouseNumber houseNumber) {
 		if (houseNumber!=null){
@@ -686,12 +695,12 @@ public class OpenStreetMap {
 	}
 
     /**
-     * Do a double set : add (not replace !) the AlternateNames to the current
-     * GisFeature and for each alternatenames : set the current GisFeature as
-     * the GisFeature of the Alternate Names
+     * Do a double set : add (not replace !) the House Numbers to the current
+     * street and for each House numbers : set the current street as
+     * the street of the House Numbers
      * 
-     * @param alternateNames
-     *                The alternateNames list to add
+     * @param HouseNumbers
+     *                The House Numbers list to add
      */
     public void addHouseNumbers(List<HouseNumber> HouseNumbers) {
 	if (HouseNumbers != null) {
