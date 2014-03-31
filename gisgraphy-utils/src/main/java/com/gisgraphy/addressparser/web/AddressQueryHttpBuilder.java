@@ -27,6 +27,7 @@ package com.gisgraphy.addressparser.web;
 
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -37,6 +38,7 @@ import com.gisgraphy.addressparser.AddressQuery;
 import com.gisgraphy.addressparser.StructuredAddressQuery;
 import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
+import com.gisgraphy.helper.IntrospectionHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.servlet.AbstractAddressServlet;
@@ -57,6 +59,17 @@ public class AddressQueryHttpBuilder {
 
 	}
 
+	/** This map allows to associate a parameter name that can be in any case (sensitive) to an address fields
+	 *  
+	 */
+	private static Map<String,String> parameterNameToAddressFields = new HashMap<String, String>(){
+		{
+			for (String fieldName : IntrospectionHelper.getFieldsAsList(Address.class)){
+				put(fieldName.toLowerCase(),fieldName);
+			}
+		}
+	};
+	
 	/**
 	 * @param req
 	 *            an HttpServletRequest to construct a {@link AddressQuery}
@@ -137,7 +150,8 @@ public class AddressQueryHttpBuilder {
 		Map<String,String[]> parameterNames = req.getParameterMap();
 		boolean atLeastOneSetterFound = false;
 		for(Entry<String, String[]> parameters :parameterNames.entrySet()){
-			String parameterName =(String) parameters.getKey();
+			String parameterNameFromQuery =(String) parameters.getKey();
+			String parameterName = getFieldNameFromParameter(parameterNameFromQuery);
 			if (parameters.getValue().length==1){
 				if (AbstractAddressServlet.COUNTRY_PARAMETER.equalsIgnoreCase(parameterName)){
 					//the country parameter should not be set, it is only a populated field and should not be confused with countrycode.
@@ -159,20 +173,31 @@ public class AddressQueryHttpBuilder {
 		
 	}
 
+	String getFieldNameFromParameter(String parameterNameFromQuery) {
+		if (parameterNameFromQuery==null){
+			return null;
+		}
+		String fieldName =  parameterNameToAddressFields.get(parameterNameFromQuery.toLowerCase());
+		return fieldName==null? parameterNameFromQuery:fieldName;
+	}
+
 	protected static boolean setAddressField(Address address, String fieldName, String value) {
 		try {
-		String setter = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-		Method method;
-		try {
-			method = Address.class.getMethod(setter, new Class[] { String.class });
-			method.invoke(address, new Object[] { value });
-		} catch (NoSuchMethodException e) {
-			return false;
+			if (fieldName==null){
+				return false;
+			}
+			String setter = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+			Method method;
+			try {
+				method = Address.class.getMethod(setter, new Class[] { String.class });
+				method.invoke(address, new Object[] { value });
+			} catch (NoSuchMethodException e) {
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			throw new RuntimeException("exception in setAddressField : " + e.getMessage(), e);
 		}
-		return true;
-	} catch (Exception e) {
-		throw new RuntimeException("exception in setAddressField : " + e.getMessage(), e);
-	}
 }
 	
 }
