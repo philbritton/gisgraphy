@@ -637,5 +637,15 @@ public class AddressQueryHttpBuilderTest {
     	Address address = builder.buildAddressFromRequest(request);
     	Assert.assertNull("country parameter is not really an address field, it is often the country parameter to geocode",address);
     }
+    
+    
+    @Test
+    public void getFieldNameFromParameter(){
+    	AddressQueryHttpBuilder builder = AddressQueryHttpBuilder.getInstance();
+    	Assert.assertEquals("streetName",builder.getFieldNameFromParameter("streetName"));
+    	Assert.assertEquals("streetName",builder.getFieldNameFromParameter("streetname"));
+    	Assert.assertEquals("streetName",builder.getFieldNameFromParameter("STREETNAME"));
+    	Assert.assertNull(builder.getFieldNameFromParameter(null));
+    }
 
 }
