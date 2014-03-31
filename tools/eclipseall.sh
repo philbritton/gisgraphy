@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ../addressParser-commons
+mvn clean eclipse:clean eclipse:eclipse
 cd ../universalserialiser-commons
 mvn clean eclipse:clean eclipse:eclipse
 cd ../universalserialiser
