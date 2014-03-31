@@ -21,6 +21,8 @@
  ******************************************************************************/
 package com.gisgraphy.addressparser;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -29,8 +31,10 @@ import com.gisgraphy.addressparser.commons.GeocodingLevels;
 
 @XmlRootElement(name = Constants.ADDRESS_ROOT_JAXB_NAME)
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Address {
+public class Address implements Serializable {
 
+	private static final long serialVersionUID = 6185879035945582454L;
+	
     private Long id;
     private Double lng;
     private Double lat;
