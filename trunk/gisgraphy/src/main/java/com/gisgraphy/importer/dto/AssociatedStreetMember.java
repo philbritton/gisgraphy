@@ -153,7 +153,7 @@ public class AssociatedStreetMember {
 	}
 
 	/**
-	 * @param streetName the streetName to set
+	 * @param name the name to set
 	 */
 	public void setStreetName(String name) {
 		this.streetName = name;

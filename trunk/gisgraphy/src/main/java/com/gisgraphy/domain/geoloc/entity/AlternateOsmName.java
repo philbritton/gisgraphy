@@ -141,8 +141,8 @@ public class AlternateOsmName {
     /**
      * Set the gisFeature, the alternate name refers to
      * 
-     * @param gisFeature
-     *                The GisFeature, the alternate name refers to
+     * @param street
+     *                The street, the alternate name refers to
      */
     public void setStreet(OpenStreetMap street) {
 	this.street = street;

@@ -38,7 +38,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -383,10 +382,15 @@ public class ImporterHelper {
 			return false;
 		}
     	int responseCode;
+    	String responseMessage = "NO RESPONSE MESSAGE";
+    	Object content = "NO CONTENT";
+    	HttpURLConnection huc;
 		try {
-			HttpURLConnection huc = (HttpURLConnection) url.openConnection();
+			huc = (HttpURLConnection) url.openConnection();
 			huc.setRequestMethod("HEAD");
 			responseCode = huc.getResponseCode();
+			content = huc.getContent();
+			responseMessage = huc.getResponseMessage();
 		} catch (ProtocolException e) {
 			logger.error("can not check url "+e.getMessage(),e);
 			return false;
@@ -399,7 +403,7 @@ public class ImporterHelper {
     		logger.info("URL "+urlAsString+ " exists");
     		return true;
     	} else {
-    		logger.error(urlAsString+" return a "+responseCode);
+    		logger.error(urlAsString+" return a "+responseCode+" : "+content+"/"+responseMessage);
     	return false;
     	}
     }

@@ -34,7 +34,8 @@
 
       <!-- Leaflet Map -->
       <div id="map" class="span16"></div>
-<div style="font-size:1.2em;font-family:arial;text-indent:10px;">Enter a place, street or address, select the country and click on the 'Geocode' button. then you can compare the several coordinates, feeds, and see the results on the map (each geocoder has a different color). <span style="color:red"> It has been reported that on old versions of Internet Explorer, the result comparator doesn't work, please use Firefox or Google chrome, if you got problems</span><br/><br/></div>
+<div style="font-size:1.2em;font-family:arial;text-indent:10px;">Enter a place, street or address, select a country (optional) and click on the 'Geocode' button. then you can compare the several coordinates, feeds, and see the results on the map (each geocoder has a different color). there is also some other tools like <a href="https://github.com/eyeseast/geocoder-comparison" target="_blank">geocoder-comparison</a> to compare API or <a href="http://philsturgeon.co.uk/blog/2011/02/geocoding-apis-compared">geocoding-apis-compared</a> on Github to compare results. <span style="color:red"> It has been reported that on old versions of Internet Explorer, the result comparator doesn't work, please use Firefox or Google chrome, if you got problems</span>. <br/><br/>
+</div>
       <!-- Geocode form section -->
       <div class="well">
         <input id="geocode-address" class="span7" name="" type="text" placeholder="">
@@ -291,12 +292,10 @@
     <option value="ZA">South Africa</option>
     <option value="ZM">Zambia</option>
     <option value="ZW">Zimbabwe</option>
-
-
 </select>
         <button id="geocode-submit" class="btn primary">Geocode</button>
       </div>
-
+<a href="documentation/relevance-and-performance.htm">See why Gisgraphy is different</a>
       <!-- Example row of columns -->
       <div id="geocoder-results" class="row"></div>
 

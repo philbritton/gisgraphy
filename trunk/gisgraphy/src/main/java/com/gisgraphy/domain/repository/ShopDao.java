@@ -25,7 +25,6 @@ package com.gisgraphy.domain.repository;
 import org.springframework.stereotype.Repository;
 
 import com.gisgraphy.domain.geoloc.entity.Shop;
-import com.gisgraphy.domain.geoloc.entity.SwimmingPool;
 
 /**
  * A data access object for {@link Shop} Object

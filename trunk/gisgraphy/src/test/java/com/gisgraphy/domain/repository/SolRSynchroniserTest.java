@@ -80,7 +80,6 @@ import com.gisgraphy.fulltext.spell.ISpellCheckerIndexer;
 import com.gisgraphy.geoloc.GisgraphyCommunicationException;
 import com.gisgraphy.helper.FileHelper;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.street.HouseNumberSerializer;
 import com.gisgraphy.street.StreetType;

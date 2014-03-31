@@ -606,7 +606,7 @@ public class ImporterConfig {
      * The HTTP URL of the directory Where openstreetmap house numbers files are to be
      * download from
      * 
-     * @param openstreetMaphouseNumberDownloadURL
+     * @param openstreetMapHouseNumberDownloadURL
      *            The option
      */
     @Required
@@ -669,8 +669,8 @@ public class ImporterConfig {
      * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
      * {@link #OPENSTREETMAP_HOUSENUMBER_DEFAULT_FILES_TO_DOWNLOAD}
      * 
-     * @param openStreetMapFilesToDownload
-     *            The openstreetmap filesToDownload to set
+     * @param openStreetMapHouseNumberFilesToDownload
+     *            The openstreetmap files to download to set
      */
     @Required
     public void setOpenStreetMapHouseNumberFilesToDownload(String openStreetMapHouseNumberFilesToDownload) {
@@ -713,7 +713,7 @@ public class ImporterConfig {
      * The HTTP URL of the directory Where openstreetmap cities files are to be
      * download from
      * 
-     * @param openstreetMapHouseNumbersDownloadURL
+     * @param openstreetMapCitiesDownloadURL
      *            The option
      */
     @Required
@@ -740,7 +740,7 @@ public class ImporterConfig {
      * The directory where the openStreetMap cities files will be retrieved and
      * processed. It must ends with / or \ according to the System
      * 
-     * @param importeropenStreetMapDir
+     * @param openStreetMapCitiesDir
      *            the option
      */
     @Required
@@ -782,7 +782,7 @@ public class ImporterConfig {
      * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
      * {@link #OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD}
      * 
-     * @param openStreetMapFilesToDownload
+     * @param openStreetMapCitiesFilesToDownload
      *            The openstreetmap filesToDownload to set
      */
     @Required
@@ -827,7 +827,7 @@ public class ImporterConfig {
      * The HTTP URL of the directory Where openstreetmap POI files are to be
      * download from
      * 
-     * @param openstreetMapHouseNumbersDownloadURL
+     * @param openstreetMapPoisDownloadURL
      *            The option
      */
     @Required
@@ -854,7 +854,7 @@ public class ImporterConfig {
      * The directory where the openStreetMap POI files will be retrieved and
      * processed. It must ends with / or \ according to the System
      * 
-     * @param importeropenStreetMapDir
+     * @param openStreetMapPoisDir
      *            the option
      */
     @Required
@@ -890,7 +890,7 @@ public class ImporterConfig {
      * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
      * {@link #OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD}
      * 
-     * @param openStreetMapFilesToDownload
+     * @param openStreetMapPoisFilesToDownload
      *            The openstreetmap filesToDownload to set
      */
     @Required

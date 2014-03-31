@@ -26,17 +26,17 @@
  <@s.text name="search.openstreetmap.data"><@s.param>http://openstreetmap.org</@s.param></@s.text>.
  <@s.text name="search.geocoding.notUsinggooglemap"/>.
  <@s.text name="search.docandinstall">
- 	<@s.param>http://www.gisgraphy.com/documentation/user-guide.htm#geocodingservice</@s.param>
+ 	<@s.param>http://www.gisgraphy.com/documentation/user-guide.htm#reversegeocodingservice</@s.param>
  	<@s.param>http://www.gisgraphy.com/documentation/installation/index.htm</@s.param>
  </@s.text>.
 </div><br/><br/>
 <div class="clear"></div>
 
 
-	<@s.form action="/street/search" method="get" id="reversegeocoding">
+	<@s.form action="/reversegeocoding/search" method="get" id="reversegeocoding">
 		<div id="simplesearch">
 			<@gisgraphysearch.latlongsearchbox/>
-			<@breadcrumbs.streetsearchTooltip advancedSearchURLParam="streetSearch"/>
+			<@breadcrumbs.streetsearchTooltip advancedSearchURLParam="" docAnchor="reversegeocodingservice"/>
 <@s.hidden size="1" name="from" id="from"  value="1" theme="simple" />
 <@s.hidden size="1" name="to"  id="to" value="1" theme="simple"/>
 	</div>
@@ -51,10 +51,18 @@
 <script type="text/javascript" >
 pointIsRequired=true;
 getHtmlFromSelectedStreet = function(selectedStreetInformation){
-var html = '<div id="EmplacementStreetView" class="googlemapInfoWindowHtml"><img src="/images/logos/logo_32.png" alt="free geocoding services" class="imgAlign"/><span  class="biggertext"><@s.text name="search.geocoding.services"/></span><hr/>id : <span  class="biggertext">'+selectedStreetInformation.gid+'</span><br/><span  class="biggertext">'+selectedStreetInformation.name+'</span><br/>';
-if (selectedStreetInformation.streetType != null){html= html + "<@s.text name="search.type.of.street"/> : "+selectedStreetInformation.streetType+"<br/><br/>";}
- if (selectedStreetInformation.oneWay==true){html = html+ '<@s.text name="street.oneway" />'; } else { html = html +'<@s.text name="street.twoway" />';}
-html= html +'<br/><br/> <@s.text name="global.latitude" /> : '+selectedStreetInformation.lat+'<br/><br/><@s.text name="global.longitude" /> : '+selectedStreetInformation.lng+'<br/><br/> <@s.text name="global.length" /> : '+(selectedStreetInformation.length*100000)+' m</div>';
+var html = '<div id="EmplacementStreetView" class="googlemapInfoWindowHtml"><img src="/images/logos/logo_32.png" alt="free geocoding services" class="imgAlign"/><span  class="biggertext"><@s.text name="search.geocoding.reverse.breadcrumbs"/></span><hr/>';
+if (typeof selectedStreetInformation.houseNumber != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.housenumber"/> : '+selectedStreetInformation.houseNumber+'</span><br/>';}
+
+if (typeof selectedStreetInformation.name != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.name"/> : '+selectedStreetInformation.name+'</span><br/>';}
+if (typeof selectedStreetInformation.streetName != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.streetName"/> : '+selectedStreetInformation.streetName+'</span><br/>';}
+if (typeof selectedStreetInformation.city != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.city"/> : '+selectedStreetInformation.city+'</span><br/>';}
+if (typeof selectedStreetInformation.citySubdivision != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.place"/> : '+selectedStreetInformation.citySubdivision+'</span><br/>';}
+if (typeof selectedStreetInformation.zipcode != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.zipcode"/> : '+selectedStreetInformation.zipcode+'</span><br/>';}
+if (typeof selectedStreetInformation.state != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.state"/> : '+selectedStreetInformation.state+'</span><br/>';}
+html= html +'<br/><br/>';
+if (typeof selectedStreetInformation.distance != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.distance"/> : '+Math.round(selectedStreetInformation.distance*100)/100+' m</span><br/>';}
+html= html+' <@s.text name="global.latitude" /> : '+selectedStreetInformation.lat+'<br/><@s.text name="global.longitude" /> : '+selectedStreetInformation.lng+'</div>';
 return html;
 }
 

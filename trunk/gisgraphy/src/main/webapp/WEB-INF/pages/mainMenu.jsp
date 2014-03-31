@@ -58,6 +58,8 @@ com.gisgraphy.importer.ImporterManager importerManager = (com.gisgraphy.importer
     
 </ul>
 
+<p><fmt:message key="premium.desc"/><br/></p>
+
 <iframe src="http://www.gisgraphy.com/news/getnews.php?version=<fmt:message key="gisgraphy.version"/>" 
 width="100%" height="100%" id="iframenews" frameborder="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no" noresize
 > </iframe>

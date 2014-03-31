@@ -30,7 +30,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
@@ -57,11 +56,8 @@ import com.gisgraphy.geoloc.GisgraphyCommunicationException;
 import com.gisgraphy.helper.ClassNameHelper;
 import com.gisgraphy.helper.EncodingHelper;
 import com.gisgraphy.helper.RetryOnErrorTemplate;
-import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.street.HouseNumberComparator;
 import com.gisgraphy.street.HouseNumberSerializer;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Interface of data access object for {@link Language}

@@ -33,7 +33,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.test.GisgraphyTestHelper;
 
 public class StringHelperTest {

@@ -43,7 +43,6 @@ import com.gisgraphy.domain.valueobject.HouseNumberType;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.street.HouseNumberComparator;
-import com.gisgraphy.util.StringUtil;
 import com.vividsolutions.jts.geom.Point;
 
 /**

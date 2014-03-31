@@ -49,6 +49,7 @@ import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
 import com.gisgraphy.fulltext.SolrResponseDto;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.service.ServiceException;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -270,11 +271,23 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
     }
 
     protected FulltextResultsDto doAFulltextSearch(String query, String countryCode) {
-	FulltextQuery fulltextQuery = new FulltextQuery(query);
+	FulltextQuery fulltextQuery;
+	try {
+		fulltextQuery = new FulltextQuery(query);
+	} catch (IllegalArgumentException e) {
+		logger.error("can not create a fulltext query for "+query);
+		return new FulltextResultsDto();
+	}
 	fulltextQuery.limitToCountryCode(countryCode);
 	fulltextQuery.withPlaceTypes(com.gisgraphy.fulltext.Constants.CITY_AND_CITYSUBDIVISION_PLACETYPE);
 
-	FulltextResultsDto results = fullTextSearchEngine.executeQuery(fulltextQuery);
+	FulltextResultsDto results;
+	try {
+		results = fullTextSearchEngine.executeQuery(fulltextQuery);
+	} catch (ServiceException e) {
+		logger.error("error when executing a fulltext search "+e.getMessage(),e);
+		return new FulltextResultsDto();
+	}
 	return results;
     }
 

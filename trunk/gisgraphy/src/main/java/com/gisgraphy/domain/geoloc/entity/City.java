@@ -22,7 +22,6 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;

@@ -47,7 +47,6 @@ import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
 import com.gisgraphy.geoloc.GeolocSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.StringHelper;
@@ -249,7 +248,14 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
 				if (street.getName()==null){
 					street.setName(alternateName);
 				} else {
-				 street.addAlternateName((new AlternateOsmName(alternateName.trim(),AlternateNameSource.OPENSTREETMAP)));
+					if (alternateName.contains(",")|| alternateName.contains(";")|| alternateName.contains(":")){
+						String[] alternateNames = alternateName.split("[;\\:,]");
+						for (String name:alternateNames){
+							street.addAlternateName(new AlternateOsmName(name.trim(),AlternateNameSource.OPENSTREETMAP));
+						}
+					} else {
+						street.addAlternateName(new AlternateOsmName(alternateName.trim(),AlternateNameSource.OPENSTREETMAP));
+					}
 				}
 			}
 		}

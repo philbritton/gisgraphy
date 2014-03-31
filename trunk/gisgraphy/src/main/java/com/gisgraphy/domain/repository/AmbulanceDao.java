@@ -25,8 +25,6 @@ package com.gisgraphy.domain.repository;
 import org.springframework.stereotype.Repository;
 
 import com.gisgraphy.domain.geoloc.entity.Ambulance;
-import com.gisgraphy.domain.geoloc.entity.Camp;
-import com.gisgraphy.domain.geoloc.entity.Picnic;
 
 /**
  * A data access object for {@link Ambulance} Object

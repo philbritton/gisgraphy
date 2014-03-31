@@ -219,6 +219,15 @@ public class FulltextQueryTest {
 	    SpellCheckerConfig.activeByDefault = savedSpellCheckingValue;
 	}
     }
+    
+    @Test
+    public void testDetectEmptyQueryAfterCleaning(){
+    	try {
+			FulltextQuery query = new FulltextQuery("()");
+			fail("it should have throw since the query is empty after cleaning");
+		} catch (IllegalArgumentException e) {
+		}
+    }
 
     @Test
     public void testCleanQueryString(){
@@ -246,6 +255,9 @@ public class FulltextQueryTest {
 	
 	query.withQuery("newyork,ny");
 	Assert.assertEquals("newyork, ny", query.getQuery());
+	
+	query.withQuery("village\\");
+	Assert.assertEquals("village", query.getQuery());
     }
     
     @Test

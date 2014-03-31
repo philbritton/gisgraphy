@@ -54,7 +54,7 @@ import com.gisgraphy.stats.StatsUsageType;
 import com.vividsolutions.jts.geom.Point;
 
 /**
- * Default (threadsafe) implementation of {@link IReverseGeocodingEngine}.
+ * Default (threadsafe) implementation of {@link IReverseGeocodingService}.
  * 
  * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
  * 

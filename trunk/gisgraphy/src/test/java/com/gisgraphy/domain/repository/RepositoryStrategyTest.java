@@ -25,15 +25,12 @@
  */
 package com.gisgraphy.domain.repository;
 
-import java.util.Collection;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
-import com.gisgraphy.domain.valueobject.FeatureCode;
 
 
 public class RepositoryStrategyTest extends AbstractTransactionalTestCase {

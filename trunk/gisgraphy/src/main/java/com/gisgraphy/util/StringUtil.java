@@ -111,18 +111,6 @@ public final class StringUtil {
     	return String.valueOf(encoder.encode(str.getBytes())).trim();
     }
 
-    /**
-     * Decode a string using Base64 encoding.
-     * 
-     * @param str
-     *                the string to decode
-     * @return the decoded string
-     */
-   /* public static String decodeString(String str) {
-	Base64 dec = new Base64();
-	return String.valueOf(dec.decode(str));
-	   
-    }*/
     
     public static boolean containsDigit(String text){
     	if (text!=null && DIGIT_PATTERN.matcher(text).find()){

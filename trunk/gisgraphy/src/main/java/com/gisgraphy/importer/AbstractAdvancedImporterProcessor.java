@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,6 +168,7 @@ public abstract class AbstractAdvancedImporterProcessor extends AbstractSimpleIm
 	private void clean() {
 		try {
 			threadPoolTaskExecutor.destroy();
+			threadPoolTaskExecutor.getThreadPoolExecutor().shutdownNow();
 			threadPoolTaskExecutor = null;
 		} catch (Exception e) {
 			logger.error("an error has occured when cleaning thread executor"+e.getMessage(),e);

@@ -22,13 +22,12 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static com.gisgraphy.test.GisgraphyTestHelper.alternateOsmNameContains;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -42,25 +41,17 @@ import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.AlternateOsmName;
 import com.gisgraphy.domain.geoloc.entity.City;
-import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
-import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
-import com.gisgraphy.domain.valueobject.GisFeatureDistance;
 import com.gisgraphy.domain.valueobject.GisFeatureDistanceFactory;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.ImporterStatus;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.fulltext.AbstractIntegrationHttpSolrTestCase;
-import com.gisgraphy.geocoloc.IGeolocSearchEngine;
-import com.gisgraphy.geoloc.GeolocQuery;
-import com.gisgraphy.geoloc.GeolocResultsDto;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.service.IInternationalisationService;
 import com.gisgraphy.street.StreetType;
 import com.vividsolutions.jts.geom.Point;
 
@@ -158,6 +149,26 @@ public class OpenStreetMapSimpleImporterTest extends AbstractIntegrationHttpSolr
     	Assert.fail("alternateNames doesn't contain "+name);
     	return false;
     }
+    
+    @Test
+	public void populateAlternateNames_nameWithCommaOrSemiColumn() {
+		String RawAlternateNames="Karl-Franzens-Universität Graz___Cheka Jedid,Chekia Atiq:Chekia Jedide;Chekia Jedidé";
+		OpenStreetMapSimpleImporter importer = new OpenStreetMapSimpleImporter();
+		OpenStreetMap street = new OpenStreetMap();
+		street = importer.populateAlternateNames(street, RawAlternateNames);
+		Assert.assertEquals(5, street.getAlternateNames().size());
+		Assert.assertTrue(alternateOsmNameContains(street.getAlternateNames(),"Karl-Franzens-Universität Graz"));
+		Assert.assertTrue(alternateOsmNameContains(street.getAlternateNames(),"Cheka Jedid"));
+		Assert.assertTrue(alternateOsmNameContains(street.getAlternateNames(),"Chekia Atiq"));
+		Assert.assertTrue(alternateOsmNameContains(street.getAlternateNames(),"Chekia Jedide"));
+		Assert.assertTrue(alternateOsmNameContains(street.getAlternateNames(),"Chekia Jedidé"));
+		
+		Iterator<AlternateOsmName> iterator = street.getAlternateNames().iterator();
+		while (iterator.hasNext()){
+			Assert.assertEquals(AlternateNameSource.OPENSTREETMAP,iterator.next().getSource());
+		}
+		
+	}
    
     
     @Test

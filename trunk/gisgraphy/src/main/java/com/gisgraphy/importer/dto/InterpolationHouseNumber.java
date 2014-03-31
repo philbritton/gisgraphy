@@ -66,7 +66,7 @@ public class InterpolationHouseNumber {
 	}
 
 	/**
-	 * @param wayID the wayID to set
+	 * @param wayId the wayID to set
 	 */
 	public void setWayId(String wayId) {
 		this.wayId = wayId;

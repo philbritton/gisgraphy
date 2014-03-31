@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
-import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 
 /**
  * Provide some usefull method to compute string for autocompletion and fulltextsearch
@@ -124,7 +123,7 @@ public class StringHelper {
 
 	/**
 	 * @param openStreetMap the openStreetMap Entity to update
-	 * @return the same openstreetmap entity with the {@link OpenStreetMap#PARTIALSEARCH_COLUMN_NAME} and {@link OpenStreetMap#FULLTEXTSEARCH_COLUMN_NAME}
+	 * @return the same openstreetmap entity with the {@link OpenStreetMap#FULLTEXTSEARCH_COLUMN_NAME}
 	 */
 	public static OpenStreetMap updateOpenStreetMapEntityForIndexation(OpenStreetMap openStreetMap) {
 		if (openStreetMap.getName() != null) {

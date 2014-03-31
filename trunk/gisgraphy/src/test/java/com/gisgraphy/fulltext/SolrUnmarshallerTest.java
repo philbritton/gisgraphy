@@ -55,8 +55,6 @@ import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.domain.valueobject.Pagination;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.helper.IntrospectionHelper;
-import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.street.StreetType;
 import com.gisgraphy.test.GisgraphyTestHelper;

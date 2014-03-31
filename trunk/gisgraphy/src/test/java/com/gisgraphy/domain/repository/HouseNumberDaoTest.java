@@ -25,7 +25,6 @@
  */
 package com.gisgraphy.domain.repository;
 
-import java.util.List;
 import java.util.SortedSet;
 
 import net.sf.jstester.util.Assert;

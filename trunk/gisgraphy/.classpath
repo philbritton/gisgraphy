@@ -10,7 +10,7 @@
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjtools/1.5.2a/aspectjtools-1.5.2a.jar"/>
 	<classpathentry kind="var" path="M2_REPO/aspectj/aspectjweaver/1.5.2a/aspectjweaver-1.5.2a.jar"/>
 	<classpathentry kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/4.0-beta1/gisgraphy-commons-4.0-beta1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-commons/4.0-beta1/gisgraphy-commons-4.0-beta1.jar" sourcepath="/gisgraphycommons"/>
 	<classpathentry kind="var" path="M2_REPO/com/vividsolutions/jts/1.8/jts-1.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser-commons/3.0/universalserialiser-commons-3.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.13/log4j-1.2.13.jar"/>
@@ -26,7 +26,7 @@
 	<classpathentry kind="var" path="M2_REPO/jdom/jdom/1.0/jdom-1.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-utils/4.0-beta1/gisgraphy-utils-4.0-beta1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/gisgraphy-utils/4.0-beta1/gisgraphy-utils-4.0-beta1.jar" sourcepath="/gisgraphy utils"/>
 	<classpathentry kind="var" path="M2_REPO/commons-collections/commons-collections/3.2/commons-collections-3.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/gisgraphy/universalserialiser/3.0/universalserialiser-3.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/javax/xml/bind/jaxb-api/2.1/jaxb-api-2.1.jar"/>

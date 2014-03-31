@@ -11,7 +11,6 @@ import com.gisgraphy.domain.geoloc.entity.HouseNumber;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.test.GisgraphyTestHelper;
-import com.opensymphony.xwork2.interceptor.annotations.Before;
 import com.vividsolutions.jts.geom.Point;
 
 public class AddressHelperTest {
@@ -114,8 +113,8 @@ public class AddressHelperTest {
 		Assert.assertEquals(osm.getIsInAdm(), address.getState());
 		Assert.assertEquals(osm.getIsInZip().iterator().next(), address.getZipCode());
 		Assert.assertEquals(osm.getCountryCode(), address.getCountryCode());
-		Assert.assertEquals(osm.getLatitude(), address.getLat());
-		Assert.assertEquals(osm.getLongitude(), address.getLng());
+		Assert.assertEquals(houseNumber.getLatitude(),address.getLat());
+		Assert.assertEquals(houseNumber.getLongitude(), address.getLng());
 		Assert.assertEquals(GeocodingLevels.HOUSE_NUMBER, address.getGeocodingLevel());
 		
 		//

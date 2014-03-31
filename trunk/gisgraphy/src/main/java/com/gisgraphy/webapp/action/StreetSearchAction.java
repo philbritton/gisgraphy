@@ -32,16 +32,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
-import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.domain.valueobject.StreetSearchResultsDto;
 import com.gisgraphy.helper.OutputFormatHelper;
-import com.gisgraphy.helper.URLUtils;
 import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.street.IStreetSearchEngine;
 import com.gisgraphy.street.StreetSearchQuery;
 import com.gisgraphy.street.StreetSearchQueryHttpBuilder;
 import com.gisgraphy.street.StreetType;
-import com.vividsolutions.jts.geom.Point;
 
 /**
  * Street search Action

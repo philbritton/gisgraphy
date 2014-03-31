@@ -6,8 +6,8 @@ curDir=`pwd`
 if [[ -e ../addressParser ]] 
 then
 	cd ../addressParser/
-	mvn clean install -Dmaven.test.skip
-	cp ./target/*.jar $curDir/data/libs/
+	./generateSolution.sh ./config-template/file/
+	cp target/export/addressParser-???.jar $curDir/data/libs/
 	cd $curDir
 else
 	 exit "address parser is not present"
@@ -39,7 +39,7 @@ then
 	cp ./target/*.jar $curDir/data/libs/
 	cd $curDir
 else
-	 exit "address parser is not present"
+	 exit "ws is not present"
 fi
 
 cd ../tools

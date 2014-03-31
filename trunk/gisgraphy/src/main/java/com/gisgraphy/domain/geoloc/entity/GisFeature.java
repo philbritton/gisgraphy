@@ -22,7 +22,6 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -65,7 +64,6 @@ import com.gisgraphy.helper.GisFeatureHelper;
 import com.gisgraphy.helper.IntrospectionIgnoredField;
 import com.gisgraphy.importer.ImporterConfig;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -101,6 +99,8 @@ public class GisFeature{
 
     protected static final Logger logger = LoggerFactory
 	    .getLogger(GisFeature.class);
+
+	public static final int MAX_ALTERNATENAME_SIZE = 200;
 
     /**
      * Default Constructor, needed by cgLib
@@ -409,8 +409,8 @@ public class GisFeature{
 
     /**
      * @see #getAdm4Code()
-     * @param adm4Code
-     *                the adm4code to set
+     * @param adm5Code
+     *                the adm5Code to set
      */
     public void setAdm5Code(String adm5Code) {
 	this.adm5Code = adm5Code;
@@ -537,10 +537,10 @@ public class GisFeature{
     /**
      * Set The name of the adm of level 5 that the GisFeature is linked to
      * 
-     * @param adm4Name
+     * @param adm5Name
      *                The name of the adm of level 5 that the GisFeature is
      *                linked to
-     * @see #getAdm4Name()
+     * @see #getAdm5Name()
      */
     public void setAdm5Name(String adm5Name) {
 	this.adm5Name = adm5Name;
@@ -595,13 +595,17 @@ public class GisFeature{
      */
     public void addAlternateName(AlternateName alternateName) {
     	if (alternateName!=null){
-    		alternateName.setGisFeature(this);
-    		Set<AlternateName> currentAlternateNames = getAlternateNames();
-    		if (currentAlternateNames == null) {
-    			currentAlternateNames = new HashSet<AlternateName>();
+    		if (alternateName.getName() != null && alternateName.getName().length() > MAX_ALTERNATENAME_SIZE){
+    			logger.warn("alternate name "+ alternateName.getName()+" is too long");
+    		} else {
+	    		alternateName.setGisFeature(this);
+	    		Set<AlternateName> currentAlternateNames = getAlternateNames();
+	    		if (currentAlternateNames == null) {
+	    			currentAlternateNames = new HashSet<AlternateName>();
+	    		}
+	    		currentAlternateNames.add(alternateName);
+	    		this.setAlternateNames(currentAlternateNames);
     		}
-    		currentAlternateNames.add(alternateName);
-    		this.setAlternateNames(currentAlternateNames);
     	}
     }
 
@@ -780,7 +784,7 @@ public class GisFeature{
     }
     
     /**
-     * @param location
+     * @param shape
      *                The shape of the GisFeature (JTS)
      * @see #getShape()
      */
@@ -1111,7 +1115,7 @@ public class GisFeature{
      * Set The zipCodes for the city. IMPORTANT : if you set the zipCodes, you should do a double set 
      * : that means that you should set the gisfeature property for all the zip codes, if you don't 
      * you will get problems when saving entity in the datastore. Please use this method
-     * you should prefer the methods {@link #addZipCode(ZipCode)} and {@link #addZipCodes(List)}
+     * you should prefer the methods {@link #addZipCode(ZipCode)} and {@link #addZipCodes(Collection)}
      *  that do it automatically.
      * 
      * @param zipCodes

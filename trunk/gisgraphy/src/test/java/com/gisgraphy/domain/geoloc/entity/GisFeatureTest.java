@@ -29,6 +29,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Required;
@@ -56,6 +57,21 @@ public class GisFeatureTest extends AbstractIntegrationHttpSolrTestCase {
     	 }
     }
 
+    @Test
+    public void testAddAlternateNamesShouldNotAddTooLongAlternateNames() {
+	GisFeature gisFeature = GisgraphyTestHelper
+		.createGisFeatureWithAlternateNames("toto", 3);
+	List<AlternateName> alternateNames = new ArrayList<AlternateName>();
+	AlternateName a1 = new AlternateName();
+	a1.setName(StringUtils.repeat("a", GisFeature.MAX_ALTERNATENAME_SIZE+1));
+	AlternateName a2 = new AlternateName();
+	a2.setName("bar");
+	alternateNames.add(a1);
+	alternateNames.add(a2);
+	gisFeature.addAlternateNames(alternateNames);
+	assertEquals("The long alternateName should not be added",4, gisFeature.getAlternateNames().size());
+    }
+    
     @Test
     public void testAddAlternateNamesShouldAddChildrenAndNotReplace() {
 	GisFeature gisFeature = GisgraphyTestHelper

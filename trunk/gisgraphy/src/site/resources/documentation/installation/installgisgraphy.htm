@@ -100,6 +100,17 @@ that's all, you can now start gisgraphy
 <li>Launch the launch script (.sh on Linux, .command on mac and .bat on windows </code>"</li>
 </ul>
 <br/>
+Some useful scripts are provided (for linux only) : 
+<ul>
+<li>The start script start Gisgraphy.</li>
+<li>The launch script, start Gisgraphy and print logs in the console</li>
+<li>The restart script stop (kill) Gisgraphy and restart.</li>
+<li>The stop script, stop Gisgraphy</li>
+<li>The force-stop script stop (kill) Gisgraphy.</li>
+<li>The status script give you informations if Gisgraphy is started or not</li>
+<li>watch, unwatch, and respawn scripts are useful when you want to restart Gisgraphy at startup or if it crash () </li>
+
+
 <div class="tip redtip">
 <span>Important</span> : You must type the command line in the directory where you've extract the Gisgraphy files. 
 <br/><br/>
@@ -112,7 +123,7 @@ This is the same thing for Tomcat or any servlet Container (Resin, ...) due to s
 </div> 
 <br/>
 <div class="tip greentip">
-To avoid OutOfMemoryError : you must launch Gisgraphy with a minimum memory of 512M. To do this : set your CATALINA_OPTS to <code>-Xms512M -Xmx512M</code> (e.g : add this <i>CATALINA_OPTS=-Xms512M -Xmx512M</i> to the .bashrc file in your home directory)
+To avoid OutOfMemoryError : if you launch Gisgraphy in Tomcat, you must launch it with a minimum memory of 512M. To do this : set your CATALINA_OPTS to <code>-Xms512M -Xmx512M</code> (e.g : add this <i>CATALINA_OPTS=-Xms512M -Xmx512M</i> to the .bashrc file in your home directory)
 </div>
 <br/>
 <br/>
