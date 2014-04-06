@@ -888,6 +888,35 @@ public class FulltextSearchEngineTest extends
     }
     
     @Test
+    public void testSearchShouldConsiderZipCodeAsAWholeWordAndNotSplitSpace_allwordRequired() {
+	City city = GisgraphyTestHelper.createCity("Saint André", 1.5F, 2F, 1001L);
+	city.addZipCode(new ZipCode("30 520"));
+	this.cityDao.save(city);
+	assertNotNull(this.cityDao.getByFeatureId(1001L));
+	// commit changes
+	this.solRSynchroniser.commit();
+
+	try {
+	    Pagination pagination = paginate().from(1).to(10);
+	    Output output = Output.withFormat(OutputFormat.XML)
+		    .withLanguageCode("FR").withStyle(OutputStyle.SHORT)
+		    .withIndentation();
+	    FulltextQuery fulltextQuery = new FulltextQuery("30 520",
+		    pagination, output, com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "fr").withAllWordsRequired(true);
+	    String result = fullTextSearchEngine
+		    .executeQueryToString(fulltextQuery);
+	    FeedChecker.assertQ("The query return incorrect values", result,
+		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
+		    "//*[@name='"
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
+			    + "']");
+	} catch (FullTextSearchException e) {
+	    fail("error during search : " + e.getMessage());
+	}
+    }
+    
+    @Test
     public void testSearchShouldConsiderZipCodeAsAWholeWordAndNotSplitSpace() {
 	City city = GisgraphyTestHelper.createCity("Saint André", 1.5F, 2F, 1001L);
 	city.addZipCode(new ZipCode("30 520"));
@@ -902,7 +931,7 @@ public class FulltextSearchEngineTest extends
 		    .withLanguageCode("FR").withStyle(OutputStyle.SHORT)
 		    .withIndentation();
 	    FulltextQuery fulltextQuery = new FulltextQuery("30 520",
-		    pagination, output, com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "fr");
+		    pagination, output, com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "fr").withAllWordsRequired(false);
 	    String result = fullTextSearchEngine
 		    .executeQueryToString(fulltextQuery);
 	    FeedChecker.assertQ("The query return incorrect values", result,

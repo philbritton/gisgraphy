@@ -190,7 +190,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		}
 		
 	} else {
-		SolrResponseDto  nearestCity = getNearestCity(location, name, countrycode, Constants.ONLY_CITYSUBDIVISION_PLACETYPE);
+		SolrResponseDto  nearestCity = getNearestCity(location, name, countrycode, Constants.ONLY_CITY_PLACETYPE);
 		if (nearestCity != null ){
 			city = cityDao.getByFeatureId(nearestCity.getFeature_id());
 			if (city==null){
@@ -203,7 +203,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 			city = createNewCity(name,countrycode,location);
 		}
 		//set municipality if needed
-		((City)city).setMunicipality(municipalityDetector.isMunicipality(countrycode, fields[8], fields[0], GISSource.OSM));
+		if ( !((City)city).isMunicipality()){ 
+			//only if not already a city, because, a node can be after a relation and then node set the municipality to false
+			((City)city).setMunicipality(municipalityDetector.isMunicipality(countrycode, fields[8], fields[0], GISSource.OSM));
+		}
 	}
 	//populate new fields
 	//population
@@ -252,12 +255,14 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 
 	//adm
 	if(!isEmptyField(fields, 9, false)){
-		String admname =fields[9];
-		SolrResponseDto solrResponseDto= getAdm(admname,countrycode);
-		if (solrResponseDto!=null){
-			Adm adm = admDao.getByFeatureId(solrResponseDto.getFeature_id());
-			if (adm!=null){
-				city.setAdm(adm);
+		if (city.getAdm()==null){
+			String admname =fields[9];
+			SolrResponseDto solrResponseDto= getAdm(admname,countrycode);
+			if (solrResponseDto!=null){
+				Adm adm = admDao.getByFeatureId(solrResponseDto.getFeature_id());
+				if (adm!=null){
+					city.setAdm(adm);
+				}
 			}
 		}
 	}

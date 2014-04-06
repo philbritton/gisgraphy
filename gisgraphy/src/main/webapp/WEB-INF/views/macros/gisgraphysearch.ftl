@@ -225,10 +225,10 @@ doAjaxSearch = function(formName){
 					<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 					<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
 					<#if result.one_way??>
-						<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
-							<#if result.one_way==true>
+							<#if result.one_way==false>
 								<@s.text name="street.oneway"/>
-							<#else>
+							<#elseif result.one_way==true >
+								<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
 								<@s.text name="street.twoway"/>
 							</#if>
 						<br/><br/>
