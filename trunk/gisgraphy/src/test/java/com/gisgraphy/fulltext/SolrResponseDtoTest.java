@@ -58,5 +58,12 @@ public class SolrResponseDtoTest  {
 	Assert.assertFalse("solrReqponseDto With the same featureId should be equals",solrResponseDto.equals(solrResponseDtoNotEquals));
 	
     }
+    
+    @Test
+    public void booleanCanBeNull(){
+    	SolrResponseDto dto = new SolrResponseDto();
+    	Assert.assertNotNull(dto.one_way);
+    	Assert.assertNotNull(dto.municipality);
+    }
 
 }

@@ -702,6 +702,9 @@
 				we need something more precise)
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				All words are not required for fulltext search
+			</action>
 			
 			</release>
 			

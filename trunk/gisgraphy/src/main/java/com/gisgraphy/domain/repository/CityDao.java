@@ -98,6 +98,8 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 
 		    public Object doInHibernate(Session session)
 			    throws PersistenceException {
+		    	//select name,municipality,source,openstreetmapid from city c 
+		    	//where st_contains(c.shape,ST_GeometryFromText('POINT(2.349 48.868)',4326))=true limit 1
 		    String pointAsString = "ST_GeometryFromText('POINT("+location.getX()+" "+location.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
 			String queryString = "from " + persistentClass.getSimpleName()
 				+ " as c where st_contains(c.shape,"+pointAsString+")=true ";

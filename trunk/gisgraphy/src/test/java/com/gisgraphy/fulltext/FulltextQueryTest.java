@@ -263,7 +263,7 @@ public class FulltextQueryTest {
     @Test
     public void testIsALlWordsRequiredShouldBeTrueByDefault(){
     	FulltextQuery query = new FulltextQuery("foo");
-    	Assert.assertTrue(query.isAllwordsRequired());
+    	Assert.assertFalse(query.isAllwordsRequired());
     }
     
     @Test(expected=IllegalArgumentException.class)
@@ -294,7 +294,7 @@ public class FulltextQueryTest {
     @Test
     public void testwithAllWordsRequired(){
     	FulltextQuery query = new FulltextQuery("foo");
-    	Assert.assertTrue(query.isAllwordsRequired());
+    	Assert.assertFalse(query.isAllwordsRequired());
     	query.withAllWordsRequired(false);
     	Assert.assertFalse(query.isAllwordsRequired());
     }
