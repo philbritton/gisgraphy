@@ -112,7 +112,7 @@ public class SolrResponseDto {
     public String yahoo_map_url;
     public String openstreetmap_map_url;
     
-    public boolean one_way;
+    public Boolean one_way;
     public Double length;
     public String  street_type;
     public Long openstreetmap_id;
@@ -122,7 +122,7 @@ public class SolrResponseDto {
     public Set<String> is_in_zip;
     public String fully_qualified_address;
     public List<HouseNumberDto> house_numbers;
-    public boolean municipality;
+    public Boolean municipality;
     public String amenity;
    
 

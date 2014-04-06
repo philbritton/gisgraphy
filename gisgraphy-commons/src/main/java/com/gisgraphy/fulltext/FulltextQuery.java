@@ -65,7 +65,7 @@ public class FulltextQuery extends AbstractGisQuery {
 	
     public final static int QUERY_MAX_LENGTH = 200;
     
-    public final static boolean ALL_WORDS_REQUIRED_DEFAULT_OPTION = true;
+    public final static boolean ALL_WORDS_REQUIRED_DEFAULT_OPTION = false;
     
     /**
      * Default radius in meters
