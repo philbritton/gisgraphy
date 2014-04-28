@@ -111,9 +111,11 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 	String code = null;
 	int accuracy = 0;
 	Point zipPoint = null;
+	String countryCode=null;
 
 	//check required field
 	if (!isEmptyField(fields, 0, true)) {
+		countryCode= fields[0];
 	}
 
 	if (!isEmptyField(fields, 1, true)) {
@@ -133,7 +135,11 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 	if (!isEmptyField(fields, 10, true) && !isEmptyField(fields, 9, true)) {
 	    zipPoint = GeolocHelper.createPoint(new Float(fields[10]), new Float(fields[9]));
 	}
-
+	City city = getByShape(countryCode, code, zipPoint);
+	if (city!=null){
+		return;
+	}
+	
 	Long featureId = findFeature(fields, zipPoint, getAccurateDistance(accuracy));
 	GisFeature gisFeature;
 	if (featureId != null) {
@@ -147,7 +153,19 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 	}
     }
 
+	protected City getByShape(String countryCode, String code, Point zipPoint) {
+		City cityByShape = cityDao.getByShape(zipPoint,countryCode,false);
+		if (cityByShape!=null){
+			ZipCode zipCode = new ZipCode(code);
+			//if (feature.getZipCodes() == null || !feature.getZipCodes().contains(zipCode)) {
+			cityByShape.addZipCode(zipCode);
+			cityDao.save(cityByShape);
+		}
+		return cityByShape;
+	}
+
     protected Long findFeature(String[] fields,  Point zipPoint,int maxDistance) {
+    
 	String query;
 	boolean extendedsearch;
 	if (fields[3] != null) {//adm1Name

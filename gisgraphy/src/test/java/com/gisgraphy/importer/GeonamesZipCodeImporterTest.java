@@ -53,9 +53,11 @@ public class GeonamesZipCodeImporterTest {
     FulltextResultsDto dtoWithOneResult;
     SolrResponseDto dtoTwo ;
     SolrResponseDto dtoOne ;
+    boolean called = false;
     
     @Before
     public void setup(){
+    	
 	dtoOne = EasyMock.createMock(SolrResponseDto.class);
 	EasyMock.expect(dtoOne.getFeature_id()).andStubReturn(123L);
 	EasyMock.expect(dtoOne.getLat()).andStubReturn(20D);
@@ -88,6 +90,71 @@ public class GeonamesZipCodeImporterTest {
 	EasyMock.expect(dtoWithTwoResults.getResults()).andStubReturn(twoResult);
 	EasyMock.replay(dtoWithTwoResults);
 	
+    }
+    
+    @Test
+    public void getByShape(){
+    	GeonamesZipCodeSimpleImporter importer = new GeonamesZipCodeSimpleImporter();
+    	ICityDao cityDao = EasyMock.createMock(ICityDao.class);
+    	Point location = GeolocHelper.createPoint(3D, 4D);
+		City city = new City();
+		city.setFeatureId(123L);
+		String countryCode = "FR";
+		EasyMock.expect(cityDao.getByShape(location, countryCode, false)).andReturn(city);
+		EasyMock.expect(cityDao.save(city)).andReturn(city);
+		EasyMock.replay(cityDao);
+		
+		importer.setCityDao(cityDao);
+		
+		City actual = importer.getByShape(countryCode, "code", location);
+		Assert.assertEquals(city, actual);
+		Assert.assertTrue(city.getZipCodes().contains(new ZipCode("code")));
+		EasyMock.verify(cityDao);
+    }
+    
+    @Test
+    public void WhenACityIsFoundByShapeWeShouldNotFindByLocation(){
+    	GeonamesZipCodeSimpleImporter importer = new GeonamesZipCodeSimpleImporter(){
+    		@Override
+    		protected City getByShape(String countryCode, String code,
+    				Point zipPoint) {
+    			return new City();
+    		}
+    		@Override
+    		protected Long findFeature(String[] fields, Point zipPoint,
+    				int maxDistance) {
+    			Assert.fail("when A city is found by shape we should not find by location");
+    			return 1L;
+    		}
+    	};
+    	
+    	importer.processData("AD\tAD100\tCanillo\t\t\t\t\t\t\t42.5833\t1.6667\t6");
+    }
+    
+    @Test
+    public void WhenACityIsNotFoundByShapeWeShouldFindByLocation(){
+    	
+    	GeonamesZipCodeSimpleImporter importer = new GeonamesZipCodeSimpleImporter(){
+    		@Override
+    		protected City getByShape(String countryCode, String code,
+    				Point zipPoint) {
+    			return null;
+    		}
+    		@Override
+    		protected Long findFeature(String[] fields, Point zipPoint,
+    				int maxDistance) {
+    			called = true;
+    			return 1L;
+    		}
+    		@Override
+    		protected GisFeature addAndSaveZipCodeToFeature(String code,
+    				Long featureId) {
+    			return new City();
+    		}
+    	};
+    	
+    	importer.processData("AD\tAD100\tCanillo\t\t\t\t\t\t\t42.5833\t1.6667\t6");
+    	Assert.assertTrue(called);
     }
     
     

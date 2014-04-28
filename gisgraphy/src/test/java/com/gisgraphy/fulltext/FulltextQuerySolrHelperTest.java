@@ -22,7 +22,7 @@
 package com.gisgraphy.fulltext;
 
 import static com.gisgraphy.domain.valueobject.Pagination.paginate;
-import static com.gisgraphy.fulltext.FulltextQuerySolrHelper.NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE;
+import static com.gisgraphy.fulltext.FulltextQuerySolrHelper.NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE;
 import static com.gisgraphy.fulltext.FulltextQuerySolrHelper.NESTED_QUERY_NUMERIC_TEMPLATE;
 import static com.gisgraphy.fulltext.FulltextQuerySolrHelper.NESTED_QUERY_TEMPLATE;
 import static org.junit.Assert.assertEquals;
@@ -216,7 +216,7 @@ public class FulltextQuerySolrHelperTest {
 	assertTrue("wrong nested parameter found, actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
 	parameters
-		.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE, "","foo")));
+		.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE, "","","foo")));
 	
 	
 	assertTrue("wrong query parameter found '"+FullTextFields.COUNTRYCODE.getValue()+":' is expected in query but was "+parameters
@@ -259,7 +259,7 @@ public class FulltextQuerySolrHelperTest {
 	assertTrue("wrong nested parameter found actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
 		parameters
-			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE, "",searchTerm)));
+			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE, "","",searchTerm)));
 	assertTrue("wrong query parameter found '"+FullTextFields.PLACETYPE.getValue()+":' expected in query but was "+parameters
 			.get(Constants.QUERY_PARAMETER),
 		parameters
@@ -303,7 +303,7 @@ public class FulltextQuerySolrHelperTest {
 	assertTrue("wrong nested parameter found actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
 		parameters
-			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_TEMPLATE, "",searchTerm)));
+			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_TEMPLATE, "","",searchTerm)));
 	assertTrue("wrong query parameter found '"+FullTextFields.PLACETYPE.getValue()+":' expected in query but was "+parameters
 			.get(Constants.QUERY_PARAMETER),
 		parameters
@@ -482,7 +482,7 @@ public class FulltextQuerySolrHelperTest {
 	assertTrue("wrong query parameter found (no search term part) actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
 		parameters
-			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_TEMPLATE, "",searchTerm)));
+			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_TEMPLATE, "","",searchTerm)));
 	
 	assertTrue("wrong query parameter found (no geoloc part) actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
@@ -534,7 +534,7 @@ public class FulltextQuerySolrHelperTest {
 	assertTrue("wrong query parameter found (no search term part) actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
 		parameters
-			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE, "",searchTerm)));
+			.get(Constants.QUERY_PARAMETER).contains(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE, "","",searchTerm)));
 	
 	assertTrue("wrong query parameter found (no geoloc part) actual : "+parameters
 		.get(Constants.QUERY_PARAMETER),
