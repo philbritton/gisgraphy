@@ -46,12 +46,13 @@ public class FulltextQuerySolrHelper {
 	private static OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
 
 	private final static String IS_IN_SENTENCE = " "+FullTextFields.IS_IN.getValue()+"^0.8 "+FullTextFields.IS_IN_PLACE.getValue()+"^0.8  "+FullTextFields.IS_IN_ADM.getValue()+"^0.5 "+FullTextFields.IS_IN_ZIP.getValue()+"^0.8 "+FullTextFields.IS_IN_CITIES.getValue()+"^0.8 ";
-	protected static final String NESTED_QUERY_TEMPLATE =                   "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bq='placetype:city^2 population^2' bf='pow(population,0.4) pow(city_population,0.4)'}%s\"";
+	protected static final String NESTED_QUERY_TEMPLATE =                   "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bq='%s population^2' bf='pow(population,0.4) pow(city_population,0.4)'}%s\"";
 	//below the all_adm1_name^0.5 all_adm2_name^0.5 has been kept
 	//protected static final String NESTED_QUERY_TEMPLATE = "_query_:\"{!dismax qf='all_name^1.1 iso_all_name^1 zipcode^1.1 all_adm1_name^0.5 all_adm2_name^0.5 all_country_name^0.5 %s' pf=name^1.1 bf=population^2.0}%s\"";
 	// protected static final String NESTED_QUERY_INTEXT_BASIC_TEMPLATE=
 	// "_query_:\"{!dismax qf='name^1.1 zipcode^1.1'  mm='1<-100%% 2<-50%% 3<-0%%' bq='_val_:\\\"pow(population,0.3)\\\"' }%s\"";
-	protected static final String NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE = "_query_:\"{!dismax qf=' all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1'   pf='all_adm1_name all_adm2_name' ps=6 bq='placetype:city^2 population^2' bf='pow(population,0.3) pow(city_population,0.3)' }%s\"";
+	protected static final String NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE = "_query_:\"{!dismax qf=' all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1'   pf='all_adm1_name all_adm2_name' ps=6 bq='%s population^2' bf='pow(population,0.3) pow(city_population,0.3)' }%s\"";
+	protected static final String CITY_BOOST_QUERY="placetype:city^2";
 	// we need to consider adm1name for andora and brooklin
 	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1 zipcode^1.2 pf=name^1.1' bf=population^2.0}%s\"";
 
@@ -100,16 +101,16 @@ public class FulltextQuerySolrHelper {
 	boolean isNumericQuery = isNumericQuery(query.getQuery());
 	StringBuffer querybuffer ;
 	if (isAdvancedQuery){
+		String boost_city=query.getPlaceTypes() == null?CITY_BOOST_QUERY:"";
+		String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
 	    if (isNumericQuery){
 	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_NUMERIC_TEMPLATE,query.getQuery()));
 	    } else if (isFeatureIdRequest){
 	    	querybuffer= new StringBuffer(query.getQuery());
 	    } else if (!query.isAllwordsRequired()){
-	       	String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
-	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE,is_in,query.getQuery()));
+	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE,is_in,boost_city,query.getQuery()));
 	    } else {
-	    	String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
-	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,is_in,query.getQuery()));
+	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,is_in,boost_city,query.getQuery()));
 	    }
 	    parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
 			.toString());
@@ -145,12 +146,12 @@ public class FulltextQuerySolrHelper {
 	    /*parameters.set(Constants.QT_PARAMETER,
 		    Constants.SolrQueryType.standard.toString());
 	    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());*/
+		String boost_city=CITY_BOOST_QUERY;//we force boost to city because it is not a 'Typed' query
+		String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
 	    if (!query.isAllwordsRequired()){
-	       	String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
-	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_INTEXT_WITHSTATE_TEMPLATE,is_in,query.getQuery()));
+	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE,is_in,boost_city,query.getQuery()));
 	    } else {
-	    	String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
-	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,is_in,query.getQuery()));
+	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,is_in,boost_city,query.getQuery()));
 		
 	    }
 	    parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
