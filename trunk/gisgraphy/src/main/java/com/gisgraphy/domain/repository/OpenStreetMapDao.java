@@ -56,9 +56,12 @@ import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.IntrospectionHelper;
+import com.gisgraphy.hibernate.criterion.DistanceRestriction;
 import com.gisgraphy.hibernate.criterion.FulltextRestriction;
 import com.gisgraphy.hibernate.criterion.IntersectsRestriction;
+import com.gisgraphy.hibernate.criterion.NativeSQLOrder;
 import com.gisgraphy.hibernate.criterion.ProjectionOrder;
 import com.gisgraphy.hibernate.criterion.ResultTransformerUtil;
 import com.gisgraphy.hibernate.projection.ProjectionBean;
@@ -378,6 +381,8 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 					+ " as c where c.openstreetmapId= ?";
 
 				Query qry = session.createQuery(queryString);
+				qry.setMaxResults(1);
+				//we need to limit to 1 because a street can be in two countries
 				qry.setCacheable(true);
 
 				qry.setParameter(0, openstreetmapId);
@@ -414,41 +419,49 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 			return null;
 		}
 		return (OpenStreetMap) this.getHibernateTemplate().execute(
-			new HibernateCallback() {
+				new HibernateCallback() {
 
-			    public Object doInHibernate(Session session)
-				    throws PersistenceException {
-			    	String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
-			    	String sqlString = new StringBuffer()
-					.append(DISTANCE_SPHERE_FUNCTION)
-					.append("(")
-						.append(pointAsString)
-						.append(",")
-						.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
-						.append("(")
-							.append("o.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
-							.append(",")
-							.append(ST_LINE_LOCATE_POINT_FUNCTION)
+				    public Object doInHibernate(Session session)
+					    throws PersistenceException {
+				    	
+				    	Criteria criteria = session
+								.createCriteria(OpenStreetMap.class);
+							
+							criteria.add(new DistanceRestriction(point,DEFAULT_DISTANCE,true));
+							criteria.add(Restrictions.in("openstreetmapId", ids));
+							
+							String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+							String distanceCondition = new StringBuffer()
+							.append(DISTANCE_SPHERE_FUNCTION)
 							.append("(")
-								.append("o.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
-								.append(",")
 								.append(pointAsString)
+								.append(",")
+								.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
+								.append("(")
+									.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+									.append(",")
+									.append(ST_LINE_LOCATE_POINT_FUNCTION)
+									.append("(")
+										.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+										.append(",")
+										.append(pointAsString)
+									.append(")")
+								.append(")")
 							.append(")")
-						.append(")")
-					.append(")")
-					.toString();
-				String queryString = "from "
-					+ OpenStreetMap.class.getSimpleName()+ " o where openstreetmapid in (:ids) "
-					+" order by "+sqlString
-					;  
-
-				Query qry = session.createQuery(queryString);
-				qry.setParameterList("ids", ids);
-				qry.setMaxResults(1);
-				return ((OpenStreetMap) qry.uniqueResult());
-			    }
-			});
-}
+							.toString();
+							criteria.addOrder(new NativeSQLOrder(distanceCondition));
+							criteria = criteria.setMaxResults(1);
+							criteria.setCacheable(true);
+							// List<Object[]> queryResults =testCriteria.list();
+							OpenStreetMap openStreetMap = (OpenStreetMap)criteria.uniqueResult();
+							
+							return openStreetMap;
+							
+						    }
+						});
+		    }
+		    
+	
 	
 	/* (non-Javadoc)
 	 * @see com.gisgraphy.domain.repository.IOpenStreetMapDao#getMaxOpenstreetMapId()
@@ -493,55 +506,57 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
     	return getNearestFrom(point,false);
     }
     
+ 
+    
     protected OpenStreetMap getNearestFrom(
 	    final Point point,final boolean onlyroad) {
+    	if (point==null){
+    		return null;
+    	}
 	return (OpenStreetMap) this.getHibernateTemplate().execute(
 		new HibernateCallback() {
 
 		    public Object doInHibernate(Session session)
 			    throws PersistenceException {
-		    	String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
-		    	String distanceCondition = new StringBuffer()
-				.append(DISTANCE_SPHERE_FUNCTION)
-				.append("(")
-					.append(pointAsString)
-					.append(",")
-					.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
+		    	
+		    	Criteria criteria = session
+						.createCriteria(OpenStreetMap.class);
+					
+					criteria.add(new DistanceRestriction(point,DEFAULT_DISTANCE,true));
+					if (onlyroad) {
+						criteria = criteria.add(Restrictions.ne("streetType",StreetType.FOOTWAY));
+					}
+					
+					String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
+					String distanceCondition = new StringBuffer()
+					.append(DISTANCE_SPHERE_FUNCTION)
 					.append("(")
-						.append("c.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+						.append(pointAsString)
 						.append(",")
-						.append(ST_LINE_LOCATE_POINT_FUNCTION)
+						.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
 						.append("(")
-							.append("c.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+							.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
 							.append(",")
-							.append(pointAsString)
+							.append(ST_LINE_LOCATE_POINT_FUNCTION)
+							.append("(")
+								.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
+								.append(",")
+								.append(pointAsString)
+							.append(")")
 						.append(")")
 					.append(")")
-				.append(")")
-				.toString();
-		    	String queryString = "from " + OpenStreetMap.class.getSimpleName()
-						+ " as c where "+DISTANCE_SPHERE_FUNCTION+"("+pointAsString+",c.location) < "+DEFAULT_DISTANCE;
-						
-				if (onlyroad){
-					queryString= queryString+" AND c.streetType != 'FOOTWAY' ";
-				} 
-		    	queryString= queryString+" order by "+distanceCondition;
-		    
-		    	
-		    	Query qry = session.createQuery(queryString);
-		    		qry = qry.setMaxResults(1);
-			List<?> queryResults = qry.list();
-			
-			if (queryResults != null && queryResults.size()!=0){
-			return queryResults.get(0);
-			} else {
-			    return null;
-			}
-			
-		    }
-		});
+					.toString();
+					criteria.addOrder(new NativeSQLOrder(distanceCondition));
+					criteria = criteria.setMaxResults(1);
+					criteria.setCacheable(true);
+					// List<Object[]> queryResults =testCriteria.list();
+					OpenStreetMap openStreetMap = (OpenStreetMap)criteria.uniqueResult();
+					
+					return openStreetMap;
+					
+				    }
+				});
     }
-    
     
     
 

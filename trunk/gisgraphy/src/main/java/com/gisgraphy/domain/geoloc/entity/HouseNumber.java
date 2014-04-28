@@ -37,6 +37,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
 import com.gisgraphy.domain.valueobject.HouseNumberType;
@@ -237,9 +238,9 @@ public class HouseNumber implements Comparable<HouseNumber>{
 	 * @return the street associated to this house number
 	 */
 	 @ManyToOne(fetch = FetchType.LAZY)//TODO HN
-	    @JoinColumn(nullable = false, name = "street")
-	    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	  //TODO HN  @Index(name = "AlternatenameGisFeatureindex")
+	 @JoinColumn(nullable = false, name = "street")
+	 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	 @Index(name = "housenumberstreetindex")
 	public OpenStreetMap getStreet() {
 		return street;
 	}

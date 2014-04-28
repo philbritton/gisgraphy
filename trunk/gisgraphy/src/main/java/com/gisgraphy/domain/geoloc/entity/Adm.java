@@ -243,6 +243,7 @@ public class Adm extends GisFeature {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = true, name = "parent")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Index(name = "admadmindex")
     public Adm getParent() {
 	return parent;
     }

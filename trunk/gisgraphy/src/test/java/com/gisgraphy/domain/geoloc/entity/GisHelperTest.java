@@ -32,6 +32,7 @@ public class GisHelperTest {
    @Test
     public void testgetBoundingBox(){
     	Assert.assertFalse(GisHelper.getBoundingBox("alias", 51.8365537F ,7.0562314F, 10000).contains("NaN"));
+    	//System.out.println(GisHelper.getBoundingBox("alias", 48.867138600000004,2.3958578000000004, 500));
     }
 
 

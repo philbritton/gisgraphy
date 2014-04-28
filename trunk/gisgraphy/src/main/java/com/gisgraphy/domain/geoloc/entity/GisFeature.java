@@ -554,6 +554,7 @@ public class GisFeature{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adm", unique = false, referencedColumnName = "id", nullable = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Index(name = "gisfeatureadmindex")
     public Adm getAdm() {
 	return adm;
     }

@@ -16,6 +16,7 @@ public class HouseNumberUtilTest {
 		Assert.assertEquals("11", normalizeNumber("11 d"));
 		Assert.assertEquals("2", normalizeNumber("2/1"));
 		Assert.assertEquals("1", normalizeNumber("1-3"));
+		Assert.assertEquals("26", normalizeNumber("26 bis"));
 		Assert.assertEquals(null, normalizeNumber("A"));
 		Assert.assertEquals(null, normalizeNumber(""));
 		Assert.assertEquals(null, normalizeNumber(null));

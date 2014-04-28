@@ -326,6 +326,30 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	
     }
     
+    
+
+    @Test
+    public void testGetByOpenstreetMapId_withTwoStreets(){
+    	//sometimes a streets starts in one country and ends in an other so there is two streets with the same id
+	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+	Long openstreetmapId = 12345678L;
+	streetOSM.setOpenstreetmapId(openstreetmapId );
+	openStreetMapDao.save(streetOSM);
+	assertNotNull(openStreetMapDao.get(streetOSM.getId()));
+	
+	OpenStreetMap streetOSM2 = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+	streetOSM2.setGid(3567L);
+	streetOSM2.setOpenstreetmapId(openstreetmapId );
+	openStreetMapDao.save(streetOSM2);
+	assertNotNull(openStreetMapDao.get(streetOSM2.getId()));
+	
+	OpenStreetMap retrieveOSM = openStreetMapDao.getByOpenStreetMapId(openstreetmapId);
+	assertNotNull("getByOpenStreetMapId should not return null if the entity exists",retrieveOSM);
+	//we don't know the one that will be return , just check it is not null
+	//assertEquals("getByOpenStreetMapId should return the entity if the entity exists",streetOSM.getId(), retrieveOSM.getId());
+	
+    }
+    
     @Test
     public void testSaveShouldsaveLongName(){
 	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
