@@ -477,16 +477,20 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 			    ex.setField(FullTextFields.AREA.getValue(), country.getArea());
 			    populateAlternateNames(FullTextFields.COUNTRYNAME
 				    .getValue(), country.getAlternateNames(), ex);
+			    if (country.getName()!=null){
 			    ex.setField(FullTextFields.COUNTRYNAME.getValue(),
 				    EncodingHelper.toUTF8(country.getName()));
+			    }
 			} else {
 			    if (countryCode != null) {
 				Country country = gisFeature.getCountry();
 				if (country != null) {
 				    populateAlternateNames(FullTextFields.COUNTRYNAME
 					    .getValue(), country.getAlternateNames(), ex);
+				    if (country.getName()!=null){
 				    ex.setField(FullTextFields.COUNTRYNAME.getValue(),
 					    EncodingHelper.toUTF8(country.getName()));
+				    }
 				} else {
 				    logger.error("Can not find country with code "
 					    + gisFeature.getCountryCode() + " for "

@@ -62,8 +62,8 @@ public class SolrResponseDtoTest  {
     @Test
     public void booleanCanBeNull(){
     	SolrResponseDto dto = new SolrResponseDto();
-    	Assert.assertNotNull(dto.one_way);
-    	Assert.assertNotNull(dto.municipality);
+    	Assert.assertNull(dto.one_way);
+    	Assert.assertNull(dto.municipality);
     }
 
 }

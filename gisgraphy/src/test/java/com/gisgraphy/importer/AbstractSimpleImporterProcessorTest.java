@@ -68,6 +68,9 @@ public class AbstractSimpleImporterProcessorTest {
 		
 		String[] fields4 = {"foo"};
 		Assert.assertFalse(importerProcessor.isEmptyField(fields4, 0, false));
+		
+		String[] fields5 = {" "};
+		Assert.assertTrue(importerProcessor.isEmptyField(fields5, 0, false));
 	}
 
 }

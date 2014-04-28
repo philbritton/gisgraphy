@@ -38,6 +38,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.PostOffice;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
@@ -48,6 +49,7 @@ import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
+import com.gisgraphy.helper.StringHelper;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -169,14 +171,22 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 			}
 		}
 		
+		
 		// name
 		if (!isEmptyField(fields, 2, false)) {
 		   String  name=fields[2].trim();
-		    if (name==null){
-		    	return null;
+		   if (name.length()>=199){
+			   logger.warn(name+ " is a too long name");
+			   return null;
+		   }
+		    if (name==null || "".equals(name.trim())|| "\"\"".equals(name.trim())){
+		    	poi.setName(StringHelper.splitCamelCase(PostOffice.class.getSimpleName()).toLowerCase());//set a default name
 		    }
 		    poi.setName(name);
+		}else {
+			poi.setName(StringHelper.splitCamelCase(PostOffice.class.getSimpleName()).toLowerCase());//set a default name
 		}
+		
 		//countrycode
 		if (!isEmptyField(fields, 3, true)) {
 			String countryCode=fields[3].trim().toUpperCase();
@@ -198,6 +208,8 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 				logger.warn("can not parse location for "+fields[6]+" : "+e);
 				return null;
 			}
+		} else {
+			return null;
 		}
 				
 		

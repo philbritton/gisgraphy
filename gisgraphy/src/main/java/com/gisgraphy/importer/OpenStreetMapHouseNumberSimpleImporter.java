@@ -59,6 +59,7 @@ import com.gisgraphy.importer.dto.InterpolationHouseNumber;
 import com.gisgraphy.importer.dto.InterpolationMember;
 import com.gisgraphy.importer.dto.InterpolationType;
 import com.gisgraphy.importer.dto.NodeHouseNumber;
+import com.gisgraphy.street.HouseNumberUtil;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -561,12 +562,12 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 								int lastNumberAsInt = 0;
 								try {
 									firstNumberAsInt = Integer
-											.parseInt(firstNumberAsString);
+											.parseInt(normalizeNumber(firstNumberAsString));
 									lastNumberAsInt = Integer
-											.parseInt(lastNumberAsString);
+											.parseInt(normalizeNumber(lastNumberAsString));
 								} catch (NumberFormatException e) {
 									logger.warn("interpolation house number "+firstNumberAsString+" and/or "+ lastNumberAsString+"are not numbers");
-									return null;
+									return houseNumbers;
 								}
 								if (house.getInterpolationType() == InterpolationType.even) {// pair
 									if (firstNumberAsInt % 2 == 1) {

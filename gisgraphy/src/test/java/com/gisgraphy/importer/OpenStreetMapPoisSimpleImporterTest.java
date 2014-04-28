@@ -12,11 +12,13 @@ import org.junit.Test;
 
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.PostOffice;
 import com.gisgraphy.domain.geoloc.entity.Religious;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.valueobject.AlternateNameSource;
 import com.gisgraphy.domain.valueobject.GISSource;
+import com.gisgraphy.helper.StringHelper;
 
 public class OpenStreetMapPoisSimpleImporterTest {
 
@@ -39,6 +41,42 @@ public class OpenStreetMapPoisSimpleImporterTest {
 		
 	}
 
+	
+	@Test
+	public void populatePoiWithEmptyNames(){
+		OpenStreetMapPoisSimpleImporter importer = new OpenStreetMapPoisSimpleImporter();
+		
+		IIdGenerator idGenerator = EasyMock.createMock(IIdGenerator.class);
+    	EasyMock.expect(idGenerator.getNextFeatureId()).andReturn(1234L);
+    	EasyMock.replay(idGenerator);
+    	importer.setIdGenerator(idGenerator);
+		
+		String line= "N\t2371848041\t\t  FR\t\t  0101000020E610000012ED743117C205407ED179E816024840\tpost_office_______________________________________";
+		String[] fields = line.split("\t");
+		String amenity= fields[6];
+		List<GisFeature> pois = importer.createAndpopulatePoi(fields, amenity);
+		Assert.assertNotNull(pois);
+		Assert.assertNotNull(pois.get(0));
+		Assert.assertEquals("name is null so the pois should have the placetype in camelcase",StringHelper.splitCamelCase(PostOffice.class.getSimpleName()).toLowerCase(),pois.get(0).getName());
+	}
+	
+	@Test
+	public void populatePoiWithdoublequotesNames(){
+		OpenStreetMapPoisSimpleImporter importer = new OpenStreetMapPoisSimpleImporter();
+		
+		IIdGenerator idGenerator = EasyMock.createMock(IIdGenerator.class);
+    	EasyMock.expect(idGenerator.getNextFeatureId()).andReturn(1234L);
+    	EasyMock.replay(idGenerator);
+    	importer.setIdGenerator(idGenerator);
+		
+		String line= "N\t2371848041\t\"\"\t  FR\t\t  0101000020E610000012ED743117C205407ED179E816024840\tpost_office_______________________________________";
+		String[] fields = line.split("\t");
+		String amenity= fields[6];
+		List<GisFeature> pois = importer.createAndpopulatePoi(fields, amenity);
+		Assert.assertNotNull(pois);
+		Assert.assertNotNull(pois.get(0));
+		Assert.assertEquals("name is null so the pois should have the placetype in camelcase",StringHelper.splitCamelCase(PostOffice.class.getSimpleName()).toLowerCase(),pois.get(0).getName());
+	}
 	
 	@Test
 	public void populatePoi(){
