@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.fulltext;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -594,6 +596,352 @@ public class SolrResponseDto {
 
 	public Float getScore() {
 		return score;
+	}
+
+	@Override
+	public String toString() {
+		final int maxLen = 10;
+		StringBuilder builder = new StringBuilder();
+		builder.append("SolrResponseDto [");
+		if (distance != null) {
+			builder.append("distance=");
+			builder.append(distance);
+			builder.append(", ");
+		}
+		if (name != null) {
+			builder.append("name=");
+			builder.append(name);
+			builder.append(", ");
+		}
+		if (score != null) {
+			builder.append("score=");
+			builder.append(score);
+			builder.append(", ");
+		}
+		if (name_alternates != null) {
+			builder.append("name_alternates=");
+			builder.append(toString(name_alternates, maxLen));
+			builder.append(", ");
+		}
+		if (name_alternates_localized != null) {
+			builder.append("name_alternates_localized=");
+			builder.append(toString(name_alternates_localized.entrySet(),
+					maxLen));
+			builder.append(", ");
+		}
+		if (feature_id != null) {
+			builder.append("feature_id=");
+			builder.append(feature_id);
+			builder.append(", ");
+		}
+		if (feature_class != null) {
+			builder.append("feature_class=");
+			builder.append(feature_class);
+			builder.append(", ");
+		}
+		if (feature_code != null) {
+			builder.append("feature_code=");
+			builder.append(feature_code);
+			builder.append(", ");
+		}
+		if (name_ascii != null) {
+			builder.append("name_ascii=");
+			builder.append(name_ascii);
+			builder.append(", ");
+		}
+		if (elevation != null) {
+			builder.append("elevation=");
+			builder.append(elevation);
+			builder.append(", ");
+		}
+		if (gtopo30 != null) {
+			builder.append("gtopo30=");
+			builder.append(gtopo30);
+			builder.append(", ");
+		}
+		if (timezone != null) {
+			builder.append("timezone=");
+			builder.append(timezone);
+			builder.append(", ");
+		}
+		if (fully_qualified_name != null) {
+			builder.append("fully_qualified_name=");
+			builder.append(fully_qualified_name);
+			builder.append(", ");
+		}
+		if (placetype != null) {
+			builder.append("placetype=");
+			builder.append(placetype);
+			builder.append(", ");
+		}
+		if (population != null) {
+			builder.append("population=");
+			builder.append(population);
+			builder.append(", ");
+		}
+		if (lat != null) {
+			builder.append("lat=");
+			builder.append(lat);
+			builder.append(", ");
+		}
+		if (lng != null) {
+			builder.append("lng=");
+			builder.append(lng);
+			builder.append(", ");
+		}
+		if (adm1_code != null) {
+			builder.append("adm1_code=");
+			builder.append(adm1_code);
+			builder.append(", ");
+		}
+		if (adm2_code != null) {
+			builder.append("adm2_code=");
+			builder.append(adm2_code);
+			builder.append(", ");
+		}
+		if (adm3_code != null) {
+			builder.append("adm3_code=");
+			builder.append(adm3_code);
+			builder.append(", ");
+		}
+		if (adm4_code != null) {
+			builder.append("adm4_code=");
+			builder.append(adm4_code);
+			builder.append(", ");
+		}
+		if (continent != null) {
+			builder.append("continent=");
+			builder.append(continent);
+			builder.append(", ");
+		}
+		if (currency_code != null) {
+			builder.append("currency_code=");
+			builder.append(currency_code);
+			builder.append(", ");
+		}
+		if (currency_name != null) {
+			builder.append("currency_name=");
+			builder.append(currency_name);
+			builder.append(", ");
+		}
+		if (fips_code != null) {
+			builder.append("fips_code=");
+			builder.append(fips_code);
+			builder.append(", ");
+		}
+		if (isoalpha2_country_code != null) {
+			builder.append("isoalpha2_country_code=");
+			builder.append(isoalpha2_country_code);
+			builder.append(", ");
+		}
+		if (isoalpha3_country_code != null) {
+			builder.append("isoalpha3_country_code=");
+			builder.append(isoalpha3_country_code);
+			builder.append(", ");
+		}
+		if (postal_code_mask != null) {
+			builder.append("postal_code_mask=");
+			builder.append(postal_code_mask);
+			builder.append(", ");
+		}
+		if (postal_code_regex != null) {
+			builder.append("postal_code_regex=");
+			builder.append(postal_code_regex);
+			builder.append(", ");
+		}
+		if (phone_prefix != null) {
+			builder.append("phone_prefix=");
+			builder.append(phone_prefix);
+			builder.append(", ");
+		}
+		if (spoken_languages != null) {
+			builder.append("spoken_languages=");
+			builder.append(toString(spoken_languages, maxLen));
+			builder.append(", ");
+		}
+		if (tld != null) {
+			builder.append("tld=");
+			builder.append(tld);
+			builder.append(", ");
+		}
+		if (capital_name != null) {
+			builder.append("capital_name=");
+			builder.append(capital_name);
+			builder.append(", ");
+		}
+		if (area != null) {
+			builder.append("area=");
+			builder.append(area);
+			builder.append(", ");
+		}
+		if (level != null) {
+			builder.append("level=");
+			builder.append(level);
+			builder.append(", ");
+		}
+		if (adm1_name != null) {
+			builder.append("adm1_name=");
+			builder.append(adm1_name);
+			builder.append(", ");
+		}
+		if (adm1_names_alternate != null) {
+			builder.append("adm1_names_alternate=");
+			builder.append(toString(adm1_names_alternate, maxLen));
+			builder.append(", ");
+		}
+		if (adm1_names_alternate_localized != null) {
+			builder.append("adm1_names_alternate_localized=");
+			builder.append(toString(adm1_names_alternate_localized.entrySet(),
+					maxLen));
+			builder.append(", ");
+		}
+		if (adm2_name != null) {
+			builder.append("adm2_name=");
+			builder.append(adm2_name);
+			builder.append(", ");
+		}
+		if (adm2_names_alternate != null) {
+			builder.append("adm2_names_alternate=");
+			builder.append(toString(adm2_names_alternate, maxLen));
+			builder.append(", ");
+		}
+		if (adm2_names_alternate_localized != null) {
+			builder.append("adm2_names_alternate_localized=");
+			builder.append(toString(adm2_names_alternate_localized.entrySet(),
+					maxLen));
+			builder.append(", ");
+		}
+		if (adm3_name != null) {
+			builder.append("adm3_name=");
+			builder.append(adm3_name);
+			builder.append(", ");
+		}
+		if (adm4_name != null) {
+			builder.append("adm4_name=");
+			builder.append(adm4_name);
+			builder.append(", ");
+		}
+		if (zipcodes != null) {
+			builder.append("zipcodes=");
+			builder.append(toString(zipcodes, maxLen));
+			builder.append(", ");
+		}
+		if (country_code != null) {
+			builder.append("country_code=");
+			builder.append(country_code);
+			builder.append(", ");
+		}
+		if (country_name != null) {
+			builder.append("country_name=");
+			builder.append(country_name);
+			builder.append(", ");
+		}
+		if (country_names_alternate != null) {
+			builder.append("country_names_alternate=");
+			builder.append(toString(country_names_alternate, maxLen));
+			builder.append(", ");
+		}
+		if (country_names_alternate_localized != null) {
+			builder.append("country_names_alternate_localized=");
+			builder.append(toString(
+					country_names_alternate_localized.entrySet(), maxLen));
+			builder.append(", ");
+		}
+		if (country_flag_url != null) {
+			builder.append("country_flag_url=");
+			builder.append(country_flag_url);
+			builder.append(", ");
+		}
+		if (google_map_url != null) {
+			builder.append("google_map_url=");
+			builder.append(google_map_url);
+			builder.append(", ");
+		}
+		if (yahoo_map_url != null) {
+			builder.append("yahoo_map_url=");
+			builder.append(yahoo_map_url);
+			builder.append(", ");
+		}
+		if (openstreetmap_map_url != null) {
+			builder.append("openstreetmap_map_url=");
+			builder.append(openstreetmap_map_url);
+			builder.append(", ");
+		}
+		if (one_way != null) {
+			builder.append("one_way=");
+			builder.append(one_way);
+			builder.append(", ");
+		}
+		if (length != null) {
+			builder.append("length=");
+			builder.append(length);
+			builder.append(", ");
+		}
+		if (street_type != null) {
+			builder.append("street_type=");
+			builder.append(street_type);
+			builder.append(", ");
+		}
+		if (openstreetmap_id != null) {
+			builder.append("openstreetmap_id=");
+			builder.append(openstreetmap_id);
+			builder.append(", ");
+		}
+		if (is_in != null) {
+			builder.append("is_in=");
+			builder.append(is_in);
+			builder.append(", ");
+		}
+		if (is_in_place != null) {
+			builder.append("is_in_place=");
+			builder.append(is_in_place);
+			builder.append(", ");
+		}
+		if (is_in_adm != null) {
+			builder.append("is_in_adm=");
+			builder.append(is_in_adm);
+			builder.append(", ");
+		}
+		if (is_in_zip != null) {
+			builder.append("is_in_zip=");
+			builder.append(toString(is_in_zip, maxLen));
+			builder.append(", ");
+		}
+		if (fully_qualified_address != null) {
+			builder.append("fully_qualified_address=");
+			builder.append(fully_qualified_address);
+			builder.append(", ");
+		}
+		if (house_numbers != null) {
+			builder.append("house_numbers=");
+			builder.append(toString(house_numbers, maxLen));
+			builder.append(", ");
+		}
+		if (municipality != null) {
+			builder.append("municipality=");
+			builder.append(municipality);
+			builder.append(", ");
+		}
+		if (amenity != null) {
+			builder.append("amenity=");
+			builder.append(amenity);
+		}
+		builder.append("]");
+		return builder.toString();
+	}
+
+	private String toString(Collection<?> collection, int maxLen) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		int i = 0;
+		for (Iterator<?> iterator = collection.iterator(); iterator.hasNext()
+				&& i < maxLen; i++) {
+			if (i > 0)
+				builder.append(", ");
+			builder.append(iterator.next());
+		}
+		builder.append("]");
+		return builder.toString();
 	}
 
    
