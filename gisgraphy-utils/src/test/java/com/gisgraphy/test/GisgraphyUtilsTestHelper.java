@@ -10,6 +10,8 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class GisgraphyUtilsTestHelper {
+	
+	public static final String HTTP_BASE_URL = "http://services.gisgraphy.com/";
 
 	 public static Point createPoint(Float longitude, Float latitude) {
 			if (longitude < -180 || longitude > 180) {

@@ -107,7 +107,7 @@ public class AbstractAddressServletTest {
 	};
 	@Override
 	public boolean checkparameter() {
-			return false;
+			return true;
 	}
 
 	@Override
