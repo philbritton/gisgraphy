@@ -60,15 +60,6 @@
 					<#if result.capital_name??><li><@s.text name="global.capital_name"/> : ${result.capital_name}</li></#if>
 					<#if result.area??><li><@s.text name="global.area"/> : ${result.area} km²</li></#if>
 					<#if result.level??><li><@s.text name="global.level"/> : ${result.level}</li></#if>
-					<#if result.one_way??>					
-					<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
-							<#if result.one_way==true>
-								<@s.text name="street.oneway"/>
-							<#else>
-								<@s.text name="street.twoway"/>
-							</#if>
-						</li>
-					</#if>
 					<#if result.street_type??><li><@s.text name="${result.street_type}" /></li></#if>
 					</ul>
 					<br/>

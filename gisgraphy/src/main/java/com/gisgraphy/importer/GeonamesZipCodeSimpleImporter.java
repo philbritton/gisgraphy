@@ -22,6 +22,8 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.domain.geoloc.entity.GisFeature.NAME_MAX_LENGTH;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -244,7 +246,12 @@ public class GeonamesZipCodeSimpleImporter extends AbstractSimpleImporterProcess
 	City city = new City();
 	long nextFeatureId = IdGenerator.getNextFeatureId();
 	city.setFeatureId(nextFeatureId);
-	city.setName(fields[2]);
+	String name = fields[2];
+	if (name.length() > NAME_MAX_LENGTH){
+		logger.warn(name + "is too long");
+		name= name.substring(0, NAME_MAX_LENGTH-1);
+	}
+	city.setName(name);
 	// Location
 	if (!isEmptyField(fields, 9, true) && !isEmptyField(fields, 10, true)) {
 	    city.setLocation(GeolocHelper.createPoint(new Float(fields[10]), new Float(fields[9])));

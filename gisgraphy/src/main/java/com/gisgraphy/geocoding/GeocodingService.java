@@ -21,6 +21,7 @@
  ******************************************************************************/
 package com.gisgraphy.geocoding;
 
+import static com.gisgraphy.fulltext.Constants.ADDRESSES_PLACETYPE;
 import static com.gisgraphy.helper.StringHelper.isEmptyString;
 import static com.gisgraphy.helper.StringHelper.isNotEmptyString;
 
@@ -655,7 +656,7 @@ public class GeocodingService implements IGeocodingService {
 		if (isEmptyString(text)) {
 			return new ArrayList<SolrResponseDto>();
 		}
-		FulltextQuery query = new FulltextQuery(text, FIVE_RESULT_PAGINATION, LONG_OUTPUT, null, countryCode);
+		FulltextQuery query = new FulltextQuery(text, FIVE_RESULT_PAGINATION, LONG_OUTPUT, ADDRESSES_PLACETYPE, countryCode);
 		query.withAllWordsRequired(true).withoutSpellChecking();
 		FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
 		if (results.getResultsSize() >= 1) {
