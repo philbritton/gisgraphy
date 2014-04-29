@@ -22,6 +22,7 @@
  *******************************************************************************/
 package com.gisgraphy.importer;
 
+import static com.gisgraphy.domain.geoloc.entity.GisFeature.NAME_MAX_LENGTH;
 import static com.gisgraphy.fulltext.Constants.ONLY_ADM_PLACETYPE;
 
 import java.io.File;
@@ -155,6 +156,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	// name
 	if (!isEmptyField(fields, 2, false)) {
 		name=fields[2].trim();
+		if (name.length() > NAME_MAX_LENGTH){
+			logger.warn(name + "is too long");
+			name= name.substring(0, NAME_MAX_LENGTH-1);
+		}
 	}
 
 	if (name==null){

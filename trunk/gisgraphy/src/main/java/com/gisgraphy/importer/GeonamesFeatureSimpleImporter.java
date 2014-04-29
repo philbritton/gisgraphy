@@ -168,6 +168,10 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	}
 	GisFeature featureObject;
 	String name = fields[1];
+	if (name.length() > GisFeature.NAME_MAX_LENGTH){
+		logger.warn(name + "is too long");
+		return;
+	}
 	if (featureCode_ != null ) {
 	    featureObject = (GisFeature) featureCode_.getObject();
 	    featureObject = correctPlaceType(featureObject, name);

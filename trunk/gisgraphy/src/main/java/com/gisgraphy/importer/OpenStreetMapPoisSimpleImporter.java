@@ -175,8 +175,8 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		// name
 		if (!isEmptyField(fields, 2, false)) {
 		   String  name=fields[2].trim();
-		   if (name.length()>=199){
-			   logger.warn(name+ " is a too long name");
+		   if (name.length()>=GisFeature.NAME_MAX_LENGTH){
+			   logger.warn(name+ " is a too long");
 			   return null;
 		   }
 		    if (name==null || "".equals(name.trim())|| "\"\"".equals(name.trim())){

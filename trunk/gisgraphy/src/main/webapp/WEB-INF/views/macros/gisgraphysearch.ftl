@@ -224,10 +224,10 @@ doAjaxSearch = function(formName){
 					<#if result.openstreetmap_id??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmap_id?c};<br/></#if>
 					<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 					<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
-					<#if result.one_way??>
-							<#if result.one_way==false>
+					<#if result.one_way?? && result.length??>
+							<#if result.one_way>
 								<@s.text name="street.oneway"/>
-							<#elseif result.one_way==true >
+							<#else>
 								<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
 								<@s.text name="street.twoway"/>
 							</#if>
@@ -619,7 +619,11 @@ doAjaxSearch = function(formName){
 									</#if>
 									
 								        <#if result.id?? && result.id!=0 ><a href="${displayURL}"></#if>
+									<#if result.id?? && result.id!=0>
 										<#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if> <#if result.id?? && result.id!=0 ></a></#if>  
+									<#else>
+										<@s.text name="user.address.address" />
+									</#if>
 									</div>
 									<#if result.distance??><div class="resultheaderright">${result.distance} m</div></#if>
 								<#else>
@@ -644,6 +648,7 @@ doAjaxSearch = function(formName){
 							<#if result.houseNumber??><li><@s.text name="address.houseNumber"/> : ${result.houseNumber}</li></#if>
 							<#if result.houseNumberInfo?? ><li><@s.text name="address.houseNumberInfo"/> : ${result.houseNumberInfo}</li></#if>
 							<#if result.civicNumberSuffix?? ><li><@s.text name="address.civicNumberSuffix"/> : ${result.civicNumberSuffix}</li></#if>
+							<#if result.streetName??><li><@s.text name="global.streetName"/> : ${result.streetName?cap_first}</li></#if> 
 							<#if result.streetType??><li><@s.text name="search.type.of.street"/> : <@s.text name="${result.streetType}"/><br/></li></#if>
 							<#if result.dependentLocality?? ><li><@s.text name="address.dependentLocality"/> : ${result.dependentLocality}</li></#if>
 							<#if result.PostTown?? ><li><@s.text name="address.PostTown"/> : ${result.PostTown}</li></#if>

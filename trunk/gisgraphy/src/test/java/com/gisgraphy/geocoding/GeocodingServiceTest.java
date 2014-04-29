@@ -21,6 +21,7 @@
  ******************************************************************************/
 package com.gisgraphy.geocoding;
 
+import static com.gisgraphy.fulltext.Constants.ADDRESSES_PLACETYPE;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -43,6 +44,7 @@ import com.gisgraphy.addressparser.commons.GeocodingLevels;
 import com.gisgraphy.addressparser.exception.AddressParserException;
 import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.Constants;
 import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
@@ -734,7 +736,7 @@ public class GeocodingServiceTest {
 	String text = "toto";
 	String countryCode = "FR";
 	IFullTextSearchEngine mockfullFullTextSearchEngine = EasyMock.createMock(IFullTextSearchEngine.class);
-	FulltextQuery query = new FulltextQuery(text, GeocodingService.FIVE_RESULT_PAGINATION, GeocodingService.LONG_OUTPUT, null, countryCode);
+	FulltextQuery query = new FulltextQuery(text, GeocodingService.FIVE_RESULT_PAGINATION, GeocodingService.LONG_OUTPUT, ADDRESSES_PLACETYPE, countryCode);
 	query.withAllWordsRequired(true).withoutSpellChecking();
 	EasyMock.expect(mockfullFullTextSearchEngine.executeQuery(query)).andReturn(mockResultDTO);
 	EasyMock.replay(mockfullFullTextSearchEngine);

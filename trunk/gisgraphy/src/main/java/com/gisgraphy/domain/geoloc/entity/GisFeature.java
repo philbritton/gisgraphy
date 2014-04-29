@@ -93,6 +93,8 @@ import com.vividsolutions.jts.geom.Point;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class GisFeature{
 	
+	public static final int NAME_MAX_LENGTH= 200;
+	
 	public static final String SHAPE_COLUMN_NAME = "shape";
 
     public static final String LOCATION_COLUMN_NAME = "location";

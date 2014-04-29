@@ -59,7 +59,6 @@ import com.gisgraphy.importer.dto.InterpolationHouseNumber;
 import com.gisgraphy.importer.dto.InterpolationMember;
 import com.gisgraphy.importer.dto.InterpolationType;
 import com.gisgraphy.importer.dto.NodeHouseNumber;
-import com.gisgraphy.street.HouseNumberUtil;
 import com.vividsolutions.jts.geom.Point;
 
 /**

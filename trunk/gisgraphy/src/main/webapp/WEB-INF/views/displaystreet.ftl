@@ -35,15 +35,15 @@
 						<#if result.openstreetmapId??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmapId?c};<br/></#if>
 						<br/>
 						<#if result.streetType??><@s.text name="search.type.of.street"/> : <@s.text name="${result.streetType}"/><br/></#if>
-						<#if result.oneWay??>
-						<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
-							<#if result.oneWay==true>
+						<#if result.one_way?? && result.length??>
+							<#if result.one_way>
 								<@s.text name="street.oneway"/>
 							<#else>
+								<img src="/images/twoway.png" class="imgAlign" alt="<@s.text name="global.street.way"/>"/>
 								<@s.text name="street.twoway"/>
 							</#if>
-						<br/>
-						</#if>
+						<br/><br/>
+					</#if>
 						<#if result.houseNumbers??>
 							<@s.text name="address.houseNumber"/> : 
 							<#list result.houseNumbers as house>
@@ -51,6 +51,15 @@
 							</#list>;
 							<br/><br/>
 						</#if>
+						 <#if result.alternateNames?? && result.alternateNames.size()!=  0>
+                                       		 <p class="quote">
+                                                <@s.iterator value="result.alternateNames" status="name_wo_lang_status" id="name_alternate">
+                                                        ${name_alternate.name} <@s.if test="!#name_wo_lang_status.last"> - </@s.if>         
+                                                </@s.iterator>
+                                                </p>
+                                       		 </#if>
+
+
 						
 						<@gisgraphysearch.googleStreetView width="700" heigth="400" 
 						googleMapAPIKey=googleMapAPIKey CSSClass="center" />
