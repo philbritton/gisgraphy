@@ -706,6 +706,10 @@
 				All words are not required for fulltext search
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				All word decompounder (german)
+			</action>
+			
 			</release>
 			
 	</body>

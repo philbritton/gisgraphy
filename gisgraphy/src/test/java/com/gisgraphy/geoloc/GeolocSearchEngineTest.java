@@ -38,6 +38,7 @@ import org.junit.Test;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.valueobject.GisFeatureDistance;
@@ -307,6 +308,25 @@ public class GeolocSearchEngineTest extends AbstractIntegrationHttpSolrTestCase 
 	GeolocResultsDto geolocResultsDto = geolocSearchEngine.executeQuery(query);
 	String results = geolocSearchEngine.executeQueryToString(query);
 	FeedChecker.checkGeolocResultsDtoGEORSS(geolocResultsDto, results);
+    }
+    
+    @Test
+    public void testExecuteQueryWithStreetPlaceTypeShouldIgnoreAllTrantientField() {
+    	//is_in field are only for sync openstreetmap entity to gisfeature
+    	//so the is_in fields are transcient and the property should be mark with introspectionignore field
+	GisFeature city = geolocTestHelper
+		.createAndSaveCityWithFullAdmTreeAndCountry(1L);
+	city.setAdm4Code("D4");
+	city.setAdm4Name("adm");
+
+	this.cityDao.save((City)city);
+
+	Pagination pagination = Pagination.DEFAULT_PAGINATION;
+	Output output = Output.withFormat(OutputFormat.GEORSS).withIndentation();
+	GeolocQuery query = new GeolocQuery(city.getLocation(), 40000,
+		pagination, output, Street.class);
+	 geolocSearchEngine.executeQuery(query);
+	 //should not fails
     }
 
 	
