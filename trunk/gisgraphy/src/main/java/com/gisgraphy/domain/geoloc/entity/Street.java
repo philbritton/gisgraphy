@@ -52,10 +52,15 @@ public class Street extends GisFeature {
     //those fields are only used to sync the fulltext engine,
     //there are not used to be stored in Datastore
     
+    @IntrospectionIgnoredField
     private String isIn;
+    @IntrospectionIgnoredField
     private String isInPlace;
+    @IntrospectionIgnoredField
     private String isInAdm;
+    @IntrospectionIgnoredField
     private Set<String> isInZip;
+    @IntrospectionIgnoredField
     private String fullyQualifiedAddress;
     private SortedSet<HouseNumber> houseNumbers;
     

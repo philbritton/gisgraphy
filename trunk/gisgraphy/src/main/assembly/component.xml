@@ -58,6 +58,7 @@
 				<include>scripts.conf</include>
 				<include>stopwords.txt</include>
 				<include>synonyms.txt</include>
+				<include>compound.txt</include>
 			</includes>
 		</fileSet>
 		<!-- doc -->
