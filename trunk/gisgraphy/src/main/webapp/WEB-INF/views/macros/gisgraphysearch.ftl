@@ -386,21 +386,51 @@ doAjaxSearch = function(formName){
 		</div>
 </#macro>
 
-<#macro displayAddressForm url>
+<#macro displayAddressForm url structured=false>
+<script type="text/javascript" >
+toggleAddressForm = function(structured){
+	if (structured){
+		$("postalcheckbox").hide();
+		$("unstructuredaddressfields").hide();
+		$("structuredaddressfields").show();
+	} else {
+		$("postalcheckbox").show();
+		$("unstructuredaddressfields").show();
+		$("structuredaddressfields").hide();
+	}
+};
+</script>
 	<@s.form action="${url}" method="get" id="addressform" cssStyle="background-color:#ebf5fc;padding-top:25px;">
+<#if url.contains('geocod')>
+<div style="600px;padding-bottom:20px;margin:auto;" class="center">
+<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;" onclick="toggleAddressForm(false);"><@s.text name="search.address.structured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
+</div>
+</#if>
 		<div id="simplesearch" style="width:600px;">
+		<div id="unstructuredaddressfields" <#if structured>style="display:none;"</#if> >
 		<#if !url.contains('geocod')>
 				<@s.text name="user.address.address" /> : (<span id="searchexample">e.g. 650 Castro Street Mountain View, CA, 94041-2021 USA</span>)
 			<#else>
 				<@s.text name="search.geocoder.field" /> :
 		</#if>
 		<@s.textfield name="address" required="true" size="56" theme="simple" id="address" maxlength="200" cssStyle="margin:0px;" cssClass="inputsearch"/><br/>
+</div>
+<div id="structuredaddressfields" <#if !structured>style="display:none;"</#if>>
+<div style="font-weight:bold;"><@s.text name="search.address.structured.desc" /> :</div>
+	<div style="margin-left:30px;">
+	<span class="searchlabel" ><@s.text name="search.address.structured.housenumber" /> : </span><@s.textfield name="houseNumber" required="false" size="20" theme="simple" id="housenumber" maxlength="10" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.street" />  (<@s.text name="global.required" />) : </span><@s.textfield name="streetName" required="true" size="30" theme="simple" id="streetname" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.city" /> (<@s.text name="global.required" />) : </span><@s.textfield name="city" required="true" size="30" theme="simple" id="city" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.state" /> : </span><@s.textfield name="state" required="false" size="20" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.zipcode" /> : </span><@s.textfield name="zipCode" required="false" size="25" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	</div>
+</div>
 		<br/>
-		<#if url.contains('geocod')>
-			<div style="padding-left:120px;"><@s.checkbox name="postal" fieldValue="true" label="search.geocoding.postal.mode" theme="simple"/><@s.text name="search.geocoding.postal.mode"/></div>
+		<span id="postalcheckbox"><#if url.contains('geocod') && !structured>
+			<div style="padding-left:120px;"><@s.checkbox name="postal" fieldValue="true" label="search.geocoding.postal.mode" theme="simple"/><@s.text name="search.geocoding.postal.mode"/></div></span>
 		</#if>
 		<br/>
-		<b><@s.text name="search.select.country"/> <#if !url.contains('geocod')>(<@s.text name="search.optional"/>)</#if> :</b> </span>
+		<b><@s.text name="search.select.country"/> <#if url.contains('geocod')>(<@s.text name="search.optional"/>)</#if> :</b> </span>
 <#if !url.contains('geocod')>
 <select name="country" id="addressform_country" style="width:180px;">
     <option value=""
