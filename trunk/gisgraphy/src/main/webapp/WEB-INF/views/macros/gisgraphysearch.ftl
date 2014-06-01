@@ -403,7 +403,7 @@ toggleAddressForm = function(structured){
 	<@s.form action="${url}" method="get" id="addressform" cssStyle="background-color:#ebf5fc;padding-top:25px;">
 <#if url.contains('geocod')>
 <div style="600px;padding-bottom:20px;margin:auto;" class="center">
-<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;" onclick="toggleAddressForm(false);"><@s.text name="search.address.structured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
+<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;" onclick="toggleAddressForm(false);"><@s.text name="search.address.unstructured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
 </div>
 </#if>
 		<div id="simplesearch" style="width:600px;">
