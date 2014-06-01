@@ -403,6 +403,18 @@ border:1px solid #BBC5CD;
 padding:7px 3px 8px 35px;
 }
 
+.inputsearchsimple{
+border:1px solid #BBC5CD;
+padding:4px 3px 5px 5px;
+}
+
+.searchlabel{
+width : 250px;
+display : block;
+margin-top : 10px;
+margin-bottom : 3px;
+}
+
 .about {
 width:1000px;
 color:#777777;
