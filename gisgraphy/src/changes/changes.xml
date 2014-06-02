@@ -710,6 +710,10 @@
 				All word decompounder (german)
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add a form to geocode structured address 
+			</action>
+			
 			</release>
 			
 	</body>

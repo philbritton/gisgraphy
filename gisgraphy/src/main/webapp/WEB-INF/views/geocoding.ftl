@@ -41,5 +41,5 @@
 </span>
 <br/><br/><br/>
 <div class="clear"></div>
-	<@gisgraphysearch.displayAddressForm url=geocodingFormUrl />
+	<@gisgraphysearch.displayAddressForm url=geocodingFormUrl structured=structured />
 </body></html>
