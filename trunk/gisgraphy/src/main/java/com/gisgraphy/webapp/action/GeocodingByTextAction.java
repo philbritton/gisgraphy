@@ -65,6 +65,7 @@ public class GeocodingByTextAction extends SearchAction {
     private String country;
     private String style;
     private String address;
+    private Boolean structured = false;
     
      
     /**
@@ -218,6 +219,14 @@ public class GeocodingByTextAction extends SearchAction {
     public void setGeocodingService(IGeocodingService geocodingService) {
         this.geocodingService = geocodingService;
     }
+
+	public Boolean getStructured() {
+		return structured;
+	}
+
+	public void setStructured(Boolean structured) {
+		this.structured = structured;
+	}
   
 
 }

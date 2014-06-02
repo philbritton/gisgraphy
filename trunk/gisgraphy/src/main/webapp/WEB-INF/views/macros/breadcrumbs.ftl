@@ -3,6 +3,10 @@
 	<@s.url id="simpleGeolocSearchUrl" action="geolocsearch" includeParams="none" namespace="" />
 	<@s.url id="geocodingAutocompleteUrl" action="geocoding_worldwide" includeParams="none" namespace="/public" />
 	<@s.url id="geocodingSearchUrl" action="geocoding" includeParams="none" namespace="/public" />
+	<@s.url id="geocodingStructuredSearchUrl" action="geocoding" includeParams="none" namespace="/public" >
+		 <@s.param name="structured" value="true" />	
+	</@s.url>
+
 	<@s.url id="reverseGeocodingSearchUrl" action="reverse_geocoding_worldwide" includeParams="none" namespace="/public" />
 	<@s.url id="addressparserurl" action="addressparser" includeParams="none" namespace="/public" />
 	<@s.url id="streetSearchUrl" action="streetSearch" includeParams="none" namespace="/public" />
@@ -40,6 +44,7 @@
 			<ul>
 				<li><a href="${geocodingSearchUrl}"><@s.text name="search.geocoding.breadcrumbs"/></a></li>
 				<li><a href="${geocodingAutocompleteUrl}"><@s.text name="search.geocoding.breadcrumbs"/> <@s.text name="by.autocompletion.breadcrumbs"/></a></li>
+				<li><a href="${geocodingStructuredSearchUrl}"><@s.text name="search.geocoding.structured"/></a></li>
 			</ul>
 		</li>
 		<li >

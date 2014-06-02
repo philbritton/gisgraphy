@@ -392,18 +392,20 @@ toggleAddressForm = function(structured){
 	if (structured){
 		$("postalcheckbox").hide();
 		$("unstructuredaddressfields").hide();
+		$("address").disable();
 		$("structuredaddressfields").show();
 	} else {
 		$("postalcheckbox").show();
 		$("unstructuredaddressfields").show();
 		$("structuredaddressfields").hide();
+		$("address").enable();
 	}
 };
 </script>
 	<@s.form action="${url}" method="get" id="addressform" cssStyle="background-color:#ebf5fc;padding-top:25px;">
 <#if url.contains('geocod')>
 <div style="600px;padding-bottom:20px;margin:auto;" class="center">
-<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;" onclick="toggleAddressForm(false);"><@s.text name="search.address.unstructured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
+<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;text-decoration:underline;" onclick="toggleAddressForm(false);"><@s.text name="search.address.unstructured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;text-decoration:underline;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
 </div>
 </#if>
 		<div id="simplesearch" style="width:600px;">
@@ -418,11 +420,11 @@ toggleAddressForm = function(structured){
 <div id="structuredaddressfields" <#if !structured>style="display:none;"</#if>>
 <div style="font-weight:bold;"><@s.text name="search.address.structured.desc" /> :</div>
 	<div style="margin-left:30px;">
-	<span class="searchlabel" ><@s.text name="search.address.structured.housenumber" /> : </span><@s.textfield name="houseNumber" required="false" size="20" theme="simple" id="housenumber" maxlength="10" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.housenumber" /> : </span><@s.textfield name="houseNumber" required="false" size="30" theme="simple" id="housenumber" maxlength="10" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
 	<span class="searchlabel" ><@s.text name="search.address.structured.street" />  (<@s.text name="global.required" />) : </span><@s.textfield name="streetName" required="true" size="30" theme="simple" id="streetname" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
 	<span class="searchlabel" ><@s.text name="search.address.structured.city" /> (<@s.text name="global.required" />) : </span><@s.textfield name="city" required="true" size="30" theme="simple" id="city" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.state" /> : </span><@s.textfield name="state" required="false" size="20" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.zipcode" /> : </span><@s.textfield name="zipCode" required="false" size="25" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.state" /> : </span><@s.textfield name="state" required="false" size="30" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.zipcode" /> : </span><@s.textfield name="zipCode" required="false" size="30" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
 	</div>
 </div>
 		<br/>

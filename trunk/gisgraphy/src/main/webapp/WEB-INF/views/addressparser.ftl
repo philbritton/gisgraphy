@@ -37,5 +37,5 @@
 </@s.text></span>
 <br/><br/><br/>
 <div class="clear"></div>
-	<@gisgraphysearch.displayAddressForm url=addressparserurl/>
+	<@gisgraphysearch.displayAddressForm url=addressparserurl structured=false/>
 </body></html>
