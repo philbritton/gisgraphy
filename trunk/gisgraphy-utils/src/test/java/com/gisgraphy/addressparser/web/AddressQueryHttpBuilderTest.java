@@ -82,7 +82,7 @@ public class AddressQueryHttpBuilderTest {
 	query = builder.buildFromRequest(request);
     Assert.assertNull("country parameter is not required",query.getCountry());
 
-	//with empty country
+	//with country=space
 	request = new MockHttpServletRequest();
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, " ");
 	request.setParameter(AbstractAddressServlet.ADDRESS_PARAMETER, "address");
@@ -414,6 +414,7 @@ public class AddressQueryHttpBuilderTest {
 	request.setParameter("streetName", streetName);
 	request.setParameter("NotExistingFieldName", "foo");
 	request.setParameter("country", "france");
+	request.setParameter("zipcode", "");//empty paramter should be ignored
 	request.setParameter(AbstractAddressServlet.COUNTRY_PARAMETER, "us");
 	StructuredAddressQuery structuredquery = (StructuredAddressQuery) builder.buildFromRequest(request);
 	Address address = structuredquery.getStructuredAddress();
@@ -421,6 +422,7 @@ public class AddressQueryHttpBuilderTest {
 	Assert.assertEquals(city, address.getCity());
 	Assert.assertEquals(houseNumber, address.getHouseNumber());
 	Assert.assertEquals(streetName, address.getStreetName());
+	Assert.assertNull("empty paramter should be ignored", address.getZipCode());
 	Assert.assertNull(address.getCountry());
 	
 	// test outputFormat

@@ -97,10 +97,10 @@ public class AddressQueryHttpBuilder {
 		}
 		else {
 			if ("".equals(adressParameter.trim())){
-				throw new AddressParserException("'AbstractAddressServlet.ADDRESS_PARAMETER' could not be empty, please specify a valid parameter or some valid address fields");
+				throw new AddressParserException("'"+AbstractAddressServlet.ADDRESS_PARAMETER+"' could not be empty, please specify a valid parameter or some valid address fields");
 			}
 			if (adressParameter.length() > AbstractAddressServlet.QUERY_MAX_LENGTH) {
-				throw new AddressParserException("address is limited to " + AbstractAddressServlet.QUERY_MAX_LENGTH + "characters");
+				throw new AddressParserException("address is limited to " + AbstractAddressServlet.QUERY_MAX_LENGTH + " characters");
 			}
 			query = new AddressQuery(adressParameter, countryParameter);
 		}
@@ -159,7 +159,11 @@ public class AddressQueryHttpBuilder {
 					//even if only the country is specified
 					continue;
 				}
-				boolean success =setAddressField(address, parameterName, parameters.getValue()[0]);
+				String parameterValue = parameters.getValue()[0];
+				if (parameterValue == null || "".equals(parameterValue.trim())){
+					continue;
+				}
+				boolean success =setAddressField(address, parameterName, parameterValue);
 				if (success){
 					atLeastOneSetterFound=true;
 				}
