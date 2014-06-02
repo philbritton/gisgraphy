@@ -420,11 +420,11 @@ toggleAddressForm = function(structured){
 <div id="structuredaddressfields" <#if !structured>style="display:none;"</#if>>
 <div style="font-weight:bold;"><@s.text name="search.address.structured.desc" /> :</div>
 	<div style="margin-left:30px;">
-	<span class="searchlabel" ><@s.text name="search.address.structured.housenumber" /> : </span><@s.textfield name="houseNumber" required="false" size="30" theme="simple" id="housenumber" maxlength="10" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.street" />  (<@s.text name="global.required" />) : </span><@s.textfield name="streetName" required="true" size="30" theme="simple" id="streetname" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.city" /> (<@s.text name="global.required" />) : </span><@s.textfield name="city" required="true" size="30" theme="simple" id="city" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.state" /> : </span><@s.textfield name="state" required="false" size="30" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
-	<span class="searchlabel" ><@s.text name="search.address.structured.zipcode" /> : </span><@s.textfield name="zipCode" required="false" size="30" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.housenumber" /> : </span><@s.textfield name="houseNumber" required="false" size="40" theme="simple" id="housenumber" maxlength="10" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.street" />  (<@s.text name="global.required" />) : </span><@s.textfield name="streetName" required="true" size="40" theme="simple" id="streetname" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.city" /> (<@s.text name="global.required" />) : </span><@s.textfield name="city" required="true" size="40" theme="simple" id="city" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.state" /> : </span><@s.textfield name="state" required="false" size="40" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
+	<span class="searchlabel" ><@s.text name="search.address.structured.zipcode" /> : </span><@s.textfield name="zipCode" required="false" size="40" theme="simple" id="state" maxlength="255" cssStyle="margin:0px;" cssClass="inputsearchsimple"/><br/>
 	</div>
 </div>
 		<br/>
