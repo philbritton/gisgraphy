@@ -25,6 +25,7 @@ package com.gisgraphy.webapp.action;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Required;
 
@@ -134,9 +135,9 @@ public class GeocodingAction extends ActionSupport implements
 
 	protected String buildCityDisplayName(SolrResponseDto cityfound) {
 		String diplayName = cityfound.getName();
-		List<String> zipcodes = cityfound.getZipcodes();
+		Set<String> zipcodes = cityfound.getZipcodes();
 		if (zipcodes != null && zipcodes.size()==1) {
-			diplayName = cityfound.getName() + " (" + zipcodes.get(0) + ")";
+			diplayName = cityfound.getName() + " (" + zipcodes.iterator().next() + ")";
 		}
 		return diplayName;
 	}

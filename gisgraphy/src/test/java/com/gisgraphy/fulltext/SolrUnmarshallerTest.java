@@ -144,8 +144,8 @@ public class SolrUnmarshallerTest extends AbstractIntegrationHttpSolrTestCase {
 	assertEquals(city.getAdm3Name(), result.getAdm3_name());
 	assertEquals(city.getAdm4Name(), result.getAdm4_name());
 	Iterator<ZipCode> ZipIterator = city.getZipCodes().iterator();
-	assertEquals(ZipIterator.next().getCode(), result.getZipcodes().get(0));
-	assertEquals(ZipIterator.next().getCode(), result.getZipcodes().get(1));
+	assertTrue(result.getZipcodes().contains(ZipIterator.next().getCode()));
+	assertTrue(result.getZipcodes().contains(ZipIterator.next().getCode()));
 	assertEquals(city.getCountry().getName(), result.getCountry_name());
 	assertEquals(null,
 			result.getCountry_flag_url());

@@ -23,7 +23,9 @@
 package com.gisgraphy.domain.valueobject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -124,7 +126,7 @@ public class GisFeatureDistance {
     @XmlElements({
     @XmlElement(name="zipCode") }
     )
-    private List<String> zipCodes;
+    private Set<String> zipCodes;
 
     private String google_map_url;
 
@@ -349,7 +351,7 @@ public class GisFeatureDistance {
     /**
      * @return the zipCode
      */
-    public List<String> getZipCodes() {
+    public Set<String> getZipCodes() {
 	return this.zipCodes;
     }
     
@@ -360,7 +362,7 @@ public class GisFeatureDistance {
      */
     public void addZipCode(String zipCode) {
 	 if (this.zipCodes == null){
-		this.zipCodes = new ArrayList<String>();
+		this.zipCodes = new HashSet<String>();
 	 }
 	 this.zipCodes.add(zipCode);//TODO tests
     }
@@ -370,7 +372,7 @@ public class GisFeatureDistance {
      * Set the zipcodes
      * @param zipCodes the zipcodes to add
      */
-    public void setZipCodes(List<String> zipCodes) { 
+    public void setZipCodes(Set<String> zipCodes) { 
 	 this.zipCodes = zipCodes;//TODO tests 
     }
 

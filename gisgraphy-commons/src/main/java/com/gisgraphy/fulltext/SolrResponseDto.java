@@ -102,7 +102,7 @@ public class SolrResponseDto {
 
     public String adm3_name;
     public String adm4_name;
-    public List<String> zipcodes;
+    public Set<String> zipcodes;
     public String country_code;
 
     public String country_name;
@@ -320,7 +320,7 @@ public class SolrResponseDto {
     /**
      * @return the zipcode
      */
-    public List<String> getZipcodes() {
+    public Set<String> getZipcodes() {
 	return zipcodes;
     }
 

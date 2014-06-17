@@ -355,7 +355,6 @@ public class OpenStreetMapSimpleImporter extends AbstractSimpleImporterProcessor
     	}
     }
 
-	//todo test
 	protected String getDeeperAdmName(City city) {
 		if (city != null) {
 			if (city.getAdm5Name() != null) {

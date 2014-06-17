@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -178,9 +179,9 @@ public class FeedChecker {
 	    Assert.assertEquals(gisFeatureDistance.getDistance(), jsTester.eval("evalresult.result[0]['distance']"));
 	    if (gisFeatureDistance.getPlaceType().equals("City") && gisFeatureDistance.getZipCodes() != null) {
 		// treat city subdivision or delete zipCodesAware
-		List<String> zipcodes = gisFeatureDistance.getZipCodes();
+		Set<String> zipcodes = gisFeatureDistance.getZipCodes();
 		for (int i = 0; i < zipcodes.size(); i++) {
-		    Assert.assertEquals(zipcodes.get(i), jsTester.eval("evalresult.result[0]['zipCodes'][" + i + "]"));
+		    Assert.assertEquals(zipcodes.size(), jsTester.eval("evalresult.result[0]['zipCodes'].length"));
 		}
 	    }
 	    Assert.assertEquals(gisFeatureDistance.getPlaceType(), jsTester.eval("evalresult.result[0]['placeType']"));

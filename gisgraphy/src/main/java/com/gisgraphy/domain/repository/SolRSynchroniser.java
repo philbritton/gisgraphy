@@ -321,29 +321,30 @@ public class SolRSynchroniser implements ISolRSynchroniser {
 				   /* ex.setField(FullTextFields.COUNTRY_FLAG_URL.getValue(), URLUtils
 							.createCountryFlagUrl(gisFeature.getCountryCode()));*/
 				}
+			if (gisFeature.getIsIn()!=null && !gisFeature.getIsIn().trim().equals("")){
+	    	    ex.setField(FullTextFields.IS_IN.getValue(), gisFeature.getIsIn());
+	    	}
+	    	if (gisFeature.getIsInPlace()!=null && !gisFeature.getIsInPlace().trim().equals("")){
+	    	    ex.setField(FullTextFields.IS_IN_PLACE.getValue(), gisFeature.getIsInPlace());
+	    	}
+	    	if (gisFeature.getIsInAdm()!=null && !gisFeature.getIsInAdm().trim().equals("")){
+	    	    ex.setField(FullTextFields.IS_IN_ADM.getValue(), gisFeature.getIsInAdm());
+	    	}
+	    	if (gisFeature.getIsInZip()!=null && gisFeature.getIsInZip().size()>0){
+	    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), gisFeature.getIsInZip() );
+	    	}
 			if (gisFeature instanceof City){
 				ex.setField(FullTextFields.MUNICIPALITY.getValue(), ((City) gisFeature).isMunicipality());
+			}
+			if (gisFeature.getIsInCityAlternateNames()!=null && gisFeature.getIsInCityAlternateNames().size()>0){
+				ex.setField(FullTextFields.IS_IN_CITIES.getValue(), gisFeature.getIsInCityAlternateNames() );
 			}
 		    if (gisFeature instanceof Street) {
 		    	ex.setField(FullTextFields.LENGTH.getValue(), ((Street) gisFeature).getLength());
 		    	ex.setField(FullTextFields.ONE_WAY.getValue(), ((Street) gisFeature).isOneWay());
 		    	ex.setField(FullTextFields.STREET_TYPE.getValue(), ((Street) gisFeature).getStreetType());
 		    	ex.setField(FullTextFields.CITY_POPULATION.getValue(), ((Street) gisFeature).getPopulation());
-		    	if (((Street) gisFeature).getIsIn()!=null && !((Street) gisFeature).getIsIn().trim().equals("")){
-		    	    ex.setField(FullTextFields.IS_IN.getValue(), ((Street) gisFeature).getIsIn());
-		    	}
-		    	if (((Street) gisFeature).getIsInPlace()!=null && !((Street) gisFeature).getIsInPlace().trim().equals("")){
-		    	    ex.setField(FullTextFields.IS_IN_PLACE.getValue(), ((Street) gisFeature).getIsInPlace());
-		    	}
-		    	if (((Street) gisFeature).getIsInAdm()!=null && !((Street) gisFeature).getIsInAdm().trim().equals("")){
-		    	    ex.setField(FullTextFields.IS_IN_ADM.getValue(), ((Street) gisFeature).getIsInAdm());
-		    	}
-		    	if (((Street) gisFeature).getIsInZip()!=null && ((Street) gisFeature).getIsInZip().size()>0){
-		    	    ex.setField(FullTextFields.IS_IN_ZIP.getValue(), ((Street) gisFeature).getIsInZip() );
-		    	}
-		    	if (((Street) gisFeature).getIsInCityAlternateNames()!=null && ((Street) gisFeature).getIsInCityAlternateNames().size()>0){
-		    	    ex.setField(FullTextFields.IS_IN_CITIES.getValue(), ((Street) gisFeature).getIsInCityAlternateNames() );
-		    	}
+		    	
 		    	/*if (((Street) gisFeature).getFullyQualifiedAddress()!=null && !((Street) gisFeature).getFullyQualifiedAddress().trim().equals("")){
 		    	    ex.setField(FullTextFields.FULLY_QUALIFIED_ADDRESS.getValue(), ((Street) gisFeature).getFullyQualifiedAddress());
 		    	}*/

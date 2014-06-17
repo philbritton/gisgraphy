@@ -915,7 +915,7 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(city.getFeature_id()).andStubReturn(123L);
     	EasyMock.expect(city.getCountry_code()).andStubReturn("XX");
     	EasyMock.expect(city.getIs_in()).andStubReturn(null);
-    	List<String> zipcodes = new ArrayList<String>();
+    	Set<String> zipcodes = new HashSet<String>();
     	zipcodes.add("zip1");
     	EasyMock.expect(city.getZipcodes()).andStubReturn(zipcodes);
     	EasyMock.expect(city.getPlacetype()).andStubReturn(City.class.getSimpleName());
@@ -938,9 +938,9 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(citySubdivision.getFeature_id()).andStubReturn(123L);
     	EasyMock.expect(citySubdivision.getCountry_code()).andStubReturn("XX");
     	EasyMock.expect(citySubdivision.getIs_in()).andStubReturn(null);
-    	List<String> zipcodes = new ArrayList<String>();
-    	zipcodes.add("zip1");
-    	EasyMock.expect(citySubdivision.getZipcodes()).andStubReturn(zipcodes);
+    	Set<String> zipCodes = new HashSet<String>();
+    	zipCodes.add("zip1");
+    	EasyMock.expect(citySubdivision.getZipcodes()).andStubReturn(zipCodes);
     	EasyMock.expect(citySubdivision.getPlacetype()).andStubReturn(CitySubdivision.class.getSimpleName());
     	EasyMock.replay(citySubdivision);
     	return citySubdivision;
@@ -987,9 +987,9 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(city.getFeature_id()).andStubReturn(1234L);
     	EasyMock.expect(city.getCountry_code()).andStubReturn("XY");
     	EasyMock.expect(city.getIs_in()).andStubReturn(null);
-    	List<String> zipcodes = new ArrayList<String>();
-    	zipcodes.add("zip2");
-    	EasyMock.expect(city.getZipcodes()).andStubReturn(zipcodes);
+    	Set<String> zipCodes = new HashSet<String>();
+    	zipCodes.add("zip2");
+    	EasyMock.expect(city.getZipcodes()).andStubReturn(zipCodes);
     	EasyMock.expect(city.getPlacetype()).andStubReturn(City.class.getSimpleName());
     	EasyMock.replay(city);
     	return city;
@@ -1002,9 +1002,9 @@ public class GisgraphyTestHelper {
     	EasyMock.expect(city.getLng()).andStubReturn(80.36D);
     	EasyMock.expect(city.getName()).andStubReturn("Name");
     	EasyMock.expect(city.getFeature_id()).andStubReturn(123456L);
-    	List<String> zipcodes = new ArrayList<String>();
-    	zipcodes.add("zip1");
-    	EasyMock.expect(city.getZipcodes()).andStubReturn(zipcodes);
+    	Set<String> zipCodes = new HashSet<String>();
+    	zipCodes.add("zip1");
+    	EasyMock.expect(city.getZipcodes()).andStubReturn(zipCodes);
     	EasyMock.expect(city.getPlacetype()).andStubReturn(City.class.getSimpleName());
     	EasyMock.replay(city);
     	return city;

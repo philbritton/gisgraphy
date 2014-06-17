@@ -200,7 +200,7 @@
    
   <!-- Medium --><field name="street_type" type="string" indexed="false" stored="true"/>
   <!-- Medium --><field name="is_in" type="text" indexed="true" stored="true"/>
-  <!-- Medium --><field name="is_in_cities" type="text" indexed="true" stored="false" multiValued="true"/>
+  <!-- Medium --><field name="is_in_cities" type="exact_string_ci" indexed="true" stored="false" multiValued="true"/>
   <!-- Medium --><field name="is_in_place" type="text" indexed="true" stored="true"/>
   <!-- Medium --><field name="is_in_adm" type="text" indexed="true" stored="true"/>
   <!-- Medium --><field name="is_in_zip" type="text" indexed="true" stored="true" multiValued="true"/>

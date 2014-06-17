@@ -13,10 +13,11 @@ import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.geocoding.GeocodingClient;
 import com.gisgraphy.serializer.common.OutputFormat;
+import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 
 public class GeocodingRelevanceTest {
 
-	private static final String HTTP_LOCALHOST_GEOCODING_URL = "http://services.gisgraphy.com/geocoding";
+	private static final String HTTP_LOCALHOST_GEOCODING_URL = GisgraphyUtilsTestHelper.HTTP_BASE_URL+"geocoding";
 	String[][] addresses = {
 			{"paris","FR","false","paris",null},
 			{"rue du caire paris","FR","false","rue du caire","paris",null}

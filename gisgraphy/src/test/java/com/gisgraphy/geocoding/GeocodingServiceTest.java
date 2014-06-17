@@ -844,7 +844,7 @@ public class GeocodingServiceTest {
 	Assert.assertEquals("city name is not correct", city.getName(), address.getCity());
 	Assert.assertEquals("name is not correct", city.getName(), address.getName());
 	Assert.assertNull("street type is not correct", address.getStreetType());
-	Assert.assertEquals("zipcode is not correct", city.getZipcodes().get(0), address.getZipCode());
+	Assert.assertEquals("zipcode is not correct", city.getZipcodes().iterator().next(), address.getZipCode());
 	Assert.assertEquals("Adm Name should be the deeper one", city.getAdm2_name(), address.getState());
 	Assert.assertEquals("countrycode is not correct", city.getCountry_code(), address.getCountryCode());
     }
@@ -873,7 +873,7 @@ public class GeocodingServiceTest {
 	Assert.assertNull("city name is not correct", address.getCity());
 	Assert.assertEquals("name is not correct", citySubdivision.getName(), address.getName());
 	Assert.assertNull("street type is not correct", address.getStreetType());
-	Assert.assertEquals("zipcode is not correct", citySubdivision.getZipcodes().get(0), address.getZipCode());
+	Assert.assertEquals("zipcode is not correct", citySubdivision.getZipcodes().iterator().next(), address.getZipCode());
 	Assert.assertEquals("Adm Name should be the deeper one", citySubdivision.getAdm2_name(), address.getState());
 	Assert.assertEquals("countrycode is not correct", citySubdivision.getCountry_code(), address.getCountryCode());
     }

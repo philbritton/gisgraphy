@@ -67,7 +67,7 @@ public class solrResponseDtoBuilder {
 		    FullTextFields.ADM3NAME.getValue());
 	    solrResponseDto.adm4_name = getFieldAsString(solrDocument,
 		    FullTextFields.ADM4NAME.getValue());
-	    solrResponseDto.zipcodes = getFieldsToList(solrDocument,
+	    solrResponseDto.zipcodes = getFieldsToSet(solrDocument,
 		    FullTextFields.ZIPCODE.getValue());
 	    solrResponseDto.country_name = getFieldAsString(solrDocument,
 		    FullTextFields.COUNTRYNAME.getValue());

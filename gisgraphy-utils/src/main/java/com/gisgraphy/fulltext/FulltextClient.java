@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonParseException;
@@ -324,11 +325,14 @@ public class FulltextClient implements IFullTextSearchEngine {
 			if (doc.get(FullTextFields.IS_IN.getValue()) != null) {
 				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN.getValue()).toString();
 			}
+			if (doc.get(FullTextFields.IS_IN_PLACE.getValue()) != null) {
+				solrResponseDto.is_in_place = doc.get(FullTextFields.IS_IN_PLACE.getValue()).toString();
+			}
 			if (doc.get(FullTextFields.IS_IN_ADM.getValue()) != null) {
-				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN_ADM.getValue()).toString();
+				solrResponseDto.is_in_adm = doc.get(FullTextFields.IS_IN_ADM.getValue()).toString();
 			}
 			if (doc.get(FullTextFields.IS_IN_ZIP.getValue()) != null) {
-				solrResponseDto.is_in = doc.get(FullTextFields.IS_IN_ZIP.getValue()).toString();
+				solrResponseDto.is_in_zip = (Set) doc.get(FullTextFields.IS_IN_ZIP.getValue());
 			}
 			
 			if (doc.get(FullTextFields.HOUSE_NUMBERS.getValue()) != null) {

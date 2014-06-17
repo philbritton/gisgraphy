@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.ResultTransformer;
@@ -44,7 +45,7 @@ public class ResultTransformerUtil<T> {
 	 * @return the list of GisFeatureDistance
 	 */
 	//TODO tests zip test
-	public static List<GisFeatureDistance> transformToGisFeatureDistance(String aliasList[], List<?> resultList, Map<Long, List<String>> featureIdToZipCodesMap,Class clazz) {
+	public static List<GisFeatureDistance> transformToGisFeatureDistance(String aliasList[], List<?> resultList, Map<Long, Set<String>> featureIdToZipCodesMap,Class clazz) {
 		List<GisFeatureDistance> results = new ArrayList<GisFeatureDistance>();
 		if (aliasList != null && !resultList.isEmpty()) {
 			ResultTransformer tr = new AliasToBeanResultTransformer(GisFeatureDistance.class);
