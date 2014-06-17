@@ -53,24 +53,9 @@ public class Street extends GisFeature {
     //there are not used to be stored in Datastore
     
     @IntrospectionIgnoredField
-    private String isIn;
-    @IntrospectionIgnoredField
-    private String isInPlace;
-    @IntrospectionIgnoredField
-    private String isInAdm;
-    @IntrospectionIgnoredField
-    private Set<String> isInZip;
-    @IntrospectionIgnoredField
     private String fullyQualifiedAddress;
     private SortedSet<HouseNumber> houseNumbers;
     
-    /**
-     * This field is only for relevance and allow to search for street<->cities in 
-     * many alternateNames. It is not in stored
-     */
-    @IntrospectionIgnoredField
-    private Set<String> isInCityAlternateNames;
-
     
 
 	/*public Long getOpenstreetmapId() {
@@ -135,74 +120,7 @@ public class Street extends GisFeature {
 	this.length = length;
     }
 
-    /**
-     * @return The city or state or any information where the street is located
-     */
-    //we don't sync it, the is_in field is only to transfer data from openstreetmap to street object 
-    @Transient
-    public String getIsIn() {
-	return isIn;
-    }
 
-    /**
-     * @param isIn
-     *            The city or state or any information where the street is
-     *            located
-     */
-    public void setIsIn(String isIn) {
-	this.isIn = isIn;
-    }
-    
-    /**
-	 * @return the place where the street is located, 
-	 * this field is filled when {@link OpenStreetMap#isIn}
-	 *  is filled and we got more specific details (generally quarter, neighborhood)
-	 */
-    @Transient
-    //we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
-	public String getIsInPlace() {
-		return isInPlace;
-	}
-
-	/**
-	 * @param isInPlace the most precise information on where the street is located,
-	 * generally quarter neighborhood
-	 */
-	public void setIsInPlace(String isInPlace) {
-		this.isInPlace = isInPlace;
-	}
-
-	/**
-	 * @return the adm (aka administrative division) where the street is located.
-	 */
-	@Transient
-	//we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
-	public String getIsInAdm() {
-		return isInAdm;
-	}
-
-	/**
-	 * @param isInAdm  the adm (aka administrative division) where the street is located
-	 */
-	public void setIsInAdm(String isInAdm) {
-		this.isInAdm = isInAdm;
-	}
-
-	/**
-	 * @return the zipcode where the street is located
-	 */
-	@Transient
-	//we don't sync it, the is_in field is only to transfer data from openstreetmap to street object
-	public Set<String> getIsInZip() {
-		return isInZip;
-	}
-
-	/**
-	 * @param isInZip the zipcode where the street is located.
-	 */
-	public void setIsInZip(Set<String> isInZip) {
-		this.isInZip = isInZip;
-	}
 
 	@Transient
 	public String getFullyQualifiedAddress() {
@@ -222,35 +140,5 @@ public class Street extends GisFeature {
 		this.houseNumbers = houseNumbers;
 	}
 	
-	/**
-	 * This field is only for relevance and allow to search for street<->cities in 
-     * many alternateNames. It is not in stored
-	 * 
-	 */
-	@Transient
-	public Set<String> getIsInCityAlternateNames() {
-		return isInCityAlternateNames;
-	}
-
-	public void setIsInCityAlternateNames(Set<String> isInCityAlternateNames) {
-		this.isInCityAlternateNames = isInCityAlternateNames;
-	}
 	
-
-    public void addIsInCitiesAlternateName(String isInCityAlternateName) {
-	Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
-	if (currentCitiesAlternateNames == null) {
-		currentCitiesAlternateNames = new HashSet<String>();
-	}
-	currentCitiesAlternateNames.add(isInCityAlternateName);
-	this.setIsInCityAlternateNames(currentCitiesAlternateNames);
-    }
-
-    public void addIsInCitiesAlternateNames(Collection<String> isInCityAlternateNames) {
-	if (isInCityAlternateNames != null) {
-	    for (String isInCityAlternateName : isInCityAlternateNames) {
-	    	addIsInCitiesAlternateName(isInCityAlternateName);
-	    }
-	}
-    }
 }

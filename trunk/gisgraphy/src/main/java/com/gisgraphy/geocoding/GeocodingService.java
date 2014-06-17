@@ -511,7 +511,7 @@ public class GeocodingService implements IGeocodingService {
 					address.setState(solrResponseDto.getAdm1_name());
 				} 
 				if (solrResponseDto.getZipcodes() != null && solrResponseDto.getZipcodes().size() > 0) {
-					address.setZipCode(solrResponseDto.getZipcodes().get(0));
+					address.setZipCode(solrResponseDto.getZipcodes().iterator().next());
 				}
 				if (solrResponseDto.getPlacetype().equalsIgnoreCase(Street.class.getSimpleName())) {
 					address.setStreetName(solrResponseDto.getName());
@@ -561,7 +561,7 @@ public class GeocodingService implements IGeocodingService {
 				address.setState(city.getIs_in_adm());
 			}
 			if (city.getZipcodes() != null && city.getZipcodes().size() > 0) {
-				address.setZipCode(city.getZipcodes().get(0));
+				address.setZipCode(city.getZipcodes().iterator().next());
 			} else if (city.getIs_in_zip()!=null && city.getIs_in_zip().size()>=1){
 				address.setZipCode(city.getIs_in_zip().iterator().next());
 			}

@@ -38,7 +38,10 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.PostOffice;
+import com.gisgraphy.domain.geoloc.entity.ZipCode;
+import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.IIdGenerator;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
@@ -61,9 +64,13 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProcessor {
 	
+	public static final int DISTANCE = 40000;
+	
 	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapPoisSimpleImporter.class);
     
     public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
+    
+    private static final Pattern pattern = Pattern.compile("(\\w+)\\s\\d+.*",Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
     
     public static final String ALTERNATENAMES_EXTRACTION_REGEXP = "((?:(?!___).)+)(?:(?:___)|(?:$))";
     
@@ -80,6 +87,13 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
   
     
     OsmAmenityToPlacetype osmAmenityToPlacetype = new OsmAmenityToPlacetype();
+    
+    @Autowired
+    protected ICityDao cityDao;
+    
+    protected boolean shouldFillIsInField(){
+    	return importerConfig.isGeonamesImporterEnabled() && importerConfig.isOpenStreetMapFillIsIn(); 
+    }
     
 
     /* (non-Javadoc)
@@ -199,6 +213,11 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 			populateAlternateNames(poi,alternateNamesAsString);
 		}
 		
+		if (shouldFillIsInField()) {
+			//we try to process is_in fields, because we want to fill adm and zip too
+			setIsInFields(poi);
+		}
+		
 		//location
 		if (!isEmptyField(fields, 5, false)) {
 			try {
@@ -232,6 +251,143 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 		return tags;
 	}
 
+	
+	 protected void setIsInFields(GisFeature poi) {
+	    	if (poi != null && poi.getLocation() != null) {
+	    		//first searchByShape because it is the more reliable :
+	    		City cityByShape = cityDao.getByShape(poi.getLocation(),poi.getCountryCode(),true);
+	    		if (cityByShape != null){
+	    			poi.setIsIn(cityByShape.getName());
+	    			poi.setPopulation(cityByShape.getPopulation());
+	    			if (cityByShape.getZipCodes() != null) {
+	    				for (ZipCode zip:cityByShape.getZipCodes()){
+	    					poi.addZip(zip.getCode());
+	    				}
+	    			}
+	    			if (cityByShape.getAlternateNames()!=null){
+	    				for (AlternateName name : cityByShape.getAlternateNames() ){
+	    					if (name!=null && name.getName()!=null){
+	    						poi.addIsInCitiesAlternateName(name.getName());
+	    					}
+	    				}
+	    			}
+	    			if (cityByShape.getAdm()!=null){
+	    				poi.setIsInAdm(cityByShape.getAdm().getName());
+	    			}
+	    			return;
+	    		}
+	    		City city = getNearestCity(poi.getLocation(),poi.getCountryCode(), true);
+	    		if (city != null) {
+	    			poi.setPopulation(city.getPopulation());
+	    			poi.setIsInAdm(getDeeperAdmName(city));
+	    			if (city.getZipCodes() != null) {
+	    				for (ZipCode zip:city.getZipCodes()){
+	    					if (zip != null && zip.getCode()!=null){
+	    						poi.addZip(zip.getCode());
+	    					}
+	    				}
+	    			}
+	    			if (city.getName() != null && poi.getIsIn()==null) {//only if it has not be set by the openstreetmap is_in field
+	    				//we can here have some concordance problem if the city found is not the one populate in the osm is_in fields.
+	    				poi.setIsIn(pplxToPPL(city.getName()));
+	    			}
+	    			if (city.getAlternateNames()!=null){
+	    				for (AlternateName name : city.getAlternateNames() ){
+	    					if (name!=null && name.getName()!=null){
+	    						poi.addIsInCitiesAlternateName(name.getName());
+	    					}
+	    				}
+	    			}
+	    		}
+	    		City city2 = getNearestCity(poi.getLocation(),poi.getCountryCode(), false);
+	    		if (city2 != null) {
+	    			if (city != null){
+	    					if (city.getFeatureId() == city2.getFeatureId()) {
+	    						return;
+	    					}
+	    					if (city2.getLocation()!=null && city.getLocation()!=null && GeolocHelper.distance(poi.getLocation(),city2.getLocation())>GeolocHelper.distance(poi.getLocation(),city.getLocation())){
+	    						return;
+	    					}
+	    			}
+	    				//we got a non municipality that is nearest, we set isinPlace tag and update is_in if needed
+	    				if (city2.getPopulation() != null && city2.getPopulation() != 0 && (poi.getPopulation() == null || poi.getPopulation() == 0)) {
+	    					poi.setPopulation(city2.getPopulation());
+	    				}
+
+	    				if (poi.getIsIn() == null) {
+	    					poi.setIsIn(pplxToPPL(city2.getName()));
+	    				} else {
+	    					poi.setIsInPlace(pplxToPPL(city2.getName()));
+	    				}
+	    				if (poi.getIsInAdm() == null) {
+	    					poi.setIsInAdm(getDeeperAdmName(city2));
+	    				}
+	    				if (city2.getZipCodes() != null ) {//we merge the zipcodes for is_in and is_in_place, so we don't check
+	    					//if zipcodes are already filled
+	    					for (ZipCode zip:city2.getZipCodes()){
+	    						if (zip!=null && zip.getCode()!=null){
+	    							poi.addZip(zip.getCode());
+	    						}
+	        				}
+	    				}
+	    				if (city==null && city2!=null){//add AN only if there are not added yet
+		        			if (city2.getAlternateNames()!=null){
+		        				for (AlternateName name : city2.getAlternateNames() ){
+		        					if (name!=null && name.getName()!=null){
+		        						poi.addIsInCitiesAlternateName(name.getName());
+		        					}
+		        				}
+		        			}
+	    				}
+	    		}
+	    	}
+	    }
+	 
+	 /**
+	     *  tests if city is a paris district, if so it is
+			probably a pplx that is newly considered as ppl
+			http://forum.geonames.org/gforum/posts/list/2063.page
+	     */
+	    protected String pplxToPPL(String cityName){
+	    	if (cityName!=null){
+	    		Matcher matcher = pattern.matcher(cityName);
+	    		if (matcher.find()) {
+	    			return matcher.group(1);
+	    		} else {
+	    			return cityName;
+	    		}
+	    	} else {
+	    		return cityName;
+	    	}
+	    }
+
+	 
+	 protected City getNearestCity(Point location, String countryCode, boolean filterMunicipality) {
+			if (location ==null){
+				return null;
+			}
+			return cityDao.getNearest(location, countryCode, filterMunicipality, DISTANCE);
+		}
+
+	 protected String getDeeperAdmName(City city) {
+		 if (city != null) {
+			 if (city.getAdm5Name() != null) {
+				 return city.getAdm5Name();
+			 } else if (city.getAdm4Name() != null) {
+				 return city.getAdm4Name();
+			 } else if (city.getAdm3Name() != null) {
+				 return city.getAdm3Name();
+			 } else if (city.getAdm2Name() != null) {
+				 return city.getAdm2Name();
+			 } else if (city.getAdm1Name() != null) {
+				 return city.getAdm1Name();
+			 } else {
+				 return null;
+			 }
+		 } else {
+			 return null;
+		 }
+	 }
 
 
 	GisFeature populateAlternateNames(GisFeature poi,
@@ -321,8 +477,6 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
     }
     
     
-   
-
     @Required
     public void setSolRSynchroniser(ISolRSynchroniser solRSynchroniser) {
         this.solRSynchroniser = solRSynchroniser;
@@ -338,7 +492,10 @@ public class OpenStreetMapPoisSimpleImporter extends AbstractSimpleImporterProce
 	}
 
     
-    
+	@Required
+	public void setCityDao(ICityDao cityDao) {
+		this.cityDao = cityDao;
+	}    
 
     
 }

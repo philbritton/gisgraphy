@@ -14,7 +14,7 @@ import com.gisgraphy.test.GisgraphyUtilsTestHelper;
 
 public class FulltextClientIntegrationTest {
 
-	private static final String BASE_URL = GisgraphyUtilsTestHelper.HTTP_BASE_URL+"/fulltext/";
+	private static final String BASE_URL = GisgraphyUtilsTestHelper.HTTP_BASE_URL+"fulltext/";
 
 	@Test
 	public void executeQueryCountry() {

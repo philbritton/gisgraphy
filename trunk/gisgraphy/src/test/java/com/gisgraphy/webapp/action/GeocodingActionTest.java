@@ -25,7 +25,9 @@ package com.gisgraphy.webapp.action;
 import static com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.jstester.JsTester;
 
@@ -195,7 +197,7 @@ public class GeocodingActionTest {
 		String cityNameFound = "cityName";
 		String zipCode= "zip";
 		EasyMock.expect(cityFound1.getName()).andStubReturn(cityNameFound);
-		List<String> zipCodes = new ArrayList<String>();
+		Set<String> zipCodes = new HashSet<String>();
 		zipCodes.add(zipCode);
 		EasyMock.expect(cityFound1.getZipcodes()).andStubReturn(zipCodes);
 		EasyMock.replay(cityFound1);
@@ -207,7 +209,7 @@ public class GeocodingActionTest {
     	GeocodingAction action = new GeocodingAction();
     	SolrResponseDto solrResponseDto = createCityFound1();
     	String displayName = action.buildCityDisplayName(solrResponseDto);
-    	Assert.assertEquals(solrResponseDto.getName()+" ("+solrResponseDto.getZipcodes().get(0)+")", displayName);
+    	Assert.assertEquals(solrResponseDto.getName()+" ("+solrResponseDto.getZipcodes().iterator().next()+")", displayName);
     }
     
     @Test
@@ -218,7 +220,7 @@ public class GeocodingActionTest {
 		EasyMock.expect(cityFound1.getLng()).andStubReturn(30D);
 		String cityNameFound = "cityName";
 		EasyMock.expect(cityFound1.getName()).andStubReturn(cityNameFound);
-		List<String> zipCodes = new ArrayList<String>();
+		Set<String> zipCodes = new HashSet<String>();
 		zipCodes.add("zip1");
 		zipCodes.add("zip2");
 		EasyMock.expect(cityFound1.getZipcodes()).andStubReturn(zipCodes);
@@ -236,7 +238,7 @@ public class GeocodingActionTest {
 		EasyMock.expect(cityFound1.getLng()).andStubReturn(30D);
 		String cityNameFound = "cityName";
 		EasyMock.expect(cityFound1.getName()).andStubReturn(cityNameFound);
-		List<String> zipCodes = new ArrayList<String>();
+		Set<String> zipCodes = new HashSet<String>();
 		EasyMock.expect(cityFound1.getZipcodes()).andStubReturn(zipCodes);
 		EasyMock.replay(cityFound1);
     	String displayName = action.buildCityDisplayName(cityFound1);
@@ -253,7 +255,7 @@ public class GeocodingActionTest {
 	EasyMock.expect(cityFound2.getLat()).andStubReturn(24D);
 	EasyMock.expect(cityFound2.getLng()).andStubReturn(31D);
 	EasyMock.expect(cityFound2.getName()).andStubReturn("cityName2");
-	List<String> zipCodes2 = new ArrayList<String>();
+	Set<String> zipCodes2 = new HashSet<String>();
 	zipCodes2.add("zip2");
 	EasyMock.expect(cityFound2.getZipcodes()).andStubReturn(zipCodes2);
 	EasyMock.replay(cityFound2);

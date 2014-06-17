@@ -1,6 +1,7 @@
 package com.gisgraphy.domain.valueobject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class GisFeatureDistanceFactory {
 	    gisFeatureDistance.setTimezone(gisFeature.getTimezone());
 	    gisFeatureDistance.setOpenstreetmapId(gisFeature.getOpenstreetmapId());
 	    gisFeatureDistance.setAmenity(gisFeature.getAmenity());
-	    gisFeatureDistance.setZipCodes(new ArrayList<String>());//TODO tests zip without zipcode
+	    gisFeatureDistance.setZipCodes(new HashSet<String>());//TODO tests zip without zipcode
 		Set<ZipCode> gisFeatureZipCodes = gisFeature.getZipCodes();
 			if (gisFeatureZipCodes != null){
 				for (ZipCode zipCode :gisFeatureZipCodes){

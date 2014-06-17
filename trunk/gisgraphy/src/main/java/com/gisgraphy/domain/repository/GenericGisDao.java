@@ -24,8 +24,10 @@ package com.gisgraphy.domain.repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.PersistenceException;
 
@@ -256,7 +258,7 @@ public class GenericGisDao<T extends GisFeature> extends
 			
 			
 			boolean hasZipCodesProperty = ZipCodesAware.class.isAssignableFrom(requiredClass);
-			Map<Long, List<String>> idToZipCodesMap = null;
+			Map<Long, Set<String>> idToZipCodesMap = null;
 			if (hasZipCodesProperty && queryResults.size()>0){
 			List<Long> ids = new ArrayList<Long>();
 			for (Object[] tuple: queryResults){
@@ -270,12 +272,12 @@ public class GenericGisDao<T extends GisFeature> extends
 			List<Object[]> zipCodes = (List<Object[]>) qry.list();
 			
 			if (zipCodes.size() > 0) {
-			    idToZipCodesMap = new HashMap<Long, List<String>>();
+			    idToZipCodesMap = new HashMap<Long, Set<String>>();
 			    for (Object[] zipCode : zipCodes){
 				Long idFromZipcode = (Long) zipCode[1];
-				List<String> zipCodesFromMap  = idToZipCodesMap.get(idFromZipcode);
+				Set<String> zipCodesFromMap  = idToZipCodesMap.get(idFromZipcode);
 				if (zipCodesFromMap == null){
-				    List<String> zipCodesToAdd = new ArrayList<String>();
+				    Set<String> zipCodesToAdd = new HashSet<String>();
 				    idToZipCodesMap.put(idFromZipcode, zipCodesToAdd);
 				    zipCodesFromMap = zipCodesToAdd;
 				} 

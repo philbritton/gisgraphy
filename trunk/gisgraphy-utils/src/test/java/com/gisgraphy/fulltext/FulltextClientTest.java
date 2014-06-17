@@ -71,7 +71,7 @@ public class FulltextClientTest {
 	}
 	
 	@Test
-	public void geolocQuerytoQueryString(){
+	public void fulltextQuerytoQueryString(){
 		FulltextQuery query = createQuery();
 		FulltextClient client = new FulltextClient(HTTP_LOCALHOST_8080_FULLTEXT);
 		String queryString = client.fulltextQueryToQueryString(query);

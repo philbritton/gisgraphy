@@ -188,6 +188,24 @@ public class GisFeature{
     private String amenity;
     
     private Long openstreetmapId;
+        
+    private String isIn;
+    
+    private String isInPlace;
+    
+    private String isInAdm;
+    
+    @IntrospectionIgnoredField
+    @Transient
+    private Set<String> isInZip;
+    
+    /**
+     * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+     */
+    @IntrospectionIgnoredField
+    private Set<String> isInCityAlternateNames;
+   
 
 	
 
@@ -1164,6 +1182,120 @@ public class GisFeature{
 	public void setOpenstreetmapId(Long openstreetmapId) {
 		this.openstreetmapId = openstreetmapId;
 	}
+	
+	 /**
+     * @return The city or state or any information where the street is located
+     */
+    public String getIsIn() {
+	return isIn;
+    }
+
+    /**
+     * @param isIn
+     *            The city or state or any information where the street is
+     *            located
+     */
+    public void setIsIn(String isIn) {
+	this.isIn = isIn;
+    }
     
-    
+    /**
+	 * @return the place where the street is located, 
+	 * this field is filled when {@link OpenStreetMap#isIn}
+	 *  is filled and we got more specific details (generally quarter, neighborhood)
+	 */
+	public String getIsInPlace() {
+		return isInPlace;
+	}
+
+	/**
+	 * @param isInPlace the most precise information on where the street is located,
+	 * generally quarter neighborhood
+	 */
+	public void setIsInPlace(String isInPlace) {
+		this.isInPlace = isInPlace;
+	}
+
+	/**
+	 * @return the adm (aka administrative division) where the street is located.
+	 */
+	public String getIsInAdm() {
+		return isInAdm;
+	}
+
+	/**
+	 * @param isInAdm  the adm (aka administrative division) where the street is located
+	 */
+	public void setIsInAdm(String isInAdm) {
+		this.isInAdm = isInAdm;
+	}
+
+	//we don't sync it, because we don't want join table, for the moment
+	@Transient
+	public Set<String> getIsInZip() {
+		return isInZip;
+	}
+
+	/**
+	 * @param isInZip the zipcode where the street is located.
+	 */
+	public void setIsInZip(Set<String> isInZip) {
+		this.isInZip = isInZip;
+	}
+
+	 /**
+     * add a zip
+     */
+    public void addZip(String zip) {
+	Set<String> currentZips = getIsInZip();
+	if (currentZips == null) {
+		currentZips = new HashSet<String>();
+	}
+	currentZips.add(zip);
+	this.setIsInZip(currentZips);
+    }
+
+    /**
+     * add zips
+     */
+    public void addZips(Collection<String> zips) {
+	if (zips != null) {
+	    for (String zip : zips) {
+	    	addZip(zip);
+	    }
+	}
+    }
+	
+	/**
+	 * This field is only for relevance and allow to search for street<->cities in 
+     * many alternateNames. It is not in stored
+	 * 
+	 */
+	@Transient
+	public Set<String> getIsInCityAlternateNames() {
+		return isInCityAlternateNames;
+	}
+
+	public void setIsInCityAlternateNames(Set<String> isInCityAlternateNames) {
+		this.isInCityAlternateNames = isInCityAlternateNames;
+	}
+	
+
+    public void addIsInCitiesAlternateName(String isInCityAlternateName) {
+	Set<String> currentCitiesAlternateNames = getIsInCityAlternateNames();
+	if (currentCitiesAlternateNames == null) {
+		currentCitiesAlternateNames = new HashSet<String>();
+	}
+	currentCitiesAlternateNames.add(isInCityAlternateName);
+	this.setIsInCityAlternateNames(currentCitiesAlternateNames);
+    }
+
+    public void addIsInCitiesAlternateNames(Collection<String> isInCityAlternateNames) {
+	if (isInCityAlternateNames != null) {
+	    for (String isInCityAlternateName : isInCityAlternateNames) {
+	    	addIsInCitiesAlternateName(isInCityAlternateName);
+	    }
+	}
+    }
+	
 }
