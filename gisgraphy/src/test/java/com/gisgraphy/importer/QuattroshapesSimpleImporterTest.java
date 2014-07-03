@@ -109,11 +109,26 @@ public class QuattroshapesSimpleImporterTest {
 	public void shouldBeSkipped(){
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
 		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(true);
 		importerConfig.setQuattroshapesImporterEnabled(true);
 		importer.setImporterConfig(importerConfig);
 		Assert.assertFalse(importer.shouldBeSkipped());
 		
 		importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(true);
+		importerConfig.setQuattroshapesImporterEnabled(false);
+		importer.setImporterConfig(importerConfig);
+		Assert.assertTrue(importer.shouldBeSkipped());
+		
+		
+		importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(false);
+		importerConfig.setQuattroshapesImporterEnabled(true);
+		importer.setImporterConfig(importerConfig);
+		Assert.assertTrue(importer.shouldBeSkipped());
+		
+		importerConfig = new ImporterConfig();
+		importerConfig.setGeonamesImporterEnabled(false);
 		importerConfig.setQuattroshapesImporterEnabled(false);
 		importer.setImporterConfig(importerConfig);
 		Assert.assertTrue(importer.shouldBeSkipped());
