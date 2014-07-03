@@ -51,11 +51,11 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class SpatialProjection {
     
-    public static final String DISTANCE_FUNCTION = "distance";
-    public static final String DISTANCE_SPHERE_FUNCTION = "distance_sphere";
-    public static String ST_LINE_INTERPOLATE_POINT_FUNCTION = "ST_line_interpolate_point";
+    public static final String DISTANCE_FUNCTION = "st_distance";
+    public static final String DISTANCE_SPHERE_FUNCTION = "st_distance_sphere";
+    public static String ST_LINE_INTERPOLATE_POINT_FUNCTION = "st_line_interpolate_point";
     public static String ST_LINE_LOCATE_POINT_FUNCTION = "st_line_locate_point";
-    public static String LINEMERGE_FUNCTION = "linemerge";
+    public static String LINEMERGE_FUNCTION = "st_linemerge";
 
     /**
 	 * projection to get the distance_sphere between a point and a LineString
@@ -183,7 +183,7 @@ public class SpatialProjection {
 			public String toSqlString(Criteria criteria, int position, CriteriaQuery criteriaQuery) throws HibernateException {
 				String columnName = criteriaQuery.getColumn(criteria, locationColumnName);
 				StringBuffer sb = new StringBuffer();
-				String sqlString = sb.append(distanceFunction).append("(").append(columnName).append(", GeometryFromText( 'POINT(").append(point.getX()).append(" ").append(point.getY()).append(")',").append(SRID.WGS84_SRID.getSRID()).append(")) as y").append(position).append("_").toString();
+				String sqlString = sb.append(distanceFunction).append("(").append(columnName).append(", st_GeometryFromText( 'POINT(").append(point.getX()).append(" ").append(point.getY()).append(")',").append(SRID.WGS84_SRID.getSRID()).append(")) as y").append(position).append("_").toString();
 				return sqlString;
 			}
 

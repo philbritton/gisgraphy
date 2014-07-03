@@ -112,6 +112,8 @@ public class ImporterConfig {
     public final static String OPENSTREETMAP_CITIES_DEFAULT_FILES_TO_DOWNLOAD = "allcountries.tar.bz2";
     
     public final static String OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD = "allcountries.tar.bz2";
+    
+    public final static String QUATTROSHAPES_DEFAULT_FILES_TO_DOWNLOAD = "shapes.tar.bz2";
 
     public final static String GEONAMES_ALTERNATENAME_ZIP_FILE="alternateNames.zip";
     
@@ -164,6 +166,8 @@ public class ImporterConfig {
 
     private String openStreetMapDir;
     
+    private String quattroshapesDir;
+    
     private String openStreetMapHouseNumberDir;
 
     private String openStreetMapCitiesDir;
@@ -173,6 +177,8 @@ public class ImporterConfig {
     private String geonamesZipCodeDir;
 
     private String openstreetMapDownloadURL;
+    
+    private String quattroshapesDownloadURL;
     
     private String openstreetMapHouseNumbersDownloadURL;
     
@@ -190,6 +196,8 @@ public class ImporterConfig {
 
     private String openStreetMapFilesToDownload = "";
     
+    private String quattroshapesFilesToDownload = "";
+    
     private String openStreetMapHouseNumberFilesToDownload = "";
     
     private String openStreetMapCitiesFilesToDownload = "";
@@ -199,6 +207,8 @@ public class ImporterConfig {
     private boolean geonamesImporterEnabled = true;
 
     private boolean openstreetmapImporterEnabled = true;
+    
+    private boolean quattroshapesImporterEnabled = true;
     
     private boolean openstreetmapHouseNumberImporterEnabled = true;
 
@@ -913,6 +923,134 @@ public class ImporterConfig {
     	return splitSemiColmunStringToList(openStreetMapPoisFilesToDownload);
     }
     
+    /*
+                   _   _                 _                           
+  __ _ _   _  __ _| |_| |_ _ __ ___  ___| |__   __ _ _ __   ___  ___ 
+ / _` | | | |/ _` | __| __| '__/ _ \/ __| '_ \ / _` | '_ \ / _ \/ __|
+| (_| | |_| | (_| | |_| |_| | | (_) \__ \ | | | (_| | |_) |  __/\__ \
+ \__, |\__,_|\__,_|\__|\__|_|  \___/|___/_| |_|\__,_| .__/ \___||___/
+    |_|                                             |_|              
+
+     */
+    
+    /**
+     * @param 
+     *            enable or disable quattroshapes importer
+     * @see ImporterConfig#isQuattroshapesImporterEnabled()
+     */
+    @Required
+    public void setQuattroshapesImporterEnabled(boolean quattroshapesImporterEnabled) {
+    	this.quattroshapesImporterEnabled = quattroshapesImporterEnabled;
+    }
+    
+    /**
+     * @return true if the importer should process the import of quattroshapes
+     *         data
+     * @see ImporterConfig#isQuattroshapesImporterEnabled()
+     */
+    public boolean isQuattroshapesImporterEnabled() {
+    	return quattroshapesImporterEnabled;
+    }
+    
+    /**
+     * @return The option
+     * @see #setQuattroshapesDownloadURL(String)
+     */
+    public String getQuattroshapesDownloadURL() {
+    	return quattroshapesDownloadURL;
+    }
+
+   
+    /**
+     * The HTTP URL of the directory Where quattroshapes files are to be
+     * download from
+     * 
+     * @param quattroshapesDownloadURL
+     *            The option
+     */
+    @Required
+    public void setQuattroshapesDownloadURL(String quattroshapesDownloadURL) {
+	if (!quattroshapesDownloadURL.endsWith("/")) {
+	    this.quattroshapesDownloadURL = quattroshapesDownloadURL + "/";
+	} else {
+	    this.quattroshapesDownloadURL = quattroshapesDownloadURL;
+	}
+	logger.debug("set quattroshapesDownloadURL to " + this.quattroshapesDownloadURL);
+    }
+
+    
+    /**
+     * @return The option
+     * @see #setQuattroshapesDir(String)
+     */
+    public String getQuattroshapesDir() {
+    	return this.quattroshapesDir;
+    }
+
+    
+    /**
+     * The directory where the quattroshapes files will be retrieved and
+     * processed. It must ends with / or \ according to the System
+     * 
+     * @param quattroshapesDir
+     *            the option
+     */
+    @Required
+    public void setQuattroshapesDir(String quattroshapesDir) {
+	if (!quattroshapesDir.endsWith(File.separator)) {
+	    logger.debug(quattroshapesDir + " does not end with " + File.separator);
+	    this.quattroshapesDir = quattroshapesDir + File.separator;
+	} else {
+	    this.quattroshapesDir = quattroshapesDir;
+	}
+	logger.debug("set quattroshapesDir to " + this.quattroshapesDir);
+    }
+    
+    /**
+     * @return true if the directory with the quattroshapes file to import exists and is
+     *         accessible
+     */
+    public boolean isQuattroshapesDirectoryAccessible() {
+    	return isDirectoryAccessible(getQuattroshapesDir());
+    }
+
+    /**
+     * @return The option
+     * @see #setQuattroshapesFilesToDownload(String)
+     */
+    public String getQuattroshapesFilesToDownload() {
+    	return this.quattroshapesFilesToDownload;
+    }
+    
+    /**
+     * The list of the Openstreetmap POI to be download from the
+     * {@link #openstreetMapPoisDownloadURL}. the several files will be separated by
+     * {@link #OPTION_SEPARATOR}. if null or empty, will be set to {
+     * {@link #OPENSTREETMAP_POI_DEFAULT_FILES_TO_DOWNLOAD}
+     * 
+     * @param openStreetMapPoisFilesToDownload
+     *            The openstreetmap filesToDownload to set
+     */
+    @Required
+    public void setQuattroshapesFilesToDownload(String quattroshapesFilesToDownload) {
+	if (quattroshapesFilesToDownload == null || quattroshapesFilesToDownload.trim().equals("")) {
+	    logger.warn("the option quattroshapesFilesToDownload is not set and will be set to his default value : " + QUATTROSHAPES_DEFAULT_FILES_TO_DOWNLOAD);
+	    this.quattroshapesFilesToDownload = QUATTROSHAPES_DEFAULT_FILES_TO_DOWNLOAD;
+	} else {
+	    this.quattroshapesFilesToDownload = quattroshapesFilesToDownload;
+	    logger.info("quattroshapesFilesToDownload=" + quattroshapesFilesToDownload);
+	}
+    }
+    
+    
+    /**
+     * @return A list of string with the files to be download, processed from
+     *         {@link #openStreetMapCitiesFilesToDownload}
+     */
+    public List<String> getQuattroshapesFilesDownloadFilesListFromOption() {
+    	return splitSemiColmunStringToList(quattroshapesFilesToDownload);
+    }
+    
     
     //_____________________________________________________end importer specific config______________________________
     
@@ -1406,7 +1544,7 @@ public class ImporterConfig {
      */
     public boolean isConfigCorrectForImport() {
     	boolean firstcondition =  isRegexpCorrects() && isGeonamesDownloadDirectoryAccessible() && isOpenStreetMapDownloadDirectoryAccessible() && isOpenStreetMapHouseNumberDownloadDirectoryAccessible()
-    			&& isOpenStreetMapCitiesDirectoryAccessible() && isOpenStreetMapPoisDirectoryAccessible();
+    			&& isOpenStreetMapCitiesDirectoryAccessible() && isOpenStreetMapPoisDirectoryAccessible() && isQuattroshapesDirectoryAccessible();
     		if (isRetrieveFiles()){
     			return firstcondition && isAllFilesDownloadables();
     		} else {
@@ -1463,6 +1601,16 @@ public class ImporterConfig {
 	    		}
 	    	}
 	    	}
+    	if (quattroshapesImporterEnabled){
+    		filenames = getQuattroshapesFilesDownloadFilesListFromOption();
+    		for (String filename:filenames){
+	    		if (!checkUrl(getQuattroshapesDownloadURL()+filename)){
+	    			return false;
+	    		}
+	    	}
+    	}
+    	
+    	
     	logger.info("All files are downloadables");
     	return true;
     }

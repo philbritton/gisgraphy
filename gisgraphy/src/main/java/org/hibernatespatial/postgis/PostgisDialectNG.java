@@ -44,45 +44,41 @@ public class PostgisDialectNG extends PostgreSQLDialect implements SpatialDialec
 		super();
 		registerColumnType(java.sql.Types.STRUCT, "geometry");
 
-		// registering OGC functions
-		// (spec_simplefeatures_sql_99-04.pdf)
-
-		// section 2.1.1.1
-		// Registerfunction calls for registering geometry functions:
-		// first argument is the OGC standard functionname, second the name as
-		// it occurs in the spatial dialect
-		registerFunction("dimension", new StandardSQLFunction("dimension", Hibernate.INTEGER));
+        // Gisgraphy text normalization function
 		registerFunction(DatabaseHelper.NORMALIZE_TEXT_FUNCTION_NAME, new StandardSQLFunction(DatabaseHelper.NORMALIZE_TEXT_FUNCTION_NAME, Hibernate.INTEGER));
-		registerFunction("geometrytype", new StandardSQLFunction("geometrytype", Hibernate.STRING));
-		registerFunction("srid", new StandardSQLFunction("srid", Hibernate.INTEGER));
-		registerFunction("envelope", new StandardSQLFunction("envelope", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("astext", new StandardSQLFunction("astext", Hibernate.STRING));
-		registerFunction("asbinary", new StandardSQLFunction("asbinary", Hibernate.BINARY));
-		registerFunction("isempty", new StandardSQLFunction("isempty", Hibernate.BOOLEAN));
-		registerFunction("issimple", new StandardSQLFunction("issimple", Hibernate.BOOLEAN));
-		registerFunction("boundary", new StandardSQLFunction("boundary", new CustomType(PGGeometryUserType.class, null)));
+
+		// registering SQL/MM Spatial functions
+		registerFunction("st_dimension", new StandardSQLFunction("st_dimension", Hibernate.INTEGER));
+		registerFunction("st_geometrytype", new StandardSQLFunction("st_geometrytype", Hibernate.STRING));
+		registerFunction("st_srid", new StandardSQLFunction("st_srid", Hibernate.INTEGER));
+		registerFunction("st_envelope", new StandardSQLFunction("st_envelope", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_astext", new StandardSQLFunction("st_astext", Hibernate.STRING));
+		registerFunction("st_asbinary", new StandardSQLFunction("st_asbinary", Hibernate.BINARY));
+		registerFunction("st_isempty", new StandardSQLFunction("st_isempty", Hibernate.BOOLEAN));
+		registerFunction("st_issimple", new StandardSQLFunction("st_issimple", Hibernate.BOOLEAN));
+		registerFunction("st_boundary", new StandardSQLFunction("st_boundary", new CustomType(PGGeometryUserType.class, null)));
 
 		// Register functions for spatial relation constructs
-		registerFunction("overlaps", new StandardSQLFunction("overlaps", Hibernate.BOOLEAN));
-		registerFunction("intersects", new StandardSQLFunction("intersects", Hibernate.BOOLEAN));
-		registerFunction("equals", new StandardSQLFunction("equals", Hibernate.BOOLEAN));
-		registerFunction("contains", new StandardSQLFunction("contains", Hibernate.BOOLEAN));
-		registerFunction("crosses", new StandardSQLFunction("crosses", Hibernate.BOOLEAN));
-		registerFunction("disjoint", new StandardSQLFunction("disjoint", Hibernate.BOOLEAN));
-		registerFunction("touches", new StandardSQLFunction("touches", Hibernate.BOOLEAN));
-		registerFunction("within", new StandardSQLFunction("within", Hibernate.BOOLEAN));
-		registerFunction("relate", new StandardSQLFunction("relate", Hibernate.BOOLEAN));
+		registerFunction("st_overlaps", new StandardSQLFunction("st_overlaps", Hibernate.BOOLEAN));
+		registerFunction("st_intersects", new StandardSQLFunction("st_intersects", Hibernate.BOOLEAN));
+		registerFunction("st_equals", new StandardSQLFunction("st_equals", Hibernate.BOOLEAN));
+		registerFunction("st_contains", new StandardSQLFunction("st_contains", Hibernate.BOOLEAN));
+		registerFunction("st_crosses", new StandardSQLFunction("st_crosses", Hibernate.BOOLEAN));
+		registerFunction("st_disjoint", new StandardSQLFunction("st_disjoint", Hibernate.BOOLEAN));
+		registerFunction("st_touches", new StandardSQLFunction("st_touches", Hibernate.BOOLEAN));
+		registerFunction("st_within", new StandardSQLFunction("st_within", Hibernate.BOOLEAN));
+		registerFunction("st_relate", new StandardSQLFunction("st_relate", Hibernate.BOOLEAN));
 
 		// register the spatial analysis functions
-		registerFunction("distance", new StandardSQLFunction("distance", Hibernate.DOUBLE));
-		registerFunction("distance_sphere", new StandardSQLFunction("distance_sphere", Hibernate.DOUBLE));
+		registerFunction("st_distance", new StandardSQLFunction("st_distance", Hibernate.DOUBLE));
+		registerFunction("st_distance_sphere", new StandardSQLFunction("st_distance_sphere", Hibernate.DOUBLE));
 		registerFunction("st_line_locate_point", new StandardSQLFunction("st_line_locate_point", Hibernate.DOUBLE));
-		registerFunction("buffer", new StandardSQLFunction("buffer", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("convexhull", new StandardSQLFunction("convexhull", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("difference", new StandardSQLFunction("difference", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("intersection", new StandardSQLFunction("intersection", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("symdifference", new StandardSQLFunction("symdifference", new CustomType(PGGeometryUserType.class, null)));
-		registerFunction("geomunion", new StandardSQLFunction("geomunion", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_buffer", new StandardSQLFunction("st_buffer", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_convexhull", new StandardSQLFunction("st_convexhull", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_difference", new StandardSQLFunction("st_difference", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_intersection", new StandardSQLFunction("st_intersection", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_symdifference", new StandardSQLFunction("st_symdifference", new CustomType(PGGeometryUserType.class, null)));
+		registerFunction("st_union", new StandardSQLFunction("st_union", new CustomType(PGGeometryUserType.class, null)));
 		registerKeyword("&&");
 	}
 
@@ -95,21 +91,21 @@ public class PostgisDialectNG extends PostgreSQLDialect implements SpatialDialec
 	public String getSpatialRelateSQL(String columnName, int spatialRelation, boolean hasFilter) {
 		switch (spatialRelation) {
 			case SpatialRelation.WITHIN:
-				return hasFilter ? "(" + columnName + " && ?  AND   within(" + columnName + ", ?))" : " within(" + columnName + ",?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_within(" + columnName + ", ?))" : " st_within(" + columnName + ",?)";
 			case SpatialRelation.CONTAINS:
-				return hasFilter ? "(" + columnName + " && ? AND contains(" + columnName + ", ?))" : " contains(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_contains(" + columnName + ", ?))" : " st_contains(" + columnName + ", ?)";
 			case SpatialRelation.CROSSES:
-				return hasFilter ? "(" + columnName + " && ? AND crosses(" + columnName + ", ?))" : " crosses(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_crosses(" + columnName + ", ?))" : " st_crosses(" + columnName + ", ?)";
 			case SpatialRelation.OVERLAPS:
-				return hasFilter ? "(" + columnName + " && ? AND overlaps(" + columnName + ", ?))" : " overlaps(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_overlaps(" + columnName + ", ?))" : " st_overlaps(" + columnName + ", ?)";
 			case SpatialRelation.DISJOINT:
-				return hasFilter ? "(" + columnName + " && ? AND disjoint(" + columnName + ", ?))" : " disjoint(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_disjoint(" + columnName + ", ?))" : " st_disjoint(" + columnName + ", ?)";
 			case SpatialRelation.INTERSECTS:
-				return hasFilter ? "(" + columnName + " && ? AND intersects(" + columnName + ", ?))" : " intersects(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_intersects(" + columnName + ", ?))" : " st_intersects(" + columnName + ", ?)";
 			case SpatialRelation.TOUCHES:
-				return hasFilter ? "(" + columnName + " && ? AND touches(" + columnName + ", ?))" : " touches(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_touches(" + columnName + ", ?))" : " st_touches(" + columnName + ", ?)";
 			case SpatialRelation.EQUALS:
-				return hasFilter ? "(" + columnName + " && ? AND equals(" + columnName + ", ?))" : " equals(" + columnName + ", ?)";
+				return hasFilter ? "(" + columnName + " && ? AND st_equals(" + columnName + ", ?))" : " st_equals(" + columnName + ", ?)";
 			default:
 				throw new IllegalArgumentException("Spatial relation is not known by this dialect");
 		}

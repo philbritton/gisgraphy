@@ -626,14 +626,14 @@ public class GenericGisDao<T extends GisFeature> extends
 			    throws PersistenceException {
 		    String pointAsString = "ST_GeometryFromText('POINT("+location.getX()+" "+location.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";
 			String queryString = "from " + persistentClass.getSimpleName()
-				+ " as c  where distance(c.location,"+pointAsString+") < "+distance;//left outer join c.zipCodes z
+				+ " as c  where st_distance(c.location,"+pointAsString+") < "+distance;//left outer join c.zipCodes z
 			if (filterMunicipality){
 				queryString+=" and c.municipality=true";
 			}
 			if (countryCode!=null ){
 				queryString+=" and c.countryCode='"+countryCode+"'";
 			}
-			queryString = queryString+ " order by distance(c.location,"+pointAsString+")";
+			queryString = queryString+ " order by st_distance(c.location,"+pointAsString+")";
 
 			Query qry = session.createQuery(queryString).setMaxResults(1);
 

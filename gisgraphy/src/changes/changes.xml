@@ -714,6 +714,14 @@
 				Add a form to geocode structured address 
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add quattroshapes importer
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Add postgis 2.0 compatibility
+			</action>
+			
 			</release>
 			
 	</body>
