@@ -177,22 +177,23 @@
 	<bean id="geonamesZipCodeImporter"
 		class="com.gisgraphy.importer.GeonamesZipCode${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
-
-	<bean id="importerManager"
-		class="com.gisgraphy.importer.ImporterManager">
-		<property name="importers" ref="importers"/>
-		<property name="importerConfig" ref="importerConfig"/>
+	
+	<bean id="geonamesZipCodeImporter"
+		class="com.gisgraphy.importer.GeonamesZipCode${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
+
 	
  	 <bean id="importers" class="java.util.ArrayList">
 		<constructor-arg>
 		<list>
 				<ref bean="geonamesFileRetriever"/>
-				<ref bean="OpenStreetMapCitiesFileRetriever"/>
+				<ref bean="openStreetMapCitiesFileRetriever"/>
 				<ref bean="geonamesZipCodeFileRetriever" />
 				<ref bean="openstreetmapFileRetriever" />
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>
-				<ref bean="OpenStreetMapPoisFileRetriever"/>
+				<ref bean="openStreetMapPoisFileRetriever"/>
+				<ref bean="quattroshapesFileRetriever"/>
+				<ref bean="quattroshapesSimpleImporter"/>
 				<ref bean="geonamesLanguageImporter" />
 				<ref bean="geonamesCountryImporter" />
 				<ref bean="geonamesAdmExtracter" />
@@ -204,30 +205,40 @@
 				<ref bean="geonamesAlternateNamesExtracter" />
 				<ref bean="geonamesAlternateNamesAdmImporter"/>
 				<ref bean="geonamesAlternateNamesImporter" />
-				<ref bean="OpenStreetMapCitiesSimpleImporter"/>
+				<ref bean="openStreetMapCitiesSimpleImporter"/>
 				<ref bean="geonamesZipCodeImporter" />
 				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="openStreetMapImporter"/>
 				<ref bean="openStreetMapHouseNumberSimpleImporter"/>
-				<ref bean="OpenStreetMapPoisSimpleImporter"/>
+				<ref bean="openStreetMapPoisSimpleImporter"/>
 			</list>
 		</constructor-arg>
 	</bean>
 	
-	<bean id="OpenStreetMapPoisFileRetriever"
+	<bean id="openStreetMapPoisFileRetriever"
 		class="com.gisgraphy.importer.OpenStreetMapPoisFileRetriever" parent="abstractFileRetriever" >
 	</bean>
 	
-	<bean id="OpenStreetMapPoisSimpleImporter"
+	<bean id="quattroshapesFileRetriever"
+		class="com.gisgraphy.importer.QuattroshapesFileRetriever" parent="abstractFileRetriever" >
+	</bean>
+	
+	<bean id="quattroshapesSimpleImporter"
+		class="com.gisgraphy.importer.QuattroshapesSimpleImporter" parent="abstractSimpleImporterProcessor">
+		<property name="gisFeatureDao" ref="gisFeatureDao"/>
+		<property name="importerConfig" ref="importerConfig"/>
+	</bean>
+	
+	<bean id="openStreetMapPoisSimpleImporter"
 		class="com.gisgraphy.importer.OpenStreetMapPois${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
 	
 	
-	<bean id="OpenStreetMapCitiesFileRetriever"
+	<bean id="openStreetMapCitiesFileRetriever"
 		class="com.gisgraphy.importer.OpenStreetMapCitiesFileRetriever" parent="abstractFileRetriever" >
 	</bean>
 	
-	<bean id="OpenStreetMapCitiesSimpleImporter"
+	<bean id="openStreetMapCitiesSimpleImporter"
 		class="com.gisgraphy.importer.OpenStreetMapCitiesSimpleImporter" parent="abstractSimpleImporterProcessor" >
 	</bean>
 	
@@ -274,7 +285,8 @@
 		<property name="openStreetMapHouseNumberDir" value="${importer.openstreetmap.housenumbers.dir}"/>
 		<property name="openStreetMapCitiesDir" value="${importer.openstreetmap.cities.dir}"/>
 		<property name="openStreetMapPoisDir" value="${importer.openstreetmap.pois.dir}"/>
-		<property name="geonamesZipCodeDir" value="${importer.geoname.zipcode.dir}"/>
+		<property name="geonamesZipCodeDir" value="${importer.geonames.zipcode.dir}"/>
+		<property name="quattroshapesDir" value="${importer.quattroshapes.dir}"/>
 		
 		<property name="geonamesDownloadURL" value="${importer.geonames.downloadURL}"/>
 		<property name="geonamesZipCodeDownloadURL" value="${importer.geonames.zipcode.downloadURL}"/>
@@ -284,6 +296,8 @@
 		<property name="openStreetMapHouseNumberFilesToDownload" value="${importer.openstreetmapHouseNumberFilesToDownload}"/>
 		<property name="openStreetMapCitiesFilesToDownload" value="${importer.openStreetMapCitiesFilesToDownload}"/>
 		<property name="openStreetMapPoisFilesToDownload" value="${importer.openStreetMapPoisFilesToDownload}"/>
+		<property name="quattroshapesFilesToDownload" value="${importer.quattroshapesFilesToDownload}"/>
+		
 		
 		<property name="adm1FileName" value="${importerConfig.adm1FileName}"/>
 		<property name="adm2FileName" value="${importerConfig.adm2FileName}"/>
@@ -296,10 +310,12 @@
 		<property name="openstreetMaphouseNumbersDownloadURL" value="${importer.openstreetmap.housenumbers.downloadURL}"/>
 		<property name="openstreetMapCitiesDownloadURL" value="${importer.openstreetmap.cities.downloadURL}"/>
 		<property name="openstreetMapPoisDownloadURL" value="${importer.openstreetmap.pois.downloadURL}"/>
+		<property name="quattroshapesDownloadURL" value="${importer.quattroshapes.downloadURL}"/>
 		
 		<property name="geonamesImporterEnabled" value="${importer.geonames.enabled}"/>
 		<property name="openstreetmapImporterEnabled" value="${importer.openstreetmap.enabled}"/>
 		<property name="openstreetmapHouseNumberImporterEnabled" value="${importer.openstreetmap.housenumber.enabled}"/>
+		<property name="quattroshapesImporterEnabled" value="${importer.openstreetmap.housenumber.enabled}"/>
 		<property name="alternateNameFeaturesFileName" value="${importerConfig.alternateNameFeaturesFileName}"/>
 		<property name="alternateNameAdm1FileName" value="${importerConfig.alternateNameAdm1FileName}"/>
 		<property name="alternateNameAdm2FileName" value="${importerConfig.alternateNameAdm2FileName}"/>

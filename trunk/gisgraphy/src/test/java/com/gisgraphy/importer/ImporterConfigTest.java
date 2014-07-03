@@ -79,6 +79,18 @@ public class ImporterConfigTest {
 		importerConfig.setGeonamesDir(filePath);
 		assertFalse(importerConfig.isGeonamesDownloadDirectoryAccessible());
 	}
+	
+	@Test
+	public void isQuattroshapesDirectoryAccessible() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setQuattroshapesDir(accessiblePath);
+		assertTrue(importerConfig.isQuattroshapesDirectoryAccessible());
+
+		importerConfig.setQuattroshapesDir(pathNotAccessible);
+		assertFalse(importerConfig.isQuattroshapesDirectoryAccessible());
+		importerConfig.setQuattroshapesDir(filePath);
+		assertFalse(importerConfig.isQuattroshapesDirectoryAccessible());
+	}
 
 	@Test
 	public void setOpenStreetMapImporterShouldDisableHouseNumber() {
@@ -163,11 +175,20 @@ public class ImporterConfigTest {
 
 	@Test
 	public void setOpenStreetMapDirShouldAddFileSeparatorIfItDoesnTEndsWithFileSeparator() {
-		String OpenStreetMapDir = "Test";
+		String openStreetMapDir = "Test";
 		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setOpenStreetMapDir(OpenStreetMapDir);
+		importerConfig.setOpenStreetMapDir(openStreetMapDir);
 		Assert.assertTrue("setOpenStreetMapDir should add File separator", importerConfig.getOpenStreetMapDir().endsWith(File.separator));
-		Assert.assertEquals(OpenStreetMapDir + File.separator, importerConfig.getOpenStreetMapDir());
+		Assert.assertEquals(openStreetMapDir + File.separator, importerConfig.getOpenStreetMapDir());
+	}
+	
+	@Test
+	public void setQuattroshapesDirShouldAddFileSeparatorIfItDoesnTEndsWithFileSeparator() {
+		String quattroshapes = "Test";
+		ImporterConfig importerConfig = new ImporterConfig();
+		importerConfig.setQuattroshapesDir(quattroshapes);
+		Assert.assertTrue("setQuattroshapesDir should add File separator", importerConfig.getQuattroshapesDir().endsWith(File.separator));
+		Assert.assertEquals(quattroshapes + File.separator, importerConfig.getQuattroshapesDir());
 	}
 	
 	@Test
@@ -211,6 +232,12 @@ public class ImporterConfigTest {
 		ImporterConfig importerConfig = new ImporterConfig();
 		Assert.assertTrue("Geonames importer should be enabled by default ", importerConfig.isGeonamesImporterEnabled());
 	}
+	
+	@Test
+	public void isQuattroshapeImporterShouldBeTrueByDefault() {
+		ImporterConfig importerConfig = new ImporterConfig();
+		Assert.assertTrue("Quattroshapes importer should be enabled by default ", importerConfig.isQuattroshapesImporterEnabled());
+	}
 
 	@Test
 	public void isOpenstreetmapImporterShouldBeTrueByDefault() {
@@ -224,6 +251,7 @@ public class ImporterConfigTest {
 		//set Correct values
 		importerConfig.setGeonamesDir(accessiblePath);
 		importerConfig.setOpenStreetMapDir(accessiblePath);
+		importerConfig.setQuattroshapesDir(accessiblePath);
 		importerConfig.setAcceptRegExString(ImporterConfig.ACCEPT_ALL_REGEX_OPTION);
 		//test with wrong geonamesDir
 		importerConfig.setGeonamesDir(pathNotAccessible);
@@ -245,6 +273,12 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapPoisDir(pathNotAccessible);
 		Assert.assertFalse("when openstreetmap Poi dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
 		importerConfig.setOpenStreetMapPoisDir(accessiblePath);
+		
+		//test with wrong quattroshapesDir
+		importerConfig.setQuattroshapesDir(pathNotAccessible);
+		Assert.assertFalse("when QuattroshapesDir dir is not ok the function should return false", importerConfig.isConfigCorrectForImport());
+		importerConfig.setQuattroshapesDir(accessiblePath);
+		
 		//test with wrong regexp
 		importerConfig.setAcceptRegExString("k[;l");
 		Assert.assertFalse("when regexp string is not ok the function should return false", importerConfig.isConfigCorrectForImport());
@@ -265,6 +299,7 @@ public class ImporterConfigTest {
 		importerConfig.setOpenstreetMapCitiesDownloadURL(baseUrl+"/cities/");
 		importerConfig.setOpenstreetMapPoisDownloadURL(baseUrl+"/pois/");
 		importerConfig.setOpenstreetMaphouseNumbersDownloadURL(baseUrl+"/housenumbers/");
+		importerConfig.setQuattroshapesDownloadURL(baseUrl+"/quattroshapes/");
 		
 		assertTrue("when all the condition are ok the function should return true when retrieve files is true", importerConfig.isConfigCorrectForImport());
 		
@@ -293,6 +328,17 @@ public class ImporterConfigTest {
 	    Assert.assertEquals("FR.bz2", importerConfig.getOpenStreetMapFilesToDownload());
 	    importerConfig.setOpenStreetMapFilesToDownload(null);
 	    Assert.assertEquals(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getOpenStreetMapFilesToDownload());
+	}
+	
+	@Test
+	public void testSetQuattroshapesFilesToDownload(){
+	    ImporterConfig importerConfig = new ImporterConfig();
+	    importerConfig.setQuattroshapesFilesToDownload(" ");
+	    Assert.assertEquals(ImporterConfig.QUATTROSHAPES_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getQuattroshapesFilesToDownload());
+	    importerConfig.setQuattroshapesFilesToDownload("shapeXX.tar.bz2");
+	    Assert.assertEquals("shapeXX.tar.bz2", importerConfig.getQuattroshapesFilesToDownload());
+	    importerConfig.setQuattroshapesFilesToDownload(null);
+	    Assert.assertEquals(ImporterConfig.QUATTROSHAPES_DEFAULT_FILES_TO_DOWNLOAD, importerConfig.getQuattroshapesFilesToDownload());
 	}
 	
 	@Test

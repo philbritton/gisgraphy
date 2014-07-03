@@ -109,7 +109,7 @@ public class CityDao extends GenericGisDao<City> implements ICityDao {
 			if (countryCode!=null ){
 				queryString+=" and c.countryCode='"+countryCode+"'";
 			}
-			queryString = queryString+ " order by area(c.shape)";
+			queryString = queryString+ " order by st_area(c.shape)";
 			//we need to sort by distance due to error in osm data 
 			//eg : if we search for the nearest city of http://www.openstreetmap.org/way/27904415
 			// we can have 2 cities : http://www.openstreetmap.org/way/75509282 vs http://www.openstreetmap.org/relation/388250
