@@ -178,9 +178,6 @@
 		class="com.gisgraphy.importer.GeonamesZipCode${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
 	</bean>
 	
-	<bean id="geonamesZipCodeImporter"
-		class="com.gisgraphy.importer.GeonamesZipCode${classifier}Importer" parent="abstract${classifier}ImporterProcessor" >
-	</bean>
 
 	
  	 <bean id="importers" class="java.util.ArrayList">
@@ -192,8 +189,6 @@
 				<ref bean="openstreetmapFileRetriever" />
 				<ref bean="openStreetMapHouseNumberFileRetriever"/>
 				<ref bean="openStreetMapPoisFileRetriever"/>
-				<ref bean="quattroshapesFileRetriever"/>
-				<ref bean="quattroshapesSimpleImporter"/>
 				<ref bean="geonamesLanguageImporter" />
 				<ref bean="geonamesCountryImporter" />
 				<ref bean="geonamesAdmExtracter" />
@@ -206,6 +201,8 @@
 				<ref bean="geonamesAlternateNamesAdmImporter"/>
 				<ref bean="geonamesAlternateNamesImporter" />
 				<ref bean="openStreetMapCitiesSimpleImporter"/>
+				<ref bean="quattroshapesFileRetriever"/>
+				<ref bean="quattroshapesSimpleImporter"/>
 				<ref bean="geonamesZipCodeImporter" />
 				<ref bean="geonamesDatabaseIndexer" />
 				<ref bean="openStreetMapImporter"/>

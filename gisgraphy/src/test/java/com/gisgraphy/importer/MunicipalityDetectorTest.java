@@ -60,9 +60,9 @@ public class MunicipalityDetectorTest {
 		Assert.assertFalse(d.isMunicipality("FI", null, null, GISSource.GEONAMES));
 		Assert.assertFalse("Even if it is N, it should be osm feature",d.isMunicipality("FI", null, "N", GISSource.GEONAMES));
 		
-		Assert.assertFalse(d.isMunicipality("FI", null, null, GISSource.OSM));
-		Assert.assertTrue(d.isMunicipality("FI", null, "n", GISSource.OSM));
-		Assert.assertTrue(d.isMunicipality("FI", null, "N", GISSource.OSM));
+		Assert.assertFalse(d.isMunicipality("PY", null, null, GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("PY", null, "n", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("PY", null, "N", GISSource.OSM));
 		
 		//R_AND_N_CITY_VILLAGE_TOWN
 		//R
@@ -90,14 +90,14 @@ public class MunicipalityDetectorTest {
 		Assert.assertTrue(d.isMunicipality("SK", "ToWn", "W", GISSource.OSM));
 		Assert.assertFalse("not a N",d.isMunicipality("TR", "CiTy", "R", GISSource.OSM));
 		
-		//N_CITY_VILLAGE_TOWN
-		Assert.assertFalse("Geonames should be ignore",d.isMunicipality("CO", "CiTy", "N", GISSource.GEONAMES));
-		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("CO", null, "N", GISSource.OSM));
-		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("CO", "foo", "N", GISSource.OSM));
-		Assert.assertTrue(d.isMunicipality("CO", "CiTy", "N", GISSource.OSM));
-		Assert.assertFalse(d.isMunicipality("CO", "ViLLaGe", "N", GISSource.OSM));
-		Assert.assertFalse("not a N",d.isMunicipality("CO", "ToWn", "W", GISSource.OSM));
-		Assert.assertFalse("not a N",d.isMunicipality("CO", "CiTy", "R", GISSource.OSM));
+		//N_CITY_TOWN
+		Assert.assertFalse("Geonames should be ignore",d.isMunicipality("TW", "CiTy", "N", GISSource.GEONAMES));
+		Assert.assertFalse("null type is not city,village,town",d.isMunicipality("TW", null, "N", GISSource.OSM));
+		Assert.assertFalse("foo type is not city,village,town",d.isMunicipality("TW", "foo", "N", GISSource.OSM));
+		Assert.assertTrue(d.isMunicipality("TW", "CiTy", "N", GISSource.OSM));
+		Assert.assertFalse(d.isMunicipality("TW", "ViLLaGe", "N", GISSource.OSM));
+		Assert.assertFalse("not a N",d.isMunicipality("TW", "ToWn", "W", GISSource.OSM));
+		Assert.assertFalse("not a N",d.isMunicipality("TW", "CiTy", "R", GISSource.OSM));
 		
 		
 	}
