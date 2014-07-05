@@ -323,6 +323,11 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
 	}
     }
 
+    /**
+     * Method called when there is an exception. 
+     * the teardown method will be call after this
+     * @param e
+     */
     protected void processError(Exception e) {
 	this.status = ImporterStatus.ERROR;
 	this.statusMessage = "An error occurred when processing "
@@ -445,8 +450,12 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
 	}
     }
     
+    /**
+     * hook to do when the file has been processed without error
+     * @param file
+     */
     protected void onFileProcessed(File file){
-    	//do nothing
+    	currentFile.renameTo(new File(currentFile.getName()+".done"));
     }
 
     protected void commit() {
