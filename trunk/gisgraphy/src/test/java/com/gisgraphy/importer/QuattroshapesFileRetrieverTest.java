@@ -118,7 +118,7 @@ public class QuattroshapesFileRetrieverTest {
 	    	QuattroshapesFileRetriever quattroshapesFileRetriever = new QuattroshapesFileRetriever();
 		quattroshapesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setQuattroshapesDownloadURL("http://dl.gisgraphy.com/quattroshapes");
+		importerConfig.setQuattroshapesDownloadURL("http://download.gisgraphy.com/quattroshapes");
 		
 		// create a temporary directory to download files
 		File tempDir = FileHelper.createTempDir(this.getClass()
@@ -193,7 +193,7 @@ public class QuattroshapesFileRetrieverTest {
 	    	QuattroshapesFileRetriever quattroshapeFileRetriever = new QuattroshapesFileRetriever();
 	    quattroshapeFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setQuattroshapesDownloadURL("http://dl.gisgraphy.com/quattroshapes");
+		importerConfig.setQuattroshapesDownloadURL("http://download.gisgraphy.com/quattroshapes");
 		
 		// create a temporary directory to download files
 		File tempDir = FileHelper.createTempDir(this.getClass()

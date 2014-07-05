@@ -293,7 +293,7 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
 		importerConfig.setGeonamesFilesToDownload(ImporterConfig.GEONAMES_DEFAULT_FILES_TO_DOWNLOAD);
 		
-		String baseUrl = "http://dl.gisgraphy.com";
+		String baseUrl = "http://download.gisgraphy.com";
 		importerConfig.setGeonamesDownloadURL("http://download.geonames.org/export/dump/");
 		importerConfig.setOpenstreetMapDownloadURL(baseUrl+"/streets/");
 		importerConfig.setOpenstreetMapCitiesDownloadURL(baseUrl+"/cities/");
