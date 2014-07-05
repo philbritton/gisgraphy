@@ -40,7 +40,7 @@ public class QuattroshapesFileRetrieverTest {
 		};
 		ImporterConfig importerConfig = new ImporterConfig();
 		List<String> filesToDownload =new ArrayList<String>();
-		String fileTobeDownload = "shape.test.tar.bz2";
+		String fileTobeDownload = "shapes.test.tar.bz2";
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setQuattroshapesFilesToDownload(fileTobeDownload);
 		importerConfig.setQuattroshapesImporterEnabled(true);
@@ -71,7 +71,7 @@ public class QuattroshapesFileRetrieverTest {
 		};
 		ImporterConfig importerConfig = new ImporterConfig();
 		List<String> filesToDownload =new ArrayList<String>();
-		String fileTobeDownload = "shape.test.tar.bz2";
+		String fileTobeDownload = "shapes.test.tar.bz2";
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setQuattroshapesImporterEnabled(true);
 		importerConfig.setRetrieveFiles(true);
@@ -102,7 +102,7 @@ public class QuattroshapesFileRetrieverTest {
 		};
 		ImporterConfig importerConfig = new ImporterConfig();
 		List<String> filesToDownload =new ArrayList<String>();
-		String fileTobeDownload = "shape.test.tar.bz2";
+		String fileTobeDownload = "shapes.test.tar.bz2";
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setQuattroshapesImporterEnabled(false);
 		importerConfig.setRetrieveFiles(true);
@@ -126,7 +126,7 @@ public class QuattroshapesFileRetrieverTest {
 
 		// get files to download
 		List<String> filesToDownload =new ArrayList<String>();
-		String fileTobeDownload = "shape.test.tar.bz2";
+		String fileTobeDownload = "shapes.test.tar.bz2";
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setQuattroshapesFilesToDownload(fileTobeDownload);
 		importerConfig.setRetrieveFiles(true);
@@ -271,26 +271,39 @@ public class QuattroshapesFileRetrieverTest {
 	    }
 	    
 	    @Test
-	    public void shouldBeSkipShouldReturnCorrectValue(){
-		ImporterConfig importerConfig = new ImporterConfig();
-		
-		QuattroshapesFileRetriever quattroshapesFileRetriever = new QuattroshapesFileRetriever();
-		quattroshapesFileRetriever.setImporterConfig(importerConfig);
-		
-		importerConfig.setQuattroshapesImporterEnabled(false);
-		Assert.assertTrue(quattroshapesFileRetriever.shouldBeSkipped());
+		public void shouldBeSkipped(){
+			QuattroshapesFileRetriever importer = new QuattroshapesFileRetriever();
+			ImporterConfig importerConfig = new ImporterConfig();
+			importerConfig.setGeonamesImporterEnabled(true);
+			importerConfig.setQuattroshapesImporterEnabled(true);
+			importer.setImporterConfig(importerConfig);
+			Assert.assertFalse(importer.shouldBeSkipped());
+			
+			importerConfig = new ImporterConfig();
+			importerConfig.setGeonamesImporterEnabled(true);
+			importerConfig.setQuattroshapesImporterEnabled(false);
+			importer.setImporterConfig(importerConfig);
+			Assert.assertTrue(importer.shouldBeSkipped());
+			
+			
+			importerConfig = new ImporterConfig();
+			importerConfig.setGeonamesImporterEnabled(false);
+			importerConfig.setQuattroshapesImporterEnabled(true);
+			importer.setImporterConfig(importerConfig);
+			Assert.assertTrue(importer.shouldBeSkipped());
+			
+			importerConfig = new ImporterConfig();
+			importerConfig.setGeonamesImporterEnabled(false);
+			importerConfig.setQuattroshapesImporterEnabled(false);
+			importer.setImporterConfig(importerConfig);
+			Assert.assertTrue(importer.shouldBeSkipped());
+		}
 
-		
-		importerConfig.setQuattroshapesImporterEnabled(true);
-		Assert.assertFalse(quattroshapesFileRetriever.shouldBeSkipped());
-		
-		
-	    }
 	    
 	    @Test
 	    public void getFilesToDownloadShouldReturnTheImporterConfigOption(){
 		ImporterConfig importerConfig = new ImporterConfig();
-		String fileTobeDownload = "shape.tar.bz2";
+		String fileTobeDownload = "shapes.tar.bz2";
 		List<String> filesToDownload =new ArrayList<String>();
 		filesToDownload.add(fileTobeDownload);
 		importerConfig.setQuattroshapesFilesToDownload(fileTobeDownload);

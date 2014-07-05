@@ -298,6 +298,20 @@ public class ImportConfirmAction extends ActionSupport {
 	public void setHousenumberImporterEnabled(boolean housenumberImporterEnabled) {
 		importerConfig.setOpenstreetmapHouseNumberImporterEnabled(housenumberImporterEnabled);
 	}
+	
+	/**
+	 * @return true if the quattroshapes importer is enabled
+	 */
+	public boolean isQuattroshapesImporterEnabled() {
+		return importerConfig.isQuattroshapesImporterEnabled();
+	}
+	
+	/**
+	 * Enable / Disable quattroshpaes importer
+	 */
+	public void setQuattroshapesImporterEnabled(boolean quattroshapesImporterEnabled) {
+		importerConfig.setQuattroshapesImporterEnabled(quattroshapesImporterEnabled);
+	}
 
 	/**
 	 * @param importerManager

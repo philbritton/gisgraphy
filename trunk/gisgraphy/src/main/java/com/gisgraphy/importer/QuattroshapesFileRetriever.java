@@ -95,7 +95,7 @@ public class QuattroshapesFileRetriever extends AbstractFileRetriever {
      */
     @Override
     public boolean shouldBeSkipped() {
-    	return !importerConfig.isQuattroshapesImporterEnabled();
+    	return !importerConfig.isQuattroshapesImporterEnabled() || !importerConfig.isGeonamesImporterEnabled();
     }
 
     /* (non-Javadoc)

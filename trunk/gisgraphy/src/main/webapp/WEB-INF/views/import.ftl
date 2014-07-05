@@ -226,7 +226,18 @@ goToStep(${step});
 						<div style="margin-left: 100px;" >
 						<@s.text name="import.houseNumbers"/> : <@s.radio name="housenumberImporterEnabled" value="%{housenumberImporterEnabled}" list="%{#@java.util.LinkedHashMap@{'true' : getText('global.yes'), 'false': getText('global.no')}}" id="disableHouseNumber" theme="simple"  onclick="checkOpenstreetMap()"/>
 							<!--<@s.checkbox value="%{housenumberImporterEnabled}" name="houseNumberImporterEnabled" id="disableHouseNumber" theme="simple"/> <@s.text name="import.houseNumbers"/>-->
-						</div>
+					<br/><br/>
+					</div>
+					<@s.text name="import.dataset.status"><@s.param>Quattroshapes</@s.param></@s.text> &nbsp;:&nbsp;
+					<@s.if test="quattroshapesImporterEnabled">
+						<span class="ok"><@s.text name="import.enabled"/></span><br/><br/>
+					</@s.if>
+					<@s.else>
+						<span class="ko"><@s.text name="import.disabled"/></span><br/><br/>
+					</@s.else>
+						<div style="margin-left: 100px;" >
+						<@s.text name="import.quattroshapes"/> : <@s.radio name="quattroshapesImporterEnabled" value="%{quattroshapesImporterEnabled}" list="%{#@java.util.LinkedHashMap@{'true' : getText('global.yes'), 'false': getText('global.no')}}" id="disableQuattroshapes" theme="simple"  />
+					</div>
 					<br/>
 						
 						<br/><br/><br/><br/>
