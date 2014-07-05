@@ -36,6 +36,7 @@ import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.repository.ISolRSynchroniser;
+import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
 import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
@@ -79,7 +80,7 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
      */
     @Override
     protected int getNumberOfColumns() {
-	return 34;
+	return 2;
     }
 
     /* (non-Javadoc)
@@ -94,16 +95,14 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 	//
 	// Line table has the following fields :
 	// --------------------------------------------------- 
-	//28 : geonames id; 33 shape
+	//O : geonames id; 1 shape
 	//
 
-	if (fields.length < 34){
-		logger.warn("wrong number of fields for quattroshapes localities : "+fields.length);
-	}
+	checkNumberOfColumn(fields);
 	
 	//geonamesId
-	if (!isEmptyField(fields, 28, false)) {
-		geonamesId=fields[28].trim();
+	if (!isEmptyField(fields, 0, false)) {
+		geonamesId=fields[0].trim();
 		long geonamesIdAsLong;
 		try {
 			geonamesIdAsLong = Long.parseLong(geonamesId);
@@ -124,11 +123,12 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 		return;
 	}
 	
-	if(!isEmptyField(fields, 33, false)){
+	if(!isEmptyField(fields, 1, false)){
 		try {
-			Geometry shape = (Geometry) GeolocHelper.convertFromHEXEWKBToGeometry(fields[33]);
+			Geometry shape = (Geometry) GeolocHelper.convertFromHEXEWKBToGeometry(fields[1]);
 			gisFeature.setShape(shape);
 			if (gisFeature instanceof City){
+				gisFeature.setSource(GISSource.GEONAMES_QUATTRO);
 				((City) gisFeature).setMunicipality(true);//force to be a municipality.
 			}
 		    } catch (RuntimeException e) {
@@ -159,7 +159,7 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
     protected static String dumpFields(String[] fields) {
 	String result = "[";
 	for (int i=0;i<fields.length;i++) {
-		if (i==33){
+		if (i==1){
 			result= result+"THE_SHAPE;";
 		}else {
 	    result = result + fields[i] + ";";
@@ -182,7 +182,7 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
      */
     @Override
     public boolean shouldBeSkipped() {
-    	return !importerConfig.isQuattroshapesImporterEnabled();
+    	return !importerConfig.isQuattroshapesImporterEnabled() || !importerConfig.isGeonamesImporterEnabled();
     }
     
    

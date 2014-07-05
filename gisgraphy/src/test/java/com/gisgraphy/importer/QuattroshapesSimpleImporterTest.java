@@ -39,7 +39,7 @@ public class QuattroshapesSimpleImporterTest {
 	@Test
 	public void processData_GeonamesIdKO() {
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
-		String line ="\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\twrongID\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ";
+		String line ="wrongID\t ";
 		importer.processData(line);
 		
 	}
@@ -48,7 +48,7 @@ public class QuattroshapesSimpleImporterTest {
 	public void processData_GeonamesIdok_featureFound_no_shape() {
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
 		IGisFeatureDao gisFeatureDao = EasyMock.createMock(IGisFeatureDao.class);
-		String line ="\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t5\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ";
+		String line ="5\t ";
 		City city = new City();
 		EasyMock.expect(gisFeatureDao.getByFeatureId(5L)).andReturn(city);
 		EasyMock.replay(gisFeatureDao);
@@ -63,7 +63,7 @@ public class QuattroshapesSimpleImporterTest {
 	public void processData_GeonamesIdok_featureFound_shape() {
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
 		IGisFeatureDao gisFeatureDao = EasyMock.createMock(IGisFeatureDao.class);
-		String line ="\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t5\t\t\t\t\t010100000006C82291A0521E4054CC39B16BC64740\t\t\t\t\t\t\t\t\t\t\t ";
+		String line ="5\t010100000006C82291A0521E4054CC39B16BC64740";
 		City city = new City();
 		city.setFeatureId(1234L);
 		EasyMock.expect(gisFeatureDao.getByFeatureId(5L)).andReturn(city);
@@ -80,7 +80,7 @@ public class QuattroshapesSimpleImporterTest {
 	public void processData_GeonamesIdok_NofeatureFound() {
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
 		IGisFeatureDao gisFeatureDao = EasyMock.createMock(IGisFeatureDao.class);
-		String line ="\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t5\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t ";
+		String line ="5\t ";
 		City city = new City();
 		EasyMock.expect(gisFeatureDao.getByFeatureId(5L)).andReturn(null);
 		EasyMock.replay(gisFeatureDao);
@@ -95,7 +95,7 @@ public class QuattroshapesSimpleImporterTest {
 	public void processData_GeonamesIdok_featureFound_wrong_shape() {
 		QuattroshapesSimpleImporter importer = new QuattroshapesSimpleImporter();
 		IGisFeatureDao gisFeatureDao = EasyMock.createMock(IGisFeatureDao.class);
-		String line ="\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t5\t\t\t\t\tfoo\t\t\t\t\t\t\t\t\t\t\t ";
+		String line ="5\tfoo";
 		City city = new City();
 		EasyMock.expect(gisFeatureDao.getByFeatureId(5L)).andReturn(city);
 		EasyMock.replay(gisFeatureDao);
