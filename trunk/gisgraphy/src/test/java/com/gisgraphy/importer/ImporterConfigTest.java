@@ -44,6 +44,8 @@ import com.gisgraphy.test.GisgraphyTestHelper;
 
 public class ImporterConfigTest {
 
+	public static final String GISGRAPHY_DOWNLOAD_SERVER = "http://download.gisgraphy.com";
+	public static final String GISGRAPHY_DOWNLOAD_SERVER2 = "http://download.gisgraphy.com";
 	public static String accessiblePath;
 	public static String pathNotAccessible;
 	public static String filePath;
@@ -293,7 +295,7 @@ public class ImporterConfigTest {
 		importerConfig.setOpenStreetMapFilesToDownload(ImporterConfig.OPENSTREETMAP_DEFAULT_FILES_TO_DOWNLOAD);
 		importerConfig.setGeonamesFilesToDownload(ImporterConfig.GEONAMES_DEFAULT_FILES_TO_DOWNLOAD);
 		
-		String baseUrl = "http://download.gisgraphy.com";
+		String baseUrl = GISGRAPHY_DOWNLOAD_SERVER2;
 		importerConfig.setGeonamesDownloadURL("http://download.geonames.org/export/dump/");
 		importerConfig.setOpenstreetMapDownloadURL(baseUrl+"/streets/");
 		importerConfig.setOpenstreetMapCitiesDownloadURL(baseUrl+"/cities/");

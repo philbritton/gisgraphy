@@ -323,6 +323,8 @@
 		<property name="alternateNameAdm2FileName" value="${importerConfig.alternateNameAdm2FileName}"/>
 		<property name="alternateNameCountryFileName" value="${importerConfig.alternateNameCountryFileName}"/>
 		<property name="openStreetMapFillIsIn" value="${importerConfig.openstreetmap.fill.isin.field}"/>
+		<property name="renameFilesAfterProcessing" value="${importer.rename.files.after.processing}"/>
+		
 	</bean>
 	
 	<bean id="addressParser" class="${addressParser.class}">

@@ -455,7 +455,9 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
      * @param file
      */
     protected void onFileProcessed(File file){
-    	currentFile.renameTo(new File(currentFile.getName()+".done"));
+    	if (importerConfig.isRenameFilesAfterProcessing()){
+    		currentFile.renameTo(new File(currentFile.getName()+".done"));
+    	}
     }
 
     protected void commit() {
