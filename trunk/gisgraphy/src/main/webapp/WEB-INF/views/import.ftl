@@ -240,7 +240,7 @@ goToStep(${step});
 					</div>
 					<br/>
 						
-						<br/><br/><br/><br/>
+						<br/><br/>
 <div class="navigationtoolbar">
 <span class="prev"><input type="button" onclick="goToStep(3);" value="<@s.text name="global.prev.step" />" class="gotostep"/></span><span class="next"><input type="button"  onclick="goToStep(5);" value="<@s.text name="global.next.step" />" class="gotostep"/></span>
 </div>
