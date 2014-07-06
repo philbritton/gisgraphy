@@ -118,7 +118,7 @@ public class QuattroshapesFileRetrieverTest {
 	    	QuattroshapesFileRetriever quattroshapesFileRetriever = new QuattroshapesFileRetriever();
 		quattroshapesFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setQuattroshapesDownloadURL("http://download.gisgraphy.com/quattroshapes");
+		importerConfig.setQuattroshapesDownloadURL(ImporterConfigTest.GISGRAPHY_DOWNLOAD_SERVER2+"/quattroshapes");
 		
 		// create a temporary directory to download files
 		File tempDir = FileHelper.createTempDir(this.getClass()
@@ -193,7 +193,7 @@ public class QuattroshapesFileRetrieverTest {
 	    	QuattroshapesFileRetriever quattroshapeFileRetriever = new QuattroshapesFileRetriever();
 	    quattroshapeFileRetriever.setInternationalisationService(createMockInternationalisationService());
 		ImporterConfig importerConfig = new ImporterConfig();
-		importerConfig.setQuattroshapesDownloadURL("http://download.gisgraphy.com/quattroshapes");
+		importerConfig.setQuattroshapesDownloadURL(ImporterConfigTest.GISGRAPHY_DOWNLOAD_SERVER+"/quattroshapes");
 		
 		// create a temporary directory to download files
 		File tempDir = FileHelper.createTempDir(this.getClass()
@@ -257,6 +257,7 @@ public class QuattroshapesFileRetrieverTest {
 		ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
 		EasyMock.expect(importerConfig.isRetrieveFiles()).andReturn(true).times(2);
 		EasyMock.expect(importerConfig.isQuattroshapesImporterEnabled()).andReturn(true);
+		EasyMock.expect(importerConfig.isGeonamesImporterEnabled()).andReturn(true);
 		//EasyMock.expect(importerConfig.getGeonamesDownloadFilesListFromOption()).andStubReturn(new ArrayList<String>());
 		EasyMock.expect(importerConfig.getQuattroshapesDir()).andStubReturn("");
 		EasyMock.expect(importerConfig.getQuattroshapesDownloadURL()).andStubReturn("");

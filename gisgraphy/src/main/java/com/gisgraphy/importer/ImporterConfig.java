@@ -122,6 +122,8 @@ public class ImporterConfig {
     public final static String OPENSTREETAMP_COMPRESSED_FILE_EXTENSION=".tar.bz2";
     
     public final static String GEONAMES_DEFAULT_FILES_TO_DOWNLOAD = "allCountries.zip"+OPTION_SEPARATOR+GEONAMES_ALTERNATENAME_ZIP_FILE;
+    
+    
 
     /**
      * Default option if the Adm1 file has already been processed
@@ -249,6 +251,8 @@ public class ImporterConfig {
     private String alternateNameAdm2FileName;
 
     private String alternateNameCountryFileName;
+    
+    private boolean renameFilesAfterProcessing = false;
     
     
     /*
@@ -1762,5 +1766,14 @@ public class ImporterConfig {
     	this.openStreetMapFillIsIn = openStreetMapFillIsIn;
     	CommentedProperties.editPropertyFromClassPathRessource(PROPERTIES_CONFIG_FILE_CLASSPATH, OPENSTREETMAP_FILL_ISIN_FIELD_NAME, String.valueOf(openStreetMapFillIsIn));
     }
+
+
+	public boolean isRenameFilesAfterProcessing() {
+		return renameFilesAfterProcessing;
+	}
+
+	public void setRenameFilesAfterProcessing(boolean renameFilesAfterProcessing) {
+		this.renameFilesAfterProcessing = renameFilesAfterProcessing;
+	}
 
 }
