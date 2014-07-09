@@ -1,4 +1,18 @@
 <h1>Quick start</h1>
+
+<h2>Yet an other Geocoder ?</h2>
+<p>
+
+<b>Yest but No :) Gisgraphy has a different philosophy : An Address is not a string !</b>
+
+After more than 7 years of doing geocoding, that's the conclusion : An address is not a string ! it is tha cardinality of all of their possible names of the different parts :
+'3355 S Las Vegas Blvd, Las Vegas ' and 'the venitian, the strip NV 89109 USA' is the same address but there is no common word between the two addresses
+
+Gisgraphy has its own importer and mix the bests open source gazeteers / databases : <a href="http://wiki.openstreetmap.org" target="gisgraphy">Openstreetmap</a> of course, but also <a href="http://www.geonames.org">Geonames</a> and <a href="http://quattroshapes.com/" target="gisgraphy">Quattroshapes</a>, and it transform them into an address and Poi databases. it links each house to their streets, each streets to their city / zipcodes, and each city to their administrative divisions. and all of them are associated to alternate their names.
+
+Gisgraphy has a different philosophy than the other geocoder. it use a fulltext engine but it use an <a href="/documentation/addressparser.htm">address parser</a> to separate the several parts of the address, then it is simpler to do geocoding and remove ambiguity : streets that have city names, unit informations that can disturb the fulltext search , house numbers that looks like zipcodes,... to have better relevance it use the shapes when possible, it avoid to put a street in a city that its center is closer than the center of the city it belongs. ...<a href="/documentation/relevance-and-performance.htm">Read more</a>
+</p>
+
 <p>
 You want to go a little bit further ? First if you haven't read it yet, please read a short webservices descriptions on the <a href="/">The home page</a> or consult the <a href="#functionalitiesmatrix">webservice functionalities matrix</a>. It will give you a good overview.
 Then you will find here several sections that will help you to start.
