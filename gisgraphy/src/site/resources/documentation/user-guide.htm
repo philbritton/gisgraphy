@@ -157,11 +157,11 @@ This documentation is for the last version of gisgraphy (snapshots, nightly buil
 <h3>About</h3>
  Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices.
   Because geocoding is nothing without data, it provides an easy to use importer that will automagically download and import the necessary 
-  (free) data to your local database (<a href="http://www.geonames.org/" target="_blank">Geonames</a> and <a href="www.openstreetmap.org" target="_blank">OpenStreetMap</a> : >100 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a gisgraphy client...<a href="/documentation/quick-start.htm">read more</a>
+  (free) data to your local database (<a href="www.openstreetmap.org" target="gisgraphy">OpenStreetMap</a>, <a href="http://www.geonames.org/" target="gisgraphy">Geonames</a> and <a href="http://quattroshapes.com" target="gisgraphy">Quattroshapes</a> : more than 100 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a gisgraphy client...Gisgraphy is a framework. As a result it's flexible and powerful enough to be used in a lot of different use cases<a href="/documentation/quick-start.htm">read more</a>
  Here are the main functionalities  :
 <ul>
 <li> Importers from geonames CSV files. Just give the country(ies) you wish to import and / or the <a href="/placetype.htm">placetypes</a>, and Gisgraphy download the files  and import them with all the alternateNames (optional), and sync the database with the fulltext search engine</li>
-<li> Importers for Openstreetmap data in csv format (view <a href="http://www.gisgraphy.com/download/download_data.htm"> data</a>)
+<li> Importers for Openstreetmap and quattroshapes data in csv format (view <a href="http://www.gisgraphy.com/download/download_data.htm"> data</a>)
 <li> WorldWide geocoding / worldWide reverse geocoding / street search WebServices;
 <li> REST WebService</li>
 <li> Several output formats supported : XML, json, PHP, ruby, python, Atom, RSS / GeoRSS, YAML  </li>
@@ -1236,7 +1236,7 @@ Gisgraphy is designed to allow search with auto suggestion and auto completion :
 <ul>
 <li>To search for streets by entire name use the fulltext search (you can also specify GPS coordinate, and change the 'allwords required' option to esae the search).</li>
 <li>To do auto completion use the street webservice</li>
-<li>To do auto suggestion use SOLR directly (see this <a href="http://www.miximum.fr/methodes-et-outils/499-autocomplete-avec-solr">article</a> in french, or use google to <a href="http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=http%3A%2F%2Fwww.miximum.fr%2Fmethodes-et-outils%2F499-autocomplete-avec-solr">translate in english</a>, i will soon add some code in the <a href="http://www.gisgraphy.com/developer-guide.htm">developper zone</a>)</li>
+<li>To do auto suggestion use SOLR directly (see this <a href="http://www.miximum.fr/methodes-et-outils/499-autocomplete-avec-solr">article</a> in french, or use google to <a href="http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=http%3A%2F%2Fwww.miximum.fr%2Fmethodes-et-outils%2F499-autocomplete-avec-solr">translate in english</a>, I will soon add some code in the <a href="http://www.gisgraphy.com/developer-guide.htm">developper zone</a>)</li>
 </ul>
 
 <div class="tip yellowtip">
@@ -1457,7 +1457,7 @@ Streets are group by type. Here are the possible values :
 </ul>
 
 <div class="tip greentip">
-note that in v 3.0 the street type were different (they have been updated to reflect the openstreetmap evloution): 
+note that in v 3.0 the street type were different (they have been updated to reflect the openstreetmap evolution): 
 <ul>
 <li>BYWAY</li>
 <li>MINOR</li>
