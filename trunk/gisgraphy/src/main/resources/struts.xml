@@ -193,7 +193,12 @@
 
     <!-- Actions in this package will be prefixed with /admin/ -->
     <package name="admin" extends="default" namespace="/admin">
-   
+   		
+   		<action name="debugStreet" class="com.gisgraphy.webapp.action.DebugStreetAction">
+            <interceptor-ref name="adminCheck"/>
+            <result name="success" type="freemarker">/WEB-INF/views/debugStreet.ftl</result>
+        </action>
+   	
    		<action name="importconfirm" class="com.gisgraphy.webapp.action.ImportConfirmAction">
             <interceptor-ref name="adminCheck"/>
             <result name="success" type="freemarker">/WEB-INF/views/import.ftl</result>
