@@ -31,6 +31,7 @@
 					<#if result.feature_class?? && result.feature_code??><li><@s.text name="global.typeDescription"/> : <@s.text name="${result.feature_class}_${result.feature_code}"/></li></#if>
 					<li><@s.text name="global.name"/> : ${result.name}</li>
 					<li><@s.text name="global.FeatureId"/> : ${result.feature_id?c}</li>
+					<#if result.openstreetmap_id??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmap_id?c};<br/></#if>
 					<#if result.feature_class?? && result.feature_code??><li><@s.text name="global.FeatureClass"/> : ${result.feature_class}</li>
 					<li><@s.text name="global.FeatureCode"/> : ${result.feature_code}</li></#if>
 					<#if result.fully_qualified_name??><li><@s.text name="global.FullyQualifedName"/> : ${result.fully_qualified_name}</li></#if>

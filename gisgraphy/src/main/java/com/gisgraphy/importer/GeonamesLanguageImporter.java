@@ -104,6 +104,11 @@ public class GeonamesLanguageImporter extends AbstractSimpleImporterProcessor {
     	return false;
     }
     
+    @Override
+    protected void onFileProcessed(File file) {
+    	//we don't want to rename files so we overide the method
+    }
+    
     /*
      * (non-Javadoc)
      * 

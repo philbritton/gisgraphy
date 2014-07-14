@@ -297,13 +297,12 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
 		return;
 	    }
 	    for (int i = 0; i < filesToProcess.length; i++) {
-		currentFile = filesToProcess[i];
-		this.endOfDocument = false;
-		getBufferReader(filesToProcess[i]);
-		processFile();
-		closeBufferReader();
-		onFileProcessed(filesToProcess[i]);
-
+			currentFile = filesToProcess[i];
+			this.endOfDocument = false;
+			getBufferReader(filesToProcess[i]);
+			processFile();
+			closeBufferReader();
+			onFileProcessed(filesToProcess[i]);
 	    }
 	} catch (Exception e) {
 	    processError(e);
@@ -456,7 +455,7 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
      */
     protected void onFileProcessed(File file){
     	if (importerConfig.isRenameFilesAfterProcessing()){
-    		currentFile.renameTo(new File(currentFile.getName()+".done"));
+    		currentFile.renameTo(new File(currentFile.getAbsoluteFile()+".done"));
     	}
     }
 
