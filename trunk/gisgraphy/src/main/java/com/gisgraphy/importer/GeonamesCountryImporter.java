@@ -163,6 +163,11 @@ public class GeonamesCountryImporter extends AbstractSimpleImporterProcessor {
 
     }
     
+    @Override
+    protected void onFileProcessed(File file) {
+    	//we don't want to rename files so we overide the method
+    }
+    
     /* (non-Javadoc)
      * @see com.gisgraphy.domain.geoloc.importer.AbstractImporterProcessor#shouldBeSkiped()
      */

@@ -281,8 +281,13 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 				session.flush();
 				logger.info("will create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column");
 				String createIndexForShape = "CREATE INDEX "+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap ON openstreetmap USING GIST ("+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+")";  
-				Query qryUpdateFulltextField = session.createSQLQuery(createIndexForShape);
-				qryUpdateFulltextField.executeUpdate();
+				Query qryUpdateShapeIndex = session.createSQLQuery(createIndexForShape);
+				qryUpdateShapeIndex.executeUpdate();
+				
+				logger.info("will create GIST index for  the "+OpenStreetMap.LOCATION_COLUMN_NAME+" column");
+				String createIndexForLocation = "CREATE INDEX "+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap ON openstreetmap USING GIST ("+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+")";  
+				Query qryUpdateLocationIndex = session.createSQLQuery(createIndexForLocation);
+				qryUpdateLocationIndex.executeUpdate();
 				return null;
 			    }
 			});
