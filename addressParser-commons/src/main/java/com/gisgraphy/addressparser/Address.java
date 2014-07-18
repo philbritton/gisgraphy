@@ -33,62 +33,98 @@ import com.gisgraphy.addressparser.commons.GeocodingLevels;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Address implements Serializable {
 
+    /**
+	 * 
+	 */
 	private static final long serialVersionUID = 6185879035945582454L;
-	
-    private Long id;
+	//1
+	private Long id;
+	//2
     private Double lng;
+    //3
     private Double lat;
+    //4
     private String name;
+    //5
     private String recipientName;
-
+    //6
     private String houseNumber;
     /**
      * fractional number, bis, ter
      */
+    //7
     private String houseNumberInfo;
-
+    //8
     private String POBox;
+    //9
     private String POBoxInfo;
+    //10
     private String POBoxAgency;
 
     /**
      * for canada, and more
      */
+    //11
     private String civicNumberSuffix;
-
+    //12
     private String preDirection;
+    //13
     private String streetName;
+    //14
     private String streetType;
+    //15
     private String postDirection;
-
+    //16
     private String preDirectionIntersection;
+    //17
     private String streetNameIntersection;
+    //18
     private String StreetTypeIntersection;
+    //19
     private String postDirectionIntersection;
-
-    
+    //20
     private String extraInfo;
+    //21
     private String suiteType;
+    //22
     private String suiteNumber;
-    
+    //23
     private String floor;
+    //24
     private String quarter;
-
+    //25
     private String zipCode;
+    //26
     private String district;
+    //27
     private String dependentLocality;
+    //28
     private String city;
+    //29
     private String citySubdivision;
+    //30
     private String postTown;
+    //31
     private String state;
+    //32
     private String prefecture;//mainly for china
+    //33
     private String country;
+    //34
     private String countryCode;
+    //35
+    private String sector;
+    //36
+    private String quadrant;
+    //37
+    private String block;
+    //38
+    private String lote;
 
     private GeocodingLevels geocodingLevel = GeocodingLevels.NONE;
-    
+    //39
     private String confidence;
-    
+    //40
     private Double distance;
     
     public String getCountry() {
@@ -107,9 +143,7 @@ public class Address implements Serializable {
         this.countryCode = countryCode;
     }
 
-    private String sector;
-    private String quadrant;
-    private String block;
+  
 
     public Long getId() {
 	return id;
@@ -240,7 +274,7 @@ public class Address implements Serializable {
     public void setPrefecture(String prefecture) {
         this.prefecture = prefecture;
     }
-    
+
     public String getZipCode() {
 	return zipCode;
     }
@@ -445,41 +479,86 @@ public class Address implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((POBox == null) ? 0 : POBox.hashCode());
-		result = prime * result + ((POBoxAgency == null) ? 0 : POBoxAgency.hashCode());
-		result = prime * result + ((POBoxInfo == null) ? 0 : POBoxInfo.hashCode());
-		result = prime * result + ((PostOfficeBox == null) ? 0 : PostOfficeBox.hashCode());
-		result = prime * result + ((StreetTypeIntersection == null) ? 0 : StreetTypeIntersection.hashCode());
+		result = prime * result
+				+ ((POBoxAgency == null) ? 0 : POBoxAgency.hashCode());
+		result = prime * result
+				+ ((POBoxInfo == null) ? 0 : POBoxInfo.hashCode());
+		result = prime * result
+				+ ((PostOfficeBox == null) ? 0 : PostOfficeBox.hashCode());
+		result = prime
+				* result
+				+ ((StreetTypeIntersection == null) ? 0
+						: StreetTypeIntersection.hashCode());
 		result = prime * result + ((block == null) ? 0 : block.hashCode());
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result + ((civicNumberSuffix == null) ? 0 : civicNumberSuffix.hashCode());
+		result = prime * result
+				+ ((citySubdivision == null) ? 0 : citySubdivision.hashCode());
+		result = prime
+				* result
+				+ ((civicNumberSuffix == null) ? 0 : civicNumberSuffix
+						.hashCode());
+		result = prime * result
+				+ ((confidence == null) ? 0 : confidence.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + ((countryCode == null) ? 0 : countryCode.hashCode());
-		result = prime * result + ((dependentLocality == null) ? 0 : dependentLocality.hashCode());
-		result = prime * result + ((district == null) ? 0 : district.hashCode());
-		result = prime * result + ((extraInfo == null) ? 0 : extraInfo.hashCode());
+		result = prime * result
+				+ ((countryCode == null) ? 0 : countryCode.hashCode());
+		result = prime
+				* result
+				+ ((dependentLocality == null) ? 0 : dependentLocality
+						.hashCode());
+		result = prime * result
+				+ ((distance == null) ? 0 : distance.hashCode());
+		result = prime * result
+				+ ((district == null) ? 0 : district.hashCode());
+		result = prime * result
+				+ ((extraInfo == null) ? 0 : extraInfo.hashCode());
 		result = prime * result + ((floor == null) ? 0 : floor.hashCode());
-		result = prime * result + ((geocodingLevel == null) ? 0 : geocodingLevel.hashCode());
-		result = prime * result + ((houseNumber == null) ? 0 : houseNumber.hashCode());
-		result = prime * result + ((houseNumberInfo == null) ? 0 : houseNumberInfo.hashCode());
+		result = prime * result
+				+ ((geocodingLevel == null) ? 0 : geocodingLevel.hashCode());
+		result = prime * result
+				+ ((houseNumber == null) ? 0 : houseNumber.hashCode());
+		result = prime * result
+				+ ((houseNumberInfo == null) ? 0 : houseNumberInfo.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lat == null) ? 0 : lat.hashCode());
 		result = prime * result + ((lng == null) ? 0 : lng.hashCode());
+		result = prime * result + ((lote == null) ? 0 : lote.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((postDirection == null) ? 0 : postDirection.hashCode());
-		result = prime * result + ((postDirectionIntersection == null) ? 0 : postDirectionIntersection.hashCode());
-		result = prime * result + ((postTown == null) ? 0 : postTown.hashCode());
-		result = prime * result + ((preDirection == null) ? 0 : preDirection.hashCode());
-		result = prime * result + ((preDirectionIntersection == null) ? 0 : preDirectionIntersection.hashCode());
-		result = prime * result + ((quadrant == null) ? 0 : quadrant.hashCode());
+		result = prime * result
+				+ ((postDirection == null) ? 0 : postDirection.hashCode());
+		result = prime
+				* result
+				+ ((postDirectionIntersection == null) ? 0
+						: postDirectionIntersection.hashCode());
+		result = prime * result
+				+ ((postTown == null) ? 0 : postTown.hashCode());
+		result = prime * result
+				+ ((preDirection == null) ? 0 : preDirection.hashCode());
+		result = prime
+				* result
+				+ ((preDirectionIntersection == null) ? 0
+						: preDirectionIntersection.hashCode());
+		result = prime * result
+				+ ((prefecture == null) ? 0 : prefecture.hashCode());
+		result = prime * result
+				+ ((quadrant == null) ? 0 : quadrant.hashCode());
 		result = prime * result + ((quarter == null) ? 0 : quarter.hashCode());
-		result = prime * result + ((recipientName == null) ? 0 : recipientName.hashCode());
+		result = prime * result
+				+ ((recipientName == null) ? 0 : recipientName.hashCode());
 		result = prime * result + ((sector == null) ? 0 : sector.hashCode());
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((streetName == null) ? 0 : streetName.hashCode());
-		result = prime * result + ((streetNameIntersection == null) ? 0 : streetNameIntersection.hashCode());
-		result = prime * result + ((streetType == null) ? 0 : streetType.hashCode());
-		result = prime * result + ((suiteNumber == null) ? 0 : suiteNumber.hashCode());
-		result = prime * result + ((suiteType == null) ? 0 : suiteType.hashCode());
+		result = prime * result
+				+ ((streetName == null) ? 0 : streetName.hashCode());
+		result = prime
+				* result
+				+ ((streetNameIntersection == null) ? 0
+						: streetNameIntersection.hashCode());
+		result = prime * result
+				+ ((streetType == null) ? 0 : streetType.hashCode());
+		result = prime * result
+				+ ((suiteNumber == null) ? 0 : suiteNumber.hashCode());
+		result = prime * result
+				+ ((suiteType == null) ? 0 : suiteType.hashCode());
 		result = prime * result + ((zipCode == null) ? 0 : zipCode.hashCode());
 		return result;
 	}
@@ -528,10 +607,20 @@ public class Address implements Serializable {
 				return false;
 		} else if (!city.equals(other.city))
 			return false;
+		if (citySubdivision == null) {
+			if (other.citySubdivision != null)
+				return false;
+		} else if (!citySubdivision.equals(other.citySubdivision))
+			return false;
 		if (civicNumberSuffix == null) {
 			if (other.civicNumberSuffix != null)
 				return false;
 		} else if (!civicNumberSuffix.equals(other.civicNumberSuffix))
+			return false;
+		if (confidence == null) {
+			if (other.confidence != null)
+				return false;
+		} else if (!confidence.equals(other.confidence))
 			return false;
 		if (country == null) {
 			if (other.country != null)
@@ -590,6 +679,11 @@ public class Address implements Serializable {
 				return false;
 		} else if (!lng.equals(other.lng))
 			return false;
+		if (lote == null) {
+			if (other.lote != null)
+				return false;
+		} else if (!lote.equals(other.lote))
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -603,7 +697,8 @@ public class Address implements Serializable {
 		if (postDirectionIntersection == null) {
 			if (other.postDirectionIntersection != null)
 				return false;
-		} else if (!postDirectionIntersection.equals(other.postDirectionIntersection))
+		} else if (!postDirectionIntersection
+				.equals(other.postDirectionIntersection))
 			return false;
 		if (postTown == null) {
 			if (other.postTown != null)
@@ -618,7 +713,13 @@ public class Address implements Serializable {
 		if (preDirectionIntersection == null) {
 			if (other.preDirectionIntersection != null)
 				return false;
-		} else if (!preDirectionIntersection.equals(other.preDirectionIntersection))
+		} else if (!preDirectionIntersection
+				.equals(other.preDirectionIntersection))
+			return false;
+		if (prefecture == null) {
+			if (other.prefecture != null)
+				return false;
+		} else if (!prefecture.equals(other.prefecture))
 			return false;
 		if (quadrant == null) {
 			if (other.quadrant != null)
@@ -678,203 +779,222 @@ public class Address implements Serializable {
 		return true;
 	}
 
-    @Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Address [");
-		if (id != null) {
-			builder.append("id=");
-			builder.append(id);
-			builder.append(", ");
-		}
-		if (lng != null) {
-			builder.append("lng=");
-			builder.append(lng);
-			builder.append(", ");
-		}
-		if (lat != null) {
-			builder.append("lat=");
-			builder.append(lat);
-			builder.append(", ");
-		}
-		if (name != null) {
-			builder.append("name=");
-			builder.append(name);
-			builder.append(", ");
-		}
-		if (recipientName != null) {
-			builder.append("recipientName=");
-			builder.append(recipientName);
-			builder.append(", ");
-		}
-		if (extraInfo != null) {
-			builder.append("extraInfo=");
-			builder.append(extraInfo);
-			builder.append(", ");
-		}
-		if (suiteType != null) {
-			builder.append("suiteType=");
-			builder.append(suiteType);
-			builder.append(", ");
-		}
-		if (suiteNumber != null) {
-			builder.append("suiteNumber=");
-			builder.append(suiteNumber);
-			builder.append(", ");
-		}
-		if (floor != null) {
-			builder.append("floor=");
-			builder.append(floor);
-			builder.append(", ");
-		}
-		if (houseNumber != null) {
-			builder.append("houseNumber=");
-			builder.append(houseNumber);
-			builder.append(", ");
-		}
-		if (houseNumberInfo != null) {
-			builder.append("houseNumberInfo=");
-			builder.append(houseNumberInfo);
-			builder.append(", ");
-		}
-		if (POBox != null) {
-			builder.append("POBox=");
-			builder.append(POBox);
-			builder.append(", ");
-		}
-		if (POBoxInfo != null) {
-			builder.append("POBoxInfo=");
-			builder.append(POBoxInfo);
-			builder.append(", ");
-		}
-		if (POBoxAgency != null) {
-			builder.append("POBoxAgency=");
-			builder.append(POBoxAgency);
-			builder.append(", ");
-		}
-		if (civicNumberSuffix != null) {
-			builder.append("civicNumberSuffix=");
-			builder.append(civicNumberSuffix);
-			builder.append(", ");
-		}
-		if (preDirection != null) {
-			builder.append("preDirection=");
-			builder.append(preDirection);
-			builder.append(", ");
-		}
-		if (streetName != null) {
-			builder.append("streetName=");
-			builder.append(streetName);
-			builder.append(", ");
-		}
-		if (streetType != null) {
-			builder.append("streetType=");
-			builder.append(streetType);
-			builder.append(", ");
-		}
-		if (postDirection != null) {
-			builder.append("postDirection=");
-			builder.append(postDirection);
-			builder.append(", ");
-		}
-		if (preDirectionIntersection != null) {
-			builder.append("preDirectionIntersection=");
-			builder.append(preDirectionIntersection);
-			builder.append(", ");
-		}
-		if (streetNameIntersection != null) {
-			builder.append("streetNameIntersection=");
-			builder.append(streetNameIntersection);
-			builder.append(", ");
-		}
-		if (StreetTypeIntersection != null) {
-			builder.append("StreetTypeIntersection=");
-			builder.append(StreetTypeIntersection);
-			builder.append(", ");
-		}
-		if (postDirectionIntersection != null) {
-			builder.append("postDirectionIntersection=");
-			builder.append(postDirectionIntersection);
-			builder.append(", ");
-		}
-		
-		if (quarter != null) {
-			builder.append("quarter=");
-			builder.append(quarter);
-			builder.append(", ");
-		}
-		if (zipCode != null) {
-			builder.append("zipCode=");
-			builder.append(zipCode);
-			builder.append(", ");
-		}
-		if (district != null) {
-			builder.append("district=");
-			builder.append(district);
-			builder.append(", ");
-		}
-		if (dependentLocality != null) {
-			builder.append("dependentLocality=");
-			builder.append(dependentLocality);
-			builder.append(", ");
-		}
-		if (city != null) {
-			builder.append("city=");
-			builder.append(city);
-			builder.append(", ");
-		}
-		if (postTown != null) {
-			builder.append("postTown=");
-			builder.append(postTown);
-			builder.append(", ");
-		}
-		if (state != null) {
-			builder.append("state=");
-			builder.append(state);
-			builder.append(", ");
-		}
-		if (country != null) {
-			builder.append("country=");
-			builder.append(country);
-			builder.append(", ");
-		}
-		if (countryCode != null) {
-			builder.append("countryCode=");
-			builder.append(countryCode);
-			builder.append(", ");
-		}
-		if (sector != null) {
-			builder.append("sector=");
-			builder.append(sector);
-			builder.append(", ");
-		}
-		if (quadrant != null) {
-			builder.append("quadrant=");
-			builder.append(quadrant);
-			builder.append(", ");
-		}
-		if (block != null) {
-			builder.append("block=");
-			builder.append(block);
-			builder.append(", ");
-		}
-		if (PostOfficeBox != null) {
-			builder.append("PostOfficeBox=");
-			builder.append(PostOfficeBox);
-			builder.append(", ");
-		}
-		if (getGeocodingLevel() != null) {
-			builder.append("geocodingLevel=");
-			builder.append(getGeocodingLevel());
-			builder.append(", ");
-		}
-		if (confidence!= null) {
-			builder.append("confidence=");
-			builder.append(confidence);
-		}
-		builder.append("]");
-		return builder.toString();
+   @Override
+public String toString() {
+	StringBuilder builder = new StringBuilder();
+	builder.append("Address [");
+	if (id != null) {
+		builder.append("id=");
+		builder.append(id);
+		builder.append(", ");
 	}
+	if (lng != null) {
+		builder.append("lng=");
+		builder.append(lng);
+		builder.append(", ");
+	}
+	if (lat != null) {
+		builder.append("lat=");
+		builder.append(lat);
+		builder.append(", ");
+	}
+	if (name != null) {
+		builder.append("name=");
+		builder.append(name);
+		builder.append(", ");
+	}
+	if (recipientName != null) {
+		builder.append("recipientName=");
+		builder.append(recipientName);
+		builder.append(", ");
+	}
+	if (houseNumber != null) {
+		builder.append("houseNumber=");
+		builder.append(houseNumber);
+		builder.append(", ");
+	}
+	if (houseNumberInfo != null) {
+		builder.append("houseNumberInfo=");
+		builder.append(houseNumberInfo);
+		builder.append(", ");
+	}
+	if (POBox != null) {
+		builder.append("POBox=");
+		builder.append(POBox);
+		builder.append(", ");
+	}
+	if (POBoxInfo != null) {
+		builder.append("POBoxInfo=");
+		builder.append(POBoxInfo);
+		builder.append(", ");
+	}
+	if (POBoxAgency != null) {
+		builder.append("POBoxAgency=");
+		builder.append(POBoxAgency);
+		builder.append(", ");
+	}
+	if (civicNumberSuffix != null) {
+		builder.append("civicNumberSuffix=");
+		builder.append(civicNumberSuffix);
+		builder.append(", ");
+	}
+	if (preDirection != null) {
+		builder.append("preDirection=");
+		builder.append(preDirection);
+		builder.append(", ");
+	}
+	if (streetName != null) {
+		builder.append("streetName=");
+		builder.append(streetName);
+		builder.append(", ");
+	}
+	if (streetType != null) {
+		builder.append("streetType=");
+		builder.append(streetType);
+		builder.append(", ");
+	}
+	if (postDirection != null) {
+		builder.append("postDirection=");
+		builder.append(postDirection);
+		builder.append(", ");
+	}
+	if (preDirectionIntersection != null) {
+		builder.append("preDirectionIntersection=");
+		builder.append(preDirectionIntersection);
+		builder.append(", ");
+	}
+	if (streetNameIntersection != null) {
+		builder.append("streetNameIntersection=");
+		builder.append(streetNameIntersection);
+		builder.append(", ");
+	}
+	if (StreetTypeIntersection != null) {
+		builder.append("StreetTypeIntersection=");
+		builder.append(StreetTypeIntersection);
+		builder.append(", ");
+	}
+	if (postDirectionIntersection != null) {
+		builder.append("postDirectionIntersection=");
+		builder.append(postDirectionIntersection);
+		builder.append(", ");
+	}
+	if (extraInfo != null) {
+		builder.append("extraInfo=");
+		builder.append(extraInfo);
+		builder.append(", ");
+	}
+	if (suiteType != null) {
+		builder.append("suiteType=");
+		builder.append(suiteType);
+		builder.append(", ");
+	}
+	if (suiteNumber != null) {
+		builder.append("suiteNumber=");
+		builder.append(suiteNumber);
+		builder.append(", ");
+	}
+	if (floor != null) {
+		builder.append("floor=");
+		builder.append(floor);
+		builder.append(", ");
+	}
+	if (quarter != null) {
+		builder.append("quarter=");
+		builder.append(quarter);
+		builder.append(", ");
+	}
+	if (zipCode != null) {
+		builder.append("zipCode=");
+		builder.append(zipCode);
+		builder.append(", ");
+	}
+	if (district != null) {
+		builder.append("district=");
+		builder.append(district);
+		builder.append(", ");
+	}
+	if (dependentLocality != null) {
+		builder.append("dependentLocality=");
+		builder.append(dependentLocality);
+		builder.append(", ");
+	}
+	if (city != null) {
+		builder.append("city=");
+		builder.append(city);
+		builder.append(", ");
+	}
+	if (citySubdivision != null) {
+		builder.append("citySubdivision=");
+		builder.append(citySubdivision);
+		builder.append(", ");
+	}
+	if (postTown != null) {
+		builder.append("postTown=");
+		builder.append(postTown);
+		builder.append(", ");
+	}
+	if (state != null) {
+		builder.append("state=");
+		builder.append(state);
+		builder.append(", ");
+	}
+	if (prefecture != null) {
+		builder.append("prefecture=");
+		builder.append(prefecture);
+		builder.append(", ");
+	}
+	if (country != null) {
+		builder.append("country=");
+		builder.append(country);
+		builder.append(", ");
+	}
+	if (countryCode != null) {
+		builder.append("countryCode=");
+		builder.append(countryCode);
+		builder.append(", ");
+	}
+	if (sector != null) {
+		builder.append("sector=");
+		builder.append(sector);
+		builder.append(", ");
+	}
+	if (quadrant != null) {
+		builder.append("quadrant=");
+		builder.append(quadrant);
+		builder.append(", ");
+	}
+	if (block != null) {
+		builder.append("block=");
+		builder.append(block);
+		builder.append(", ");
+	}
+	if (lote != null) {
+		builder.append("lote=");
+		builder.append(lote);
+		builder.append(", ");
+	}
+	if (geocodingLevel != null) {
+		builder.append("geocodingLevel=");
+		builder.append(getGeocodingLevel());
+		builder.append(", ");
+	}
+	if (confidence != null) {
+		builder.append("confidence=");
+		builder.append(confidence);
+		builder.append(", ");
+	}
+	if (distance != null) {
+		builder.append("distance=");
+		builder.append(distance);
+		builder.append(", ");
+	}
+	if (PostOfficeBox != null) {
+		builder.append("PostOfficeBox=");
+		builder.append(PostOfficeBox);
+	}
+	builder.append("]");
+	return builder.toString();
+}
 
 	public String getName() {
 		return name;
@@ -919,5 +1039,15 @@ public class Address implements Serializable {
 	public void setGeocodingLevel(GeocodingLevels geocodingLevel) {
 		this.geocodingLevel = geocodingLevel;
 	}
+
+	public String getLote() {
+		return lote;
+	}
+
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+
+
 
 }
