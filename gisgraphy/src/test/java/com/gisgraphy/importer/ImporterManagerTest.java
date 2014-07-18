@@ -58,10 +58,12 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.Adm;
 import com.gisgraphy.domain.geoloc.entity.AlternateName;
 import com.gisgraphy.domain.geoloc.entity.City;
+import com.gisgraphy.domain.geoloc.entity.CitySubdivision;
 import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.Forest;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.Language;
+import com.gisgraphy.domain.repository.GisFeatureDao;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.IAlternateNameDao;
 import com.gisgraphy.domain.repository.ICityDao;
@@ -144,7 +146,7 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
     private IAdmDao admDao;
 
     private ICityDao cityDao;
-
+    
     private IGisFeatureDao gisFeatureDao;
 
     private ILanguageDao languageDao;
@@ -1559,7 +1561,8 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 
 	// check zipcode
 	// city without zipCode
-	City cityWithNoZipCode = this.cityDao.getByFeatureId(0000001L);
+	GisFeature cityWithNoZipCode = this.gisFeatureDao.getByFeatureId(0000001L);
+	Assert.assertTrue("because the city got number in it it should be considered as city subdivision",cityWithNoZipCode instanceof CitySubdivision);
 	assertNotNull("the city with no zip code should not be null",
 		cityWithNoZipCode);
 	assertTrue("city with FeatureId 0000001 should not have zipcode",

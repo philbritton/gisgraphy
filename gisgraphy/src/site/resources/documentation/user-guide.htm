@@ -391,6 +391,29 @@ importer.openstreetmap.enabled=false
 </div>
 <br/><br/>
 
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmap.housenumber.enabled</h4>
+Wether the importers related to house numbers Openstreetmap will be processed. If 'true' the importers will be excuted. This option should be in lower case
+<br/>
+<div class="code">
+Examples : <br/>
+importer.openstreetmap.housenumber.enabled=true<br/>
+importer.openstreetmap.housenumber.enabled=false
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.quattroshapes.enabled</h4>
+Wether the importers related to Quattroshapes will be processed. If 'true' the importers will be excuted. This option should be in lower case
+<br/>
+<div class="code">
+Examples : <br/>
+importer.quattroshapes.enabled=true<br/>
+importer.quattroshapes.enabled=false
+</div>
+<br/><br/>
+
 <div align="right"><a href="#top">[top]</a></div>
 <h4>importerConfig.openstreetmap.fill.isin.field</h4>
 Wether we search for the nearest city in geonames data to fill the is_in field. This increase the time of the importer but <b>strongly increase the relevance of the geocoder</b>. Default to true.
@@ -420,6 +443,74 @@ importer.geonames.downloadURL=http://download.geonames.org/export/dump/
 Don't forget the ending slash !
 </div>
 <br/><br/>
+
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmap.downloadURL</h4>
+This option determines the URL of the server to download the OpenStreetMap files to be processed (typically, the <a href="http://download.gisgraphy.com/">Gisgraphy download server</a>). This option is case sensitive.
+<div class="code">
+Example : <br/>
+importer.openstreetmap.downloadURL=http://download.gisgraphy.com/openstreetmap/
+</div>
+<br/><br/>
+<div class="tip yellowtip">
+Don't forget the ending slash !
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmap.housenumbers.downloadURL</h4>
+This option determines the URL of the server to download the house numbers OpenStreetMap files to be processed (typically, the <a href="http://download.gisgraphy.com/">Gisgraphy download server</a>). This option is case sensitive.
+<div class="code">
+Example : <br/>
+importer.openstreetmap.downloadURL=http://download.gisgraphy.com/openstreetmap/housenumbers/
+</div>
+<br/><br/>
+<div class="tip yellowtip">
+Don't forget the ending slash !
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmap.cities.downloadURL</h4>
+This option determines the URL of the server to download the cities OpenStreetMap files to be processed (typically, the <a href="http://download.gisgraphy.com/">Gisgraphy download server</a>). This option is case sensitive.
+<div class="code">
+Example : <br/>
+importer.openstreetmap.cities.downloadURL=http://download.gisgraphy.com/openstreetmap/cities/
+</div>
+<br/><br/>
+<div class="tip yellowtip">
+Don't forget the ending slash !
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmap.pois.downloadURL</h4>
+This option determines the URL of the server to download the POIs (point of interest) OpenStreetMap files to be processed (typically, the <a href="http://download.gisgraphy.com/">Gisgraphy download server</a>). This option is case sensitive.
+<div class="code">
+Example : <br/>
+importer.openstreetmap.pois.downloadURL=http://download.gisgraphy.com/openstreetmap/pois/
+</div>
+<br/><br/>
+<div class="tip yellowtip">
+Don't forget the ending slash !
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.quattroshapes.downloadURL</h4>
+This option determines the URL of the server to download the Quattroshapes files to be processed (typically, the <a href="http://download.gisgraphy.com/">Gisgraphy download server</a>). This option is case sensitive.
+<div class="code">
+Example : <br/>
+importer.quattroshapes.downloadURL=http://download.gisgraphy.com/quattroshapes/
+</div>
+<br/><br/>
+<div class="tip yellowtip">
+Don't forget the ending slash !
+</div>
+<br/><br/>
+
+
 <div align="right"><a href="#top">[top]</a></div>
 <h4>importer.geonames.zipcode.downloadURL</h4>
 This option determines the URL of the server to download the Geonames zipcode files to be processed (typically, the Geonames download server). This option is case sensitive.
@@ -434,18 +525,7 @@ Don't forget the ending slash !
 <br/><br/>
 
 
-<div align="right"><a href="#top">[top]</a></div>
-<h4>importer.openstreetmap.downloadURL</h4>
-This option determines the URL of the server to download the OpenStreetMap files to be processed (typically, the <a href="http://download.gisgraphy.com/openstreetmap/">Gisgraphy download server</a>). This option is case sensitive.
-<div class="code">
-Example : <br/>
-importer.openstreetmap.downloadURL=http://download.gisgraphy.com/openstreetmap/
-</div>
-<br/><br/>
-<div class="tip yellowtip">
-Don't forget the ending slash !
-</div>
-<br/><br/>
+
 <div align="right"><a href="#top">[top]</a></div>
 <h4>importer.geonamesfilesToDownload</h4>
 This option determines the files to be download from the <code>importer.geonames.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip) and alternateNames.zip. This option is case sensitive. If allCountries.txt file is in the <code>importer.geonames.dir</code> Directory, the other country files will be logically ignored.
@@ -466,12 +546,60 @@ importer.geonamesfilesToDownload=allCountries.zip<br/>
 
 <div align="right"><a href="#top">[top]</a></div>
 <h4>importer.openstreetmapfilesToDownload</h4>
-This option determines the files to be download from the <code>importer.openStreetMap.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip) and alternateNames.zip. This option is case sensitive. If allCountries.txt file is in the <code>importer.geonames.dir</code> Directory, the other countries files will be logically ignored.
+This option determines the files to be download from the <code>importer.openStreetMap.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip). This option is case sensitive. If allCountries.txt file is in the <code>importer.geonames.dir</code> Directory, the other countries files will be logically ignored.
 <br/>
 <div class="code">
 Examples : <br/>
 importer.openstreetmapfilesToDownload=AD.tar.bz2;CY.tar.bz2<br/>
 importer.openstreetmapfilesToDownload=allCountries.zip<br/>
+<br/>
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openstreetmapHouseNumberFilesToDownload</h4>
+This option determines the house numbers files to be download from the <code>importer.openstreetmap.housenumbers.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip). This option is case sensitive. If allCountries.txt file is in the <code>importer.openstreetmap.housenumbers.dir</code> Directory, the other countries files will be logically ignored.
+<br/>
+<div class="code">
+Examples : <br/>
+importer.openstreetmapHouseNumberFilesToDownload=AD.tar.bz2;CY.tar.bz2<br/>
+importer.openstreetmapHouseNumberFilesToDownload=allCountries.zip<br/>
+<br/>
+</div>
+<br/><br/>
+
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openStreetMapCitiesFilesToDownload</h4>
+This option determines the openstreetmap cities files to be download from the <code>importer.openstreetmap.cities.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip). This option is case sensitive. If allCountries.txt file is in the <code>importer.openStreetMapCitiesFilesToDownload</code> Directory, the other countries files will be logically ignored.
+<br/>
+<div class="code">
+Examples : <br/>
+importer.openStreetMapCitiesFilesToDownload=AD.tar.bz2;CY.tar.bz2<br/>
+importer.openStreetMapCitiesFilesToDownload=allCountries.zip<br/>
+<br/>
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.openStreetMapPoisFilesToDownload</h4>
+This option determines the POIs (point of interest) numbers files to be download from the <code>importer.openstreetmap.pois.downloadURL</code> URL. The files must be ';' separated. Add specific country zip files (or allcountries.zip). This option is case sensitive. If allCountries.txt file is in the <code>importer.openstreetmap.pois.dir</code> Directory, the other countries files will be logically ignored.
+<br/>
+<div class="code">
+Examples : <br/>
+importer.openStreetMapPoisFilesToDownload=AD.tar.bz2;CY.tar.bz2<br/>
+importer.openStreetMapPoisFilesToDownload=allCountries.zip<br/>
+<br/>
+</div>
+<br/><br/>
+
+<div align="right"><a href="#top">[top]</a></div>
+<h4>importer.quattroshapesFilesToDownload</h4>
+This option determines the quattroshapes files to be download from the <code>importer.quattroshapes.downloadURL</code> URL. The files must be ';' separated. typically the files is shapes.tar.bz2. This option is case sensitive. files will be downloaded in <code>importer.quattroshapes.dir</code> Directory.
+<br/>
+<div class="code">
+Examples : <br/>
+importer.quattroshapesFilesToDownload=shapes.tar.bz2<br/>
 <br/>
 </div>
 <br/><br/>
@@ -844,7 +972,7 @@ a full list can be found <a href=https://code.google.com/p/gisgraphy/source/brow
 <br/>
 
 <a name="countrygeocoding"></a>
-<li>The country (required) : The country where the Place/address is. it is used to determine the postal address format and to improve performance. it will probably be optionnal in next version to ease the usability. The value must be the <a href="http://en.wikipedia.org/wiki/ISO_3166">ISO 3166 Alpha 2 code</a> of the country
+<li>The country (not required for gisgraphy v 4.0 and above) : The country where the Place/address is. it is used to determine the postal address format and to improve performance. it will probably be optionnal in next version to ease the usability. The value must be the <a href="http://en.wikipedia.org/wiki/ISO_3166">ISO 3166 Alpha 2 code</a> of the country
 <br/> Examples :
 <ul>
 <li>US</li>
@@ -923,6 +1051,7 @@ Here is a summary of the Web parameters mapping : <br/>
 Examples : <br/>
 geocoding/geocode?address=108%20avenue%20des%20champs%20elysees%20paris&countrycode=FR<br/><br/>
 geocoding/geocode?address=108%20avenue%20des%20champs%20elysees%20paris&countrycode=FR&format=json<br/><br/>
+/geocoding/geocode?housenumber=105&streetname=avenue des champs elysees&city=paris<br/>
 </div>
 <br/>
 

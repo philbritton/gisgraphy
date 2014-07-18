@@ -76,6 +76,8 @@ import com.vividsolutions.jts.geom.Point;
  */
 public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterProcessor {
 	
+	public static final int SCORE_LIMIT = 1;
+
 	protected static final Logger logger = LoggerFactory.getLogger(OpenStreetMapCitiesSimpleImporter.class);
 	
     public static final Output MINIMUM_OUTPUT_STYLE = Output.withDefaultFormat().withStyle(OutputStyle.SHORT);
@@ -152,6 +154,7 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 	// 10 : alternatenames
 	//
 	checkNumberOfColumn(fields);
+	
 	
 	// name
 	if (!isEmptyField(fields, 2, false)) {
@@ -397,7 +400,11 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
 		if (results != null){
 			for (SolrResponseDto solrResponseDto : results.getResults()) {
-				return solrResponseDto;
+				if (solrResponseDto!=null && solrResponseDto.getScore() >= SCORE_LIMIT){
+					return solrResponseDto;
+				} else {
+					return null;
+				}
 			}
 		}
 		return null;
