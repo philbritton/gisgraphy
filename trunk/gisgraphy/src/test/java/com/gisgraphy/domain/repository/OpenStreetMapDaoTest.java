@@ -292,6 +292,23 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
     }
     
     @Test
+    public void testCount(){
+	OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+	OpenStreetMap streetOSM2 = GisgraphyTestHelper.createOpenStreetMapForJohnKenedyStreet();
+	long minGid = 1000L;
+	streetOSM.setGid(minGid);
+	long maxGid = 1500L;
+	streetOSM2.setGid(maxGid);
+	
+	openStreetMapDao.save(streetOSM);
+	openStreetMapDao.save(streetOSM2);
+	
+	long count = openStreetMapDao.count();
+	Assert.assertEquals(2, count);
+	
+    }
+    
+    @Test
     public void testCountEstimateWithOutStreetInDatabase(){
 	long estimateCount = openStreetMapDao.countEstimate();
 	Assert.assertEquals("countestimate should return the max gid, the estimation is based on the fact that the importer start the gid to 0",0L, new Long(estimateCount).intValue());

@@ -166,25 +166,27 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 		    .valueOf(featureClass + "_" + featureCode);
 	} catch (RuntimeException e) {
 	}
-	GisFeature featureObject;
+	GisFeature gisFeature = null;
 	String name = fields[1];
 	if (name.length() > GisFeature.NAME_MAX_LENGTH){
 		logger.warn(name + "is too long");
 		return;
 	}
 	if (featureCode_ != null ) {
-	    featureObject = (GisFeature) featureCode_.getObject();
-	    featureObject = correctPlaceType(featureObject, name);
-	    if (featureObject!=null && !isPlaceTypeAccepted(featureObject.getClass().getSimpleName())){
+		gisFeature = (GisFeature) featureCode_.getObject();
+		gisFeature = correctPlaceType(gisFeature, name);
+	    if (gisFeature!=null && !isPlaceTypeAccepted(gisFeature.getClass().getSimpleName())){
 	    	return;
 	    }
+	} else {
+		gisFeature = new GisFeature();
 	}
 	
 
-	GisFeature gisFeature = null;
+	
 	// create GisFeature and set featureId
 	if (!isEmptyField(fields, 0, true)) {
-	    gisFeature = new GisFeature();
+	   // gisFeature = new GisFeature();
 	    gisFeature.setFeatureId(new Long(fields[0]));
 	}
 
@@ -340,21 +342,18 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 	setAdmNames(adm, gisFeature);
 
 	if (featureCode_ != null) {
-	    featureObject = (GisFeature) featureCode_.getObject();
-	    logger.debug(featureClass + "_" + featureCode
-		    + " have an entry in " + FeatureCode.class.getSimpleName()
-		    + " : " + featureObject.getClass().getSimpleName());
-	    featureObject.populate(gisFeature);
-	    if (gisFeature instanceof City){
+	   if (gisFeature instanceof City){
 	    	((City)gisFeature).setMunicipality(municipalityDetector.isMunicipality(fields[8].toUpperCase(),null,null,GISSource.GEONAMES));
 	    }
 	    
 		// zipcode
+	   
 		String foundZipCode = findZipCode(fields);
 		if (foundZipCode != null){
-			featureObject.addZipCode(new ZipCode(foundZipCode));//TODO tests zip we should take embeded option into account
+			gisFeature.addZipCode(new ZipCode(foundZipCode));//TODO tests zip we should take embeded option into account
 		}
-	    this.gisFeatureDao.save(featureObject);
+	    this.gisFeatureDao.save(gisFeature);
+	    System.err.println("");
 	} else {
 	    logger.debug(featureClass + "_" + featureCode
 		    + " have no entry in " + FeatureCode.class.getSimpleName()

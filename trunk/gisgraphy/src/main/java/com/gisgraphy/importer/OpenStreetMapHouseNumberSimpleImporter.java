@@ -905,7 +905,7 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		String savedMessage = this.statusMessage;
 		try {
 			this.statusMessage = internationalisationService.getString("import.message.createIndex");
-			openStreetMapDao.createSpatialIndexes();
+			//openStreetMapDao.createSpatialIndexes();
 		} catch (Exception e) {
 			logger.error("an error occured during spatial index creation, we ignore it but you have to manually run it to have good performances : " + e.getMessage(), e);
 		}
