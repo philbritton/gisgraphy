@@ -35,10 +35,8 @@ import org.springframework.beans.factory.annotation.Required;
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.IGisFeatureDao;
-import com.gisgraphy.domain.repository.ISolRSynchroniser;
 import com.gisgraphy.domain.valueobject.GISSource;
 import com.gisgraphy.domain.valueobject.NameValueDTO;
-import com.gisgraphy.fulltext.FullTextSearchEngine;
 import com.gisgraphy.helper.GeolocHelper;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -108,6 +106,8 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 			geonamesIdAsLong = Long.parseLong(geonamesId);
 		} catch (NumberFormatException e) {
 			logger.error("can not parse geonames id :"+geonamesId);
+			//we don't want to parse when there is several ids (e.g:146390,146639) because it can cause error
+			//todo if there is several ids search the rearest.
 			return;
 		}
 		gisFeature = gisFeatureDao.getByFeatureId(geonamesIdAsLong);
@@ -122,16 +122,12 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 		logger.warn("There is no geonames Id for "+dumpFields(fields));
 		return;
 	}
-	
+
+	Geometry shape =null;
 	if(!isEmptyField(fields, 1, false)){
 		try {
-			Geometry shape = (Geometry) GeolocHelper.convertFromHEXEWKBToGeometry(fields[1]);
-			gisFeature.setShape(shape);
-			if (gisFeature instanceof City){
-				gisFeature.setSource(GISSource.GEONAMES_QUATTRO);
-				((City) gisFeature).setMunicipality(true);//force to be a municipality.
-			}
-		    } catch (RuntimeException e) {
+			shape = (Geometry) GeolocHelper.convertFromHEXEWKBToGeometry(fields[1]);
+			} catch (RuntimeException e) {
 		    	logger.warn("can not parse shape for id "+fields[1]+" : "+e);
 		    	return;
 		    }
@@ -140,6 +136,18 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 		return;
 	}
 	
+
+	
+	
+	gisFeature.setShape(shape);
+	if (gisFeature.getSource()==GISSource.GEONAMES){
+		gisFeature.setSource(GISSource.GEONAMES_QUATTRO);
+		} else if (gisFeature.getSource() ==GISSource.GEONAMES_OSM){
+			//gisFeature.setSource(GISSource.GEONAMES_OSM_QUATTRO);
+		}
+	if (gisFeature instanceof City){
+		((City) gisFeature).setMunicipality(true);//force to be a municipality.
+	}
 	
 	try {
 		savecity(gisFeature);

@@ -722,6 +722,10 @@
 				Add postgis 2.0 compatibility
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				improve importer performance by the creation of GIST index (if it doesn't already exists)
+			</action>
+			
 			</release>
 			
 	</body>

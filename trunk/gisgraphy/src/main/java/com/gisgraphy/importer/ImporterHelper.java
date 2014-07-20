@@ -76,6 +76,8 @@ public class ImporterHelper {
     public static final String GEONAMES_COUNTRY_FILE_ACCEPT_REGEX_STRING = "[A-Z][A-Z](.txt)";
 
     public static final String OPENSTREETMAP_US_FILE_ACCEPT_REGEX_STRING = "(US.)[0-9]+(.txt)";
+    
+    public static final String QUATTROSHAPES_FILE_ACCEPT_REGEX_STRING = "(localities.txt)";
 
     public static final String SPLITED_FILE_ACCEPT_REGEX_STRING = "[A-Z][A-Z](.)[0-9]+(.txt)";
     
@@ -113,9 +115,10 @@ public class ImporterHelper {
 	public boolean accept(File file) {
 	    Pattern patternGeonames = Pattern.compile(GEONAMES_COUNTRY_FILE_ACCEPT_REGEX_STRING);
 	    Pattern patternOpenStreetMapUS = Pattern.compile(OPENSTREETMAP_US_FILE_ACCEPT_REGEX_STRING);
+	    Pattern patternQuattroshapes = Pattern.compile(QUATTROSHAPES_FILE_ACCEPT_REGEX_STRING);
 
 	    return (file.isFile() && file.exists()) && !EXCLUDED_README_FILENAME.equals(file.getName())
-		    && ( patternGeonames.matcher(file.getName()).matches() || ALLCOUTRY_FILENAME.equals(file.getName()) || patternOpenStreetMapUS.matcher(file.getName()).matches());
+		    && ( patternGeonames.matcher(file.getName()).matches() || ALLCOUTRY_FILENAME.equals(file.getName()) || patternOpenStreetMapUS.matcher(file.getName()).matches() || patternQuattroshapes.matcher(file.getName()).matches());
 	}
     };
     

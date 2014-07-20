@@ -279,15 +279,34 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 			    public Object doInHibernate(Session session)
 				    throws PersistenceException {
 				session.flush();
-				logger.info("will create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column");
-				String createIndexForShape = "CREATE INDEX "+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap ON openstreetmap USING GIST ("+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+")";  
-				Query qryUpdateShapeIndex = session.createSQLQuery(createIndexForShape);
-				qryUpdateShapeIndex.executeUpdate();
+
+				String locationIndexName = OpenStreetMap.LOCATION_COLUMN_NAME.toLowerCase()+"indexopenstreetmap";
+				logger.info("checking if "+locationIndexName+" exists");
+				String checkingLocationIndex= "SELECT 1 FROM   pg_class c  JOIN   pg_namespace n ON n.oid = c.relnamespace WHERE  c.relname = '"+locationIndexName+"'";
+				Query checkingLocationIndexQuery = session.createSQLQuery(checkingLocationIndex);
+				Object locationIndexExists = checkingLocationIndexQuery.uniqueResult();
+				if (locationIndexExists != null){
+					logger.info("will create GIST index for  the "+OpenStreetMap.LOCATION_COLUMN_NAME+" column");
+					String createIndexForLocation = "CREATE INDEX "+locationIndexName+" ON openstreetmap USING GIST ("+OpenStreetMap.LOCATION_COLUMN_NAME.toLowerCase()+")";  
+					Query qryUpdateLocationIndex = session.createSQLQuery(createIndexForLocation);
+					qryUpdateLocationIndex.executeUpdate();
+				} else {
+					logger.info("won't create GIST index for  the "+OpenStreetMap.LOCATION_COLUMN_NAME+" column because it already exists");
+				}
 				
-				logger.info("will create GIST index for  the "+OpenStreetMap.LOCATION_COLUMN_NAME+" column");
-				String createIndexForLocation = "CREATE INDEX "+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap ON openstreetmap USING GIST ("+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+")";  
-				Query qryUpdateLocationIndex = session.createSQLQuery(createIndexForLocation);
-				qryUpdateLocationIndex.executeUpdate();
+				String shapeIndexName=OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap";
+				logger.info("checking if "+shapeIndexName+" exists");
+				String checkingShapeIndex= "SELECT 1 FROM   pg_class c  JOIN   pg_namespace n ON n.oid = c.relnamespace WHERE  c.relname = '"+shapeIndexName+"'";
+				Query checkingShapeIndexQuery = session.createSQLQuery(checkingShapeIndex);
+				Object shapeIndexExists = checkingShapeIndexQuery.uniqueResult();
+				if (shapeIndexExists!=null){
+					logger.info("will create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column");
+					String createIndexForShape = "CREATE INDEX "+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+"indexopenstreetmap ON openstreetmap USING GIST ("+OpenStreetMap.SHAPE_COLUMN_NAME.toLowerCase()+")";  
+					Query qryUpdateShapeIndex = session.createSQLQuery(createIndexForShape);
+					qryUpdateShapeIndex.executeUpdate();
+				} else {
+					logger.info("won't create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column because it already exists");
+				}
 				return null;
 			    }
 			});

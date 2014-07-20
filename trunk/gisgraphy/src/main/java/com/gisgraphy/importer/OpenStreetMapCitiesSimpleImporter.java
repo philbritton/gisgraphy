@@ -400,7 +400,10 @@ public class OpenStreetMapCitiesSimpleImporter extends AbstractSimpleImporterPro
 		FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
 		if (results != null){
 			for (SolrResponseDto solrResponseDto : results.getResults()) {
-				if (solrResponseDto!=null && solrResponseDto.getScore() >= SCORE_LIMIT){
+				if (solrResponseDto!=null && solrResponseDto.getScore() >= SCORE_LIMIT 
+						&& solrResponseDto.getOpenstreetmap_id()== null){
+					//if fopenstreetmapid is not null it is because the shape has already been set 
+					//(R are before nodes)
 					return solrResponseDto;
 				} else {
 					return null;

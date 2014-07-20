@@ -353,7 +353,6 @@ public class GeonamesFeatureSimpleImporter extends AbstractSimpleImporterProcess
 			gisFeature.addZipCode(new ZipCode(foundZipCode));//TODO tests zip we should take embeded option into account
 		}
 	    this.gisFeatureDao.save(gisFeature);
-	    System.err.println("");
 	} else {
 	    logger.debug(featureClass + "_" + featureCode
 		    + " have no entry in " + FeatureCode.class.getSimpleName()

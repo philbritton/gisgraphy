@@ -18,7 +18,7 @@
     <div id="page">
         <div id="header" class="clearfix">
             <div id="branding">
-   				 <h1><a href="http://services.gisgraphy.com/"><img src="/images/logos/logo_70.png" alt="Free Geolocalisation Services" class="imgAlign"/><decorator:getProperty property="meta.heading"/></a></h1>
+   				 <h1><a href="/"><img src="/images/logos/logo_70.png" alt="Free Geolocalisation Services" class="imgAlign"/><decorator:getProperty property="meta.heading"/></a></h1>
     			 <div id="tagline"><fmt:message key="webapp.tagline"/></div>
 			</div>
         </div>

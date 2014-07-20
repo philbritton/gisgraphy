@@ -53,4 +53,6 @@ public interface ICityDao extends IGisDao<City> {
     public City getByShape(Point location,final String countryCode,boolean filterMunicipality);
     
   
+    
+  
 }

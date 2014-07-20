@@ -245,6 +245,26 @@ public class ImporterHelperTest {
 		}
 
 	}
+	
+	@Test
+	public void listQuattroshapesFilesToImport() throws IOException {
+
+		// create a temporary directory to download files
+		File tempDir = FileHelper.createTempDir(this.getClass().getSimpleName());
+
+		try {
+			String tempDirectoryPath = tempDir.getAbsolutePath();
+
+			File goodFilePattern1 = new File(tempDirectoryPath + File.separator + "localities.txt");
+			goodFilePattern1.createNewFile();
+
+			assertEquals("wrongnumber of files created ", 1, tempDir.listFiles().length);
+
+		} finally {
+			assertTrue("the tempDir has not been deleted", GisgraphyTestHelper.DeleteNonEmptyDirectory(tempDir));
+		}
+
+	}
 
 	@Test
 	public void listOpenstreetMapSplitedFilesToImport() throws IOException {
