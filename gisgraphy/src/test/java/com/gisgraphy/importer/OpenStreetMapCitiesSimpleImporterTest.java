@@ -193,6 +193,7 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
 		SolrResponseDto solrResponseDto = EasyMock.createMock(SolrResponseDto.class);
 		EasyMock.expect(solrResponseDto.getScore()).andReturn(OpenStreetMapCitiesSimpleImporter.SCORE_LIMIT+0.2F);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andReturn(null);
 		EasyMock.replay(solrResponseDto);
 		results.add(solrResponseDto);
 		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
@@ -219,12 +220,13 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 	}
 	
 	@Test
-	public void getNearestCity_lowScore(){
+	public void getNearestCity_openstreetmapidNotNull(){
 		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
 		
 		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
 		SolrResponseDto solrResponseDto = EasyMock.createMock(SolrResponseDto.class);
-		EasyMock.expect(solrResponseDto.getScore()).andReturn(OpenStreetMapCitiesSimpleImporter.SCORE_LIMIT-0.2F);
+		EasyMock.expect(solrResponseDto.getScore()).andReturn(OpenStreetMapCitiesSimpleImporter.SCORE_LIMIT+0.2F);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andReturn(5L);
 		EasyMock.replay(solrResponseDto);
 		results.add(solrResponseDto);
 		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
@@ -246,7 +248,40 @@ public class OpenStreetMapCitiesSimpleImporterTest {
 		importer.setFullTextSearchEngine(mockfullFullTextSearchEngine);
 		
 		SolrResponseDto actual = importer.getNearestCity(location, text, countryCode,ONLY_CITY_PLACETYPE);
-		Assert.assertEquals(solrResponseDto, actual);
+		Assert.assertEquals(null, actual);
+		EasyMock.verify(mockfullFullTextSearchEngine);
+	}
+	
+	@Test
+	public void getNearestCity_lowScore(){
+		OpenStreetMapCitiesSimpleImporter importer = new OpenStreetMapCitiesSimpleImporter();
+		
+		List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
+		SolrResponseDto solrResponseDto = EasyMock.createMock(SolrResponseDto.class);
+		EasyMock.expect(solrResponseDto.getScore()).andReturn(OpenStreetMapCitiesSimpleImporter.SCORE_LIMIT-0.2F);
+		EasyMock.expect(solrResponseDto.getOpenstreetmap_id()).andReturn(null);
+		EasyMock.replay(solrResponseDto);
+		results.add(solrResponseDto);
+		FulltextResultsDto mockResultDTO = EasyMock.createMock(FulltextResultsDto.class);
+		EasyMock.expect(mockResultDTO.getResultsSize()).andReturn(1);
+		EasyMock.expect(mockResultDTO.getResults()).andReturn(results);
+		EasyMock.replay(mockResultDTO);
+		
+		
+		String text = "toto";
+		String countryCode = "FR";
+		Point location = GeolocHelper.createPoint(3F, 4F);
+		IFullTextSearchEngine mockfullFullTextSearchEngine = EasyMock.createMock(IFullTextSearchEngine.class);
+		FulltextQuery query = new FulltextQuery(text, Pagination.ONE_RESULT, OpenStreetMapCitiesSimpleImporter.MINIMUM_OUTPUT_STYLE, ONLY_CITY_PLACETYPE, countryCode);
+		query.withAllWordsRequired(false).withoutSpellChecking();
+		
+		EasyMock.expect(mockfullFullTextSearchEngine.executeQuery(query)).andReturn(mockResultDTO);
+		EasyMock.replay(mockfullFullTextSearchEngine);
+		
+		importer.setFullTextSearchEngine(mockfullFullTextSearchEngine);
+		
+		SolrResponseDto actual = importer.getNearestCity(location, text, countryCode,ONLY_CITY_PLACETYPE);
+		Assert.assertEquals(null, actual);
 		EasyMock.verify(mockfullFullTextSearchEngine);
 	}
 	

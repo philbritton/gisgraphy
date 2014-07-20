@@ -205,7 +205,7 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
     
     
     /**
-     * Create the database GIST index for the column 'location' for this entity
+     * Create the database GIST index for the column 'location' for this entity if it doesn't already exists
      */
     public void createGISTIndexForLocationColumn();
     
@@ -219,4 +219,8 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
     public T getNearest(final Point location,final String countryCode,final boolean filterMunicipality,final int distance);
 
 
+    /**
+     * create the shape index for the entity if it doesn't already exists. 
+     */
+    public void createGISTIndexForShapeColumn();
 }

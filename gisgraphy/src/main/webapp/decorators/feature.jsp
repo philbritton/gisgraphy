@@ -19,7 +19,7 @@
    				 <h1 style="color:#333;font-size: 2em;"><img src="/images/logos/logo_70.png" style="vertical-align:middle;" alt="Free GIS Services"/><decorator:title/></h1>
     			 <div id="tagline"><fmt:message key="webapp.name"/> : <fmt:message key="webapp.tagline"/></div>
     			 <br/><br/>
-    			 <div><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html">Go to free Gisgraphy GIS services</a> | <a href="http://www.gisgraphy.com/">Go to Gisgraphy open source project</a></div>
+    			 <div><a href="/ajaxfulltextsearch.html">Go to free Gisgraphy GIS services</a> | <a href="http://www.gisgraphy.com/">Go to Gisgraphy open source project</a></div>
 			</div>
         </div>
 		<div id="content" class="clearfix">

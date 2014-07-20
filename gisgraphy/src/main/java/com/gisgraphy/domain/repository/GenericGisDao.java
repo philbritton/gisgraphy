@@ -53,6 +53,7 @@ import org.springframework.util.Assert;
 
 import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.ZipCode;
 import com.gisgraphy.domain.geoloc.entity.ZipCodesAware;
 import com.gisgraphy.domain.geoloc.entity.event.EventManager;
@@ -608,10 +609,22 @@ public class GenericGisDao<T extends GisFeature> extends
 			    public Object doInHibernate(Session session)
 				    throws PersistenceException {
 				session.flush();
+				
 				logger.info("will create GIST index for  "+persistentClass.getSimpleName());
-				String createIndex = "CREATE INDEX locationIndex"+persistentClass.getSimpleName()+" ON "+persistentClass.getSimpleName().toLowerCase()+" USING GIST (location)";  
-				Query createIndexQuery = session.createSQLQuery(createIndex);
-				createIndexQuery.executeUpdate();
+				String locationIndexName = "locationIndex"+persistentClass.getSimpleName();
+				logger.info("checking if "+locationIndexName+" exists");
+				String checkingLocationIndex= "SELECT 1 FROM   pg_class c  JOIN   pg_namespace n ON n.oid = c.relnamespace WHERE  c.relname = '"+locationIndexName+"'";
+				Query checkingLocationIndexQuery = session.createSQLQuery(checkingLocationIndex);
+				Object locationIndexExists = checkingLocationIndexQuery.uniqueResult();
+				if (locationIndexExists != null){
+					logger.info("will create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column");
+					String createIndex = "CREATE INDEX "+locationIndexName+" ON "+persistentClass.getSimpleName().toLowerCase()+" USING GIST (location)";  
+					Query createIndexQuery = session.createSQLQuery(createIndex);
+					createIndexQuery.executeUpdate();
+				} else {
+					logger.info("won't create GIST index for "+persistentClass.getSimpleName()+" because it already exists");
+				}
+				
 				return null;
 			    }
 			});
@@ -645,4 +658,34 @@ public class GenericGisDao<T extends GisFeature> extends
 		});
 	}
 
+    public void createGISTIndexForShapeColumn() {
+		 this.getHibernateTemplate().execute(
+				 new HibernateCallback() {
+
+				    public Object doInHibernate(Session session)
+					    throws PersistenceException {
+					session.flush();
+					
+					logger.info("will create GIST index for "+persistentClass.getSimpleName().toLowerCase()+" shape column");
+					String shapeIndexName = "shapeIndex"+persistentClass.getSimpleName();
+					logger.info("checking if "+shapeIndexName+" exists");
+					String checkingShapeIndex= "SELECT 1 FROM   pg_class c  JOIN   pg_namespace n ON n.oid = c.relnamespace WHERE  c.relname = '"+shapeIndexName+"'";
+					Query checkingShapeIndexQuery = session.createSQLQuery(checkingShapeIndex);
+					Object shapeIndexExists = checkingShapeIndexQuery.uniqueResult();
+					if (shapeIndexExists != null){
+						logger.info("will create GIST index for  the "+OpenStreetMap.SHAPE_COLUMN_NAME+" column");
+						String createIndex = "CREATE INDEX "+shapeIndexName+" ON "+persistentClass.getSimpleName().toLowerCase()+" USING GIST ("+GisFeature.SHAPE_COLUMN_NAME+")";  
+						Query createIndexQuery = session.createSQLQuery(createIndex);
+						createIndexQuery.executeUpdate();
+					} else {
+						logger.info("won't create GIST index for "+persistentClass.getSimpleName()+" because it already exists");
+					}
+					
+					return null;
+				    }
+		
+	});
+	}
+
+    
 }
