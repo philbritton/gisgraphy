@@ -45,7 +45,7 @@ import com.gisgraphy.test.GisgraphyTestHelper;
 public class ImporterConfigTest {
 
 	public static final String GISGRAPHY_DOWNLOAD_SERVER = "http://download.gisgraphy.com";
-	public static final String GISGRAPHY_DOWNLOAD_SERVER2 = "http://download.gisgraphy.com";
+	public static final String GISGRAPHY_DOWNLOAD_SERVER2 = "http://dl.gisgraphy.com";
 	public static String accessiblePath;
 	public static String pathNotAccessible;
 	public static String filePath;

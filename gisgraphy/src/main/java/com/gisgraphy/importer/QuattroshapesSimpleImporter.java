@@ -143,7 +143,7 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 	if (gisFeature.getSource()==GISSource.GEONAMES){
 		gisFeature.setSource(GISSource.GEONAMES_QUATTRO);
 		} else if (gisFeature.getSource() ==GISSource.GEONAMES_OSM){
-			//gisFeature.setSource(GISSource.GEONAMES_OSM_QUATTRO);
+			gisFeature.setSource(GISSource.GEONAMES_OSM_QUATTRO);
 		}
 	if (gisFeature instanceof City){
 		((City) gisFeature).setMunicipality(true);//force to be a municipality.
