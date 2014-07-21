@@ -90,6 +90,11 @@ public class GeonamesAlternateNamesExtracter extends AbstractSimpleImporterProce
 	super();
     }
     
+    @Override
+    protected void onFileProcessed(File file){
+    	//we overrride because we don't want to rename files
+    }
+    
     /*
      * (non-Javadoc)
      * 

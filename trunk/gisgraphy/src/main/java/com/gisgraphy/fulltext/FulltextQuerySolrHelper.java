@@ -52,7 +52,7 @@ public class FulltextQuerySolrHelper {
 	// protected static final String NESTED_QUERY_INTEXT_BASIC_TEMPLATE=
 	// "_query_:\"{!dismax qf='name^1.1 zipcode^1.1'  mm='1<-100%% 2<-50%% 3<-0%%' bq='_val_:\\\"pow(population,0.3)\\\"' }%s\"";
 	protected static final String NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE = "_query_:\"{!dismax qf=' all_name^1.1 iso_all_name^1 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1'   pf='all_adm1_name all_adm2_name' ps=6 bq='%s population^2' bf='pow(population,0.3) pow(city_population,0.3)' }%s\"";
-	protected static final String CITY_BOOST_QUERY="placetype:city^2";
+	protected static final String CITY_BOOST_QUERY="placetype:city^16";
 	// we need to consider adm1name for andora and brooklin
 	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1 zipcode^1.2 pf=name^1.1' bf=population^2.0}%s\"";
 

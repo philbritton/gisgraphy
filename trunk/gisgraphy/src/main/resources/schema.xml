@@ -127,6 +127,41 @@
 		  </analyzer>
 	</fieldType>
 	
+	<fieldType name="suggest" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
+<!--generatenumberparts pour que 12-345 et 12"' matches
+8th et 8 th soit ok 
+concatenate numbers doit etre a 1 pour l'index pour que  12-34 soit aussi 1234 mais il faut un removeduplicates sinon 12 et 34 seront présents deux fois
+lowercase apres word delimiter sinon split on casse change
+decompound after lower car les mot du dictionaire sont en minuscule
+
+bunderstrasse n'est pas splité (pas de casse, et decompound ne separe que les mot du dictionaire so bunder is not present
+
+-->
+			<analyzer type="index">
+				<filter class="solr.ASCIIFoldingFilterFactory"/>
+				<tokenizer class="solr.StandardTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+                              dictionary="compound.txt" onlyLongestMatch="false"/>
+                 <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+				<filter class="solr.EdgeNGramFilterFactory" maxGramSize="20" minGramSize="1"/>
+				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
+			</analyzer>
+			<analyzer type="query">
+				<filter class="solr.ASCIIFoldingFilterFactory"/>
+				<tokenizer class="solr.StandardTokenizerFactory"/>
+				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="1" catenateAll="0" splitOnCaseChange="0"/>
+				<filter class="solr.LowerCaseFilterFactory"/>
+				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+                              dictionary="compound.txt" onlyLongestMatch="true" />
+                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
+				<filter class="solr.PatternReplaceFilterFactory" pattern="^(.{20})(.*)?" replacement="$1" replace="all"/>
+			</analyzer>
+		</fieldType>
+    
+ 
 
 
     <!-- Less flexible matching, but less false matches.  Probably not ideal for product names,
@@ -321,12 +356,12 @@
    <copyField source="all_name" dest="iso_all_name"/>
    <copyField source="name" dest="iso_name"/> 
    
-   <!-- <field name="suggest_name" type="suggest" indexed="true" stored="false"/>
-  <field name="suggest_in" type="suggest" indexed="true" stored="false"/>
+   <field name="suggest_name" type="suggest" indexed="true" stored="false" multiValued="true"/>
+  <field name="suggest_in" type="suggest" indexed="true" stored="false" multiValued="true"/>
   <copyField source="name*" dest="suggest_name"/>
   <copyField source="is_in*" dest="suggest_in"/>
   <copyField source="zipcode" dest="suggest_in"/>
-  -->
+  
   
    
  </fields>
