@@ -28,8 +28,6 @@ import com.gisgraphy.domain.geoloc.entity.City;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.repository.ICityDao;
 import com.gisgraphy.domain.repository.IOpenStreetMapDao;
-import com.gisgraphy.fulltext.IFullTextSearchEngine;
-import com.gisgraphy.importer.IImporterProcessor;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**

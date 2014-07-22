@@ -50,6 +50,7 @@ import java.util.logging.Level;
 import junit.framework.Assert;
 
 import org.easymock.EasyMock;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -63,7 +64,6 @@ import com.gisgraphy.domain.geoloc.entity.Country;
 import com.gisgraphy.domain.geoloc.entity.Forest;
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.Language;
-import com.gisgraphy.domain.repository.GisFeatureDao;
 import com.gisgraphy.domain.repository.IAdmDao;
 import com.gisgraphy.domain.repository.IAlternateNameDao;
 import com.gisgraphy.domain.repository.ICityDao;
@@ -92,6 +92,7 @@ import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.test.FeedChecker;
 import com.gisgraphy.test.GisgraphyTestHelper;
 //test class that really must be splitted, refactored, and unit tested vs integration tested
+@Ignore
 public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 
     private static final String ADM1_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin1CodesWithWrongNumberOfFields.txt";
