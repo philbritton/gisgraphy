@@ -4,6 +4,9 @@
     <property name="context-root" value="gisgraphy"/>
     <wb-resource deploy-path="/" source-path="src/main/webapp"/>
     <property name="java-output-path" value="/target/classes"/>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/aspectj/aspectjlib/1.5.2a/aspectjlib-1.5.2a.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
@@ -229,7 +232,7 @@
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/commons-io/commons-io/2.1/commons-io-2.1.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/woodstox/wstx-asl/3.2.0/wstx-asl-3.2.0.jar">
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/woodstox/wstx-asl/3.2.7/wstx-asl-3.2.7.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/apache/struts/struts2-codebehind-plugin/2.1.8/struts2-codebehind-plugin-2.1.8.jar">
@@ -263,42 +266,6 @@
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/jra/jra/1.0-alpha-4/jra-1.0-alpha-4.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-java5/1.2.6/xfire-java5-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-aegis/1.2.6/xfire-aegis-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-core/1.2.6/xfire-core-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/wsdl4j/wsdl4j/1.6.1/wsdl4j-1.6.1.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/net/java/dev/stax-utils/stax-utils/20040917/stax-utils-20040917.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-annotations/1.2.6/xfire-annotations-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/xfire/xfire-jsr181-api/1.0-M1/xfire-jsr181-api-1.0-M1.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-spring/1.2.6/xfire-spring-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/apache/xbean/xbean-spring/2.8/xbean-spring-2.8.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring/2.5/spring-2.5.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/codehaus/xfire/xfire-xmlbeans/1.2.6/xfire-xmlbeans-1.2.6.jar">
-      <dependency-type>uses</dependency-type>
-    </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/xmlbeans/xbean/2.2.0/xbean-2.2.0.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/directwebremoting/dwr/2.0.1/dwr-2.0.1.jar">
@@ -343,10 +310,37 @@
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/javassist/javassist/3.16.1-GA/javassist-3.16.1-GA.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-aspects/2.5/spring-aspects-2.5.jar">
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-aspects/3.2.10.RELEASE/spring-aspects-3.2.10.RELEASE.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
-    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/aspectj/aspectjrt/1.5.3/aspectjrt-1.5.3.jar">
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-beans/3.2.10.RELEASE/spring-beans-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-core/3.2.10.RELEASE/spring-core-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-context/3.2.10.RELEASE/spring-context-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-aop/3.2.10.RELEASE/spring-aop-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-expression/3.2.10.RELEASE/spring-expression-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-context-support/3.2.10.RELEASE/spring-context-support-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-orm/3.2.10.RELEASE/spring-orm-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-jdbc/3.2.10.RELEASE/spring-jdbc-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-tx/3.2.10.RELEASE/spring-tx-3.2.10.RELEASE.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/springframework/spring-web/3.2.10.RELEASE/spring-web-3.2.10.RELEASE.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/tuckey/urlrewritefilter/3.0.4/urlrewritefilter-3.0.4.jar">
@@ -385,8 +379,6 @@
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/java"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="target/classes"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
   </wb-module>
 </project-modules>
