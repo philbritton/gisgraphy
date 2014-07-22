@@ -22,9 +22,6 @@
  *******************************************************************************/
 package com.gisgraphy.domain.geoloc.entity;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.SortedSet;
 
 import javax.persistence.Entity;

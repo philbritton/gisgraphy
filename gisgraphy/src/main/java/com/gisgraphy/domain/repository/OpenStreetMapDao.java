@@ -56,7 +56,6 @@ import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.SRID;
 import com.gisgraphy.domain.valueobject.StreetDistance;
 import com.gisgraphy.helper.GeolocHelper;
-import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.IntrospectionHelper;
 import com.gisgraphy.hibernate.criterion.DistanceRestriction;
 import com.gisgraphy.hibernate.criterion.FulltextRestriction;
