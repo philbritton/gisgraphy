@@ -869,11 +869,11 @@
 		</dependency>
 		<!-- This should replace jsr181 which 
 			is missing in javax.jws.jsr181  -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>xfire</groupId>
 			<artifactId>xfire-jsr181-api</artifactId>
 			<version>1.0-M1</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>jsr250-api</artifactId>
@@ -895,80 +895,7 @@
 			<!-- <version>2.1.6</version>-->
 			<version>2.0.5</version>
 		</dependency>
-		<!--end dependency needed by both CXF and jersey-->
-		<!-- dependency needed by cxf only -->
-		<!-- <dependency>
-			<groupId>javax.xml</groupId>
-			<artifactId>jaxb-impl</artifactId>
-			<version>2.0EA3</version>
-			</dependency>
-			<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-			<version>1.0.0</version>
-			</dependency>
-			<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.0</version>
-			</dependency>
-			<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jsr173_api</artifactId>
-			<version>1.0</version>
-			</dependency>
-			<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-bindings-http</artifactId>
-			<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf</artifactId>
-			<version>${cxf.version}</version>
-			</dependency>
-			<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_2.5_spec</artifactId>
-			<version>1.1-M1</version>
-			</dependency>
-		-->
-		<!-- Jetty is needed if you're are not using the CXFServlet (optional dependency) -->
-		<!--<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http-jetty</artifactId>
-			<version>${cxf.version}</version>
-			<exclusions>
-			<exclusion>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jetty</artifactId>
-			</exclusion>
-			<exclusion>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			</exclusion>
-			</exclusions>
-			<scope>test</scope>
-			</dependency>
-		--><!-- end of dependencies needed by CXF only -->
-		<!-- dependency needed by jersey only -->
-		<!--<dependency>
-			<groupId>jersey</groupId>
-			<artifactId>jersey</artifactId>
-			<version>0.4-ea</version>
-		</dependency>
-		-->
-		<!-- end of dependencies needed by jersey only -->
+		
 		<dependency>
 			<groupId>wadl</groupId>
 			<artifactId>wadl2java</artifactId>
@@ -1020,7 +947,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-java5</artifactId>
 			<version>${xfire.version}</version>
@@ -1047,11 +974,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>org.codehaus.xfire</groupId>
 			<artifactId>xfire-spring</artifactId>
 			<version>${xfire.version}</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.directwebremoting</groupId>
 			<artifactId>dwr</artifactId>
@@ -1083,18 +1010,18 @@
 			<version>${hibernate.annotations.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<optional>true</optional>
-			<scope>test</scope>
-		</dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-test</artifactId>
+  <version>${spring.version}</version>
+  <optional>true</optional>
+  <scope>test</scope>
+</dependency>
 		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>-->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
 			<version>${spring.version}</version>
@@ -1120,12 +1047,16 @@
 					<groupId>junit</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
+ 		 <groupId>org.springframework</groupId>
+  			<artifactId>spring-aspects</artifactId>
+  			<version>${spring.version}</version>
+  			<exclusions>
+  			<exclusion>
+  			<groupId>org.aspectj</groupId>
+  			<artifactId>aspectjweaver</artifactId>
+  			</exclusion>
 				<exclusion>
 					<artifactId>spring-beans</artifactId>
 					<groupId>org.springframework</groupId>
@@ -1136,6 +1067,56 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-core</artifactId>
+  <version>${spring.version}</version>
+</dependency>
+
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-beans</artifactId>
+  <version>${spring.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-context</artifactId>
+  <version>${spring.version}</version>
+ <!--  <exclusions>
+  <exclusion>
+					<artifactId>spring-aop</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+  </exclusions>-->
+  
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-context-support</artifactId>
+  <version>${spring.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-tx</artifactId>
+  <version>${spring.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-orm</artifactId>
+  <version>${spring.version}</version>
+</dependency>
+<dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-web</artifactId>
+  <version>${spring.version}</version>
+  <exclusions>
+  <exclusion>
+  <artifactId>spring-aop</artifactId>
+  <groupId>org.springframework</groupId>
+  </exclusion>
+  </exclusions>
+</dependency>
+<dependency><artifactId>aopalliance</artifactId><groupId>aopalliance</groupId><version>1.0</version></dependency>
 		<dependency>
 			<groupId>org.subethamail</groupId>
 			<artifactId>subethasmtp-wiser</artifactId>
@@ -1550,7 +1531,7 @@
 
 		<!-- Framework dependency versions -->
 		<appfuse.version>2.0</appfuse.version>
-		<spring.version>2.5.6</spring.version>
+		<spring.version>3.2.10.RELEASE</spring.version>
 
 		<!-- Testing dependency versions -->
 		<jmock.version>1.1.0</jmock.version>
@@ -1600,8 +1581,8 @@
 
 		<!-- Properties calculated by AppFuse when running full-source plugin -->
 		<acegi.version>1.0.5</acegi.version>
-		<aspectj.version>1.5.2a</aspectj.version>
-		<cxf.version>2.0.4-incubator</cxf.version>
+		 <aspectj.version>1.5.2a</aspectj.version>
+		<!--<aspectj.version>1.6.1</aspectj.version>-->
 		<lucene.version>2.3.1</lucene.version>
 		<jetty.version>6.1.8</jetty.version>
 		<clickstream.version>1.0.2</clickstream.version>
