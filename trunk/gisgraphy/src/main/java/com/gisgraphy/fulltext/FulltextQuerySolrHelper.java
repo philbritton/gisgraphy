@@ -67,6 +67,7 @@ public class FulltextQuerySolrHelper {
 	public static ModifiableSolrParams parameterize(FulltextQuery query) {
 	ModifiableSolrParams parameters = new ModifiableSolrParams();
 	
+	
 	parameters.set(Constants.INDENT_PARAMETER, query.isOutputIndented() ? "on"
 		: "off");
 	parameters.set(Constants.ECHOPARAMS_PARAMETER, "none");
@@ -86,15 +87,25 @@ public class FulltextQuerySolrHelper {
 	    parameters.set(Constants.STYLESHEET_PARAMETER,
 		    Constants.GEORSS_STYLESHEET);
 	}
+	
+	if (query.isSuggest()){
+		parameters.set(Constants.OUTPUT_FORMAT_PARAMETER, OutputFormat.JSON
+				.getParameterValue());
+	} else {
 	parameters.set(Constants.OUTPUT_FORMAT_PARAMETER, query.getOutputFormat()
 		.getParameterValue());
+	}
+	
 	// force Medium style if ATOM or Geo RSS
-	if (query.getOutputFormat() == OutputFormat.ATOM
+	if (query.isSuggest()){
+		// parameters.set(Constants.FL_PARAMETER,"");//we took the one by default
+	} else 	if (query.getOutputFormat() == OutputFormat.ATOM
 		|| query.getOutputFormat() == OutputFormat.GEORSS) {
 	    parameters.set(Constants.FL_PARAMETER,outputStyleHelper.getFulltextFieldList(OutputStyle.MEDIUM, query.getOutput().getLanguageCode()));
 	} else {
 	    parameters.set(Constants.FL_PARAMETER, outputStyleHelper.getFulltextFieldList(query.getOutput()));
 	}
+	
 	String trimedCountryCode = query.getCountryCode()!=null?query.getCountryCode().trim():null;
 	boolean isFeatureIdRequest = query.getQuery().startsWith(FullTextFields.FEATUREID.getValue()+":");
 	boolean isAdvancedQuery = ((trimedCountryCode!=null && !"".equals(trimedCountryCode)) || query.getPlaceTypes() != null || !query.isAllwordsRequired() || query.getPoint()!=null || isFeatureIdRequest);
@@ -112,32 +123,48 @@ public class FulltextQuerySolrHelper {
 	    } else {
 	    	querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,is_in,boost_city,query.getQuery()));
 	    }
-	    parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
+	    
+	    if (query.isSuggest()){
+	    	 parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.suggest
+	    				.toString());
+	    		    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
+	    }else {
+	    	parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
 			.toString());
-	    if (query.getCountryCode() != null && !query.getCountryCode().trim().equals("")) {
-	    	querybuffer.append(" AND ").append(FullTextFields.COUNTRYCODE.getValue()+":"+query.getCountryCode());
-
-		}
-	    if (query.getPoint() != null) {
-	    	querybuffer.append(" AND ").append(String.format(Locale.US,GEOLOC_QUERY_TEMPLATE,query.getPoint().getY(),query.getPoint().getX(),query.getRadius()/1000));
-
-		}
-	    if (query.getPlaceTypes() != null && containsOtherThingsThanNull(query.getPlaceTypes())) {
-	    	 querybuffer.append(" AND (");
-	    	 boolean firstAppend=false;
-	    	for (int i=0;i< query.getPlaceTypes().length;i++){
-	    		if (query.getPlaceTypes()[i] != null){
-	    			if (firstAppend){
-	    				querybuffer.append(" OR ");
-	    			}
-	    		querybuffer.append(FullTextFields.PLACETYPE.getValue()+":"+query.getPlaceTypes()[i].getSimpleName());
-	    		firstAppend=true;
-	    	}
-		}
-	    	querybuffer.append(") ");
+	    	
+	    	
+		    if (query.getCountryCode() != null && !query.getCountryCode().trim().equals("")) {
+		    	querybuffer.append(" AND ").append(FullTextFields.COUNTRYCODE.getValue()+":"+query.getCountryCode());
+	
+			}
+		    if (query.getPoint() != null) {
+		    	querybuffer.append(" AND ").append(String.format(Locale.US,GEOLOC_QUERY_TEMPLATE,query.getPoint().getY(),query.getPoint().getX(),query.getRadius()/1000));
+	
+			}
+		   
+		    if (query.getPlaceTypes() != null && containsOtherThingsThanNull(query.getPlaceTypes())) {
+		    	 querybuffer.append(" AND (");
+		    	 boolean firstAppend=false;
+		    	for (int i=0;i< query.getPlaceTypes().length;i++){
+		    		if (query.getPlaceTypes()[i] != null){
+		    			if (firstAppend){
+		    				querybuffer.append(" OR ");
+		    			}
+		    		querybuffer.append(FullTextFields.PLACETYPE.getValue()+":"+query.getPlaceTypes()[i].getSimpleName());
+		    		firstAppend=true;
+		    	}
+			}
+		    	querybuffer.append(") ");
+		    }
+		    
+		    parameters.set(Constants.QUERY_PARAMETER, querybuffer.toString());
 	    }
-	    parameters.set(Constants.QUERY_PARAMETER, querybuffer.toString());
-	}  else if (isNumericQuery) {
+	    
+	}  else if (query.isSuggest()){
+   	 	parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.suggest
+				.toString());
+		    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
+	} else if (isNumericQuery) {
 	    parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.numeric
 			.toString());
 	    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
@@ -162,7 +189,7 @@ public class FulltextQuerySolrHelper {
 	
 	
 	
-	if (SpellCheckerConfig.enabled && query.hasSpellChecking() && !isNumericQuery){
+	if (SpellCheckerConfig.enabled && query.hasSpellChecking() && !isNumericQuery && !query.isSuggest()){
 		parameters.set(Constants.SPELLCHECKER_ENABLED_PARAMETER,"true");
 		if(isAdvancedQuery){
 		    parameters.set(Constants.SPELLCHECKER_QUERY_PARAMETER, query.getQuery());
@@ -174,6 +201,7 @@ public class FulltextQuerySolrHelper {
 
 	return parameters;
     }
+
 
 	private static boolean containsOtherThingsThanNull(Class[] array) {
 		if (array != null) {

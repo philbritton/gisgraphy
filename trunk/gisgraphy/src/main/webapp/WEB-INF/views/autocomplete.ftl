@@ -61,7 +61,7 @@ var geocoding = new Bloodhound({
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   local: $.map(pois, function(poi) { return { name: poi+ ' near ' }; }),
   remote:{
-		url:'http://localhost:8080/solr/suggest?indent=on&version=2.2&q=%QUERY&fq=&start=0&rows=10&fl=adm1_name,name&wt=json&explainOther=&hl.fl=&bq=population^2&fq=placetype:city placetype:adm&bf=pow(population,0.3) pow(city_population,0.3)',
+		url:'/fulltext/suggest?q=%QUERY&suggest=true',
   		filter: function(d,e) {
 			var names = [];
 			return d.response['docs'];
@@ -85,7 +85,7 @@ $('#autocomplete').typeahead({
   source: geocoding.ttAdapter(),
   templates: {
     empty: '<div class="empty-message">no results found</div>'
-    ,suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{adm1_name}}</p>')
+    ,suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{adm1_name}} - {{is_in}}</p>')
   }
 });
 

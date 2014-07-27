@@ -479,6 +479,37 @@ public class FulltextQueryHttpBuilderTest {
 			+ " should be true for 'on' value (case insensitive and on value)  ",
 		query.isOutputIndented());
 	
+	// test suggest
+		// with no value specified
+		request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
+		request.removeParameter(FulltextQuery.SUGGEST_PARAMETER);
+		query = buildQuery(request);
+		assertEquals("When no " + FulltextQuery.SUGGEST_PARAMETER
+			+ " is specified, the  parameter should be set to default", false
+			,query.isSuggest());
+		// with wrong value
+		request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
+		request.setParameter(FulltextQuery.SUGGEST_PARAMETER, "UNK");
+		query = buildQuery(request);
+		assertEquals("When wrong " + FulltextQuery.SUGGEST_PARAMETER
+			+ " is specified, the  parameter should be set to default",false,
+			query.isSuggest());
+		// test case sensitive
+		request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
+		request.setParameter(FulltextQuery.SUGGEST_PARAMETER, "True");
+		query = buildQuery(request);
+		assertTrue(FulltextQuery.SUGGEST_PARAMETER
+			+ " should be case insensitive  ", query.isSuggest());
+		// test with on value
+		request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
+		request.setParameter(FulltextQuery.SUGGEST_PARAMETER, "oN");
+		query = buildQuery(request);
+		assertTrue(
+				FulltextQuery.SUGGEST_PARAMETER
+				+ " should be true for 'on' value (case insensitive and on value)  ",
+			query.isSuggest());
+		
+	
 	
 	// test allwordsRequired
 	// with no value specified

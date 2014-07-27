@@ -196,6 +196,15 @@ public class FulltextQueryHttpBuilder {
 			.getParameter(GisgraphyServlet.INDENT_PARAMETER))) {
 	    output.withIndentation();
 	}
+	
+	//auto suggestion / auto completion
+	if ("true".equalsIgnoreCase(req
+			.getParameter(FulltextQuery.SUGGEST_PARAMETER))
+			|| "on".equalsIgnoreCase(req
+				.getParameter(FulltextQuery.SUGGEST_PARAMETER))) {
+		    query.withSuggest(true);
+		}
+	
 	//spellchecking
 	if ("true".equalsIgnoreCase(req
 			.getParameter(FulltextQuery.SPELLCHECKING_PARAMETER))
