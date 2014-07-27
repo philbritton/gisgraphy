@@ -56,6 +56,7 @@ public class FulltextQuery extends AbstractGisQuery {
 	public static final String LAT_PARAMETER = "lat";
 	public static final String LONG_PARAMETER = "lng";
 	public static final String RADIUS_PARAMETER = "radius";
+	public static final String SUGGEST_PARAMETER = "suggest";
 	
 	public final static int REGEXP_CASESENSITIVE_FLAG =  Pattern.UNICODE_CASE;
 	private static final Pattern CLEAN_QUERY_PATTERN = Pattern.compile("([\\{\\}\\(\\)\\=\\!\"\'\\\\]+)");
@@ -161,6 +162,7 @@ public class FulltextQuery extends AbstractGisQuery {
     private String query = "";
     private String countryCode;
     private boolean allWordsRequired = ALL_WORDS_REQUIRED_DEFAULT_OPTION;
+    private boolean suggest = false;
     
     private boolean spellchecking = SpellCheckerConfig.activeByDefault;
 
@@ -285,7 +287,8 @@ public class FulltextQuery extends AbstractGisQuery {
     @Override
     public String toString() {
     	String allwordsRequiredString = allWordsRequired?" with all words required ":" without all words required ";
-		String asString = "FullTextQuery '" + this.query + "' "+allwordsRequiredString;
+    	String autosuggestionString = isSuggest()?" for auto suggestion ":" ";
+		String asString = "FullTextQuery '" + this.query + "' "+allwordsRequiredString+autosuggestionString;
 		if (point!=null){
 		    asString+="with apikey="+getApikey()+" around (lat='"
 			+ point.getY() + "',long='" + point.getX() + "') and radius="
@@ -418,6 +421,21 @@ public class FulltextQuery extends AbstractGisQuery {
 
 	public boolean isSpellcheckingEnabled() {
 		return spellchecking;
+	}
+
+	/**
+	 * @return true if the fulltext query is for auto suggestion/ autocompletion
+	 */
+	public boolean isSuggest() {
+		return suggest;
+	}
+
+	/**
+	 * @param suggest wheter the fulltext query is used for auto suggection
+	 */
+	public FulltextQuery withSuggest(boolean suggest) {
+		this.suggest = suggest;
+		return this;
 	}
     
 

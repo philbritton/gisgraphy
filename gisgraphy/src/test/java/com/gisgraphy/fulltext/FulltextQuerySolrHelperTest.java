@@ -54,6 +54,42 @@ import com.gisgraphy.test.GisgraphyTestHelper;
 public class FulltextQuerySolrHelperTest {
 	 private  OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
 	 
+	 
+	 @Test
+	    public void testToQueryStringShouldreturnCorrectParamsForSuggestQuery() {
+		Country france = GisgraphyTestHelper.createCountryForFrance();
+		Pagination pagination = paginate().from(3).to(10);
+		Output output = Output.withFormat(OutputFormat.XML).withLanguageCode(
+			"FR").withStyle(OutputStyle.SHORT).withIndentation();
+		String searchTerm = "Saint-André";
+		FulltextQuery fulltextQuery = new FulltextQuery(searchTerm,
+			pagination, output, null, null).withAllWordsRequired(true).withSuggest(true).withSpellChecking();
+		// split parameters
+		HashMap<String, String> parameters = GisgraphyTestHelper.splitURLParams(
+			FulltextQuerySolrHelper.toQueryString(fulltextQuery), "&");
+		// check parameters
+		assertNull("field list parameter are by default, we use the one in the suggest request handler", parameters
+			.get(Constants.FL_PARAMETER));
+		assertEquals("wrong indent parameter found", "on", parameters
+			.get(Constants.INDENT_PARAMETER));
+		assertEquals("wrong echoparams parameter found", "none", parameters
+			.get(Constants.ECHOPARAMS_PARAMETER));
+		assertEquals("wrong start parameter found", "2", parameters
+			.get(Constants.START_PARAMETER));
+		assertEquals("wrong rows parameter found", "8", parameters
+			.get(Constants.ROWS_PARAMETER));
+		assertEquals("wrong output format parameter found", OutputFormat.JSON
+			.getParameterValue(), parameters
+			.get(Constants.OUTPUT_FORMAT_PARAMETER));
+		assertEquals("wrong query type parameter found",
+			Constants.SolrQueryType.suggest.toString(), parameters
+				.get(Constants.QT_PARAMETER));
+		assertTrue("wrong query parameter found",parameters
+				.get(Constants.QUERY_PARAMETER).equals(searchTerm));
+		assertNull("spellchecker query should not be set",parameters
+			.get(Constants.SPELLCHECKER_QUERY_PARAMETER));   
+		}
+	 
     @Test
     public void testToQueryStringShouldreturnCorrectParamsForBasicQuery() {
 	Country france = GisgraphyTestHelper.createCountryForFrance();
@@ -88,6 +124,9 @@ public class FulltextQuerySolrHelperTest {
 	assertNull("spellchecker query should not be set when standard query",parameters
 		.get(Constants.SPELLCHECKER_QUERY_PARAMETER));   
 	}
+    
+    
+    
     
     @Test
     public void testToQueryStringShouldreturnCorrectParamsForBasicNumericQuery() {

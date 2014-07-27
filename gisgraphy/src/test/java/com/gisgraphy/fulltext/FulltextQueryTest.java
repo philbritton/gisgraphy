@@ -297,6 +297,16 @@ public class FulltextQueryTest {
     	Assert.assertFalse(query.isAllwordsRequired());
     	query.withAllWordsRequired(false);
     	Assert.assertFalse(query.isAllwordsRequired());
+    	query.withAllWordsRequired(true);
+    	Assert.assertTrue(query.isAllwordsRequired());
+    }
+    
+    @Test
+    public void testsetSuggest(){
+    	FulltextQuery query = new FulltextQuery("foo");
+    	Assert.assertFalse(query.isSuggest());
+    	query.withSuggest(true);
+    	Assert.assertTrue(query.isSuggest());
     }
     
 }

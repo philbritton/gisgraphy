@@ -179,7 +179,7 @@ public class Constants {
      * All the Query type in the Gisgraphy solr config file
      */
     public enum SolrQueryType {
-	standard, numeric, simple, deep, advanced,spellcheck
+	standard, numeric, simple, deep, advanced,spellcheck,suggest
     };
 
     /**

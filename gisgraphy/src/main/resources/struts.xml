@@ -164,7 +164,7 @@
            <result name="success" type="freemarker">/WEB-INF/views/geocoding.ftl</result>
             <result name="popup" type="freemarker">/WEB-INF/views/geocodingsearchpopup.ftl</result>
         </action>
-	<action name="autocomplete" class="com.gisgraphy.webapp.action.GeocodingByTextAction">
+		<action name="autocomplete" class="com.gisgraphy.webapp.action.GeocodingByTextAction">
            <result name="success" type="freemarker">/WEB-INF/views/autocomplete.ftl</result>
         </action>
         <action name="addressparser" class="com.gisgraphy.webapp.action.AddressParserAction">
