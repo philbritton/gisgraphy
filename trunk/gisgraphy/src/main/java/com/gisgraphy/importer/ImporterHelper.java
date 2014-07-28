@@ -84,9 +84,6 @@ public class ImporterHelper {
     //2 letter but not us, it is managed by SPLITED_OPENSTREETMAP_US_FILE_ACCEPT_REGEX_STRING
     public static final String SPLITED_OPENSTREETMAP_FILE_ACCEPT_REGEX_STRING = "((?!(?:US))[A-Z][A-Z])(.)[0-9]+(.txt)";
     
-    public static final String SPLITED_OPENSTREETMAP_US_FILE_ACCEPT_REGEX_STRING = "(US.)[0-9]+(.)[0-9]+(.txt)";
-    
-    public static final String SPLITED_GEONAMES_US_FILE_ACCEPT_REGEX_STRING = "(US.)[0-9]+(.txt)";
     
     public static final String SPLITED_GEONAMES_ALTERNATENAMES_FILE_ACCEPT_REGEX_STRING = "(US.)[0-9]+(.txt)";
     
@@ -122,35 +119,17 @@ public class ImporterHelper {
 	}
     };
     
-	public static FileFilter countryGeonamesSplitedFileFilter = new FileFilter() {
+
+	public static FileFilter splitedFileFilter = new FileFilter() {
 		public boolean accept(File file) {
 			Pattern patternSplit = Pattern.compile(SPLITED_FILE_ACCEPT_REGEX_STRING);
-			Pattern patternUSSplit = Pattern.compile(SPLITED_GEONAMES_US_FILE_ACCEPT_REGEX_STRING);
 			Pattern patternAllCountriesSplit = Pattern.compile(SPLITED_ALLCOUNTRIES_FILE_ACCEPT_REGEX_STRING);
 
-			return (file.isFile() && file.exists()) && !EXCLUDED_README_FILENAME.equals(file.getName()) && (patternUSSplit.matcher(file.getName()).matches() || patternAllCountriesSplit.matcher(file.getName()).matches() || patternSplit.matcher(file.getName()).matches());
-		}
-	};
-
-	public static FileFilter alternatenamesGeonamesSplitedFileFilter = new FileFilter() {
-		public boolean accept(File file) {
-			Pattern patternSplit = Pattern.compile(SPLITED_FILE_ACCEPT_REGEX_STRING);
-			Pattern patternUSSplit = Pattern.compile(SPLITED_GEONAMES_US_FILE_ACCEPT_REGEX_STRING);
-			Pattern patternAllCountriesSplit = Pattern.compile(SPLITED_ALLCOUNTRIES_FILE_ACCEPT_REGEX_STRING);
-
-			return (file.isFile() && file.exists()) && !EXCLUDED_README_FILENAME.equals(file.getName()) && (patternUSSplit.matcher(file.getName()).matches() || patternAllCountriesSplit.matcher(file.getName()).matches() || patternSplit.matcher(file.getName()).matches());
+			return (file.isFile() && file.exists()) && !EXCLUDED_README_FILENAME.equals(file.getName()) && (patternAllCountriesSplit.matcher(file.getName()).matches() || patternSplit.matcher(file.getName()).matches());
 		}
 	};
 	
-	public static FileFilter countryOpenstreetMapSplitedFileFilter = new FileFilter() {
-		public boolean accept(File file) {
-			Pattern patternSplit = Pattern.compile(SPLITED_OPENSTREETMAP_FILE_ACCEPT_REGEX_STRING);
-			Pattern patternUSSplit = Pattern.compile(SPLITED_OPENSTREETMAP_US_FILE_ACCEPT_REGEX_STRING);
-
-			return (file.isFile() && file.exists()) && !EXCLUDED_README_FILENAME.equals(file.getName()) && (patternUSSplit.matcher(file.getName()).matches() || patternSplit.matcher(file.getName()).matches());
-		}
-	};
-
+	
     private static FileFilter ZipFileFilter = new FileFilter() {
 	public boolean accept(File file) {
 	    Pattern pattern = Pattern.compile(ZIP_FILE_ACCEPT_REGEX_STRING);
@@ -212,16 +191,13 @@ public class ImporterHelper {
     /**
      * @param directoryPath
      *            The directory where splited files are
-     * @see #GEONAMES_COUNTRY_FILE_ACCEPT_REGEX_STRING
-     * @return the allcountries.XX.txt (@see {@linkplain #ALLCOUTRY_FILENAME} file
-     *         if present or the list of country file to Import or an empty
-     *         array if there is no file
+     * 
      */
-    public static File[] listGeonamesSplitedFilesToImport(String directoryPath) {
+    public static File[] listSplitedFilesToImport(String directoryPath) {
 
 	File dir = new File(directoryPath);
 
-	File[] files = dir.listFiles(countryGeonamesSplitedFileFilter);
+	File[] files = dir.listFiles(splitedFileFilter);
 
 	if (files == null) {
 	    return new File[0];
@@ -241,37 +217,7 @@ public class ImporterHelper {
 	return files;
     }
     
-    /**
-     * @param directoryPath
-     *            The directory where splited files are
-     * @see #GEONAMES_COUNTRY_FILE_ACCEPT_REGEX_STRING
-     * @return the allcountries.XX.txt (@see {@linkplain #ALLCOUTRY_FILENAME} file
-     *         if present or the list of country file to Import or an empty
-     *         array if there is no file
-     */
-    public static File[] listOpenstreetmapSplitedFilesToImport(String directoryPath) {
-
-	File dir = new File(directoryPath);
-
-	File[] files = dir.listFiles(countryOpenstreetMapSplitedFileFilter);
-
-	if (files == null) {
-	    return new File[0];
-	}
-
-		
-	if (files.length==0){
-	    logger.warn("there is no file to import in "+directoryPath);
-	}
-
-	// for Log purpose
-	for (int i = 0; i < files.length; i++) {
-	    logger.info(files[i].getName() + " is a splited Openstreetmap importable File");
-	}
-	logger.info(files.length +" files are Openstreetmap importable files");
-
-	return files;
-    }
+   
 
     /**
      * @param directoryPath

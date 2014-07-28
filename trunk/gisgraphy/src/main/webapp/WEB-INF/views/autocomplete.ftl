@@ -59,6 +59,7 @@ var pois = ['Court House','Craft','Customs Post','Dam','Dentist','Desert','Docto
 var geocoding = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
   queryTokenizer: Bloodhound.tokenizers.whitespace,
+  limit : 10,
   local: $.map(pois, function(poi) { return { name: poi+ ' near ' }; }),
   remote:{
 		url:'/fulltext/suggest?q=%QUERY&suggest=true',
@@ -69,7 +70,6 @@ var geocoding = new Bloodhound({
 	}
 });
 
-// kicks off the loading/processing of `local` and `prefetch`
 geocoding.initialize();
 
 $('#autocomplete').typeahead({
@@ -85,10 +85,17 @@ $('#autocomplete').typeahead({
   source: geocoding.ttAdapter(),
   templates: {
     empty: '<div class="empty-message">no results found</div>'
-    ,suggestion: Handlebars.compile('<p><strong>{{name}}</strong> – {{adm1_name}} - {{is_in}}</p>')
+    ,suggestion: Handlebars.compile('<p><strong>{{name}}</strong>{{#if is_in}} – {{is_in}} {{else}}{{#if adm1_name}} - {{adm1_name}}{{/if}}{{/if}}</p>')
   }
 });
 
+
+$('#autocomplete').bind('typeahead:selected', function(obj, datum, name) {      
+        console.log(obj); 
+        console.log(datum);
+        console.log(name); 
+
+});
 
 
 </script>

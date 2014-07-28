@@ -191,7 +191,7 @@ public class ImporterHelperTest {
 	}
 
 	@Test
-	public void listGeonamesSplitedFilesToImport() throws IOException {
+	public void listSplitedFilesToImport() throws IOException {
 
 		// create a temporary directory to download files
 		File tempDir = FileHelper.createTempDir(this.getClass().getSimpleName());
@@ -237,7 +237,7 @@ public class ImporterHelperTest {
 
 			assertEquals("wrongnumber of files created ", 12, tempDir.listFiles().length);
 
-			File[] fileToBeImported = ImporterHelper.listGeonamesSplitedFilesToImport(tempDirectoryPath);
+			File[] fileToBeImported = ImporterHelper.listSplitedFilesToImport(tempDirectoryPath);
 
 			assertEquals("Only spliyted files should be listed ", 4, fileToBeImported.length);
 		} finally {
@@ -266,61 +266,6 @@ public class ImporterHelperTest {
 
 	}
 
-	@Test
-	public void listOpenstreetMapSplitedFilesToImport() throws IOException {
-
-		// create a temporary directory to download files
-		File tempDir = FileHelper.createTempDir(this.getClass().getSimpleName());
-
-		try {
-			String tempDirectoryPath = tempDir.getAbsolutePath();
-
-			File goodFilePattern1 = new File(tempDirectoryPath + File.separator + "FR.txt");
-			goodFilePattern1.createNewFile();
-
-			File goodFilePattern2 = new File(tempDirectoryPath + File.separator + "OK.txt");
-			goodFilePattern2.createNewFile();
-
-			File goodFilePatternUS = new File(tempDirectoryPath + File.separator + "US.1.txt");
-			goodFilePatternUS.createNewFile();
-
-			File goodFilePatternUSForGeonames = new File(tempDirectoryPath + File.separator + "US.txt");
-			goodFilePatternUSForGeonames.createNewFile();
-
-			File goodFilePatternUS2 = new File(tempDirectoryPath + File.separator + "US.12.txt");
-			goodFilePatternUS2.createNewFile();
-
-			File badFilePatternWithLowerCase = new File(tempDirectoryPath + File.separator + "Ko.txt");
-			badFilePatternWithLowerCase.createNewFile();
-
-			File badFilePatternWithLowerCase2 = new File(tempDirectoryPath + File.separator + "kO.txt");
-			badFilePatternWithLowerCase2.createNewFile();
-
-			File badFilePatternWithExcludedName = new File(tempDirectoryPath + File.separator + ImporterHelper.EXCLUDED_README_FILENAME);
-			badFilePatternWithExcludedName.createNewFile();
-
-			File goodFileSplitedPattern = new File(tempDirectoryPath + File.separator + "UM.11.txt");//
-			goodFileSplitedPattern.createNewFile();
-
-			File goodFileUSSplitedPattern = new File(tempDirectoryPath + File.separator + "US.1.12.txt");//
-			goodFileUSSplitedPattern.createNewFile();
-
-			File goodFileallcountriesSplitedPattern = new File(tempDirectoryPath + File.separator + "allCountries.11.txt");
-			goodFileallcountriesSplitedPattern.createNewFile();
-
-			File badFilePatternWithALLCountriesPattern = new File(tempDirectoryPath + File.separator + ImporterHelper.ALLCOUTRY_FILENAME);
-			badFilePatternWithALLCountriesPattern.createNewFile();
-
-			assertEquals("wrongnumber of files created ", 12, tempDir.listFiles().length);
-
-			File[] fileToBeImported = ImporterHelper.listOpenstreetmapSplitedFilesToImport(tempDirectoryPath);
-
-			assertEquals("Only spliyted files should be listed ", 2, fileToBeImported.length);
-		} finally {
-			assertTrue("the tempDir has not been deleted", GisgraphyTestHelper.DeleteNonEmptyDirectory(tempDir));
-		}
-
-	}
 
 	@Test
 	public void listCountryFilesToImportShouldNotReturnNullIfThereIsNoFile() {

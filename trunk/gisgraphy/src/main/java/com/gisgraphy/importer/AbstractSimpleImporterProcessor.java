@@ -292,9 +292,10 @@ public abstract class AbstractSimpleImporterProcessor implements IImporterProces
 	    setup();
 	    this.filesToProcess = getFiles();
 	    if (this.filesToProcess.length == 0) {
-		logger.info("there is 0 file to process for "
+	    	logger.info("there is 0 file to process for "
 			+ this.getClass().getSimpleName());
-		return;
+	    	this.status= ImporterStatus.SKIPPED;
+	    	return;
 	    }
 	    for (int i = 0; i < filesToProcess.length; i++) {
 			currentFile = filesToProcess[i];

@@ -29,6 +29,7 @@ else
    echo $PID > $PIDFILE
    printf "%s\n" "Ok"
 fi
+./logs.sh
 
 
 
