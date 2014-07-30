@@ -141,7 +141,7 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 
 
 		for (GisFeature gisFeature:gisFeatures){
-			if (gisFeatures.size()==1 || gisFeature.getLocation().within(shape)){
+			if (gisFeatures.size()==1 || shapeContainsPoint(shape, gisFeature)){
 				//if more than one feature match, we look at the one included in the shape
 				gisFeature.setShape(shape);
 				if (gisFeature.getSource()==GISSource.GEONAMES){
@@ -164,6 +164,16 @@ public class QuattroshapesSimpleImporter extends AbstractSimpleImporterProcessor
 		}
 
 
+	}
+
+
+	private boolean shapeContainsPoint(Geometry shape, GisFeature gisFeature) {
+				try {
+					return gisFeature.getLocation().within(shape);
+				} catch (Exception e) {
+					logger.error("can not determine if a shape contains point for "+gisFeature);
+					return false;
+				}
 	}
 
 	/**
