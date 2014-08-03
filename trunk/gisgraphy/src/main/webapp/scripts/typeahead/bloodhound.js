@@ -134,16 +134,18 @@
             whitespace: whitespace,
             obj: {
                 nonword: getObjTokenizer(nonword),
-                whitespace: getObjTokenizer(whitespace)
+                whitespace: getObjTokenizer(whitespace),
             }
         };
         function whitespace(str) {
             str = _.toStr(str);
-            return str ? str.split(/\s+/) : [];
+	        //modify by gisgraphy
+            return str ? normalize(str).split(/\s+/) : [];
         }
         function nonword(str) {
             str = _.toStr(str);
-            return str ? str.split(/\W+/) : [];
+            //modify by gisgraphy
+            return str ? normalize(str).split(/\W+/) : [];
         }
         function getObjTokenizer(tokenizer) {
             return function setKey() {

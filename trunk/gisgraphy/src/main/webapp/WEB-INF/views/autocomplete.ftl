@@ -38,7 +38,7 @@
 
 <script type="text/javascript">
 
-var pois = ['Court House','Craft','Customs Post','Dam','Dentist','Desert','Doctor','EmergencyPhone',
+var pois = ['eléphAnt with','Craft','Customs Post','Dam','Dentist','Desert','Doctor','EmergencyPhone',
 'Factory','Falls','Farm','Ferry Terminal','Field','Fire Station','Fishing Area','Fjord','Forest','Fountain',
 'Fuel','Garden','Golf','Gorge','Grass Land','Gulf','Hill','Hospital','Hotel','House','Ice','Island','Lake',
 'Library','Light House','Mall','Marsh','Metro Station','Military','Mill','Mine','Mole','Monument','Mound',
@@ -53,23 +53,35 @@ var pois = ['Court House','Craft','Customs Post','Dam','Dentist','Desert','Docto
 'Sport','Tourism','Tourism Info'
 ];
 
+ charMap = {
+    "à": "a", "â": "a", "é": "e", "è": "e", "ê": "e", "ë": "e",
+    "ï": "i", "î": "i", "ô": "o", "ö": "o", "û": "u", "ù": "u"
+};
 
-
+ function normalize(input) {
+ 	    $.each(charMap, function (unnormalizedChar, normalizedChar) {
+    	    var regex = new RegExp(unnormalizedChar, 'gi');
+    	    input = input.replace(regex, normalizedChar);
+	 });
+	 return input.replace(/\W+/,'');
+	}
 
 var geocoding = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
+  queryTokenizer: Bloodhound.tokenizers.nonword,
   limit : 10,
   local: $.map(pois, function(poi) { return { name: poi+ ' near ' }; }),
   remote:{
-		url:'/fulltext/suggest?q=%QUERY&suggest=true',
+		url:'/fulltext/suggest?q=%QUERY&suggest=true&allwordsrequired=false',
   		filter: function(d,e) {
 			var names = [];
 			return d.response['docs'];
-		 }
+		 },
+ 		rateLimitWait:1
 	}
 });
 
+// kicks off the loading/processing of `local` and `prefetch`
 geocoding.initialize();
 
 $('#autocomplete').typeahead({
@@ -85,7 +97,7 @@ $('#autocomplete').typeahead({
   source: geocoding.ttAdapter(),
   templates: {
     empty: '<div class="empty-message">no results found</div>'
-    ,suggestion: Handlebars.compile('<p><strong>{{name}}</strong>{{#if is_in}} – {{is_in}} {{else}}{{#if adm1_name}} - {{adm1_name}}{{/if}}{{/if}}</p>')
+    ,suggestion: Handlebars.compile('{{#if name}}<p><strong>{{name}}</strong>{{#if is_in}} – {{is_in}} {{else}}{{#if adm1_name}} - {{adm1_name}}{{/if}}{{/if}}</p>{{/if}}')
   }
 });
 
