@@ -82,7 +82,7 @@ public class MunicipalityDetector implements IMunicipalityDetector {
 			put("BE",MunicipalityOSMDetectionStrategy.OSM);
 			put("NG",MunicipalityOSMDetectionStrategy.ALL);
 			put("RU",MunicipalityOSMDetectionStrategy.ALL);
-			put("JP",MunicipalityOSMDetectionStrategy.ALL);
+			put("JP",MunicipalityOSMDetectionStrategy.R);
 			put("FI",MunicipalityOSMDetectionStrategy.OSM);
 			put("CA",MunicipalityOSMDetectionStrategy.ALL);
 			put("MX",MunicipalityOSMDetectionStrategy.OSM);
