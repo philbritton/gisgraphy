@@ -45,6 +45,7 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
     else
         return opts.inverse(this);
 });
+
 var pois = ['eléphAnt with','Craft','Customs Post','Dam','Dentist','Desert','Doctor','EmergencyPhone',
 'Factory','Falls','Farm','Ferry Terminal','Field','Fire Station','Fishing Area','Fjord','Forest','Fountain',
 'Fuel','Garden','Golf','Gorge','Grass Land','Gulf','Hill','Hospital','Hotel','House','Ice','Island','Lake',
@@ -84,7 +85,7 @@ var geocoding = new Bloodhound({
 			var names = [];
 			return d.response['docs'];
 		 },
- 		rateLimitWait:1
+ 		rateLimitWait:10
 	}
 });
 
@@ -98,13 +99,20 @@ $('#autocomplete').typeahead({
 },
 {
   name: 'geocoding',
-  displayKey: 'name',
+  displayKey: function(obj){
+				is_in='';
+				if (obj['is_in']){
+				is_in=obj['is_in'];
+				} else if (obj['adm1_name']){
+				is_in=obj['adm1_name'];
+				}
+				return obj['name']+' - '+is_in;},
   // `ttAdapter` wraps the suggestion engine in an adapter that
   // is compatible with the typeahead jQuery plugin
   source: geocoding.ttAdapter(),
   templates: {
-    empty: '<div class="empty-message">no results found</div>'
-    ,suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="/images/flags/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/> {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">– {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">- {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}')
+    //empty: '<div class="empty-message">no results found</div>',
+    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="/images/flags/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/> {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">– {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">- {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}')
   }
 });
 
