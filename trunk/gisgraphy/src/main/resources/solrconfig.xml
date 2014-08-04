@@ -493,7 +493,7 @@
    <!-- <str name="pf">suggest_in^30 suggest_name^50.0 zipcode^20</str>-->
     <str name="bq">population^2</str>
     <str name="bf">pow(population,0.3) pow(city_population,0.3)</str>
-    <!--<str name="mm">1&lt;100% 2&lt;-1 </str>-->
+    <str name="mm">1&lt;100% 2&lt;-1 5&lt;-2 </str>
    <!-- <str name="group">true</str>
     <str name="group.field">universe_s</str>
     <str name="group.field">collection_s</str>
