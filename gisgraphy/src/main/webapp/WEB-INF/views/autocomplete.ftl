@@ -26,8 +26,8 @@
 
 <div class="clear"></div>
 	
- <div class="example" id="remote">
-<input type="text" placeholder="enter an address" id="autocomplete" class="typeahead"/>
+ <div class="autocomplete-gisgraphy">
+<input type="text" placeholder="Enter an address" id="autocomplete" autocomplete="off" class="typeahead clearable"/>
 </div>
 
 <script src="http://localhost:8080/scripts/typeahead/jquery-1.11.1.js"></script>
@@ -38,6 +38,13 @@
 
 <script type="text/javascript">
 
+
+Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    if(a == b) 
+        return opts.fn(this);
+    else
+        return opts.inverse(this);
+});
 var pois = ['eléphAnt with','Craft','Customs Post','Dam','Dentist','Desert','Doctor','EmergencyPhone',
 'Factory','Falls','Farm','Ferry Terminal','Field','Fire Station','Fishing Area','Fjord','Forest','Fountain',
 'Fuel','Garden','Golf','Gorge','Grass Land','Gulf','Hill','Hospital','Hotel','House','Ice','Island','Lake',
@@ -97,7 +104,7 @@ $('#autocomplete').typeahead({
   source: geocoding.ttAdapter(),
   templates: {
     empty: '<div class="empty-message">no results found</div>'
-    ,suggestion: Handlebars.compile('{{#if name}}<p><strong>{{name}}</strong>{{#if is_in}} – {{is_in}} {{else}}{{#if adm1_name}} - {{adm1_name}}{{/if}}{{/if}}</p>{{/if}}')
+    ,suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="/images/flags/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/> {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">– {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">- {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}')
   }
 });
 
@@ -108,6 +115,19 @@ $('#autocomplete').bind('typeahead:selected', function(obj, datum, name) {
         console.log(name); 
 
 });
+
+
+ function tog(v){return v?'addClass':'removeClass';} 
+  
+  $(document).on('input', '.clearable', function(){
+    $(this)[tog(this.value)]('x');
+  }).on('mousemove', '.x', function( e ){
+    $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');   
+  }).on('click', '.onX', function(){
+    $(this).removeClass('x onX').val('');
+    $('geocoding').typeahead('val','');
+    $('geocoding').typeahead('close');
+  });
 
 
 </script>
@@ -197,6 +217,35 @@ $('#autocomplete').bind('typeahead:selected', function(obj, datum, name) {
  font-size: 14px;
 }
 
+.flag-autocomplete {
+width:15px;
+padding-right:3px;
+padding-top:3px;
+}
+
+.isin-autocomplete{
+color:#999;
+}
+
+.clearable{
+  background:url(http://i.imgur.com/z7ZSYjt.png) no-repeat right -10px center;
+ /* border:1px solid #999;
+  padding:3px 18px 3px 4px; */
+  /*border-radius:3px;*/
+}
+.clearable.x{
+  background-position: right 5px center;
+}
+.clearable.onX{
+  cursor:pointer;
+}
+
+.autocomplete-gisgraphy{
+margin:auto auto;
+width:420px;
+padding:10px;
+padding-right:30px;
+}
 
 </style>
 
