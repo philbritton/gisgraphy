@@ -17,6 +17,7 @@ package com.gisgraphy.compound.solr;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.solr.analysis.BaseTokenFilterFactory;
@@ -28,18 +29,17 @@ import com.gisgraphy.compound.Decompounder;
 
 public class DecompoundTokenFilterFactory extends BaseTokenFilterFactory implements ResourceLoaderAware {
 
-    private final Decompounder decompounder;
+    private Decompounder decompounder;
     private String dictFile;
     List<String> wlist;
-    public DecompoundTokenFilterFactory(){
-    	
+    
+    public void init(Map<String, String> args) {
     	dictFile = args.get("dictionary");
         if (null == dictFile) {
           throw new SolrException( SolrException.ErrorCode.SERVER_ERROR, 
                                    "Missing required parameter: dictionary");
         }
-        this.decompounder = createDecompounder();
-    }
+        }
 
     @Override
     public TokenStream create(TokenStream tokenStream) {
@@ -49,6 +49,7 @@ public class DecompoundTokenFilterFactory extends BaseTokenFilterFactory impleme
     public void inform(ResourceLoader loader) {
         try {
           wlist = loader.getLines(dictFile);
+          this.decompounder = createDecompounder();
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
