@@ -54,7 +54,7 @@ public class Decompounder {
 	public String[] decompound(String str) {
 		//Simple but probably not optimized
 		Matcher m = p.matcher(str);
-		StringBuffer s = new StringBuffer(str).append(" ");
+		StringBuffer s = new StringBuffer();
 		boolean found=false;
 		while (m.find()) {
 			found=true;
