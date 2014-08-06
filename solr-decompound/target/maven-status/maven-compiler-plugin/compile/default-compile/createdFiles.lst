@@ -1,0 +1,10 @@
+com/gisgraphy/compound/solr/DecompoundTokenFilterFactory.class
+com/gisgraphy/compound/solr/DecompoundTokenFilter.class
+com/gisgraphy/compound/Trie$OffsetAndPattern.class
+com/gisgraphy/compound/Trie$State.class
+com/gisgraphy/compound/Trie$1.class
+com/gisgraphy/compound/Decompounder.class
+com/gisgraphy/compound/solr/DecompoundTokenFilter$DecompoundToken.class
+com/gisgraphy/compound/Trie$PatternAndEncapsulation.class
+com/gisgraphy/compound/TrieException.class
+com/gisgraphy/compound/Trie.class
