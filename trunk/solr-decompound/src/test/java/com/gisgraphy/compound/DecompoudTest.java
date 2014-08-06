@@ -31,6 +31,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class DecompoudTest {
+	@SuppressWarnings("serial")
 	private static List<String> words = new ArrayList<String>(){ 
 		{
 		add("weg");
