@@ -106,7 +106,7 @@ $('#autocomplete').typeahead({
 				} else if (obj['adm1_name']){
 				is_in=obj['adm1_name'];
 				}
-				return obj['name']+' - '+is_in;},
+				return obj['name']+' , '+is_in;},
   // `ttAdapter` wraps the suggestion engine in an adapter that
   // is compatible with the typeahead jQuery plugin
   source: geocoding.ttAdapter(),
