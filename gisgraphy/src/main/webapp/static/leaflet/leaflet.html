@@ -23,11 +23,13 @@ ELEMENT_ID="gisgraphy-leaflet"
 DEFAULT_LANGUAGE="EN";
 allowPoiSelection=true;
 allowLanguageSelection=true;
-formNodeID=ELEMENT_ID+'-form'
-placetypeNodeID=ELEMENT_ID+'-placetypes'
-languagesNodeID=ELEMENT_ID+'-languages'
-inputSearchNodeID=ELEMENT_ID+'-inputSearch'
-fulltextURL='http://localhost:8080/fulltext/suggest'
+formNodeID=ELEMENT_ID+'-form';
+placetypeNodeID=ELEMENT_ID+'-placetypes';
+languagesNodeID=ELEMENT_ID+'-languages';
+inputSearchNodeID=ELEMENT_ID+'-inputSearch';
+fulltextURL='http://localhost:8080/fulltext/suggest';
+reversegeocodingUrl='http://localhost:8080/reversegeocoding/search';
+enableReverseGeocoding=true;//todo if enable check reversegeocodingUrl is defined
 
 function buildSearchBox(){
 	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo('#'+formNodeID);
@@ -101,6 +103,8 @@ function buildPoisArray(lang){
 	return pois;
 }
 
+function initUI(){
+$('<form>').attr('id',formNodeID).appendTo('#'+ELEMENT_ID);
 if(allowLanguageSelection){
 	BuildLanguageSelector(DEFAULT_LANGUAGE);
 }
@@ -109,7 +113,7 @@ if(allowPoiSelection){
 }
 buildSearchBox();
 pois = buildPoisArray(DEFAULT_LANGUAGE);
-
+}
 
 Handlebars.registerHelper('if_eq', function(a, b, opts) {
     if(a == b) 
@@ -128,6 +132,8 @@ function normalize(input) {
 	 return input.replace(/\W+/,'');
 }
 
+initUI();
+
 var geocoding = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
   queryTokenizer: Bloodhound.tokenizers.nonword,
@@ -135,14 +141,26 @@ var geocoding = new Bloodhound({
   local: getLocalSuggestionsArray(DEFAULT_LANGUAGE),
   remote:{
 		url:fulltextURL +'?suggest=true&allwordsrequired=false&q=%QUERY',
-		replace:function () {return fulltextURL +'?suggest=true&allwordsrequired=false&'+ $('#'+formNodeID).serialize();},
+		replace:function () {
+			if (enableReverseGeocoding){
+				var latLong = convertToLatLong($('#'+inputSearchNodeID).val());
+				if (latLong){
+					return reversegeocodingUrl +"?format=json&lat="+latLong.lat+"&lng="+latLong.long;
+				} 
+			}	
+			return fulltextURL +'?suggest=true&allwordsrequired=false&'+ $('#'+formNodeID).serialize();
+		},
   		filter: function(d,e) {
 			var names = [];
-			$.each(d.response['docs'], function( key, value ) {
-				if(value.name){
-					names.push(value);
-				}				
-			});
+			if (d && d.response && d.response['docs']){
+				$.each(d.response['docs'], function( key, value ) {
+					if(value.name){
+						names.push(value);
+					}				
+				});
+			} else if (d && d.result && d.result[0]){
+				names.push(convertAddress(d.result[0]));
+			}
 			return names;
 			
 		 },
@@ -222,6 +240,11 @@ function changeLanguage(lang){
 	
 }
 
+
+function convertAddress(address){
+	doc= {"name":address.streetName, "is_in":address.city, "country_code":address.countryCode, "lat":address.lat,"lng":address.lng,"distance":address.distance,"houseNumber":address.houseNumber};
+	return doc;
+}
 //-------------------------------------------------------------------------------------------
 //DMS
 
@@ -232,25 +255,19 @@ function changeLanguage(lang){
 */
 
 function convertDMS(input){
+var obj;
 var matches = input.match(/((\d+)\s?[:°dD]*\s?(\d+)\s?\s?[:'′]*\s?(\d+([.]\d+)?)?\s?[:\"″]*\s?([NnSs])\s?([,;]\s?)?(\d+)\s?[:°dD]*\s?(\d+)\s?[:'′]*\s?(\d+([.]\d+)?)?\s?[:\"″]*\s?([EeWw]))/);
 if (matches){
 	/*for (var i=0;i<matches.length;i++){
 		console.log(matches[i]);
 	}*/
-	console.log(convertToDecimal(matches[2],matches[3],matches[4],matches[6]));
-	console.log(convertToDecimal(matches[8],matches[9],matches[10],matches[12]));
+	lat = convertToDecimal(matches[2],matches[3],matches[4],matches[6]);
+	long = convertToDecimal(matches[8],matches[9],matches[10],matches[12]);
+	obj =  {"lat":lat,"long":long};
+}
+return obj
 }
 
-}
-
-function couldbeCoordinate(str){
-	match =  str.match(/[-\d\sWwEeNnSsOo\.,:]+/);
-	if (match){
-		return match[0]==str;
-	} else {
-		return false;
-	}
-}
 
 function convertToDecimal(
 degrees, minutes, seconds, hemisphere){
@@ -265,20 +282,32 @@ seconds=parseFloat(seconds.replace(',', '.'))
 return (degrees + minutes / 60.0 + seconds / 3600.0) * hemi ;
 }
 
+function couldbeCoordinate(str){
+	match =  str.match(/[-\d\sWwEeNnSsOo\.,:°'"]+/);
+	if (match){
+		return match[0]==str;
+	} else {
+		return false;
+	}
+}
 
-//dd
+
+
 /* Pattern 1 (ex: -23.399437,-52.090904 or 40.446195, -79.948862)
  Pattern 2 (ex: 40.446195N 79.948862W)
 */
 function convertDD(input){
+	var obj;
 	var matches = input.match(/((-?\d+[.,]\d+)\s*([NnSs])?(\s*[,;]?\s*)?(-?\d+[,.]\d+)\s*([WwEe])?)/);
 	if (matches){
 		/*for (var i=0;i<matches.length;i++){
 			console.log(matches[i]);
 		}*/
-		console.log(parseDD(matches[1],matches[2]));
-		console.log(parseDD(matches[5],matches[6]));
+		lat = parseDD(matches[2],matches[3]);
+		long = parseDD(matches[5],matches[6]);
+		obj =  {"lat":lat,"long":long};
 	}
+		return obj;
 }
 
 
@@ -295,9 +324,25 @@ return decimalDegrees * hemi ;
 }
 
 /*convertDMS("40:26:46.302N 079:56:55.903W");
+convertDMS(50°37'59.7"N 3°03'13.2"E")
 convertDD("-23.399437,-52.090904");
-convertDD("-23.399437 -52.090904");*/
-convertDD("-23,399437  -52,090904");
+convertDD("-23.399437 -52.090904");
+convertDD("-23,399437  -52,090904");*/
+
+function convertToLatLong(str){
+	var obj;	
+	if(str){
+		if (couldbeCoordinate(str)){
+			obj= convertDD(str);
+			if(!obj){
+				obj = convertDMS(str)
+			}
+		}	
+	}
+	return obj;
+}
+
+
 
 </script>
 
