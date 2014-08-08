@@ -19,8 +19,9 @@
 </div>
 
 <script type="text/javascript">
-ELEMENT_ID="gisgraphy-leaflet"
+ELEMENT_ID="gisgraphy-leaflet";
 DEFAULT_LANGUAGE="EN";
+currentLanguage=DEFAULT_LANGUAGE;
 allowPoiSelection=true;
 allowLanguageSelection=true;
 formNodeID=ELEMENT_ID+'-form';
@@ -122,6 +123,14 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
         return opts.inverse(this);
 });
 
+Handlebars.registerHelper('l10n', function(keyword) {
+	target = translation[keyword][currentLanguage];
+	// fallback to the original string if nothing found
+	target = target || keyword;	
+	//output
+	return target;
+});
+
 
 
 function normalize(input) {
@@ -194,8 +203,11 @@ $('#'+inputSearchNodeID).typeahead({
   // is compatible with the typeahead jQuery plugin
   source: geocoding.ttAdapter(),
   templates: {
-    empty: '<div class="empty-message">no suggestions, please click the search button</div>',
-    //empty: function(){$('geocoding').typeahead('close');},
+    empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
+ /* empty: function(){
+		return '<div class="empty-message">translation["nosuggestion"][currentLanguage]</div>';
+		//$('geocoding').typeahead('close');
+},*/
     suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/> {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
     footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com" target="gisgraphy">Gisgraphy</a></div>'
   }
@@ -230,6 +242,7 @@ function getLocalSuggestionsArray(lang){
 }
 
 function changeLanguage(lang){
+	currentLanguage=lang;
 	buildPlaceTypeDropBox(lang);
 	pois = buildPoisArray(lang);
 	geocoding.clear();
