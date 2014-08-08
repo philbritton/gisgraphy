@@ -460,7 +460,15 @@ translation={
 "EN": "Enter an address, GPS or DMS coordinates",
 "ES": "Introduzca una dirección, GPS o DMS coordinan",
 "DE": "Geben Sie eine Adresse, GPS-Koordinate oder DMS"
+},
+"nosuggestion":{
+"FR": "Aucune suggetion, cliquer sur le bouton rechercher",
+"EN": "no suggestions, please click the search button",
+"ES": "ninguna sugerencia, por favor haga clic en el botón de búsqueda",
+"DE": "keine Vorschläge, bitte klicken Sie auf die Suchtaste"
 }
+
+
 }
 
 
@@ -1183,4 +1191,3 @@ charMap = {
 'ｏ':'o',
 'ｓ':'s',
 'ｗ':'w'};
-
