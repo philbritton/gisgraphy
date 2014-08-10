@@ -55,8 +55,8 @@
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
 		<filter class="solr.ASCIIFoldingFilterFactory"/>
-		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+		<filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
         dictionary="compound.txt" />
 		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
       </analyzer>
@@ -64,10 +64,10 @@
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
 		<filter class="solr.ASCIIFoldingFilterFactory"/>
-		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+		<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
         dictionary="compound.txt" />
-		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
+		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>-->
       </analyzer>
     </fieldType>
     
@@ -75,18 +75,18 @@
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
-		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+		<filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
         dictionary="compound.txt" />
 		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
-		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
+		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+		<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
         dictionary="compound.txt" />
-		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>-->
       </analyzer>
     </fieldType>
     
@@ -128,22 +128,20 @@
 	</fieldType>
 	
 	<fieldType name="suggest" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
-<!--generatenumberparts pour que 12-345 et 12"' matches
-8th et 8 th soit ok 
-concatenate numbers doit etre a 1 pour l'index pour que  12-34 soit aussi 1234 mais il faut un removeduplicates sinon 12 et 34 seront présents deux fois
-lowercase apres word delimiter sinon split on casse change
-decompound after lower car les mot du dictionaire sont en minuscule
-
-bunderstrasse n'est pas splité (pas de casse, et decompound ne separe que les mot du dictionaire so bunder is not present
+<!--generatenumberparts for 12-345 and 12"' matches
+8th et 8 th is ok 
+concatenate numbers have to be 1 for the index for 12-34 is also 1234 but we needs removeduplicates, if not 12 and 34 will be two times
+lowercase after word delimiter if not split on case change
+decompound after lower because words of dictionary are in lower, unpunct
 
 -->
 			<analyzer type="index">
 				<filter class="solr.ASCIIFoldingFilterFactory"/>
 				<tokenizer class="solr.StandardTokenizerFactory"/>
-				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="1" catenateAll="0" splitOnCaseChange="1"/>
+				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="0"/>
 				<filter class="solr.LowerCaseFilterFactory"/>
-				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
-                              dictionary="compound.txt" onlyLongestMatch="false"/>
+				<filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
+                              dictionary="compound.txt" />
                  <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
 				<filter class="solr.EdgeNGramFilterFactory" maxGramSize="20" minGramSize="1"/>
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
@@ -151,11 +149,11 @@ bunderstrasse n'est pas splité (pas de casse, et decompound ne separe que les m
 			<analyzer type="query">
 				<filter class="solr.ASCIIFoldingFilterFactory"/>
 				<tokenizer class="solr.StandardTokenizerFactory"/>
-				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="1" catenateAll="0" splitOnCaseChange="0"/>
+				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="0"/>
 				<filter class="solr.LowerCaseFilterFactory"/>
-				<filter class="solr.DictionaryCompoundWordTokenFilterFactory"
-                              dictionary="compound.txt" onlyLongestMatch="true" />
-                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+				<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
+                              dictionary="compound.txt"  />
+                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>-->
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
 				<filter class="solr.PatternReplaceFilterFactory" pattern="^(.{20})(.*)?" replacement="$1" replace="all"/>
 			</analyzer>
