@@ -140,12 +140,12 @@
         function whitespace(str) {
             str = _.toStr(str);
 	        //modify by gisgraphy
-            return str ? normalize(str).split(/\s+/) : [];
+            return str ? gisgraphyAutocomplete.normalize(str).split(/\s+/) : [];
         }
         function nonword(str) {
             str = _.toStr(str);
             //modify by gisgraphy
-            return str ? normalize(str).split(/\W+/) : [];
+            return str ? gisgraphyAutocomplete.normalize(str).split(/\W+/) : [];
         }
         function getObjTokenizer(tokenizer) {
             return function setKey() {
