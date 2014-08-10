@@ -1,22 +1,683 @@
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#this files has two different synonyms management (always in ascii because we use it after ascii folding):
+#one that associate equivalent synonyms (where there is no ambiguity possible
+#one that associate explicit mappings (for instance we don't want 'dr' to be converted to 'doctor' because it can also be 'drive').
+#by default, we do explicit mapping for words less than two chars, or if we think there is no ambiguity possible.
+#if so we can mix both e.g :mount,mnt and mount=>mt, so if mount is found it will be transform to mount,mnt, and mt
+#but if mt is found it won't be transform
+#see http://www.abbreviations.com/ and http://wiki.openstreetmap.org/wiki/Name_finder:Abbreviations
 
-#-----------------------------------------------------------------------
-#some test synonym mappings unlikely to appear in real input text
+###################
+# english         #
+###################
+access=>accs
+alley,allee
+allee=>aly,ally
+airport,aprt
+amble=>ambl
+annex=>anex,anx,annx
+arcade=>arc
+avenue,avnue,avenu
+avenue=>av,ave,avn,aven
+back=>bk
+bayoo,bayou
+bayoo=>byu
+bayou=>byu
+beach=>bch
+bend=>bnd
+block=>blk
+bluff=>blf
+bluff,bluf,bluffs,blfs
+boardwalk=>bwlk
+bottom,bottm
+bottom=>btm
+bowl=>bl
+boulevard,blvd,boul,boulv
+break=>brk
+branch,brnch
+#br for brazil, botom right
+branch=>br
+bridge,brdge
+brook=>brk
+brooks=>brks
+#bg stands for bulgaria,...
+burgs=>bgs
+burg=>bg
+burgs,burg
+bypass=>byp,byps
+bypass,bypas
+#cp means code postal
+camp=>cmp,cp
+canyon,cnyn
+canyon=>cyn,canyn
+#also be cavern
+cape>cpe
+causeway,cswy
+#also can be counter
+center,centers,centr,centre
+center>cen,ctr,ctrs,cent,cnter,cntr
+church=>ch
+circle,circles,crcle,crcl,circl
+circle=>cir,cirs,circ
+city=>cty
+cliff=>clf
+cliffs,clfs
+club=>clb
+common=>cmn
+corner=>cor
+corners>cors
+course=>crse
+corso=>cso
+county road=>cr
+county route=>cr
+#remove ct : connecticut
+court,courts
+court=>ct,crt,cts
+#cv : capverde
+cove,coves
+cove=>cv,cvs
+#cr costa rica
+creek=>cr,crk,ck
+crescent,crecent,cresent,crscnt,crsent
+crescent=>cres,crest,crst,crsnt
+crossing=>xing,crss
+crossing=>crssing,crssng
+crossroad=>xrd
+cul de sac=>cds
+curve=>curv
+dale=>dl
+dam=>dm
+deviation=>devn
+divide=>div,dv,dvd
+drive,drives
+drive=>dr,drv,drs,driv
+east=>e
+#remove est because it is a direction
+#estate,est,estates,ests
+estate,estates
+# exp stands for expeditor, express
+expressway=>exp,expy,expr,expw
+#ext means exterior too
+extension=>ext,extn,extensions,exts
+extension,extnsn,extensions
+fall,falls
+falls=>fls
+ferry=>fry,frry
+field=>fld
+fields=>flds
+field,fields
+flat=>flt
+flats=>flts
+flat,flats
+fords,frds
+ford=>frd
+forest=>frst
+forests=>frsts
+forest,forests
+forge=>frg
+forges=>frgs
+forge,forg
+forks=>frks
+fork=>frk
+fork,forks
+#ft can mean falt
+fort=>ft,frt
+freeway,freewy
+freeway=>fwy,frway,frwy
+gardens=>grdns,gardens,gdns
+garden=>gdn,grdn,gardn,grden
+garden,gardens
+gateway=>gtwy,gatewy,gtway
+glen,glens
+glen=>gln
+glens=>glns
+green=>grn
+greens=>grns
+green,greens
+grove=>grov,grv
+groves=>grvs
+groves,grove
+harbor,harbors
+harbor=>harb,hbr,harbr,hrbor
+haven=>hvn,havn
+height=>ht,hgt
+heights=>hts,hgts
+heights,height
+highway,hwy,highwy,hiway,hiwy,hway
+high school=>hs
+hill=>hl
+hills=>hls
+hill,hills
+hollow=>hllw,holw
+hollows=>holws
+hollow,hollows
+house=>hse
+inlet=>inlt
+international,intl
+island=>islnd,isle
+islands=>islnds,iss,islands,islnds,isles
+island,islands
+isle,isles
+junction=>jction,jctn,junctn,juncton,jct
+junctions,jctns,jcts
+junction,junctions
+#ky: kentucky
+key,keys
+key=>ky
+knoll=>knol,knl
+knolls=>knls,knls
+knoll,knolls
+lakes=>lks
+lake=>lk
+lake,lakes
+landing,lndg,lndng
+lane,lanes
+lane=>la,ln
+light=>lgt,lght
+lights=>lgts
+light,lights
+little,litl
+little=>lit
+loaf=>lf
+lock=>lck
+locks=>lcks
+lock,locks
+lodge=>ldg,ldge,lodg
+lodge,lodges
+loop,loops
+lower=>lwr
+manor=>mnr
+manors=>mnrs
+manor,manors
+market=>mkt
+meadow,meadows
+meadow=>mdw,medow
+meadows=>mdws,medows
+mill=>ml
+mills=>mls
+mill,mills
+mission,missions
+mission=>msn,mssn,missn
+motorway=>mtwy
+mount,mnt
+mount=>mt
+mountain=>mtn,mtin,mntn,mountin,mntain
+mountains=>mtns
+mountain,mountains
+neck=>nck
+north=>n
+northwest=>nw
+northeast=>ne
+north west=>nw
+north east=>ne
+orchard,orchrd
+orchard=>orch
+oval=>ovl
+overpass=>opas
+park,parks
+park=>pk,prk
+parkway,pkwy,parkwy,pkway
+parkway=>pky
+parkways=>pkwys
+parkway,parkways
+passage=>psge,pass
+path,paths
+pike,pikes
+pine=>pne
+pines=>pnes
+pine,pines
+place=>pl
+plain=>pln,plaine
+plains=>plns,plaines
+plain,plains
+plaine=>pln,plaine
+plaines=>plns,plains
+plaine,plaines
+plaza=>plz,plza
+point=>pt
+points=>pts
+point,points
+port=>prt
+ports=>prts
+port,ports
+post office=>po
+prairie=>pr,prr
+radial=>rad,radl,radiel
+ranch=>rnch
+ranches=>rnchs
+ranches,ranch
+rapid=>rpd
+rapids=>rpds
+rest=>rst
+ridge=>rdg,rdge
+ridges=>rdgs
+ridge,ridges
+river=>riv,rivr,rvr
+road,roads
+road=>rd
+roads=>rds
+#rue and route are very near in meaning, we mix it
+route,rte,rue
+route=>r
+rue=>r
+shoal=>shl
+shoals=>shls
+shoals,shoal
+shore=>shoar,shr
+shores=>shoars,shrs
+shore,shores
+skyway,skwy
+south=>s,sth
+southeast=>se
+southwest=>sw
+south east=>se
+south west=>sw
+spring=>spg,spng,sprng
+springs=>spngs,spgs,sprngs
+spring,springs
+spur,spurs
+square=>sq,sqr,sqre,squ
+squares=>sqrs,sqs
+square,squares
+station=>sta,statn,stn
+stravenue=>strav,stra,strave,stravn,strvn,straven
+stream=>streme,strm
+street=>st,str
+streets=>sts
+summit,sumit,sumitt
+summit=>smt
+terrace=>ter,terr
+throughway=>trwy
+trace=>trce
+trace,traces
+track=>trak,trk
+tracks=>trks
+track,tracks
+trafficway=>trfy
+#tr : turk
+trail=>tr,trl
+trails=>trls
+trail,trails
+tunnel,tunel,tunnels
+tunnel=>tunl,tunls,tunnl
+turnpike=>tpk,tpke,trpk,turnpk,trnpk
+underpass=>upas
+union=>un
+unions=>uns
+union,unions
+upper>upr
+valley=>vy,vly,vlly,vally
+valleys=>vlys
+valley,valleys
+viaduct=>vdct,viadct
+view=>vw
+views=>vws
+views,view
+#village=>vill,vlg,villg,villiage,villag,villages,vlgs
+#ville=>vl
+vista=>vist,vsta
+walk,walks
+way=>wy
+#wl : west lancashire
+well,wells
+well=>wl,wls
 
-# Some synonym groups specific to this example
-saint,st,santa,sta
-#notice we use "gib" instead of "GiB" so any WordDelimiterFilter coming
 
-# Synonym mappings can be used for spelling correction too
-#pixima => pixma
 
+
+
+
+
+
+##########german###########################
+an der=>ad
+auf der=>ad
+allee=>a,al
+berg=>bg
+burg=>bg
+bad=>b 
+bahnhof=>bhf
+bahnhof=>bf
+brucke=>br
+chaussee=>ch
+dorf=>df
+doktor=>dr
+grosser=>gr
+grosse=>gr
+grosses=>gr
+hauptbahnhof=>hbf
+heiligen=>hl
+in der=>id
+kleiner=>kl
+kleine=>kl
+kleines=>kl
+ob=>o
+oberer=>ob
+obere=>ob
+oberes=>ob
+platz=>pl
+quelle =>qu
+rhein=>rh
+sankt=>st
+strasse=>str
+unterer=>u
+untere=>u
+unteres=>u
+von=>v
+vor der=>vd
+zum=>z
+
+#danish
+lille is also a city, we remove
+#lille,ll
+nordre =>ndr
+sondre=>sdr
+store=>st
+gammel=>gl
+
+#################estonian
+maantee=>mnt
+puiestee=>pst
+tanav=>tn
+
+#################eskara
+etorbidea=>etorb
+errepidea=>err
+kalea=>k
+
+#######################spanish
+acceso=>acces
+acequia=>aceq
+alameda=>alam
+alqueria=>alque
+andador=>andad
+angosta=>angta
+apeadero=>apdro
+arboleda=>arb
+arrabal=>arral
+arroyo=>arry
+autopista=>auto
+autovia=>autov
+avenida=>av
+avenida=>avd
+avenida=>avda
+bajada=>bjada 
+balneario=>balnr
+banda=>b
+banda=>bda
+barranco=>branc 
+barranquil=>bqllo 
+barriada=>barda 
+barrio=>bº
+barrio=>barro 
+barrio=>bo 
+bloque=>blque 
+brazal=>brzal 
+bulevar=>bulev 
+calle=>c,cl
+calleja=>cllja
+callejon=>callej,cjon,callejon,cllon
+callejuela=>cjla
+callizo=>cllzo 
+calzada=>czada 
+camino=>cno 
+camino=>cmno 
+camino hondo=>ch
+camino nuevo=>cn
+camino viejo=>cv
+camping=>campg
+cantera=>cantr 
+cantina=>canti 
+canton=>cant 
+carrera=>cra
+carrero=>cro
+carretera=>ctra
+carreterin=>ctrin
+carretil=>crtil 
+carril=>crril 
+caserio=>csrio 
+chalet=>chlet 
+cinturon=>cint 
+circunvalacion=>ccvcn 
+cobertizo=>cbtiz 
+colonia=>col
+complejo,=>compj 
+conjunto=>cjto 
+convento>cnvto 
+cooperativa=>coop 
+corral=>crral 
+corralillo=>crrlo 
+corredor=>crrdo 
+cortijo=>crtjo 
+costanilla=>cstan 
+costera=>coste 
+cuadra=>cuadr 
+cuesta=>custa 
+dehesa=>dhsa 
+cemarcacion=>demar 
+diagonal=>diag 
+diseminado=>disem 
+edificio=>edifc
+empresa=>empr 
+entrada=>entd 
+escalera=>esca 
+escalinata=>escal 
+espalda=>eslda 
+estacion=>estcn 
+estrada=>estda 
+explanada=>expla 
+extramuros=>extrm 
+extrarradio=>extrr 
+fabrica=>fca 
+fabrica=>fbrca 
+galeria=>gale 
+glorieta=>gta 
+gran via=>gv
+granja=>granj 
+hipodromo,hipod 
+jardin=>jdin 
+ladera=>ldera 
+llanura=>llnra 
+malecon=>malec 
+mercado=>merc 
+mirador=>mrdor 
+monasterio=>mtrio 
+muelle=>muell
+núcleo=>ncleo 
+palacio=>palac 
+pantano=>pant 
+paraje=>praje 
+parque=>pque 
+particular=>parti 
+partida=>ptda 
+pasadizo=>pzo 
+pasaje=>psaje 
+paseo=>pº
+paseo maritimo=>psmar 
+pasillo=>psllo 
+plaza=>pl 
+plaza=>plza 
+plaza=>pza 
+plazoleta=>pzta 
+plazuela=>plzla 
+poblado=>pbdo 
+poligono=>polig 
+poligono industrial=>pgind 
+poligono industrial=>pi
+portal=>prtal
+portico=>prtco 
+portillo=>ptilo 
+prazuela=>przla 
+prolongacion=>prol 
+pueblo=>pblo 
+puente=>pnte 
+puerta=>pta 
+puerto=>pto 
+punto kilométrico=>pk
+rambla=>rbla 
+rampla=>rampa 
+residencial=>resid 
+ribera=>rbra 
+rincon=>rcon 
+rinconada=>rcda 
+rotonda=>rtda 
+san=>s
+sanatorio=>sanat 
+santuario=>santu 
+sector=>sect 
+sendera=>sedra 
+sendero=>send 
+subida=>sbida 
+torrente=>trrnt 
+transito=>trans 
+transversal=>trval 
+trasera=>tras 
+travesia=>trva 
+urbanizacion=>urb 
+vecindario=>vecin 
+vereda=>vreda 
+viaducto=>vcto 
+viviendas=>vvdas
+
+#french
+allee=>all
+avenue=>av
+avenue,aven
+boulevard=>bd
+chemin=>ch
+general=>gnl,gnrl
+lotissement,lotissements
+lotissement=>lot
+mont=>mt
+parking=>pkg
+passage=>pass,pas
+place=>pl
+pont=>pt
+promenade=>prom
+quai=>qu
+rocade=>roc
+rond point=>rpt
+residence=>res
+square=>sq
+zone artisanale=>za
+zone industrielle=>zi
+zone à urbaniser en priorite=>zup
+
+#italiano
+calle=>cle
+campo=>cpo
+corso=>cso
+corte=>cte
+fondamenta=>fta
+largo>lgo
+localita=>loc
+piazza=>pza
+piazza>pzza
+piazzale=>ple
+piazzetta=>pta
+ponte=>pte
+porta=>pta
+salizada=>sda
+stazione=>staz
+strada comunale=>sc
+strada provinciale=>sp
+strada regionale=>sr
+strada statale=>s
+via=>v
+viale=>vle
+vicolo=>vlo
+
+#hungarian
+utca=>u
+
+#dutch
+markt=>mkt
+laan=>ln
+gracht=>gr
+markt=>mkt
+steenweg,stwg
+straat=>str
+steenweg=>stwg
+vliet=>vlt
+weg=>wg
+
+#norvegian
+vei=>v
+veien=>v
+gate=>g,gt
+gaten=>g,gt
+gata=>g,gt
+plass=>pl
+plassen=>pl
+sving=>sv
+svingen=>sv
+
+#polish
+osiedle=>os
+osiedlu=>os
+plac=>pl
+placu=>pl
+placem=>pl
+swietego=>sw
+swietej=>sw
+ewietych=>sw
+ulica=>ul
+ulice=>ul
+ulicy=>ul
+wojewodztwo=>woj
+wojewodztwie =>woj
+
+#portuguese
+avenida=>av
+rua=>r
+
+#russian/ukrainian
+аллея=>ал
+набережная,наб
+переулок,пер
+площадь=>пл
+проезд=>пр
+шоссе=>ш
+тупик,туп
+улица=>ул
+бульвар,бул 
+дорога,дор 
+провулок,пров 
+площа=>пл 
+проспект,просп 
+шосе=>ш 
+вулиця,вул 
+
+#swedish
+vag=>v
+vagen=>v
+gatan=>g
+gata=>g
+grand=>gr
+granden=>gr
+stig=>st
+stigen=>st
+sankt=>st
+sankta=>sta
+plats=>pl 
+platsen=>pl
+
+#slovenian
+cesta=>c
+ulica=>ul
+
+#slovak
+ulica=>ul
+namestie=>nam    
+
+#turkish
+sokak=>sk,sok
+sokagi=>sk,sok
+cadde=>cd
+caddesi=>cd
+bulvar=>bl
+bulvari=>bl 
+
+#misc
+saint=>st,san
+santa,sta
+sint=>st
