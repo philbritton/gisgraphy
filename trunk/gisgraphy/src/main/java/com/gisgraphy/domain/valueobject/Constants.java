@@ -80,6 +80,11 @@ public class Constants {
      * The field list to return (Solr parameter name)
      */
     public static final String FL_PARAMETER = "fl";
+    
+    /**
+     * The field list to return (Solr parameter name)
+     */
+    public static final String FQ_PARAMETER = "fq";
 
     /**
      * The parameter to specifie the text to search (Solr parameter name)

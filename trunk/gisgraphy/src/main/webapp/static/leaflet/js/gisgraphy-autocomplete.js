@@ -73,13 +73,13 @@ function detectLanguage(){
 			return opts.inverse(this);
 	    });
 
-	   Handlebars.registerHelper('l10n', function(keyword) {
-		target = translation[keyword][this.currentLanguage];
+	   Handlebars.registerHelper('l10n', $.proxy(function(keyword) {
+		var target = translation[keyword][this.currentLanguage];
 		// fallback to the original string if nothing found
 		target = target || keyword;	
 		//output
 		return target;
-	    });
+	    },this));
 	    function buildSearchBox(){
 	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',this.inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo('#'+this.formNodeID);
 	//<input type="text" placeholder="Enter an address, GPS or DMS coordinate" id="ELEMENT_IDautocomplete" autocomplete="off" class="typeahead clearable"/>
@@ -394,5 +394,4 @@ function convertToLatLong(str){
 	}
 	return obj;
 }
-
 

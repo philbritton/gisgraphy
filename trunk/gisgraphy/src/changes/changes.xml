@@ -723,7 +723,23 @@
 			</action>
 			
 			<action dev="David Masclet" type="add">
-				improve importer performance by the creation of GIST index (if it doesn't already exists)
+				Improve importer performance by the creation of GIST index (if it doesn't already exists)
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Add a leaflet plugin
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Add our own decompound
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Improve synonyms management
+			</action>
+			
+			<action dev="David Masclet" type="add">
+				Add a 'suggest' parameter to allow autocompletion/ autosuggestion
 			</action>
 			
 			</release>
