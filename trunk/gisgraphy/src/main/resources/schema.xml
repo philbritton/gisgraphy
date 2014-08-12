@@ -58,16 +58,13 @@
 		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
 		<filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
         dictionary="compound.txt" />
-		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
+		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
 		<filter class="solr.ASCIIFoldingFilterFactory"/>
 		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
-        dictionary="compound.txt" />-->
-		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="false" expand="true"/>
       </analyzer>
     </fieldType>
     
@@ -84,9 +81,6 @@
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
 		<filter class="solr.LowerCaseFilterFactory"/>
 		<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
-		<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
-        dictionary="compound.txt" />-->
-		<filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
       </analyzer>
     </fieldType>
     
@@ -142,7 +136,7 @@ decompound after lower because words of dictionary are in lower, unpunct
 				<filter class="solr.LowerCaseFilterFactory"/>
 				<filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
                               dictionary="compound.txt" />
-                 <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
+                 <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
 				<filter class="solr.EdgeNGramFilterFactory" maxGramSize="20" minGramSize="1"/>
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
 			</analyzer>
@@ -151,9 +145,6 @@ decompound after lower because words of dictionary are in lower, unpunct
 				<tokenizer class="solr.StandardTokenizerFactory"/>
 				<filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0" splitOnCaseChange="0"/>
 				<filter class="solr.LowerCaseFilterFactory"/>
-				<!-- <filter class="com.gisgraphy.compound.solr.DecompoundTokenFilterFactory"
-                              dictionary="compound.txt"  />-->
-                <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
 				<filter class="solr.PatternReplaceFilterFactory" pattern="([^\w\d\*æøåÆØÅ ])" replacement="" replace="all"/>
 				<filter class="solr.PatternReplaceFilterFactory" pattern="^(.{20})(.*)?" replacement="$1" replace="all"/>
 			</analyzer>

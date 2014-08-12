@@ -742,6 +742,10 @@
 				Add a 'suggest' parameter to allow autocompletion/ autosuggestion
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				use filter query for fulltext query (improve performance)
+			</action>
+			
 			</release>
 			
 	</body>
