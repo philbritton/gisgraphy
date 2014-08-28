@@ -432,10 +432,10 @@ public class GisgraphyTestHelper {
      *                the string representing and sign ('&' or '&amp;')
      * @return an hashmap<paramName, paramValue> for the URL parameter
      */
-    public static HashMap<String, String> splitURLParams(String completeURL,
+    public static HashMap<String, List<String>> splitURLParams(String completeURL,
 	    String andSign) {
 	int i;
-	HashMap<String, String> searchparms = new HashMap<String, String>();
+	HashMap<String,  List<String>> searchparms = new HashMap<String,  List<String>>();
 	;
 	logger.debug("Complete URL: " + completeURL);
 	i = completeURL.indexOf("?");
@@ -448,10 +448,13 @@ public class GisgraphyTestHelper {
 	    for (int c = 0; c < paramArray.length; c++) {
 		String[] paramSplited = paramArray[c].split("=");
 		try {
-		    searchparms.put(paramSplited[0], java.net.URLDecoder
+			if (!searchparms.containsKey(paramSplited[0])){
+				searchparms.put(paramSplited[0], new ArrayList<String>());
+			}
+		    searchparms.get(paramSplited[0]).add(java.net.URLDecoder
 			    .decode(paramSplited[1], Constants.CHARSET));
 		} catch (UnsupportedEncodingException e) {
-		    return new HashMap<String, String>();
+		    return new HashMap<String, List<String>>();
 		}
 
 	    }

@@ -29,14 +29,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.acegisecurity.providers.AuthenticationProvider;
-import org.acegisecurity.providers.ProviderManager;
-import org.acegisecurity.providers.encoding.Md5PasswordEncoder;
-import org.acegisecurity.providers.rememberme.RememberMeAuthenticationProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.providers.AuthenticationProvider;
+import org.springframework.security.providers.ProviderManager;
+import org.springframework.security.providers.encoding.Md5PasswordEncoder;
+import org.springframework.security.providers.encoding.PasswordEncoder;
+import org.springframework.security.providers.rememberme.RememberMeAuthenticationProvider;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.gisgraphy.Constants;
@@ -81,32 +82,24 @@ public class StartupListener implements ServletContextListener {
 	ApplicationContext ctx = WebApplicationContextUtils
 		.getRequiredWebApplicationContext(context);
 
-	boolean encryptPassword = false;
-	try {
-	    ProviderManager provider = (ProviderManager) ctx
-		    .getBean("authenticationManager");
-	    for (Object o : provider.getProviders()) {
-		AuthenticationProvider p = (AuthenticationProvider) o;
-		if (p instanceof RememberMeAuthenticationProvider) {
-		    config.put("rememberMeEnabled", Boolean.TRUE);
-		}
-	    }
-
-	    if (ctx.containsBean("passwordEncoder")) {
-		encryptPassword = true;
-		config.put(Constants.ENCRYPT_PASSWORD, Boolean.TRUE);
-		String algorithm = "SHA";
-		if (ctx.getBean("passwordEncoder") instanceof Md5PasswordEncoder) {
-		    algorithm = "MD5";
-		}
-		config.put(Constants.ENC_ALGORITHM, algorithm);
-	    }
-	} catch (NoSuchBeanDefinitionException n) {
-	    log
-		    .debug("authenticationManager bean not found, assuming test and ignoring...");
-	    // ignore, should only happen when testing
-	}
-
+	boolean encryptPassword = true;
+	
+    try {
+        ProviderManager provider = (ProviderManager) ctx.getBean(ctx.getBeanNamesForType(ProviderManager.class)[0]);
+        for (Object o : provider.getProviders()) {
+            AuthenticationProvider p = (AuthenticationProvider) o;
+            if (p instanceof RememberMeAuthenticationProvider) {
+                config.put("rememberMeEnabled", Boolean.TRUE);
+            } 
+            config.put(Constants.ENCRYPT_PASSWORD, Boolean.TRUE);
+            config.put(Constants.ENC_ALGORITHM, "SHA");
+        }
+    } catch (NoSuchBeanDefinitionException n) {
+        log.debug("authenticationManager bean not found, assuming test and ignoring...");
+        // ignore, should only happen when testing
+    }
+	
+	
 	context.setAttribute(Constants.CONFIG, config);
 
 	// output the retrieved values for the Init and Context Parameters

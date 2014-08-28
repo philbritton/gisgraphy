@@ -746,6 +746,10 @@
 				use filter query for fulltext query (improve performance)
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				migrate from acegi to spring security
+			</action>
+			
 			</release>
 			
 	</body>

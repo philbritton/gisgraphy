@@ -120,7 +120,7 @@ public class FulltextQuerySolrHelper {
 			parameters.add(Constants.DISTANCE_PARAMETER,query.getRadius()/1000+"");
 		}
 		if (query.getCountryCode()!=null && !"".equals(query.getCountryCode().trim())){
-			parameters.add(Constants.FQ_PARAMETER, String.format(FQ_COUNTRYCODE,query.getCountryCode()));
+			parameters.add(Constants.FQ_PARAMETER, String.format(FQ_COUNTRYCODE,query.getCountryCode().toUpperCase()));
 		}
 		
 		if (query.getPlaceTypes() != null && containsOtherThingsThanNull(query.getPlaceTypes())) {
@@ -132,7 +132,7 @@ public class FulltextQuerySolrHelper {
 					if (firstAppend){
 						sb.append(" OR ");
 					}
-					sb.append(FullTextFields.PLACETYPE.getValue()+":"+query.getPlaceTypes()[i].getSimpleName());
+					sb.append(query.getPlaceTypes()[i].getSimpleName());
 					firstAppend=true;
 				}
 			}
@@ -161,7 +161,10 @@ public class FulltextQuerySolrHelper {
 			/*parameters.set(Constants.QT_PARAMETER,
 		    Constants.SolrQueryType.standard.toString());
 	    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());*/
-			String boost_city=CITY_BOOST_QUERY;//we force boost to city because it is not a 'Typed' query
+			String boost_city="";
+			if (query.getPlaceTypes()==null){
+				boost_city=CITY_BOOST_QUERY;//we force boost to city because it is not a 'Typed' query
+			}
 			String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
 			if (!query.isAllwordsRequired()){
 				querybuffer = new StringBuffer(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE,is_in,boost_city,query.getQuery()));

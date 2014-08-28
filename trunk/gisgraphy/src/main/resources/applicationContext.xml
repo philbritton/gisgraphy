@@ -11,7 +11,7 @@
 		class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor" />
 
 	<!-- Enable @Transactional support -->
-	<!-- <tx:annotation-driven/> -->
+	 <tx:annotation-driven/> 
 
 	<!-- Enable @AspectJ support -->
 	<!-- <aop:aspectj-autoproxy/> -->
