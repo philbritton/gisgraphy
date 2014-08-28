@@ -44,7 +44,7 @@
        http://services.gisgraphy.com/displayfeature.html?featureId=<xsl:value-of select="$feature_id"/>
       </link>
       <description>
-        <xsl:value-of select="str[@name='fully_qualified_name']"/>
+        <xsl:value-of select="str[@name='name']"/>
       </description>
       <pubDate>2008-12-01T07:02:32Z</pubDate>
       <guid>

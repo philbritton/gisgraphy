@@ -50,7 +50,7 @@
      <title><xsl:value-of select="str[@name='name']"/> (<xsl:value-of select="str[@name='placetype']"/>)</title>
      <link href="http://services.gisgraphy.com/displayfeature.html?featureId={$feature_id}"/>
       <id><xsl:value-of select="$feature_id"/></id>
-  	<summary><xsl:value-of select="str[@name='fully_qualified_name']"/></summary>
+  	<summary><xsl:value-of select="str[@name='name']"/></summary>
       <updated>2008-12-01T07:02:32Z</updated>
       <georss:point><xsl:value-of select="double[@name='lat']"/><xsl:text disable-output-escaping="yes"> </xsl:text>
 	  <xsl:value-of select="double[@name='lng']"/></georss:point>

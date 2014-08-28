@@ -944,12 +944,60 @@ toggleAddressForm = function(structured){
 			return;
 		      }
 		else {
-			alert ('An unknow error has occured on viewStreetPanorama : '+errorCode);		
+			alert ('An unknow error has occured on google streetview : '+errorCode);		
 		}
 		    }  
 		</script>
 
 </#macro>
+
+<#macro leafletMap width heigth googleMapAPIKey CSSClass >
+<@utils.includeJs jsName="/scripts/leaflet.js"/>
+<link href="/styles/leaflet.css" rel="stylesheet" type="text/css" />
+ 			<div name="leafletmap" id="leafletmap" class="${CSSClass}"></div>
+			<script type="text/javascript">
+		  
+		       var map;
+
+		    
+		       function viewStreet(lat, lng, htmlToDisplayParam) {
+			$('leafletmap').setStyle({ 
+				width: '${width}px',
+				height: '${heigth}px'
+			});
+			
+			if (typeof map == 'undefined'){
+		     		map = L.map('leafletmap').setView([lat, lng], 15);
+			}
+			var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+			var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 16, attribution: osmAttrib});
+			map.addLayer(osm);
+			displayInfoWindowHTML = function() {
+				if (typeof htmlToDisplayParam != 'undefined'){
+					 popupcontent = htmlToDisplayParam;
+					  console.log(popupcontent)
+				}else {
+					console.log("no popup content to display");
+				}
+			}
+
+			var greenIcon = L.icon({
+   			 iconUrl: '/images/marker-icon.png',
+			});			
+
+			var marker = L.marker([lat, lng],{icon: greenIcon}).addTo(map);
+			marker.bindPopup(htmlToDisplayParam).openPopup();
+			//displayInfoWindowHTML();
+			}
+
+
+
+		    
+		</script>
+
+</#macro>
+
 
 
 
@@ -960,7 +1008,7 @@ toggleAddressForm = function(structured){
 		<span class="searchfield">
 		<span class="error"><@s.text name="search.city.ambiguous"/> ! </span>
 		<br/><br/>
-		<@s.select listKey="Feature_id" listValue="Fully_qualified_name" name="ambiguouscity" list="ambiguousCities" headerValue="-- %{getText('search.select.city')} --" headerKey="" multiple="false" required="true" labelposition="top" theme="simple" onchange="${onCityFound}();" id="ambiguouscity" />&nbsp;
+		<@s.select listKey="Feature_id" listValue="name" name="ambiguouscity" list="ambiguousCities" headerValue="-- %{getText('search.select.city')} --" headerKey="" multiple="false" required="true" labelposition="top" theme="simple" onchange="${onCityFound}();" id="ambiguouscity" />&nbsp;
 		<@s.url id="chooseOtherCityUrl" action="geocoding_worldwide" includeParams="none" />
 		<a href="${chooseOtherCityUrl}"><@s.text name="search.city.chooseOther" /></a>
 		<br/>
