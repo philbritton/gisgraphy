@@ -27,7 +27,8 @@ import java.util.List;
 import javax.jws.WebService;
 import javax.persistence.EntityExistsException;
 
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import com.gisgraphy.dao.UserDao;
@@ -73,6 +74,7 @@ public class UserManagerImpl extends UniversalManagerImpl implements
     /**
      * {@inheritDoc}
      */
+    @Transactional
     public User saveUser(User user) throws UserExistsException {
 	// if new user, lowercase userId
 	if (user.getVersion() == null) {

@@ -24,8 +24,8 @@ package com.gisgraphy.dao;
 
 import java.util.List;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import com.gisgraphy.model.User;
 

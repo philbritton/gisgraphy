@@ -22,7 +22,7 @@
  *******************************************************************************/
 package com.gisgraphy.webapp.action;
 
-import org.acegisecurity.context.SecurityContextHolder;
+import org.springframework.security.context.SecurityContextHolder;
 import org.apache.struts2.ServletActionContext;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;

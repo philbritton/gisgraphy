@@ -24,9 +24,9 @@ package com.gisgraphy.dao.hibernate;
 
 import java.util.List;
 
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.userdetails.UsernameNotFoundException;
 
 import com.gisgraphy.dao.UserDao;
 import com.gisgraphy.model.User;

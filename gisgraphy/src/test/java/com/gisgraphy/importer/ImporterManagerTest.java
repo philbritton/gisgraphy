@@ -92,7 +92,7 @@ import com.gisgraphy.serializer.common.OutputFormat;
 import com.gisgraphy.test.FeedChecker;
 import com.gisgraphy.test.GisgraphyTestHelper;
 //test class that really must be splitted, refactored, and unit tested vs integration tested
-@Ignore
+//@Ignore
 public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 
     private static final String ADM1_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin1CodesWithWrongNumberOfFields.txt";

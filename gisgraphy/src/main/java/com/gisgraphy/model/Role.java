@@ -32,7 +32,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.acegisecurity.GrantedAuthority;
+import org.springframework.security.GrantedAuthority;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -142,5 +142,22 @@ public class Role extends BaseObject implements Serializable, GrantedAuthority {
 	return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE).append(
 		this.name).toString();
     }
+
+	public int compareTo(Object o) {
+		if (this == o) {
+		    return 0;
+		}
+		if (!(o instanceof Role)) {
+		    return -1;
+		}
+
+		final Role role = (Role) o;
+
+		if (name != null && role.name!=null && name.equals(role.name)){
+			return 0;
+		} else {
+			return -1;
+		}
+	}
 
 }
