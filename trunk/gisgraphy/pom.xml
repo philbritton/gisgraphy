@@ -1288,7 +1288,7 @@
 			</dependencies>
 			<properties>
 				<config.directory>${basedir}/etc/gisgraphy</config.directory>
-				<jdbc.url><![CDATA[jdbc:postgresql://88.191.82.6/gisgraphy]]></jdbc.url>
+				<jdbc.url><![CDATA[jdbc:postgresql://127.0.0.1/gisgraphy]]></jdbc.url>
 				<jdbc.username>postgres</jdbc.username>
 				<jdbc.password></jdbc.password>
 				<maven.test.skip>true</maven.test.skip>

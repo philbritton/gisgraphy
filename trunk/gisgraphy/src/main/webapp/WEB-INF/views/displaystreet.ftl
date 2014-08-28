@@ -6,6 +6,7 @@
 <meta name="Description" content="${preferedName}"/>
 <meta name="heading" content="Free Geolocalisation Services"/>
 <meta name="keywords" content="${preferedName} GPS information population elevation"/>
+<@utils.includeJs jsName="/scripts/prototype.js"/>
 </head>
 <body>
 <br/>
@@ -61,11 +62,11 @@
 
 
 						
-						<@gisgraphysearch.googleStreetView width="700" heigth="400" 
+						<@gisgraphysearch.leafletMap width="700" heigth="400" 
 						googleMapAPIKey=googleMapAPIKey CSSClass="center" />
 						<br/><br/>
-						<@gisgraphysearch.googleStreetPanorama width="700" heigth="300" 
-						googleMapAPIKey=googleMapAPIKey CSSClass="center" />
+						<#--<@gisgraphysearch.googleStreetPanorama width="700" heigth="300" 
+						googleMapAPIKey=googleMapAPIKey CSSClass="center" />-->
 						<script type="text/javascript">
 						
 						function commadot(that) {
@@ -74,8 +75,8 @@
 						    }
 						}
 
-						viewStreet(commadot('${result.location.y}'),commadot('${result.location.x}'));
-						viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
+						viewStreet(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
+						//viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
 						</script>
 						</div>
 					</div>

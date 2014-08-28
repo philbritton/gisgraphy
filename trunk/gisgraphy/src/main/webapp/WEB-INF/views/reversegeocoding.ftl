@@ -89,11 +89,11 @@ return false;
 
 </script>
 
-<@gisgraphysearch.googleStreetView width="700" heigth="400" 
+<@gisgraphysearch.leafletMap width="700" heigth="400" 
 	googleMapAPIKey=googleMapAPIKey CSSClass="center" />
 <br/><br/>
-<@gisgraphysearch.googleStreetPanorama width="700" heigth="300" 
-	googleMapAPIKey=googleMapAPIKey CSSClass="center" />
+<#--<@gisgraphysearch.googleStreetPanorama width="700" heigth="300" 
+	googleMapAPIKey=googleMapAPIKey CSSClass="center" />-->
 
 </body>
 </html>
