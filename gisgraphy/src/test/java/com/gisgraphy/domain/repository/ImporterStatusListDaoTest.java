@@ -135,6 +135,29 @@ public class ImporterStatusListDaoTest extends TestCase {
 		0).toCSV());
 	GisgraphyTestHelper.DeleteNonEmptyDirectory(tempDir);
     }
+    
+    @Test
+    public void testGetShouldNotThrowIfThereIsNotTheCorrectNumberOfColumn() {
+	ImporterStatusListDao importerstatusDao = new ImporterStatusListDao();
+	// create a temporary directory to download files
+	File tempDir = FileHelper.createTempDir(this.getClass()
+		.getSimpleName());
+	ImporterConfig importerConfig = new ImporterConfig();
+	importerConfig.setGeonamesDir(tempDir.getAbsolutePath());
+	importerstatusDao.setImporterConfig(importerConfig);
+	String messageWithNewLine = String.format("Hello%sthere!",System.getProperty("line.separator"));
+	ImporterStatusDto importerStatus = new ImporterStatusDto(
+		PROCESSOR_NAME, CURRENT_FILE_NAME, CURRENT_LINE,
+		TOTAL_LINE_TO_PROCESS, TOTAL_READ_LINE, messageWithNewLine,
+		ImporterStatus.PROCESSING);
+	List<ImporterStatusDto> importerStatusDtoList = new ArrayList<ImporterStatusDto>();
+	importerStatusDtoList.add(importerStatus);
+	importerstatusDao.saveOrUpdate(importerStatusDtoList);
+	List<ImporterStatusDto> importerStatusDtoListExpected = importerstatusDao
+		.get();
+	assertEquals(0, importerStatusDtoListExpected.size());
+	GisgraphyTestHelper.DeleteNonEmptyDirectory(tempDir);
+    }
 
     @Test
     public void testDelete() {
