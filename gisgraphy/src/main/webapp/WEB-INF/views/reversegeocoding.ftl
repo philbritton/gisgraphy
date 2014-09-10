@@ -54,7 +54,8 @@ getHtmlFromSelectedStreet = function(selectedStreetInformation){
 var html = '<div id="EmplacementStreetView" class="googlemapInfoWindowHtml"><img src="/images/logos/logo_32.png" alt="free geocoding services" class="imgAlign"/><span  class="biggertext"><@s.text name="search.geocoding.reverse.breadcrumbs"/></span><hr/>';
 if (typeof selectedStreetInformation.houseNumber != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.housenumber"/> : '+selectedStreetInformation.houseNumber+'</span><br/>';}
 
-if (typeof selectedStreetInformation.name != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.name"/> : '+selectedStreetInformation.name+'</span><br/>';}
+html= html+'<span  class="biggertext"><@s.text name="global.name"/> : '
+if (typeof selectedStreetInformation.name != "undefined"){html= html+selectedStreetInformation.name+'</span><br/>';}else{html= html+'<@s.text name="global.street.noname" /></span><br/>';}
 if (typeof selectedStreetInformation.streetName != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.streetName"/> : '+selectedStreetInformation.streetName+'</span><br/>';}
 if (typeof selectedStreetInformation.city != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.city"/> : '+selectedStreetInformation.city+'</span><br/>';}
 if (typeof selectedStreetInformation.citySubdivision != "undefined"){html= html+'<span  class="biggertext"><@s.text name="global.place"/> : '+selectedStreetInformation.citySubdivision+'</span><br/>';}
