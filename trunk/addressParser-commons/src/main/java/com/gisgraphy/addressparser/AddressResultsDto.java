@@ -45,6 +45,7 @@ public class AddressResultsDto {
 	private String message;
     private Integer numFound = 0;
     private Long QTime = 0L;
+    private Address parsedAddress = null;
     private List<Address> result=new ArrayList<Address>();
 
 
@@ -137,6 +138,14 @@ public class AddressResultsDto {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public Address getParsedAddress() {
+		return parsedAddress;
+	}
+
+	public void setParsedAddress(Address parsedAddress) {
+		this.parsedAddress = parsedAddress;
 	}
 
    
