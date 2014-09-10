@@ -138,8 +138,12 @@ public class ImporterStatusListDao implements IImporterStatusListDao {
 	    String line = bufferReader.readLine();
 	    ImporterStatusDto importerStatusDto = null;
 	    while (line != null) {
-		importerStatusDto = new ImporterStatusDto(line);
-		result.add(importerStatusDto);
+		try {
+			importerStatusDto = new ImporterStatusDto(line);
+			result.add(importerStatusDto);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 		line = bufferReader.readLine();
 	    }
 	} catch (Exception e) {
