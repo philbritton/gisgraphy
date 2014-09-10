@@ -59,6 +59,7 @@ import com.gisgraphy.importer.dto.InterpolationHouseNumber;
 import com.gisgraphy.importer.dto.InterpolationMember;
 import com.gisgraphy.importer.dto.InterpolationType;
 import com.gisgraphy.importer.dto.NodeHouseNumber;
+import com.gisgraphy.service.ServiceException;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -518,8 +519,12 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		houseNumber.setLocation(location);
 		OpenStreetMap osm = findNearestStreet(house.getStreetName(),location);
 		if (osm!=null){
-					osm.addHouseNumber(houseNumber);
-					openStreetMapDao.save(osm);
+					try {
+						osm.addHouseNumber(houseNumber);
+						openStreetMapDao.save(osm);
+					} catch (Exception e) {
+						logger.error("error processing node housenumber, we ignore it but you should consider it : "+ e.getMessage(),e);
+					}
 					return houseNumber;
 		} else {
 			logger.warn("can not find node street for name "+house.getStreetName()+", position :"+ location+ " for "+house);
@@ -696,7 +701,13 @@ public class OpenStreetMapHouseNumberSimpleImporter extends AbstractSimpleImport
 		query.withAllWordsRequired(false).withoutSpellChecking();
 		query.around(location);
 			query.withRadius(SEARCH_DISTANCE);
-		FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
+		FulltextResultsDto results;
+		try {
+			results = fullTextSearchEngine.executeQuery(query);
+		} catch (RuntimeException e) {
+			logger.error("error during fulltext search : "+e.getMessage(),e);
+			return null;
+		}
 		int resultsSize = results.getResultsSize();
 		List<SolrResponseDto> resultsList = results.getResults();
 		if (resultsSize == 1) {

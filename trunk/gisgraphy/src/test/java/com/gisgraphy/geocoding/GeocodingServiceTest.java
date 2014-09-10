@@ -226,7 +226,7 @@ public class GeocodingServiceTest {
 	    @Override
 	    public AddressResultsDto geocode(Address address, String countryCode) throws GeocodingException {
 		GeocodeAdressCalled = true;
-		return null;
+		return new AddressResultsDto();
 	    }
 	};
 	ImporterConfig importerConfig = EasyMock.createMock(ImporterConfig.class);
@@ -250,7 +250,8 @@ public class GeocodingServiceTest {
 	geocodingService.setAddressParser(mockAddressParserService);
 	String rawAddress = "t";
 	AddressQuery query = new AddressQuery(rawAddress, "ac");
-	geocodingService.geocode(query);
+	AddressResultsDto addressResultsDto = geocodingService.geocode(query);
+	Assert.assertEquals("Parsed address should be set when the address paresed is not null",addressList.get(0), addressResultsDto.getParsedAddress());
 	Assert.assertTrue(GeocodeAdressCalled);
     }
     
@@ -1162,6 +1163,68 @@ public class GeocodingServiceTest {
 	geocodingService.setImporterConfig(new ImporterConfig());
 	geocodingService.geocode(address, "fr");
 	EasyMock.verify(statsUsageService);
+    }
+    
+    
+    @Test
+    public void testParsedAddressShouldBeSetForGeocodeAddress_city() {
+	GeocodingService geocodingService = new GeocodingService() {
+	    @Override
+	    protected List<SolrResponseDto> findCitiesInText(String text, String countryCode) {
+		return new ArrayList<SolrResponseDto>();
+	    }
+	    
+	    @Override
+	    protected List<SolrResponseDto> findStreetInText(String text, String countryCode, Point point) {
+		return new ArrayList<SolrResponseDto>();
+	    }
+	};
+	geocodingService.setStatsUsageService(statsUsageService);
+	IAddressParserService mockAddressParserService = EasyMock.createMock(IAddressParserService.class);
+	List<Address> addressList = new ArrayList<Address>() {
+	    {
+		Address address = new Address();
+		address.setCity("city");
+		add(address);
+		
+	    }
+	};
+	AddressResultsDto addressresults = new AddressResultsDto(addressList, 3L);
+	statsUsageService.increaseUsage(StatsUsageType.GEOCODING);
+	EasyMock.replay(statsUsageService);
+	EasyMock.expect(mockAddressParserService.execute((AddressQuery) EasyMock.anyObject())).andStubReturn(addressresults);
+	EasyMock.replay(mockAddressParserService);
+	geocodingService.setAddressParser(mockAddressParserService);
+	Address address = new Address();
+	address.setCity("city");
+	geocodingService.setImporterConfig(new ImporterConfig());
+	AddressResultsDto addressResultsDto = geocodingService.geocode(address, "fr");
+	Assert.assertEquals("parsed address should be null when a structured address is provided",null, addressResultsDto.getParsedAddress());
+	EasyMock.verify(statsUsageService);
+    }
+    
+    @Test
+    public void testParsedAddressShouldBeSetForGeocodeAddress_OnlyStreet() {
+	findStreetCalled = false;
+	GeocodingService geocodingService = new GeocodingService() {
+
+	    @Override
+	    protected java.util.List<SolrResponseDto> findStreetInText(String text, String countryCode, Point point) {
+		findStreetCalled = true;
+		return null;
+	    }
+	};
+	geocodingService.setStatsUsageService(statsUsageService);
+	IAddressParserService mockAddressParserService = EasyMock.createMock(IAddressParserService.class);
+	EasyMock.expect(mockAddressParserService.execute((AddressQuery) EasyMock.anyObject())).andStubReturn(null);
+	EasyMock.replay(mockAddressParserService);
+	geocodingService.setAddressParser(mockAddressParserService);
+	Address address = new Address();
+	address.setStreetName("foo");
+
+	AddressResultsDto addressResultsDto = geocodingService.geocode(address, "ac");
+	Assert.assertEquals("parsed address should be null when a structured address is provided",null, addressResultsDto.getParsedAddress());
+	Assert.assertTrue(findStreetCalled);
     }
     
     @Test

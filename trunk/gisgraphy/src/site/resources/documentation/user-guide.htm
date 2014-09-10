@@ -1065,6 +1065,7 @@ By default the geocoding service is mapped to <code>/geocoding</code> pattern bu
 <a name="geocodingserviceoutputfieldsdescription"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Output fields description</h3>
+The Geocoding service returns a list of address. it also return the parsed address in a parsedAddress field ()when the <a href="http://www.address-parser.net">address parser</a> is enabled.
 Here is a description of all the output fields of an adress that can be returned  :<br/>
 <table class="mediumsizetable smartborder">
 <th>field</th><th>description</th><th>Examples of value</th><th>Examples in address</th>
@@ -1124,6 +1125,9 @@ IGeocodingService geocodingService = new GeocodingService();
 	*/
 	System.out.println("Query tooks "+result.getQTime()+" ms and"+
 		" return "+result.getNumFound()+" result(s)");
+	//if the parser is enabled or if the geocoder is called with a structured address
+	//then, the the parsedAddress field is filled.
+	System.out.println("parsed address : "+result.getParsedAddress());
 	for (Address address : results.getResult()){
 		System.out.println("housenumber : "+address.getHouseNumber());
 		System.out.println("streetType : "+address.getStreetType());
