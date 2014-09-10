@@ -750,6 +750,10 @@
 				migrate from acegi to spring security
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Geocoding now output the parsed address in a specific field (parsedAddress)
+			</action>
+			
 			</release>
 			
 	</body>

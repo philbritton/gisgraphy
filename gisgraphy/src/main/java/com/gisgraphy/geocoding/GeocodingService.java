@@ -183,7 +183,10 @@ public class GeocodingService implements IGeocodingService {
 			if (logger.isDebugEnabled()) {
 				logger.debug("successfully parsed address : " + rawAddress + " : " + addressResultDto.getResult().get(0));
 			}
-			return geocode(addressResultDto.getResult().get(0), countryCode);
+			Address address = addressResultDto.getResult().get(0);
+			AddressResultsDto addressesDto = geocode(address, countryCode);
+			addressesDto.setParsedAddress(address);
+			return addressesDto;
 		} else if (importerConfig.isOpenStreetMapFillIsIn()) {
 			logger.debug("is_in is active");
 			statsUsageService.increaseUsage(StatsUsageType.GEOCODING);
@@ -294,6 +297,7 @@ public class GeocodingService implements IGeocodingService {
 		if (isEmptyString(address.getCity()) && isEmptyString(address.getZipCode()) && isEmptyString(address.getPostTown())) {
 			List<SolrResponseDto> streets = findStreetInText(address.getStreetName(), countryCode, null);
 			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(streets, null, null);
+			//results.setParsedAddress(address);
 			Long endTime = System.currentTimeMillis();
 			long qTime = endTime - startTime;
 			results.setQTime(qTime);
@@ -322,6 +326,7 @@ public class GeocodingService implements IGeocodingService {
 				fulltextResultsDto = findStreetInText(streetSentenceToSearch, countryCode, cityLocation);
 			}
 			AddressResultsDto results = buildAddressResultDtoFromStreetsAndCities(fulltextResultsDto, cities, address.getHouseNumber());
+			//results.setParsedAddress(address);
 			Long endTime = System.currentTimeMillis();
 			long qTime = endTime - startTime;
 			results.setQTime(qTime);

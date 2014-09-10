@@ -256,12 +256,11 @@ public class HouseNumber implements Comparable<HouseNumber>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((openstreetmapId == null) ? 0 : openstreetmapId.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
-	@Override
+	/*@Override
 	public boolean equals(Object obj) {
 		if (this == obj){
 			return true;
@@ -284,7 +283,25 @@ public class HouseNumber implements Comparable<HouseNumber>{
 		}
 		return true;
 	}
-
+*/
+	
+	 @Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HouseNumber other = (HouseNumber) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	 
 	@Override
 	public String toString() {
 		return "HouseNumber [id=" + id + ", openstreetmapId=" + openstreetmapId

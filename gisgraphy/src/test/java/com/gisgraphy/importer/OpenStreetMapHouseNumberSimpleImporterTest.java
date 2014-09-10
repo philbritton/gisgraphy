@@ -361,6 +361,28 @@ public class OpenStreetMapHouseNumberSimpleImporterTest {
 		EasyMock.verify(fulltextEngine);
 	}
 	
+	@Test
+	public void findNearestStreet_errorsShouldBeCatched(){
+		
+		String streetName="--";
+		FulltextQuery query = new FulltextQuery(streetName, Pagination.DEFAULT_PAGINATION, OpenStreetMapHouseNumberSimpleImporter.MEDIUM_OUTPUT, 
+				com.gisgraphy.fulltext.Constants.STREET_PLACETYPE, null);
+		Point point = GeolocHelper.createPoint(2F,	3F);
+		query.around(point);
+		query.withRadius(OpenStreetMapHouseNumberSimpleImporter.SEARCH_DISTANCE);
+		query.withAllWordsRequired(false).withoutSpellChecking();
+		
+		
+
+		IFullTextSearchEngine fulltextEngine = EasyMock.createMock(IFullTextSearchEngine.class);
+		OpenStreetMapHouseNumberSimpleImporter importer = new OpenStreetMapHouseNumberSimpleImporter();
+		EasyMock.expect(fulltextEngine.executeQuery(query)).andThrow(new RuntimeException());
+		EasyMock.replay(fulltextEngine);
+		importer.setFullTextSearchEngine(fulltextEngine);
+		OpenStreetMap result = importer.findNearestStreet(streetName, point);
+		EasyMock.verify(fulltextEngine);
+	}
+	
 	
 	@Test
 	public void findNearestStreet_severalResults(){
