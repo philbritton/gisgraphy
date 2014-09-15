@@ -687,5 +687,26 @@ public class GenericGisDao<T extends GisFeature> extends
 	});
 	}
 
+	public String getShapeAsWKTByFeatureId(final Long featureId) {
+		if (featureId ==null){
+			return null;
+		}
+		return (String) this.getHibernateTemplate().execute(
+				new HibernateCallback() {
+
+				    public Object doInHibernate(Session session)
+					    throws PersistenceException {
+					String queryString = "select ST_AsText("+GisFeature.SHAPE_COLUMN_NAME+") from " + persistentClass.getSimpleName()
+			+ " as g where g.featureId= ?";
+
+					Query qry = session.createQuery(queryString);
+					qry.setParameter(0, featureId);
+					qry.setCacheable(true);
+					return (String) qry.uniqueResult();
+				    }
+				});
+	}
+    
+
     
 }

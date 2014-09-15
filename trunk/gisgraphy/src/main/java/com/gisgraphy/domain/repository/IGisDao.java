@@ -223,4 +223,11 @@ public interface IGisDao<T> extends IDao<T, java.lang.Long> {
      * create the shape index for the entity if it doesn't already exists. 
      */
     public void createGISTIndexForShapeColumn();
+    
+    
+    /**
+     * @param featureId
+     * @return the shape as wkt or null;
+     */
+    public String getShapeAsWKTByFeatureId(Long featureId);
 }

@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
+import com.gisgraphy.domain.repository.GisFeatureDao;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.fulltext.FullTextFields;
@@ -86,10 +88,14 @@ public class DisplayFeatureAction extends ActionSupport {
 	    .getLogger(DisplayFeatureAction.class);
 
     private IFullTextSearchEngine fullTextSearchEngine;
+    
+    private GisFeatureDao gisFeatureDao;
 
     private String featureId;
 
     private SolrResponseDto result = null;
+    
+    private String shape = null;
 
     public static final String ERROR = "error";
 
@@ -153,6 +159,7 @@ public class DisplayFeatureAction extends ActionSupport {
 		return ERROR;
 	    } else {
 		result = results.get(0);
+		this.shape = retrieveShape(result.getFeature_id());
 	    }
 	} catch (RuntimeException e) {
 	    if (e.getCause() != null) {
@@ -169,7 +176,15 @@ public class DisplayFeatureAction extends ActionSupport {
 	return SUCCESS;
     }
 
-    /**
+    protected String retrieveShape(Long featureId) {
+    	if (featureId!=null){
+    		return gisFeatureDao.getShapeAsWKTByFeatureId(featureId);
+    	}
+    	return null;
+		
+	}
+
+	/**
      * @param fullTextSearchEngine
      *                the fullTextSearchEngine to set
      */
@@ -178,6 +193,13 @@ public class DisplayFeatureAction extends ActionSupport {
 	    IFullTextSearchEngine fullTextSearchEngine) {
 	this.fullTextSearchEngine = fullTextSearchEngine;
     }
+    
+    @Required
+    public void setGisFeatureDao(GisFeatureDao gisFeatureDao) {
+		this.gisFeatureDao = gisFeatureDao;
+	}
+    
+    
 
     /**
      * @param featureId
@@ -207,5 +229,11 @@ public class DisplayFeatureAction extends ActionSupport {
     public String getErrorMessage() {
 	return errorMessage;
     }
+
+	public String getShape() {
+		return shape;
+	}
+
+	
 
 }

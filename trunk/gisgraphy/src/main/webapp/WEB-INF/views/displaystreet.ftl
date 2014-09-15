@@ -75,7 +75,7 @@
 						    }
 						}
 
-						viewStreet(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
+						displayMap(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
 						//viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
 						</script>
 						</div>
