@@ -951,49 +951,38 @@ toggleAddressForm = function(structured){
 
 </#macro>
 
-<#macro leafletMap width heigth googleMapAPIKey CSSClass >
+<#macro leafletMap width heigth googleMapAPIKey CSSClass zoom=16>
+<@utils.includeJs jsName="/scripts/prototype.js"/>
 <@utils.includeJs jsName="/scripts/leaflet.js"/>
 <link href="/styles/leaflet.css" rel="stylesheet" type="text/css" />
  			<div name="leafletmap" id="leafletmap" class="${CSSClass}"></div>
 			<script type="text/javascript">
 		  
 		       var map;
-
-		    
-		       function viewStreet(lat, lng, htmlToDisplayParam) {
+			
+		       function displayMap(lat, lng, htmlToDisplayParam) {
 			$('leafletmap').setStyle({ 
 				width: '${width}px',
 				height: '${heigth}px'
 			});
 			
 			if (typeof map == 'undefined'){
-		     		map = L.map('leafletmap').setView([lat, lng], 15);
+		     		map = L.map('leafletmap').setView([lat, lng], ${zoom});
 			}
 			var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 			var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 16, attribution: osmAttrib});
 			map.addLayer(osm);
-			displayInfoWindowHTML = function() {
-				if (typeof htmlToDisplayParam != 'undefined'){
-					 popupcontent = htmlToDisplayParam;
-					  console.log(popupcontent)
-				}else {
-					console.log("no popup content to display");
-				}
 			}
 
 			var greenIcon = L.icon({
    			 iconUrl: '/images/marker-icon.png',
 			});			
-
+			if (typeof htmlToDisplayParam != 'undefined'){
 			var marker = L.marker([lat, lng],{icon: greenIcon}).addTo(map);
 			marker.bindPopup(htmlToDisplayParam).openPopup();
-			//displayInfoWindowHTML();
 			}
 
-
-
-		    
 		</script>
 
 </#macro>

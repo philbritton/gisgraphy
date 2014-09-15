@@ -1,11 +1,21 @@
-<html>
+<#import "macros/utils.ftl" as utils>
+<#import "macros/gisgraphysearch.ftl" as gisgraphysearch><html>
 <head>
 <title>${preferedName}</title>
 <meta name="Description" content="${preferedName}"/>
 <meta name="heading" content="Free Geolocalisation Services"/>
 <meta name="keywords" content="${preferedName} GPS information population elevation"/>
+
 </head>
 <body>
+<style>
+  .leafletmap { float:right; }
+</style>
+<#if shape??>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+</#if>
+
+
 <br/>
 			<!--<h1>${preferedName}</h1>-->
 			<div class="clear"><br/></div>
@@ -16,7 +26,8 @@
 					</div>
 					
 					<div class="separator"><hr/></div>
-					
+					<@gisgraphysearch.leafletMap width="500" heigth="500" 
+						googleMapAPIKey='' CSSClass="leafletmap" zoom=12 />
 					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links " />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a> | </#if>
 					  <@s.url id="proximitySearchUrl" action="ajaxgeolocsearch!search" forceAddSchemeHostAndPort="true" includeParams="none" >
 			  			<@s.param name="lat" value="${result.lat?c}" />
@@ -158,5 +169,11 @@
 					<br/><br/>
 					</div>
 			 <div class="clear"><br/></div>
+<script>
+displayMap(${result.lat?c},${result.lng?c},null);
+<#if shape??>
+omnivore.wkt.parse('${shape}').addTo(map);
+</#if>
+</script>
 </body>
 </html>

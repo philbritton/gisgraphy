@@ -34,7 +34,7 @@ function detectLanguage(){
             this.currentLanguage = (o.currentLanguage || DEFAULT_LANGUAGE).toUpperCase();
 	    this.allowPoiSelection = o.allowPoiSelection || true;
 	    this.allowLanguageSelection = o.allowLanguageSelection || true;
-            this.fulltextURL = o.fulltextURL || 'http://localhost:8080/fulltext/suggest';
+            this.fulltextURL = o.fulltextURL || '/fulltext/suggest';
             this.reversegeocodingUrl = o.reversegeocodingUrl || 'http://localhost:8080/reversegeocoding/search';
             this.enableReverseGeocoding = o.enableReverseGeocoding || true;//todo if enable check reversegeocodingUrl is defined
             this.limit=o.limit || 7;

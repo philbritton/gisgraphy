@@ -79,7 +79,7 @@ doSearch = function(){
 			alert('no result found');
 		} else if (resultsSize == 1){
 			selectedStreetInformation = results[0];
-			viewStreet(selectedStreetInformation.lat,selectedStreetInformation.lng,getHtmlFromSelectedStreet(selectedStreetInformation));
+			displayMap(selectedStreetInformation.lat,selectedStreetInformation.lng,getHtmlFromSelectedStreet(selectedStreetInformation));
 			viewStreetPanorama(selectedStreetInformation.lat,selectedStreetInformation.lng);
 		}
 	}

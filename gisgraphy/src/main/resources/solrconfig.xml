@@ -486,12 +486,13 @@
     <str name="defType">edismax</str>
     <str name="rows">10</str>
     <str name="start">0</str>
-    <str name="fl">name,zipcode,country_code,adm1_name,is_in,feature_id,lat,lng</str>
+    <str name="fl">name,zipcode,country_code,adm1_name,is_in,feature_id,lat,lng,score</str>
     <str name="fq">placetype:city placetype:adm placetype:street</str>
     <str name="wt">json</str>
-    <str name="qf">suggest_in^30 suggest_name^50.0 zipcode^20</str>
-   <!-- <str name="pf">suggest_in^30 suggest_name^50.0 zipcode^20</str>-->
-    <str name="bq">population^2</str>
+    <str name="qf">suggest_in^30 suggest_name^50.0 zipcode^20 name^200</str>
+    <str name="pf">name^20000</str>
+    <str name="ps">0</str>
+    <str name="bq">population^2 placetype:city^15</str>
     <str name="bf">pow(population,0.3) pow(city_population,0.3)</str>
     <str name="mm">1&lt;100% 2&lt;-2 5&lt;-3 </str>
    <!-- <str name="group">true</str>
