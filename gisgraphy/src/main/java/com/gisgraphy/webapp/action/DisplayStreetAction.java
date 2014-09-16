@@ -79,6 +79,8 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
     private IOpenStreetMapDao openStreetMapDao;
 
     private String gid;
+    
+    private String shape = null;
 
     private OpenStreetMap result = null;
 
@@ -133,7 +135,9 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
 	    if (result == null) {
 		errorRef = ERROR_REF_NORESULT;
 		return ERROR;
-	    } 
+	    } else {
+	    	this.shape= retrieveShape(result.getGid());
+	    }
 	} catch (RuntimeException e) {
 	    if (e.getCause() != null) {
 		logger.warn("An error occured during search : "
@@ -149,6 +153,14 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
 	return SUCCESS;
     }
 
+
+    protected String retrieveShape(Long gid) {
+    	if (gid!=null){
+    		return openStreetMapDao.getShapeAsWKTByGId(gid);
+    	}
+    	return null;
+		
+	}
 
 
     /**
@@ -206,6 +218,11 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
     public String getGoogleMapAPIKey() {
         return GisgraphyConfig.googleMapAPIKey == null ? "" : GisgraphyConfig.googleMapAPIKey;
     }
+
+
+	public String getShape() {
+		return shape;
+	}
 
 
 }

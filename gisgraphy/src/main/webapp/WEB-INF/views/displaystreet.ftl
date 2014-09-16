@@ -7,6 +7,10 @@
 <meta name="heading" content="Free Geolocalisation Services"/>
 <meta name="keywords" content="${preferedName} GPS information population elevation"/>
 <@utils.includeJs jsName="/scripts/prototype.js"/>
+<#if shape??>
+ <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+</#if>
+
 </head>
 <body>
 <br/>
@@ -60,6 +64,9 @@
                                                 </p>
                                        		 </#if>
 
+						<#if shape??>
+                           <div class="center"><strong><@s.text name="displaystreet.partofstreet"/></strong></div><br/>
+                        </#if>
 
 						
 						<@gisgraphysearch.leafletMap width="700" heigth="400" 
@@ -74,9 +81,10 @@
 						       return that.replace(/\,/g,".");
 						    }
 						}
-
-						displayMap(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
-						//viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
+						 displayMap(commadot('${result.location.y + 0.0005}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
+                         <#if shape??>
+                              omnivore.wkt.parse('${shape}').addTo(map);
+                         </#if>
 						</script>
 						</div>
 					</div>

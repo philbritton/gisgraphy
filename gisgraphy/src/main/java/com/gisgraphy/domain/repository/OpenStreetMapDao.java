@@ -46,6 +46,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import com.gisgraphy.GisgraphyException;
+import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.geoloc.entity.OpenStreetMap;
 import com.gisgraphy.domain.geoloc.entity.Street;
 import com.gisgraphy.domain.geoloc.entity.event.EventManager;
@@ -582,6 +583,25 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
     }
     
     
+    public String getShapeAsWKTByGId(final Long gid) {
+		if (gid ==null){
+			return null;
+		}
+		return (String) this.getHibernateTemplate().execute(
+				new HibernateCallback() {
+
+				    public Object doInHibernate(Session session)
+					    throws PersistenceException {
+					String queryString = "select ST_AsText("+GisFeature.SHAPE_COLUMN_NAME+") from " + persistentClass.getSimpleName()
+			+ " as o where o.gid=?";
+
+					Query qry = session.createQuery(queryString);
+					qry.setParameter(0, gid);
+					qry.setCacheable(true);
+					return (String) qry.uniqueResult();
+				    }
+				});
+	}
 
 
 

@@ -149,5 +149,10 @@ public interface IOpenStreetMapDao extends IDao<OpenStreetMap, java.lang.Long> {
      */
     public OpenStreetMap getNearestRoadFrom(
     	    final Point point);
-    
+
+    /**
+     * @param gid the gid of the feature
+     * @return the shape as wkt
+     */
+    public String getShapeAsWKTByGId(final Long gid);
 }

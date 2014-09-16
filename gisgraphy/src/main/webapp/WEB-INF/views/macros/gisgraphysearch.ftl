@@ -961,27 +961,28 @@ toggleAddressForm = function(structured){
 		       var map;
 			
 		       function displayMap(lat, lng, htmlToDisplayParam) {
-			$('leafletmap').setStyle({ 
-				width: '${width}px',
-				height: '${heigth}px'
-			});
-			
-			if (typeof map == 'undefined'){
-		     		map = L.map('leafletmap').setView([lat, lng], ${zoom});
-			}
-			var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-			var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 16, attribution: osmAttrib});
-			map.addLayer(osm);
-			}
-
-			var greenIcon = L.icon({
-   			 iconUrl: '/images/marker-icon.png',
-			});			
-			if (typeof htmlToDisplayParam != 'undefined'){
-			var marker = L.marker([lat, lng],{icon: greenIcon}).addTo(map);
-			marker.bindPopup(htmlToDisplayParam).openPopup();
-			}
+					$('leafletmap').setStyle({ 
+						width: '${width}px',
+						height: '${heigth}px'
+					});
+					
+					if (typeof map == 'undefined'){
+				     		map = L.map('leafletmap').setView([lat, lng], ${zoom});
+					}
+					var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+					var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+					var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 16, attribution: osmAttrib});
+					map.addLayer(osm);
+					
+		
+					var greenIcon = L.icon({
+		   			 iconUrl: '/images/marker-icon.png',
+					});			
+					if (typeof htmlToDisplayParam != 'undefined'){
+					var marker = L.marker([lat, lng],{icon: greenIcon}).addTo(map);
+					marker.bindPopup(htmlToDisplayParam).openPopup();
+					}
+			 }
 
 		</script>
 

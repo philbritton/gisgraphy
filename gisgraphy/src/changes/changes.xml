@@ -754,6 +754,10 @@
 				Geocoding now output the parsed address in a specific field (parsedAddress)
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				Add a map with the shape of feature and city when we display infos on html page
+			</action>
+			
 			</release>
 			
 	</body>
