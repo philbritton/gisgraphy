@@ -641,7 +641,23 @@ public class OpenStreetMapDaoTest extends AbstractIntegrationHttpSolrTestCase{
 	Assert.assertNull("Road should be null because it is a footway street",nearestRoad);
     }
 
-    
+    @Test
+    public void testGetShapeAsWKTByGId(){
+    	 LineString shape = GeolocHelper.createLineString("LINESTRING (6.9416088 50.9154239,6.9410001 50.99999)");
+    	    shape.setSRID(SRID.WGS84_SRID.getSRID());
+    		
+    		OpenStreetMap streetOSM = GisgraphyTestHelper.createOpenStreetMapForPeterMartinStreet();
+    		streetOSM.setShape(shape);
+    		openStreetMapDao.save(streetOSM);
+    		assertNotNull(openStreetMapDao.get(streetOSM.getId()));
+    	
+    	String shapeAsWKT = this.openStreetMapDao.getShapeAsWKTByGId(null);
+    	Assert.assertNull(shapeAsWKT);
+    	
+    	
+    	shapeAsWKT = this.openStreetMapDao.getShapeAsWKTByGId(streetOSM.getGid());
+    	Assert.assertEquals("LINESTRING(6.9416088 50.9154239,6.9410001 50.99999)", shapeAsWKT);
+    }
     
     public void setOpenStreetMapDao(IOpenStreetMapDao openStreetMapDao) {
         this.openStreetMapDao = openStreetMapDao;

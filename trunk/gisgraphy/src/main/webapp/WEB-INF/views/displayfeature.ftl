@@ -27,7 +27,7 @@
 					
 					<div class="separator"><hr/></div>
 					<@gisgraphysearch.leafletMap width="500" heigth="500" 
-						googleMapAPIKey='' CSSClass="leafletmap" zoom=12 />
+						googleMapAPIKey='' CSSClass="leafletmap" zoom=11 />
 					<#if result.google_map_url?? && result.openstreetmap_map_url??><img src="images/world_link.png" alt="Maps links " />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a> | </#if>
 					  <@s.url id="proximitySearchUrl" action="ajaxgeolocsearch!search" forceAddSchemeHostAndPort="true" includeParams="none" >
 			  			<@s.param name="lat" value="${result.lat?c}" />
@@ -170,7 +170,7 @@
 					</div>
 			 <div class="clear"><br/></div>
 <script>
-displayMap(${result.lat?c},${result.lng?c},null);
+displayMap(${result.lat?c},${result.lng?c},undefined);
 <#if shape??>
 omnivore.wkt.parse('${shape}').addTo(map);
 </#if>
