@@ -1717,7 +1717,7 @@ you can
 <ul>
 	<li> Specify one or more words</li>
 	<li> Search for text or zip code</li>
-	<li> Specify a GPS restriction </li>
+	<li> Specify a GPS restriction (promote nearsest ,not sorted but hav an impact on the score)</li>
 	<li> Limit the results to a specific
 		<ul>
 		<li>Language</li>
@@ -1767,7 +1767,7 @@ The following languages are supported :
 <br/>
 
 <a name="latitudefulltext"></a>
-<li>The latitude (optional) (north-south) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates.
+<li>The latitude (optional) (north-south) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates. If lat/long is provided then the nearest place will be promotes (not sorted but hav an impact on the score)
 <br/> Examples : 
 <ul>
 <li>-4.2</li>
@@ -1777,7 +1777,7 @@ The following languages are supported :
 
 
 <a name="longitudefulltext"></a>
-<li>The longitude (optional) (east-West) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates.
+<li>The longitude (optional) (east-West) for the location point to search around and restrict the search results. The value is a float and can be negative. It use GPS coordinates. If lat/long is provided then the nearest place will be promotes (not sorted but hav an impact on the score)
 <br/> Examples : 
 <ul>
 <li>3.6</li>
@@ -1785,7 +1785,8 @@ The following languages are supported :
 </li>
 <br/>
 <a name="radiusfulltext"></a>
-<li>The radius (optional) : distance from the location point in meters we'd like to search around. The value is a number > 0 if it is not specify or incorrect : The default value will be used (10 km).
+<li>The radius (optional) : distance from the location point in meters we'd like to search around. The value is a number >= 0 if it is not specify or incorrect : The default value will be used (10 km).
+If the radius is >0, then the result will be filtered by a bounding box and nearest will be promotes. If the radius is equal to 0 then it will only promote the nearest.
 <br/> Examples : 
 <ul>
 <li>50000</li>
