@@ -95,6 +95,16 @@ public class Constants {
      * The query type parameter (dismax, standard, ...) (Solr parameter name)
      */
     public static final String QT_PARAMETER = "qt";
+    
+    /**
+     * The boost query type parameter 
+     */
+    public static final String BQ_PARAMETER = "bq";
+    
+    /**
+     * The boost field type parameter 
+     */
+    public static final String BF_PARAMETER = "bf";
 
     /**
      * The rows parameter (useful for paginate, Solr parameter name)

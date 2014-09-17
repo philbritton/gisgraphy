@@ -59,7 +59,10 @@ public class FulltextQuerySolrHelper {
 	protected static final String FQ_COUNTRYCODE = FullTextFields.COUNTRYCODE.getValue()+":%s";
 	protected static final String FQ_PLACETYPE = FullTextFields.PLACETYPE.getValue()+":";
 	protected static final String FQ_LOCATION = "{!bbox "+Constants.SPATIAL_FIELD_PARAMETER+"="+GisFeature.LOCATION_COLUMN_NAME+"}";
-	protected static final String BF_NEAREST = "recip(geodist(),2,2000,2000)";
+
+	//http://rechneronline.de/function-graphs/
+	protected static final String BF_NEAREST = "recip(geodist(),1.2,1000,1)";//first number impact  the nearest (the more, the nearest got importance), two other the farest. 2/3 =>the highest score
+	//http://wiki.apache.org/solr/FunctionQuery#recip
 	
 	//{!geofilt sfield=store}&pt=45.15,-93.85&d=5
 	
@@ -151,11 +154,15 @@ public class FulltextQuerySolrHelper {
 			parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
 					.toString());
+			if (query.getPoint() != null ){
+			parameters.set(Constants.BF_PARAMETER, BF_NEAREST);
+			}
 		}
 		else if (query.isSuggest()){
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.suggest
 					.toString());
 			parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
+			parameters.set(Constants.BF_PARAMETER, BF_NEAREST);
 		} else if (isNumericQuery(query.getQuery())) {
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.numeric
 					.toString());
