@@ -758,6 +758,10 @@
 				Add a map with the shape of feature and city when we display infos on html page
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				fulltext : promote nearest results (not sorted!) when a location is given
+			</action>
+			
 			</release>
 			
 	</body>

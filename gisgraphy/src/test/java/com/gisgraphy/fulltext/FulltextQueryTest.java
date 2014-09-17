@@ -51,6 +51,13 @@ public class FulltextQueryTest {
 	   query.withRadius(1);
 	   Assert.assertEquals(1, query.getRadius(),0.00001);
    }
+   
+   @Test
+   public void withradiusShouldAccept0(){
+	   FulltextQuery query = new FulltextQuery("foo");
+	   query.withRadius(0);
+	   Assert.assertEquals(0, query.getRadius(),0.0000001);
+   }
 
     @Test
     public void testFulltextQueryStringPaginationOutputClassOfQextendsGisFeature() {
