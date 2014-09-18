@@ -489,10 +489,10 @@
     <str name="fl">name,zipcode,country_code,adm1_name,is_in,feature_id,lat,lng,score</str>
     <str name="fq">placetype:city placetype:adm placetype:street</str>
     <str name="wt">json</str>
-    <str name="qf">suggest_in^0.3 suggest_name^0.5 zipcode^0.2 name^0.1</str>
+    <str name="qf">suggest_in^0.5 suggest_name^0.55 zipcode^0.2 name^0.01</str>
     <!--<str name="pf">name^2</str>
     <str name="ps">0</str>-->
-    <str name="bq">population^2 placetype:city^15</str>
+    <str name="bq">population^1.5 placetype:city^1.2</str>
 <!--    <str name="bf">pow(population,0.3) pow(city_population,0.3)</str>-->
     <str name="mm">1&lt;100% 2&lt;-2 5&lt;-3 </str>
    <!-- <str name="group">true</str>
