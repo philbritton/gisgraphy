@@ -631,6 +631,18 @@
             },
             _getFromRemote: function getFromRemote(query, cb) {
                 var that = this, url, uriEncodedQuery;
+		//modification done by gisgraphy start
+		var reg=new RegExp("[ ,-;]+", "g");
+		var tableau=query.trim().split(reg);
+		if (tableau && tableau[tableau.length-1]){
+			var lastLength=tableau[tableau.length-1].length
+			//console.log('length='+tableau[tableau.length-1].length);
+			if (lastLength == 1){
+				//console.log('ignoring due to last word length');
+				return;
+			}
+		}
+		//modification done by gisgraphy end
                 if (!this.transport) {
                     return;
                 }
