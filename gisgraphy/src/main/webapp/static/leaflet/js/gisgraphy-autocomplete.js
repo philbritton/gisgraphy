@@ -35,15 +35,18 @@ function detectLanguage(){
 	    this.allowPoiSelection = o.allowPoiSelection || true;
 	    this.allowLanguageSelection = o.allowLanguageSelection || true;
             this.fulltextURL = o.fulltextURL || '/fulltext/suggest';
-            this.reversegeocodingUrl = o.reversegeocodingUrl || 'http://localhost:8080/reversegeocoding/search';
+            this.reversegeocodingUrl = o.reversegeocodingUrl || '/reversegeocoding/search';
+	    this.geocodingUrl = o.geocodingUrl || '/geocoding/search';
             this.enableReverseGeocoding = o.enableReverseGeocoding || true;//todo if enable check reversegeocodingUrl is defined
-            this.limit=o.limit || 7;
+            this.limit=o.limit || 20;
             this.onItemSelect=o.onItemSelect || logOnSelect;
 
             this.formNodeID = o.formNodeID || this.ELEMENT_ID+'-form';
             this.placetypeNodeID = o.placetypeNodeID || this.ELEMENT_ID+'-placetypes';
             this.languagesNodeID = o.languagesNodeID || this.ELEMENT_ID+'-languages';
             this.inputSearchNodeID = o.inputSearchNodeID || this.ELEMENT_ID+'-inputSearch';
+	    this.searchButtonNodeID = o.searchButtonNodeID || this.ELEMENT_ID+'-searchButton';
+	    this.resultBoxNodeID = o.resultBoxNodeID || this.ELEMENT_ID+'-resultBox';
 	    this.buildSearchBox=buildSearchBox;
 	    this.buildPlaceTypeDropBox=buildPlaceTypeDropBox;
 	    this.BuildLanguageSelector=BuildLanguageSelector;
@@ -53,6 +56,8 @@ function detectLanguage(){
 	    this.getLocalSuggestionsArray=getLocalSuggestionsArray;
 	    this.changeLanguage=changeLanguage;
 	    this.replace=$.proxy(replace,this);
+	    this.doGeocoding = o.doGeocoding || doGeocoding;
+	    this.doProcessGeocodingResults = o.doProcessGeocodingResults || $.proxy(doProcessGeocodingResults,this);
             this.initUI();
 	    function logOnSelect(obj, datum, name) {      
                  console.log(obj); 
@@ -82,7 +87,8 @@ function detectLanguage(){
 	    },this));
 	    function buildSearchBox(){
 	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',this.inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo('#'+this.formNodeID);
-	//<input type="text" placeholder="Enter an address, GPS or DMS coordinate" id="ELEMENT_IDautocomplete" autocomplete="off" class="typeahead clearable"/>
+	var searchbutton =$('<input>').attr('type','button').attr('value','').addClass('searchbutton').attr('onclick','gg.doGeocoding();').attr('id',this.searchButtonNodeID).appendTo('#'+this.formNodeID);
+	var resultsBox = $('<div>').attr('id',this.resultBoxNodeID).addClass('resultBox').appendTo('#'+this.formNodeID)
 };
  function replace() {
 			if (this.enableReverseGeocoding){
@@ -91,9 +97,40 @@ function detectLanguage(){
 					return this.reversegeocodingUrl +"?format=json&lat="+latLong.lat+"&lng="+latLong.long;
 				} 
 			}	
-			return this.fulltextURL +'?format=json&suggest=true&allwordsrequired=false&'+ $('#'+this.formNodeID).serialize();
+			return this.fulltextURL +'?format=json&suggest=true&allwordsrequired=false&radius=10000000&placetype=city&placetype=adm&style=long&placetype=street&lat=50.455&lng=3.204&from=1&to=50&'+ $('#'+this.formNodeID).serialize();
 		}
 ;
+function doGeocoding(){
+	$.ajax({
+	  url: this.geocodingUrl+'?format=json&address='+$('#'+this.inputSearchNodeID).val(),
+	})
+	  .done($.proxy(doProcessGeocodingResults,this));
+};
+function doProcessGeocodingResults(data){
+	    if ( console && console.log ) {
+	      console.log(data.result );
+	    }
+	    
+	    $('#'+this.resultBoxNodeID).empty();
+	     if (data){
+		if (data.numFound && data.numFound > 0){  
+			$.each(data.result,
+				$.proxy(function( index, value ) {
+		  			$('<div>').text(value.name+'('+value.lat+','+value.lng+')').appendTo('#'+this.resultBoxNodeID);
+					$('<hr>').appendTo('#'+this.resultBoxNodeID);
+	    				}
+				,this)
+			);
+		} else {
+			$('<div>').text('sorry no result found').appendTo('#'+this.resultBoxNodeID);
+		}
+	    } else {
+		$('<div>').text('sorry no data recieved').appendTo('#'+this.resultBoxNodeID);
+	  }
+	};
+
+
+
 function buildPlaceTypeDropBox(lang){
 	if (!lang){
 	 lang=DEFAULT_LANGUAGE;

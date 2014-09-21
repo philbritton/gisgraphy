@@ -43,7 +43,7 @@
 }
 
 .tt-dropdown-menu {
-  width: 422px;
+  width: 390px;
   margin-top: 2px;
   padding: 0px 0;
   background-color: #fff;
@@ -90,6 +90,8 @@ padding-bottom:4px;
  font-size: 14px;
 }
 
+
+
 .flag-autocomplete {
 width:15px;
 padding-right:3px;
@@ -113,9 +115,29 @@ color:#999;
   cursor:pointer;
 }
 
+#gisgraphy-leaflet .searchbutton {
+width: 26px;
+height: 28px;
+background-image: url(../img/search.png);
+background-repeat: no-repeat;
+margin-top:10px;
+background-position: center;
+/*border:1px solid;*/
+float: right;
+cursor: pointer;
+padding:1px;
+}
+
+#gisgraphy-leaflet .resultBox {
+width: 390px;
+height: 28px;
+/*border:1px solid;*/
+float: left;
+}
+
 #gisgraphy-leaflet {
-margin:auto auto;
-width:430px;
+/*margin:auto auto;*/
+width:420px;
 padding:10px;
 padding-right:30px;
 font-size:9px;
@@ -132,5 +154,5 @@ margin-left:10px;
 }
 
 #gisgraphy-leaflet .searchbox{
-width:430px;
+width:390px;
 }
