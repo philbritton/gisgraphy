@@ -1,6 +1,7 @@
 function detectLanguage(){
 	var lang = (navigator.language) ? navigator.language : navigator.userLanguage; 
 //	console.log(lang) ;
+	if (lang){lang=lang.split('-')[0]}
 	return lang? lang.toUpperCase():"EN";
 }
 
@@ -59,11 +60,35 @@ function detectLanguage(){
 	    this.doGeocoding = o.doGeocoding || doGeocoding;
 	    this.doProcessGeocodingResults = o.doProcessGeocodingResults || $.proxy(doProcessGeocodingResults,this);
             this.initUI();
+	    this.itemSelected=false;
+	    this.result=undefined;
+	    this._detectPosition = o.detectPosition || detectPosition
+            this._fillPosition = $.proxy(fillPosition,this);
+            this.userLat=undefined;
+            this.userLng=undefined;
+            this.allowUserPositionDetection = o.allowUserPositionDetection || true;
+	    if (this.allowUserPositionDetection){
+		this._detectPosition();
+	    }
 	    function logOnSelect(obj, datum, name) {      
                  console.log(obj); 
                  console.log(datum);
                  console.log(name); 
 	     };
+             function fillPosition(position){ 
+			if (position){
+			 this.userLat = position.coords.latitude;
+			 this.userLng = position.coords.longitude;
+			 }
+	     }
+	     function detectPosition(){
+	     try{	
+			  navigator.geolocation.getCurrentPosition(this._fillPosition);
+	      } catch (e) {
+		console.log("can not detect position");
+		console.log(e);
+		 }
+	    }
 	    gisgraphyAutocomplete.normalize =  function normalize(input) {
 	 	    $.each(charMap, function (unnormalizedChar, normalizedChar) {
 	    	    var regex = new RegExp(unnormalizedChar, 'gi');
@@ -97,7 +122,12 @@ function detectLanguage(){
 					return this.reversegeocodingUrl +"?format=json&lat="+latLong.lat+"&lng="+latLong.long;
 				} 
 			}	
-			return this.fulltextURL +'?format=json&suggest=true&allwordsrequired=false&radius=10000000&placetype=city&placetype=adm&style=long&placetype=street&lat=50.455&lng=3.204&from=1&to=50&'+ $('#'+this.formNodeID).serialize();
+			var fulltextUrlWithParam =  this.fulltextURL +'?format=json&suggest=true&allwordsrequired=false&placetype=city&placetype=adm&style=long&placetype=street'
+			if (this.userLat && this.userLng){
+				fulltextUrlWithParam = fulltextUrlWithParam+"&lat="+this.userLat+"&lng="+this.userLng+"&radius=10000000";
+		}
+			fulltextUrlWithParam = fulltextUrlWithParam+"&from=1&to=50&"+ $('#'+this.formNodeID).serialize();
+			return fulltextUrlWithParam;
 		}
 ;
 function doGeocoding(){
@@ -129,7 +159,33 @@ function doProcessGeocodingResults(data){
 	  }
 	};
 
+$('input.typeahead').keypress(
+//$('#gisgraphy-leaflet-form').on('submit',
+$.proxy(function (e) {
+    if (e.which == 13){
+		if(  !this.itemSelected) {
+//        var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
+  //      $("#value_id").val(selectedValue);
+	        console.log('enter pressed : '+this.itemSelected);
+		this.doGeocoding();
+        	$('#'+this.inputSearchNodeID).typeahead('close');
+//        $('#gisgraphy-leaflet-form').submit();
+		this.itemSelected=false;
+        	return false;
+    }
+ else {
+this.itemSelected=false;
+}
+}
+},this));
 
+/*$('#gisgraphy-leaflet-form').on('submit', function(e) {
+        e.preventDefault(); 
+	console.log('do geocoding submit');
+	console.log(this);
+	doGeocoding();
+});
+*/
 
 function buildPlaceTypeDropBox(lang){
 	if (!lang){
@@ -200,7 +256,7 @@ function buildPoisArray(lang){
 }
 
 function initUI(){
-$('<form>').attr('id',this.formNodeID).appendTo('#'+this.ELEMENT_ID);
+//$('<form>').attr('id',this.formNodeID).attr('action','/').appendTo('#'+this.ELEMENT_ID);
 if(this.allowLanguageSelection){
 	this.BuildLanguageSelector(DEFAULT_LANGUAGE);
 }
@@ -232,7 +288,7 @@ var geocoding = new Bloodhound({
 			return names;
 			
 		 },
- 		rateLimitWait:10
+ 		rateLimitWait:60
 	}
 });
 
@@ -268,12 +324,23 @@ $('#'+this.inputSearchNodeID).typeahead({
   }
 });
 
-$('#'+this.inputSearchNodeID).bind('typeahead:selected', function(obj, datum, name) {      
+$('#'+this.inputSearchNodeID).bind('typeahead:selected', $.proxy(function(obj, datum, name) {      
+	this.itemSelected=true;
+        console.log('selected');
         console.log(obj); 
         console.log(datum);
-        console.log(name); 
+        console.log(name);
+        this.result=datum
+	return false; 
 
+},this));
+/*
+$('#'+this.inputSearchNodeID).bind('typeahead:closed',function(obj, datum, name) {
+//        e.preventDefault();
+        console.log('do geocoding submit');
+        gg.doGeocoding();
 });
+*/
 
 $('#'+this.inputSearchNodeID).focus();
 
