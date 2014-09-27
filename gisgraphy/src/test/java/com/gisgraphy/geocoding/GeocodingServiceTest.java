@@ -776,7 +776,7 @@ public class GeocodingServiceTest {
 	SolrResponseDto street = GisgraphyTestHelper.createSolrResponseDtoForStreet("is_in");
 	streets.add(street);
 	// exercise
-	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(streets);
+	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(streets, null);
 
 	// verify
 	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -784,9 +784,41 @@ public class GeocodingServiceTest {
 	Assert.assertEquals(1, addressResultsDto.getResult().size());
 	Address address = addressResultsDto.getResult().get(0);
 	Assert.assertEquals("latitude is not correct", street.getLat(), address.getLat());
-	Assert.assertEquals("id is not correct", street.getFeature_id(), address.getId());
 	Assert.assertEquals("longitude is not correct", street.getLng(), address.getLng());
+	Assert.assertEquals("id is not correct", street.getFeature_id(), address.getId());
 	Assert.assertEquals("geocoding level is not correct", GeocodingLevels.STREET, address.getGeocodingLevel());
+	Assert.assertEquals("street name is not correct", street.getName(), address.getStreetName());
+	Assert.assertEquals("name is not correct", street.getName(), address.getName());
+	Assert.assertEquals("street type is not correct", street.getStreet_type(), address.getStreetType());
+	Assert.assertEquals("city name is not correct", street.getIs_in(), address.getCity());
+	Assert.assertEquals("countrycode is not correct", street.getCountry_code(), address.getCountryCode());
+	
+	Assert.assertEquals("zip is not correct", street.getIs_in_zip().iterator().next(), address.getZipCode());
+	Assert.assertEquals("Adm Name should not be the deeper one but the is_inadm one", street.getIs_in_adm(), address.getState());
+	Assert.assertEquals("place is not correct", street.getIs_in_place(), address.getDependentLocality());
+	
+    }
+    
+    @Test
+    public void buildAddressResultDtoFromSolrResponseDto_street_houseNumber() {
+	// setup
+	GeocodingService geocodingService = new GeocodingService();
+	List<SolrResponseDto> streets = new ArrayList<SolrResponseDto>();
+	SolrResponseDto street = GisgraphyTestHelper.createSolrResponseDtoForStreet("is_in");
+	streets.add(street);
+	String houseNumberToFind = "2";
+	// exercise
+	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(streets, houseNumberToFind);
+
+	// verify
+	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
+	Assert.assertNotNull("results should not be null, but at least empty list", addressResultsDto.getResult());
+	Assert.assertEquals(1, addressResultsDto.getResult().size());
+	Address address = addressResultsDto.getResult().get(0);
+	Assert.assertEquals("latitude is not correct, it should be the house number one", 5D, address.getLat(),0.001);
+	Assert.assertEquals("longitude is not correct, it should be the house number one", 4D, address.getLng(),0.001);
+	Assert.assertEquals("id is not correct", street.getFeature_id(), address.getId());
+	Assert.assertEquals("geocoding level is not correct", GeocodingLevels.HOUSE_NUMBER, address.getGeocodingLevel());
 	Assert.assertEquals("street name is not correct", street.getName(), address.getStreetName());
 	Assert.assertEquals("name is not correct", street.getName(), address.getName());
 	Assert.assertEquals("street type is not correct", street.getStreet_type(), address.getStreetType());
@@ -809,7 +841,7 @@ public class GeocodingServiceTest {
 	results.add(street);
 	results.add(city);
 	// exercise
-	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results);
+	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results, null);
 
 	// verify
 	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -829,7 +861,7 @@ public class GeocodingServiceTest {
 	List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
 	results.add(city);
 	// exercise
-	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results);
+	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results, null);
 
 	// verify
 	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -857,7 +889,7 @@ public class GeocodingServiceTest {
 	List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
 	results.add(citySubdivision);
 	// exercise
-	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results);
+	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results, null);
 
 	// verify
 	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -885,7 +917,7 @@ public class GeocodingServiceTest {
     	List<SolrResponseDto> results = new ArrayList<SolrResponseDto>();
     	results.add(adm);
     	// exercise
-    	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results);
+    	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(results, null);
 
     	// verify
     	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -912,7 +944,7 @@ public class GeocodingServiceTest {
     	List<SolrResponseDto> cities = new ArrayList<SolrResponseDto>();
     	cities.add(feature);
     	// exercise
-    	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(cities);
+    	AddressResultsDto addressResultsDto = geocodingService.buildAddressResultDtoFromSolrResponseDto(cities, null);
 
     	// verify
     	Assert.assertNotNull("qtime should not be null", addressResultsDto.getQTime());
@@ -1697,6 +1729,18 @@ public class GeocodingServiceTest {
 	AddressQuery addressQuery = new AddressQuery("paris", "fr");
 	geocodingService.geocodeAndSerialize(addressQuery, new ByteArrayOutputStream());
 	Assert.assertTrue(geocodeIsCalled);
+    }
+    
+    @Test
+    public void findHouseNumber(){
+    	GeocodingService geocodingService = new GeocodingService();
+    	Assert.assertEquals("3", geocodingService.findHouseNumber("3 rue de la gare 59000 lille",null));
+    	Assert.assertEquals("36", geocodingService.findHouseNumber("36 rue de la gare 59000 lille",null));
+    	Assert.assertEquals("367", geocodingService.findHouseNumber("367 rue de la gare 59000 lille",null));
+    	Assert.assertEquals("3677", geocodingService.findHouseNumber("3677 rue de la gare 59000 lille",null));
+    	Assert.assertEquals("5900", geocodingService.findHouseNumber("rue de la gare 5900 lille",null));
+    	Assert.assertEquals(null, geocodingService.findHouseNumber("rue de la gare 59000 lille",null));
+    	Assert.assertEquals("4", geocodingService.findHouseNumber("4-6 rue de la gare 59000 lille",null));
     }
 
    
