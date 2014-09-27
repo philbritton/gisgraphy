@@ -312,9 +312,10 @@
         var pendingRequestsCount = 0, pendingRequests = {}, maxPendingRequests = 6, sharedCache = new LruCache(10);
         function Transport(o) {
             o = o || {};
+	   // o = defaultAjax ;
             this.cancelled = false;
             this.lastUrl = null;
-            this._send = o.transport ? callbackToDeferred(o.transport) : $.ajax;
+            this._send = o.transport ? callbackToDeferred(o.transport) :  $.ajax;
             this._get = o.rateLimiter ? o.rateLimiter(this._get) : this._get;
             this._cache = o.cache === false ? new LruCache(0) : sharedCache;
         }
@@ -334,7 +335,8 @@
                     jqXhr.done(done).fail(fail);
                 } else if (pendingRequestsCount < maxPendingRequests) {
                     pendingRequestsCount++;
-                    pendingRequests[url] = this._send(url, o).done(done).fail(fail).always(always);
+                    pendingRequests[url] = this._send(url,o ).done(done).fail(fail).always(always);
+
                 } else {
                     this.onDeckRequestArgs = [].slice.call(arguments, 0);
                 }
@@ -637,7 +639,7 @@
 		if (tableau && tableau[tableau.length-1]){
 			var lastLength=tableau[tableau.length-1].length
 			//console.log('length='+tableau[tableau.length-1].length);
-			if (lastLength == 1){
+			if (lastLength == 1 && tableau.length >=3){
 				//console.log('ignoring due to last word length');
 				return;
 			}
@@ -694,6 +696,7 @@
                 var that = this, matches = [], cacheHit = false;
                 matches = this.index.get(query);
                 matches = this.sorter(matches).slice(0, this.limit);
+				this._cancelLastRemoteRequest();
                 matches.length < this.limit ? cacheHit = this._getFromRemote(query, returnRemoteMatches) : this._cancelLastRemoteRequest();
                 if (!cacheHit) {
                     (matches.length > 0 || !this.transport) && cb && cb(matches);

@@ -450,10 +450,10 @@ translation={
 "DE": "nahe"
 },
 "choosepoitype":{
-"FR": "Choisissez un type de POI",
-"EN": "Choose POI type",
-"ES": "Elegir POI type",
-"DE": "Wählen POI Kategorie"
+"FR": "Lieu ou addresse",
+"EN": "Place or address",
+"ES": "lugar o la dirección",
+"DE": "Ort oder adresse"
 },
 "placeholder":{
 "FR": "Entrez un lieu, une addresse, ou une coordonée GPS / DMS",
