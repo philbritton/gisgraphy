@@ -1,23 +1,15 @@
 currentRequests = {};
 
-
-
 defaultAjax = {
 beforeSend: function(request){
-// console.log("ajax before send");
- //  console.log(request);
  if (currentRequests["geocoding"]) {
-                                        // if a request of this class is already in progress, attempt to abort it before launching this new request
                                         try { currentRequests["geocoding"].abort();console.log('aborting'); } catch(e)    {console.log(e); }
                                 }
 
 currentRequests["geocoding"] = request;
 
-// Handle the beforeSend event
 },
 complete: function(xhr){
-// console.log("ajax complete");
-// console.log(xhr);
 currentRequests["geocoding"] = null;
 
 }
@@ -25,7 +17,6 @@ currentRequests["geocoding"] = null;
 };
 function detectLanguage(){
 	var lang = (navigator.language) ? navigator.language : navigator.userLanguage; 
-//	console.log(lang) ;
 	if (lang){lang=lang.split('-')[0]}
 	return lang? lang.toUpperCase():"EN";
 }
@@ -55,7 +46,9 @@ function setSearchText(htmlId,text){
             if (!o || !o.ELEMENT_ID) {
                 $.error("please specify an ELEMENT_ID option");
             }
+	
 	    //user options
+	    this.geocoding;
 	    this.ELEMENT_ID = o.ELEMENT_ID;
             this.currentLanguage = (o.currentLanguage || DEFAULT_LANGUAGE).toUpperCase();
 	    this.allowPoiSelection = o.allowPoiSelection || true;
@@ -67,7 +60,6 @@ function setSearchText(htmlId,text){
             this.enableReverseGeocoding = o.enableReverseGeocoding || true;//todo if enable check reversegeocodingUrl is defined
             this.limit=o.limit || 20;
 	    this.apiKey=o.apiKey || undefined;
-            this.onItemSelect=o.onItemSelect || logOnSelect;
             this.formNodeID = o.formNodeID || this.ELEMENT_ID+'-form';
             this.toolsNodeID = o.toolsNodeID || this.ELEMENT_ID+'-tools';
             this.placetypeNodeID = o.placetypeNodeID || this.ELEMENT_ID+'-placetypes';
@@ -89,6 +81,7 @@ function setSearchText(htmlId,text){
 	    this.BuildLanguageSelector=BuildLanguageSelector;
             this.buildPoisArray=buildPoisArray;
             this.initUI=initUI;
+	    this.initAutoCompletion=initAutoCompletion;
 	    this.pois = buildPoisArray(DEFAULT_LANGUAGE);
 	    this.getLocalSuggestionsArray=getLocalSuggestionsArray;
 	    this.changeLanguage=changeLanguage;
@@ -105,18 +98,39 @@ function setSearchText(htmlId,text){
             this.allowUserPositionDetection = o.allowUserPositionDetection || true;
             this.withHelp = o.withHelp || true;
 	    this.displayHelp = displayHelp;
-//	    this.initUI();
+	    this.initUI();
+	   
+	   this.geocoding = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
+  queryTokenizer: Bloodhound.tokenizers.nonword,
+  limit : this.limit,
+  local: this.getLocalSuggestionsArray(DEFAULT_LANGUAGE),
+  remote:{
+		url:this.fulltextURL +'?suggest=true&allwordsrequired=false&q=%QUERY',
+		replace:this.replace,
+		ajax:defaultAjax,
+  		filter: function(d,e) {
+			var names = [];
+			if (d && d.response && d.response['docs']){
+				$.each(d.response['docs'], function( key, value ) {
+					if(value.name){
+						names.push(value);
+					}				
+				});
+			} else if (d && d.result && d.result[0]){
+				names.push(convertAddress(d.result[0]));
+			}
+			return names;
+			
+		 },
+ 		rateLimitWait:130
+	}
+});
+
+
 	    if (this.allowUserPositionDetection){
 		this._detectPosition();
 	    }
-	    function logOnSelect(obj, datum, name) {     
-		 if (datum && datum.poiType && this.allowPoiSelection) {
-                	 $('#'+this.placetypeNodeID+' option[value="'+datum.poiType+'"]').prop('selected', true);
-		}		
-		 console.log(obj); 
-                 console.log(datum);
-                 console.log(name); 
-	     };
              function fillPosition(position){ 
 			if (position){
 			 this.userLat = position.coords.latitude;
@@ -155,24 +169,31 @@ function setSearchText(htmlId,text){
 		//output
 		return target;
 	    },this));
+
 	    function buildSearchBox(){
-	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',this.inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo('#'+this.formNodeID);
-	var searchbutton =$('<input>').attr('type','button').attr('value','').addClass('searchbutton').attr('onclick','gg.doGeocoding();').attr('id',this.searchButtonNodeID).appendTo('#'+this.formNodeID);
-	var resultsBox = $('<div>').attr('id',this.resultBoxNodeID).addClass('resultBox').appendTo('#'+this.formNodeID);
+	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',this.inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo(this._formNode);
+	var searchbutton =$('<input>').attr('type','button').attr('value','').addClass('searchbutton').attr('onclick','gg.doGeocoding();').attr('id',this.searchButtonNodeID).appendTo(this._formNode);
+	this._resultBoxNode = $('<div>').attr('id',this.resultBoxNodeID).addClass('resultBox').appendTo(this._formNode);
 	if (this.withHelp == true){
 		this.displayHelp();
 	}
 };
 
 function displayHelp(){
- $('#'+this.resultBoxNodeID).html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#'+this.resultBoxNodeID+'\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 5 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'restaurant new york\')">restaurant new york</a></li></ul>');
- if ( $('#'+this.resultBoxNodeID ).is( ":hidden" ) ) {
-                $( '#'+this.resultBoxNodeID ).slideDown(200);
-        } else {
-                $( '#'+this.resultBoxNodeID ).hide();
-        }
+var el = this._resultBoxNode;
+if ($('#'+this.resultBoxNodeID).length >0){
+ el =$('#'+this.resultBoxNodeID);
+}
+ el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#'+this.resultBoxNodeID+'\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 5 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'restaurant new york\')">restaurant new york</a></li></ul>');
+if ($('#'+this.resultBoxNodeID).length >0){ 
+	if ( $('#'+this.resultBoxNodeID ).is( ":hidden" ) ) {
+		        $( '#'+this.resultBoxNodeID ).slideDown(200);
+		} else {
+		        $( '#'+this.resultBoxNodeID ).hide();
+		}
 
-         $('#'+this.resultBoxNodeID).slideDown(200);
+		 $('#'+this.resultBoxNodeID).slideDown(200);
+	}
 }
  function replace() {
 			if (this.enableReverseGeocoding){
@@ -231,7 +252,7 @@ function doProcessGeocodingResults(data){
 			$.each(data.result,
 				$.proxy(function( index, value ) {
 					console.log(value);
-					content ='';
+					var content ='';
 					var hasName=false;
 					if (value.countryCode){
 					content+='<img src="img/'+value.countryCode+'.png" alt="'+value.countryCode+'" class="flag-autocomplete"/>';
@@ -274,33 +295,8 @@ function doProcessGeocodingResults(data){
 	 $('#'+this.resultBoxNodeID).slideDown(200);
 	};
 
-$('input.typeahead').keypress(
-//$('#gisgraphy-leaflet-form').on('submit',
-$.proxy(function (e) {
-    if (e.which == 13){
-		if(  !this.itemSelected) {
-//        var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
-  //      $("#value_id").val(selectedValue);
-	        console.log('enter pressed : '+this.itemSelected);
-		this.doGeocoding();
-        	$('#'+this.inputSearchNodeID).typeahead('close');
-//        $('#gisgraphy-leaflet-form').submit();
-		this.itemSelected=false;
-        	return false;
-    }
- else {
-this.itemSelected=false;
-}
-}
-},this));
 
-/*$('#gisgraphy-leaflet-form').on('submit', function(e) {
-        e.preventDefault(); 
-	console.log('do geocoding submit');
-	console.log(this);
-	doGeocoding();
-});
-*/
+
 
 function buildPlaceTypeDropBox(lang){
 	if (!lang){
@@ -313,7 +309,7 @@ function buildPlaceTypeDropBox(lang){
 	if (dropBoxHtml.length > 0){
 		dropBoxHtml.replaceWith(sel);
 	} else {
-		sel.appendTo('#'+this.toolsNodeID)
+		sel.appendTo(this._toolsNode)
 	}
 
 	sel.append($("<option>").attr('value','').text(translation['choosepoitype'][lang]));
@@ -336,7 +332,7 @@ function buildPlaceTypeDropBox(lang){
 
 function BuildLanguageSelector(lang){
 	var ff = function( key, value ) {
-		$('<input>').attr('type','radio').attr('name','lang').attr('onclick','gg.changeLanguage(this.value);').attr('id','lang'+key).attr('value',key).addClass('languages').appendTo('#'+this.toolsNodeID).after(value);
+		$('<input>').attr('type','radio').attr('name','lang').attr('onclick','gg.changeLanguage(this.value);').attr('id','lang'+key).attr('value',key).addClass('languages').appendTo(this._toolsNode).after(value);
 	}
 	$.each(SUPPORTED_LANGUAGE,$.proxy(ff,this ));
 	 $('#lang'+lang).attr('checked','true');
@@ -374,10 +370,10 @@ function buildPoisArray(lang){
 }
 
 function initUI(){
-var form = $('<form>').attr('id',this.formNodeID).attr('action',this.geocodingUrl).appendTo('#'+this.ELEMENT_ID);
-var tools = $('<div>').attr('id',this.toolsNodeID).addClass('tools').appendTo('#'+this.formNodeID);
+this._formNode = $('<form>').attr('id',this.formNodeID).attr('action',this.geocodingUrl);//.appendTo('#'+this.ELEMENT_ID);
+this._toolsNode = $('<div>').attr('id',this.toolsNodeID).addClass('tools').appendTo(this._formNode);
 if (this.withHelp){
-        $("<img>").attr('alt','help').attr('src','./img/help.png').attr('onclick','gg.displayHelp();').addClass('help').appendTo('#'+this.toolsNodeID);
+        $("<img>").attr('alt','help').attr('src','./img/help.png').attr('onclick','gg.displayHelp();').addClass('help').appendTo(this._toolsNode);
 }
 if(this.allowLanguageSelection){
 	this.BuildLanguageSelector(DEFAULT_LANGUAGE);
@@ -386,37 +382,18 @@ if(this.allowPoiSelection){
 	this.buildPlaceTypeDropBox(DEFAULT_LANGUAGE);
 }
 this.buildSearchBox();
+if ($('#'+this.ELEMENT_ID).length >0){
+	    this._formNode.appendTo($('#'+this.ELEMENT_ID));
+}
 }
 
-var geocoding = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.obj.nonword('name'),
-  queryTokenizer: Bloodhound.tokenizers.nonword,
-  limit : this.limit,
-  local: this.getLocalSuggestionsArray(DEFAULT_LANGUAGE),
-  remote:{
-		url:this.fulltextURL +'?suggest=true&allwordsrequired=false&q=%QUERY',
-		replace:this.replace,
-		ajax:defaultAjax,
-  		filter: function(d,e) {
-			var names = [];
-			if (d && d.response && d.response['docs']){
-				$.each(d.response['docs'], function( key, value ) {
-					if(value.name){
-						names.push(value);
-					}				
-				});
-			} else if (d && d.result && d.result[0]){
-				names.push(convertAddress(d.result[0]));
-			}
-			return names;
-			
-		 },
- 		rateLimitWait:130
-	}
-});
 
-geocoding.initialize();
 
+function initAutoCompletion(){
+if ($('#'+this.ELEMENT_ID).length == 0){
+	return;
+}
+this.geocoding.initialize();
 $('#'+this.inputSearchNodeID).typeahead({
   hint: true,
   highlight: true,
@@ -439,13 +416,42 @@ $('#'+this.inputSearchNodeID).typeahead({
 				},
   // `ttAdapter` wraps the suggestion engine in an adapter that
   // is compatible with the typeahead jQuery plugin
-  source: geocoding.ttAdapter(),
+  source: this.geocoding.ttAdapter(),
   templates: {
     empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
     suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{#if houseNumber}} {{houseNumber}}</span>{{/if}} {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
     footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com" target="gisgraphy">Gisgraphy</a></div>'
   }
 });
+
+
+$('input.typeahead').keypress(
+//$('#gisgraphy-leaflet-form').on('submit',
+$.proxy(function (e) {
+    if (e.which == 13){
+		if(  !this.itemSelected) {
+//        var selectedValue = $('input.typeahead').data().ttView.dropdownView.getFirstSuggestion().datum.id;
+  //      $("#value_id").val(selectedValue);
+	        console.log('enter pressed : '+this.itemSelected);
+		this.doGeocoding();
+        	$('#'+this.inputSearchNodeID).typeahead('close');
+//        $('#gisgraphy-leaflet-form').submit();
+		this.itemSelected=false;
+        	return false;
+    }
+ else {
+this.itemSelected=false;
+}
+}
+},this));
+
+$('#'+this.inputSearchNodeID).bind('typeahead:selected', doOnChoose);
+$('#'+this.inputSearchNodeID).bind('typeahead:cursorchanged', doOnChoose);
+$('#'+this.inputSearchNodeID).bind('typeahead:autocompleted', doOnChoose);
+$('#'+this.inputSearchNodeID).focus();
+}
+
+	this.initAutoCompletion();
 
 var doOnChoose= $.proxy(function(obj, datum, name) {
          if (datum && datum.poiType && this.allowPoiSelection) {
@@ -462,21 +468,6 @@ var doOnChoose= $.proxy(function(obj, datum, name) {
         return false;
 
 },this);
-
-$('#'+this.inputSearchNodeID).bind('typeahead:selected', doOnChoose);
-$('#'+this.inputSearchNodeID).bind('typeahead:cursorchanged', doOnChoose);
-$('#'+this.inputSearchNodeID).bind('typeahead:autocompleted', doOnChoose);
-/*
-$('#'+this.inputSearchNodeID).bind('typeahead:closed',function(obj, datum, name) {
-//        e.preventDefault();
-        console.log('do geocoding submit');
-        gg.doGeocoding();
-});
-*/
-
-$('#'+this.inputSearchNodeID).focus();
-
-
  function tog(v){return v?'addClass':'removeClass';} 
   
   $(document).on('input', '.clearable', function(){
@@ -505,9 +496,9 @@ function changeLanguage(lang){
 		this.buildPlaceTypeDropBox(lang);
 		this.pois = buildPoisArray(lang);
 	}
-	geocoding.clear();
-	geocoding.local= this.getLocalSuggestionsArray(lang);
-	geocoding.initialize(true);
+	this.geocoding.clear();
+	this.geocoding.local= this.getLocalSuggestionsArray(lang);
+	this.geocoding.initialize(true);
 	$('#'+this.inputSearchNodeID).focus();
 	$('#'+this.inputSearchNodeID).attr('placeholder',translation['placeholder'][lang])
 	
@@ -529,6 +520,7 @@ if (address){
 }
   
         }
+ 
         gisgraphyAutocomplete.noConflict = function noConflict() {
             root.gisgraphyAutocomplete = old;
             return gisgraphyAutocomplete;

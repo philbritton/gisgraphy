@@ -1,3 +1,5 @@
+gg = undefined;
+
 L.Control.gisgraphygeocoder = L.Control.extend({
 options: {
 position: 'topleft',
@@ -8,36 +10,28 @@ initialize: function (options) {
 },
 onAdd: function (map) {
 this._map = map;
-//var className = 'leaflet-control-geocoder',
 container = this._container = L.DomUtil.create('div');
-$('<div>').attr('id','gisgraphy-leaflet').appendTo('#map');
 container.id="gisgraphy-leaflet";
-this.gg = new gisgraphyAutocomplete(this.options);
-//console.log($('#gisgraphy-leaflet'));
-//gg.initUI();
-console.log(container);
-this.gg.initUI();
-console.log(container);
+gg = this.gg = new gisgraphyAutocomplete(this.options);
+container.appendChild(this.gg._formNode[0]);
+//container = gg._formNode[0];
 return container;
 },
 
 
-
+initAutoCompletion : function(){
+if (this.gg){
+	this.gg.initAutoCompletion();
+}
+},
 onRemove: function (map) {
 /*map.off('mousemove', this._onMouseMove)*/
 },
 
 });
 
-/*
-L.Map.addInitHook(function () {
-if (this.gg) {
-console.log($('#gisgraphy-leaflet'));
-this.gg.initUI();
 
-}
-});
-*/
+
 /*L.control.gisgraphygeocoder = function (options) {
 if (options || options.ELEMENT_ID) {
                 throw new Error("please specify an ELEMENT_ID option");

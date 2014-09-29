@@ -43,8 +43,8 @@
 		var gisgraphyGeocoder = new L.Control.gisgraphygeocoder({ELEMENT_ID:"gisgraphy-leaflet",apiKey:123});
 		map.addControl(gisgraphyGeocoder);
 //		var gg = new gisgraphyAutocomplete({ELEMENT_ID:"gisgraphy-leaflet"})
-		gisgraphyGeocoder.gg.initUI();
-	//	map.panTo(new L.LatLng(gg.userLat,gg.userLng));
+		gisgraphyGeocoder.initAutoCompletion();
+		map.panTo(new L.LatLng(gisgraphyGeocoder.gg.userLat,gisgraphyGeocoder.gg.userLng));
 	</script>
 </body>
 </html>
