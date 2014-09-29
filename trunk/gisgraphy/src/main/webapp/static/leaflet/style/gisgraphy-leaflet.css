@@ -143,6 +143,8 @@ padding:1px;
 margin-left:8px;
 margin-right:8px;
 cursor:help;
+background-color : #FFF;
+
 }
 
 #gisgraphy-leaflet .resultBox {
@@ -157,11 +159,18 @@ margin-top : 8px;
 margin-left : 3px;
 border: 2px solid #1465B7;
 border-radius: 8px 8px 8px 8px;
+background-color : #FFF;
+
 }
+
+#gisgraphy-leaflet .tools {
+background-color : #FFF;
+}
+
 
 #gisgraphy-leaflet {
 /*margin:auto auto;*/
-width:420px;
+width:437px;
 padding:10px;
 padding-right:30px;
 font-size:9px;
@@ -180,4 +189,5 @@ margin-left:10px;
 
 #gisgraphy-leaflet .searchbox{
 width:390px;
+background-color : #FFF;
 }
