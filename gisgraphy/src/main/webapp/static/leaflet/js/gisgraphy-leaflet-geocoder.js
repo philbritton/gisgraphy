@@ -1,5 +1,3 @@
-gg = undefined;
-
 L.Control.gisgraphygeocoder = L.Control.extend({
 options: {
 position: 'topleft',
@@ -11,17 +9,22 @@ initialize: function (options) {
 onAdd: function (map) {
 this._map = map;
 container = this._container = L.DomUtil.create('div');
-container.id="gisgraphy-leaflet";
-gg = this.gg = new gisgraphyAutocomplete(this.options);
-container.appendChild(this.gg._formNode[0]);
-//container = gg._formNode[0];
+container.id=this.options.ELEMENT_ID || "gisgraphy-leaflet";
+this.autocomplete = new gisgraphyAutocomplete(this.options);
+container.appendChild(this.autocomplete._formNode[0]);
+var o =container
+/* L.DomEvent
+            .addListener(o, 'click', L.DomEvent.stopPropagation)
+            .addListener(o, 'click', L.DomEvent.preventDefault)
+        .addListener(o, 'click', function () { console.log('click') });*/
+ L.DomEvent.disableClickPropagation(container);
 return container;
 },
 
 
 initAutoCompletion : function(){
-if (this.gg){
-	this.gg.initAutoCompletion();
+if (this.autocomplete){
+	this.autocomplete.initAutoCompletion();
 }
 },
 onRemove: function (map) {

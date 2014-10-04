@@ -1,3 +1,6 @@
+autocompleteGisgraphyCounter = 0;
+autocompleteGisgraphy=[];
+
 currentRequests = {};
 
 defaultAjax = {
@@ -25,6 +28,36 @@ function setSearchText(htmlId,text){
 	$('#'+htmlId).val(text);
 }
 
+var marker = undefined;
+function moveCenterOfMapTo(lat,lng,placetype){
+if (typeof map != 'undefined'){
+	if ( lat != undefined && lng != 'undefined'){
+               map.panTo(new L.LatLng(lat,lng));
+		if (typeof marker != 'undefined'){
+			map.removeLayer(marker)	      
+		}
+		marker = L.marker([lat, lng]).addTo(map); 
+	}
+	if (typeof placetype != 'undefined'){
+		map.setZoom(getZoomByPlaceType(placetype));
+	}
+}
+}
+
+function getZoomByPlaceType(placetype){
+ var zoom = 14;//for city and other
+console.log(placetype);
+ if (typeof placetype != 'undefined'){
+       if (placetype.toUpperCase() == 'STREET'){
+          zoom = 15;
+      } else if (placetype.toUpperCase() == 'CITY'){
+          zoom = 12;
+      }  else if (placetype.toUpperCase() == 'ADM'){
+          zoom = 9;
+ }
+}
+return zoom;
+}
 
  DEFAULT_LANGUAGE=detectLanguage();
 
@@ -49,6 +82,7 @@ function setSearchText(htmlId,text){
 	
 	    //user options
 	    this.geocoding;
+            this.autocompleteGisgraphyCounter= autocompleteGisgraphyCounter+'';
 	    this.ELEMENT_ID = o.ELEMENT_ID;
             this.currentLanguage = (o.currentLanguage || DEFAULT_LANGUAGE).toUpperCase();
 	    this.allowPoiSelection = o.allowPoiSelection || true;
@@ -135,8 +169,8 @@ function setSearchText(htmlId,text){
 			if (position){
 			 this.userLat = position.coords.latitude;
 			 this.userLng = position.coords.longitude;
-			if (map){
-				map.panTo(new L.LatLng(gg.userLat,gg.userLng));
+			if (typeof map != 'undefined'){
+				map.panTo(new L.LatLng(this.userLat,this.userLng));
 			}
 			 }
 	     }
@@ -172,7 +206,7 @@ function setSearchText(htmlId,text){
 
 	    function buildSearchBox(){
 	var box = $('<input>').attr('type','text').attr('placeholder',translation['placeholder'][DEFAULT_LANGUAGE]).attr('id',this.inputSearchNodeID).attr('name','q').attr('autocomplete','off').addClass('typeahead clearable searchbox').appendTo(this._formNode);
-	var searchbutton =$('<input>').attr('type','button').attr('value','').addClass('searchbutton').attr('onclick','gg.doGeocoding();').attr('id',this.searchButtonNodeID).appendTo(this._formNode);
+	var searchbutton =$('<input>').attr('type','button').attr('value','').addClass('searchbutton').attr('onclick','autocompleteGisgraphy['+autocompleteGisgraphyCounter+'].doGeocoding();').attr('id',this.searchButtonNodeID).appendTo(this._formNode);
 	this._resultBoxNode = $('<div>').attr('id',this.resultBoxNodeID).addClass('resultBox').appendTo(this._formNode);
 	if (this.withHelp == true){
 		this.displayHelp();
@@ -211,7 +245,7 @@ if ($('#'+this.resultBoxNodeID).length >0){
 			}
 			fulltextUrlWithParam = fulltextUrlWithParam+"&from=1&to=10&"+ $('#'+this.formNodeID).serialize();
 			 if (this.apiKey != undefined){
-		            fulltextUrlWithParam = fulltextUrlWithParam+'&apikey='+this.apikey;
+		            fulltextUrlWithParam = fulltextUrlWithParam+'&apikey='+this.apiKey;
         		}
 
 			return fulltextUrlWithParam;
@@ -242,7 +276,7 @@ function doGeocoding(){
 };
 function doProcessGeocodingResults(data){
 	    if ( console && console.log ) {
-	      console.log(data.result );
+//	      console.log(data.result );
 	    }
 	    
 	    $('#'+this.resultBoxNodeID).empty();
@@ -251,7 +285,7 @@ function doProcessGeocodingResults(data){
 		if (data.numFound && data.numFound > 0){  
 			$.each(data.result,
 				$.proxy(function( index, value ) {
-					console.log(value);
+					//console.log(value);
 					var content ='';
 					var hasName=false;
 					if (value.countryCode){
@@ -273,7 +307,7 @@ function doProcessGeocodingResults(data){
 					if (value.lat && value.lng){
 						content+="<br/>("+value.lat+","+value.lng+")";
 					}
-		  			$('<div>').html(content).appendTo('#'+this.resultBoxNodeID);
+		  			$('<div onclick="moveCenterOfMapTo('+value.lat+','+value.lng+','+value.placetype+')">').html(content).appendTo('#'+this.resultBoxNodeID);
 					if (index+1 < data.result.length){
 						$('<hr>').appendTo('#'+this.resultBoxNodeID);
 					}
@@ -332,7 +366,7 @@ function buildPlaceTypeDropBox(lang){
 
 function BuildLanguageSelector(lang){
 	var ff = function( key, value ) {
-		$('<input>').attr('type','radio').attr('name','lang').attr('onclick','gg.changeLanguage(this.value);').attr('id','lang'+key).attr('value',key).addClass('languages').appendTo(this._toolsNode).after(value);
+		$('<input>').attr('type','radio').attr('name','lang').attr('onclick','autocompleteGisgraphy['+autocompleteGisgraphyCounter+'].changeLanguage(this.value);').attr('id','lang'+key).attr('value',key).addClass('languages').appendTo(this._toolsNode).after(value);
 	}
 	$.each(SUPPORTED_LANGUAGE,$.proxy(ff,this ));
 	 $('#lang'+lang).attr('checked','true');
@@ -373,7 +407,7 @@ function initUI(){
 this._formNode = $('<form>').attr('id',this.formNodeID).attr('action',this.geocodingUrl);//.appendTo('#'+this.ELEMENT_ID);
 this._toolsNode = $('<div>').attr('id',this.toolsNodeID).addClass('tools').appendTo(this._formNode);
 if (this.withHelp){
-        $("<img>").attr('alt','help').attr('src','./img/help.png').attr('onclick','gg.displayHelp();').addClass('help').appendTo(this._toolsNode);
+        $("<img>").attr('alt','help').attr('src','./img/help.png').attr('onclick','autocompleteGisgraphy['+autocompleteGisgraphyCounter+'].displayHelp();').addClass('help').appendTo(this._toolsNode);
 }
 if(this.allowLanguageSelection){
 	this.BuildLanguageSelector(DEFAULT_LANGUAGE);
@@ -384,6 +418,10 @@ if(this.allowPoiSelection){
 this.buildSearchBox();
 if ($('#'+this.ELEMENT_ID).length >0){
 	    this._formNode.appendTo($('#'+this.ELEMENT_ID));
+}
+if ( this.userLat != undefined && this.userLng != 'undefined' && typeof map != 'undefined'){
+                                map.panTo(new L.LatLng(this.userLat,this.userLng));
+
 }
 }
 
@@ -400,7 +438,7 @@ $('#'+this.inputSearchNodeID).typeahead({
   minLength: 1
 },
 {
-  name: 'geocoding',
+  name: this.ELEMENT_ID+'',
   displayKey: function(obj){
 				var is_in='';
 				if (obj['is_in'] || obj['adm1_name'] ){
@@ -420,10 +458,9 @@ $('#'+this.inputSearchNodeID).typeahead({
   templates: {
     empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
     suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{#if houseNumber}} {{houseNumber}}</span>{{/if}} {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
-    footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com" target="gisgraphy">Gisgraphy</a></div>'
+    footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com/">Gisgraphy.com</a></div>'
   }
 });
-
 
 $('input.typeahead').keypress(
 //$('#gisgraphy-leaflet-form').on('submit',
@@ -452,13 +489,21 @@ $('#'+this.inputSearchNodeID).focus();
 }
 
 	this.initAutoCompletion();
+window.autocompleteGisgraphy[autocompleteGisgraphyCounter]=this;
+autocompleteGisgraphyCounter++;
 
 var doOnChoose= $.proxy(function(obj, datum, name) {
+console.log('doOnChosse');
          if (datum && datum.poiType && this.allowPoiSelection) {
                          $('#'+this.placetypeNodeID+' option[value="'+datum.poiType+'"]').prop('selected', true);
                 }else {
 		$('#'+this.placetypeNodeID+' option[value=""]').prop('selected', true);
 }
+/*if (typeof map != 'undefined' && datum && datum.lat && datum.lng){
+		console.log('moving to '+datum.lat+','+datum.lng);
+                                map.panTo(new L.LatLng(datum.lat,datum.lng));
+}*/
+	moveCenterOfMapTo(datum.lat,datum.lng,datum.placetype);
         this.itemSelected=true;
         console.log('selected');
         console.log(obj);
