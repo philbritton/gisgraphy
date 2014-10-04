@@ -44,7 +44,12 @@
 		map.addControl(gisgraphyGeocoder);
 //		var gg = new gisgraphyAutocomplete({ELEMENT_ID:"gisgraphy-leaflet"})
 		gisgraphyGeocoder.initAutoCompletion();
-		map.panTo(new L.LatLng(gisgraphyGeocoder.gg.userLat,gisgraphyGeocoder.gg.userLng));
+//$('#map').on('click',function (e) {e.preventDefault; console.log('click on input') });
+// L.DomEvent
+//            .addListener(o, 'click', L.DomEvent.stopPropagation)
+  //          .addListener(o, 'click', L.DomEvent.preventDefault)
+  //      .addListener(o, 'click', function () { console.log('click') });
+	//	map.panTo(new L.LatLng(gisgraphyGeocoder.gg.userLat,gisgraphyGeocoder.gg.userLng));
 	</script>
 </body>
 </html>

@@ -42,6 +42,8 @@ import com.gisgraphy.serializer.common.OutputFormat;
  * 
  */
 public class FulltextQuerySolrHelper {
+	
+	private static SmartStreetDetection smartStreetDetection = new SmartStreetDetection();
 
 	private static OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
 
@@ -53,6 +55,7 @@ public class FulltextQuerySolrHelper {
 	// "_query_:\"{!dismax qf='name^1.1 zipcode^1.1'  mm='1<-100%% 2<-50%% 3<-0%%' bq='_val_:\\\"pow(population,0.3)\\\"' }%s\"";
 	protected static final String NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE = "_query_:\"{!dismax qf=' all_name^1.1 iso_all_name^1.3 zipcode^1.2 all_adm1_name^0.5 all_adm2_name^0.5 %s' mm='1<1 2<1 3<1'   pf='name^1.8' ps=0 bq='%s ' bf='pow(map(population,0,0,0.0001),0.3)     pow(map(city_population,0,0,0.0000001),0.3)  %s ' }%s\"";
 	protected static final String CITY_BOOST_QUERY="placetype:city^16";
+	protected static final String STREET_BOOST_QUERY="placetype:street^16";
 	// we need to consider adm1name for andora and brooklin
 	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1 zipcode^1.2 pf=name^1.1' bf=population^2.0}%s\"";
     
@@ -176,9 +179,11 @@ public class FulltextQuerySolrHelper {
 			/*parameters.set(Constants.QT_PARAMETER,
 		    Constants.SolrQueryType.standard.toString());
 	    parameters.set(Constants.QUERY_PARAMETER, query.getQuery());*/
-			String boost_city="";
-			if (query.getPlaceTypes()==null){
-				boost_city=CITY_BOOST_QUERY;//we force boost to city because it is not a 'Typed' query
+			String boost="";
+			if (smartStreetDetection.getStreetTypes(query.getQuery()).size()==1){
+				boost=STREET_BOOST_QUERY;
+			} else if (query.getPlaceTypes()==null){
+				boost=CITY_BOOST_QUERY;//we force boost to city because it is not a 'Typed' query
 			}
 			String is_in = isStreetQuery(query)?IS_IN_SENTENCE:"";
 			String boostNearest = "";
@@ -186,10 +191,10 @@ public class FulltextQuerySolrHelper {
 				boostNearest = BF_NEAREST;
 			}
 			if (!query.isAllwordsRequired()){
-				querybuffer = new StringBuffer(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE,is_in,boost_city,boostNearest,query.getQuery()));
+				querybuffer = new StringBuffer(String.format(NESTED_QUERY_NOT_ALL_WORDS_REQUIRED_TEMPLATE,is_in,boost,boostNearest,query.getQuery()));
 			} else {
 				//with all word required we don't search in is_in
-				querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,"",boost_city,boostNearest,query.getQuery()));
+				querybuffer = new StringBuffer(String.format(NESTED_QUERY_TEMPLATE,"",boost,boostNearest,query.getQuery()));
 
 			}
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced

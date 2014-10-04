@@ -71,7 +71,7 @@ public class FulltextQuerySolrHelperTest {
 						FulltextQuerySolrHelper.toQueryString(fulltextQuery),
 						"&");
 		// check parameters
-		assertNull(
+		assertNotNull(
 				"field list parameter are by default, we use the one in the suggest request handler",
 				parameters.get(Constants.FL_PARAMETER));
 		assertEquals("wrong indent parameter found", "on",

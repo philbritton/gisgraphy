@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.gisgraphy.domain.geoloc.entity.GisFeature;
 import com.gisgraphy.domain.repository.GisFeatureDao;
+import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Output.OutputStyle;
 import com.gisgraphy.fulltext.FullTextFields;
@@ -89,7 +90,7 @@ public class DisplayFeatureAction extends ActionSupport {
 
     private IFullTextSearchEngine fullTextSearchEngine;
     
-    private GisFeatureDao gisFeatureDao;
+    private IGisFeatureDao gisFeatureDao;
 
     private String featureId;
 
@@ -195,7 +196,7 @@ public class DisplayFeatureAction extends ActionSupport {
     }
     
     @Required
-    public void setGisFeatureDao(GisFeatureDao gisFeatureDao) {
+    public void setGisFeatureDao(IGisFeatureDao gisFeatureDao) {
 		this.gisFeatureDao = gisFeatureDao;
 	}
     

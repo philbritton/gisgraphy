@@ -31,6 +31,8 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.gisgraphy.domain.repository.GisFeatureDao;
+import com.gisgraphy.domain.repository.IGisFeatureDao;
 import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IFullTextSearchEngine;
@@ -60,6 +62,7 @@ public class DisplayFeatureActionTest {
 	String fullyQualifedName = "fully";
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
+	EasyMock.expect(mockSolrResponseDto.getFeature_id()).andReturn(123456L);
 	EasyMock.expect(mockSolrResponseDto.getFully_qualified_name())
 		.andReturn(fullyQualifedName);
 	EasyMock.replay(mockSolrResponseDto);
@@ -81,6 +84,7 @@ public class DisplayFeatureActionTest {
 	String name = "the name";
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
+	EasyMock.expect(mockSolrResponseDto.getFeature_id()).andReturn(123456L);
 	EasyMock.expect(mockSolrResponseDto.getFully_qualified_name())
 		.andReturn(fullyQualifedName);
 	EasyMock.expect(mockSolrResponseDto.getName()).andReturn(name);
@@ -171,6 +175,7 @@ public class DisplayFeatureActionTest {
 	action.setFeatureId("1");
 	SolrResponseDto mockSolrResponseDto = EasyMock
 		.createMock(SolrResponseDto.class);
+	EasyMock.expect(mockSolrResponseDto.getFeature_id()).andReturn(123456L);
 	EasyMock.replay(mockSolrResponseDto);
 	results.add(mockSolrResponseDto);
 	EasyMock.replay(mockResultDTO);
@@ -178,6 +183,12 @@ public class DisplayFeatureActionTest {
 		mockSearchEngine.executeQuery((FulltextQuery) EasyMock
 			.anyObject())).andReturn(mockResultDTO);
 	EasyMock.replay(mockSearchEngine);
+	
+	IGisFeatureDao gisFeatureDao = EasyMock.createMock(GisFeatureDao.class);
+	EasyMock.expect(gisFeatureDao.getShapeAsWKTByFeatureId(123456L)).andStubReturn("wkt");
+	EasyMock.replay(gisFeatureDao);
+	action.setGisFeatureDao(gisFeatureDao);
+	
 	String returnAction = action.execute();
 	assertEquals(DisplayFeatureAction.SUCCESS, returnAction);
 	assertEquals("", action.getErrorRef());
