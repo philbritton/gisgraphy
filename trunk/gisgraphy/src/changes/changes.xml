@@ -762,6 +762,11 @@
 				fulltext : promote nearest results (not sorted!) when a location is given
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				add smart street detection
+			</action>
+			
+			
 			</release>
 			
 	</body>
