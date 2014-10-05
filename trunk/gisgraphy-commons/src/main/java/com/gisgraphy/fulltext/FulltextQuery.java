@@ -62,11 +62,13 @@ public class FulltextQuery extends AbstractGisQuery {
 	private static final Pattern CLEAN_QUERY_PATTERN = Pattern.compile("([\\{\\}\\(\\)\\=\\!\"\'\\\\]+)");
 	private static final Pattern COMMA_PATTERN = Pattern.compile("([\\,]+)");
 
-	public static final int DEFAULT_MAX_RESULTS = 10;
+	public static final int DEFAULT_MAX_RESULTS = 20;
 	
     public final static int QUERY_MAX_LENGTH = 200;
     
     public final static boolean ALL_WORDS_REQUIRED_DEFAULT_OPTION = false;
+    
+    public static final int DEFAULT_NB_RESULTS = 10;
     
     /**
      * Default radius in meters
@@ -114,7 +116,7 @@ public class FulltextQuery extends AbstractGisQuery {
      *                default radius.
      */
     public FulltextQuery withRadius(double radius) {
-	if (radius <= 0) {
+	if (radius < 0) {
 	    this.radius = DEFAULT_RADIUS;
 	} else {
 	    this.radius = radius;

@@ -109,14 +109,20 @@ public class PaginationTest {
     @Test
     public void limitNumberOfResultsShouldLimit() {
 	// with negative limit=>no effect
+	assertEquals(16, Pagination.paginate().from(4).to(16)
+		.limitNumberOfResults(-3).getTo());
 	assertEquals(13, Pagination.paginate().from(4).to(16)
-		.limitNumberOfResults(-3).getMaxNumberOfResults());
+			.limitNumberOfResults(-3).getMaxNumberOfResults());
 	// with limit=0 =>no effect
+	assertEquals(16, Pagination.paginate().from(4).to(16)
+		.limitNumberOfResults(0).getTo());
 	assertEquals(13, Pagination.paginate().from(4).to(16)
-		.limitNumberOfResults(0).getMaxNumberOfResults());
+			.limitNumberOfResults(0).getMaxNumberOfResults());
 
 	assertEquals(13, Pagination.paginate().from(4).to(16)
 		.getMaxNumberOfResults());
+	assertEquals(16, Pagination.paginate().from(4).to(16)
+			.getTo());
 	// with numberOfResults > limit
 	assertEquals(10, Pagination.paginate().from(4).to(16)
 		.limitNumberOfResults(10).getMaxNumberOfResults());
@@ -144,11 +150,11 @@ public class PaginationTest {
     public void paginateWithMaxResults(){
 	Pagination pagination = Pagination.paginateWithMaxResults(32).from(1).to(-1);
 	assertEquals(1, pagination.getFrom());
-	assertEquals(32, pagination.getTo());
+	assertEquals(10, pagination.getTo());
 	
 	pagination = Pagination.paginateWithMaxResults(32).from(5).to(-1);
 	assertEquals(5, pagination.getFrom());
-	assertEquals(36, pagination.getTo());
+	assertEquals(14, pagination.getTo());
 	
 	pagination = Pagination.paginateWithMaxResults(3).from(5).to(-1);
 	assertEquals(5, pagination.getFrom());
