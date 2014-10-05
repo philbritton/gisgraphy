@@ -115,6 +115,7 @@ To suggest a change or a correction to any part of the documentation, please sen
 <div class="indexlevel3"><a href="#fulltextservicedescription" />Description</a></div>
 <div class="indexlevel3"><a href="#fulltextserviceoutputformat" />Output formats and languages</a></div>
 <div class="indexlevel3"><a href="#fulltextserviceparameters" />Parameters</a></div>
+<div class="indexlevel3"><a href="#autosuggetion" />auto completion / suggetions</a></div>
 <div class="indexlevel3"><a href="#fulltextwebservice" />Web service</a></div>
 <div class="indexlevel3"><a href="#fulltextserviceoutputfieldsdescription" />Output fields description</a></div>
 <div class="indexlevel3"><a href="#fulltextservicejavaapi" />Java API</a></div>
@@ -155,15 +156,17 @@ This documentation is for the last version of gisgraphy (snapshots, nightly buil
 <a name="about"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>About</h3>
- Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices.
+ Since 2006, Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices.
   Because geocoding is nothing without data, it provides an easy to use importer that will automagically download and import the necessary 
   (free) data to your local database (<a href="www.openstreetmap.org" target="gisgraphy">OpenStreetMap</a>, <a href="http://www.geonames.org/" target="gisgraphy">Geonames</a> and <a href="http://quattroshapes.com" target="gisgraphy">Quattroshapes</a> : more than 100 million entries). You can also add your own data with the Web interface or the importer connectors provided. Gisgraphy is production ready, and has been designed to be scalable(load balanced), performant and used in other languages than just java : results can be output in XML, JSON, PHP, Python, Ruby, YAML, GeoRSS, and Atom. One of the most popular GPS tracking System (<a href="http://opengts.sourceforge.net/">OpenGTS</a>) also includes a gisgraphy client...Gisgraphy is a framework. As a result it's flexible and powerful enough to be used in a lot of different use cases<a href="/documentation/quick-start.htm">read more</a>
  Here are the main functionalities  :
 <ul>
-<li> Importers from geonames CSV files. Just give the country(ies) you wish to import and / or the <a href="/placetype.htm">placetypes</a>, and Gisgraphy download the files  and import them with all the alternateNames (optional), and sync the database with the fulltext search engine</li>
 <li> Importers for Openstreetmap and quattroshapes data in csv format (view <a href="http://www.gisgraphy.com/download/download_data.htm"> data</a>)
+<li> Importers from geonames CSV files. Just give the country(ies) you wish to import and / or the <a href="/placetype.htm">placetypes</a>, and Gisgraphy download the files  and import them with all the alternateNames (optional), and sync the database with the fulltext search engine</li>
 <li> WorldWide geocoding / worldWide reverse geocoding / street search WebServices;
 <li> REST WebService</li>
+<li> Powerfull Autocompletion / suggetion engine</li>
+<li> Leaflet plugins and JS API (aka : gisgraphy-js-API)</li>
 <li> Several output formats supported : XML, json, PHP, ruby, python, Atom, RSS / GeoRSS, YAML  </li>
 <li> Full text search  (based on <a href="http://lucene.apache.org/java/"/>Lucene</a> / <a href="http://lucene.apache.org/solr/"/>Solr</a>  with default filters optimized for city search
 (case insensitivity, separator characters stripping, ..) via an Java API or a webservice</li>
@@ -1365,11 +1368,10 @@ you can :
 The street search service search the nearest street based on the shape of the streets, not the middle point. It is recommended to use this service for OpenGTS or if you want to search the nearest distance to a street. It is recommended to use the fulltext search engine with placetype=street to search by name, the fulltext engine search arround a point, it is more like a restriction and distance is the one to the middle of the street. street search service is the one to use when GPS is more important than name.<br><br>
 Actually the street search doesn't return house numbers (probably in next version). if you want house numbers you have to use the <a href="#fulltextservice">fulltext service</a>
 <br/>
-Gisgraphy is designed to allow search with auto suggestion and auto completion : 
+Gisgraphy is designed to allow search with auto completion / suggetions : 
 <ul>
 <li>To search for streets by entire name use the fulltext search (you can also specify GPS coordinate, and change the 'allwords required' option to esae the search).</li>
-<li>To do auto completion use the street webservice</li>
-<li>To do auto suggestion use SOLR directly (see this <a href="http://www.miximum.fr/methodes-et-outils/499-autocomplete-avec-solr">article</a> in french, or use google to <a href="http://translate.google.com/translate?hl=en&sl=fr&tl=en&u=http%3A%2F%2Fwww.miximum.fr%2Fmethodes-et-outils%2F499-autocomplete-avec-solr">translate in english</a>, I will soon add some code in the <a href="http://www.gisgraphy.com/developer-guide.htm">developper zone</a>)</li>
+<li>To do auto completion / suggetion use the fulltext webservice</li>
 </ul>
 
 <div class="tip yellowtip">
@@ -1444,7 +1446,7 @@ IMPORTANT TIPS : If you need to do a fulltext search and you don't care about di
 <li>Start pagination index (optional) : The first pagination index. Numbered from 1. If the number is < 1 or not specified, it will be set to the default value : 1.</li>
 <br/>
 <a name="endindexstreet"></a>
-<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 50.</li>
+<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 10. Max = 50 (can be changed)</li>
 <br/>
 
 <a name="callbackstreet"></a>
@@ -1716,6 +1718,7 @@ The full text service allows to search for features / places / street.<br/>
 you can
 <ul>
 	<li> Specify one or more words</li>
+	<li>search on part of the name (auto completion / suggetion)</li>
 	<li> Search for text or zip code</li>
 	<li> Specify a GPS restriction (promote nearsest ,not sorted but hav an impact on the score)</li>
 	<li> Limit the results to a specific
@@ -1786,19 +1789,24 @@ The following languages are supported :
 <br/>
 <a name="radiusfulltext"></a>
 <li>The radius (optional) : distance from the location point in meters we'd like to search around. The value is a number >= 0 if it is not specify or incorrect : The default value will be used (10 km).
-If the radius is >0, then the result will be filtered by a bounding box and nearest will be promotes. If the radius is equal to 0 then it will only promote the nearest.
+If the radius is >0, then the result will be filtered by a bounding box and nearest will be promotes. <b>If the radius is equal to 0 then it will only promote the nearest.</b>
 <br/> Examples : 
 <ul>
 <li>50000</li>
 </ul>
 </li>
 <br/>
+<a name="suggestfulltext"></a>
+<li>suggest (optional) : If this parameter is set then it will search in part of the names of the street, place,.... It allow you to do auto completion auto suggetions. See the gisgraphy leaflet plugin for more details.
+The json format will be forced if this parameter is true. See <a href="#autosuggetion"> auto completion / suggetions engine</a> for more details</li>. 
+
+<br/>
 
 <a name="startindex"></a>
 <li>Start pagination index (optional) : The first pagination index. Numbered from 1. If the number is < 1 or not specified, it will be set to the default value : 1.</li>
 <br/>
 <a name="endindex"></a>
-<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 10.</li>
+<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 10. max = 20 (can be changed)</li>
 <br/>
 <a name="outputformat"></a>
 <li>The output format (optional) : The formats available are :<br/>
@@ -1851,7 +1859,7 @@ For a full list and descrition of output fields : see <a href="#fulltextserviceo
 
 <br/>
 <a name="placetype"></a>
-<li>The placetype(s) (optional) : limit the search to the one <b>or more</b> place type. place type regroups some feature class and feature code. You need to specify the class coresponding to the place type you want to search. default : search for all features</li>
+<li>The placetype(s) (optional) : limit the search to the one <b>or more</b> place type (you can specify more than one). place type regroups some feature class and feature code. You need to specify the class coresponding to the place type you want to search. default : search for all features</li>
 
 <br/>
 <div class="tip greentip">
@@ -1876,7 +1884,39 @@ See a full list and explanation of placetype : <a href="http://www.gisgraphy.com
 
 
 
+
+
 </ul>
+
+
+<a name="autosuggetion"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h3>Autocompletion / suggetions</h3>
+Gisgraphy can provide, via the fulltext search engine, a very powerfull auto completion / suggetions engine.
+combined with the other parameters of the fulltext engine (latitude, longitude, radius, countrycode,...),
+ It allow to have a very powerful and personnalized suggetion engine.<br/>
+You can : 
+<ul>
+<li>Promote nearest by specifying radius to 0</li>
+<li>Suggest place for a specific country with the countrycode parameter</li>
+<li>Suggest  only in a bounding box by specifying a radius > 0</li>
+<li>Detect or specify lat/long to improve user experience</li>
+<li>Detect GPS coordinate and resolve them as an address</li>
+<li>Detect degree/minute/second coordinate and resolve them as an address</li>
+<li>Use magic sentence</li>
+<li>Prefetch some results</li>
+<li>So much more...feel free to <a href="mailto:david.masclet@gisgraphy.com">contact me</a> me for more details</li>
+</ul>
+<br/>
+You can use the gisgraphy js API to instanciate an auto completion input text very simply, or use the gisgraphy leaflet geocoder plugin to use aucocompletion on a map.
+there is also a reverse geocoding plugin.
+ See the gisgraphy leaflet plugin for more details.
+
+<br/>
+
+
+
+
 <a name="fulltextwebservice"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h3>Web service</h3>
@@ -1904,6 +1944,7 @@ Here is a summary of the Web parameters mapping : <br/>
 <tr><td>Latitude</td><td>lat</td><td></td></tr>
 <tr><td>Longitude<td>lng</td><td></td></tr>
 <tr><td>Radius</td><td>radius</td><td></td></tr>
+<tr><td>suggest</td><td>suggest</td><td></td></tr>
 <tr><td>Start pagination index</td><td>from</td><td></td></tr>
 <tr><td>End pagination index</td><td>to</td><td></td></tr>
 <tr><td>Output format</td><td>format</td><td></td></tr>
@@ -2139,7 +2180,7 @@ The following languages are supported :
 <li>Start pagination index (optional) : The first pagination index. Numbered from 1. If the number is < 1 or not specified, it will be set to the default value : 1.</li>
 <br/>
 <a name="endindexgeoloc"></a>
-<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 10.</li>
+<li>End pagination Index (optional) : The last pagination index. if < 1 or not specified, it will be set to startindex + 10. Max = 10 (can be changed)</li>
 <br/>
 <a name="callbackgeoloc"></a>
 <li>The callback method name (optional), use to wrap the content into a method name, must be alphanumeric and operate only for script outputformat (json,php,ruby,python)

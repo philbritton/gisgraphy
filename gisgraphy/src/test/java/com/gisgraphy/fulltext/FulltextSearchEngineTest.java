@@ -694,7 +694,7 @@ public class FulltextSearchEngineTest extends
 	    Output output = Output.withFormat(OutputFormat.XML)
 		    .withLanguageCode("FR").withStyle(OutputStyle.SHORT)
 		    .withIndentation();
-	    FulltextQuery fulltextQuery = new FulltextQuery(featureId.toString()+" ",
+	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+featureId.toString()+" ",
 		    pagination, output,com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "fr");
 	    String result = fullTextSearchEngine
 		    .executeQueryToString(fulltextQuery);
@@ -710,7 +710,36 @@ public class FulltextSearchEngineTest extends
     }
     
     @Test
-    public void testExecuteQueryToStringWithFeatureID() {
+    public void testExecuteQueryToStringWithFeatureID_goodprefix() {
+	Long featureId = 1001L;
+	City city = GisgraphyTestHelper.createCity("Saint-André", 1.5F, 2F, featureId);
+	this.cityDao.save(city);
+	assertNotNull(this.cityDao.getByFeatureId(featureId));
+	// commit changes
+	this.solRSynchroniser.commit();
+
+	try {
+	    Pagination pagination = paginate().from(1).to(10);
+	    Output output = Output.withFormat(OutputFormat.XML)
+		    .withLanguageCode("FR").withStyle(OutputStyle.SHORT)
+		    .withIndentation();
+	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+featureId.toString(),
+		    pagination, output, com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "fr");
+	    String result = fullTextSearchEngine
+		    .executeQueryToString(fulltextQuery);
+	    FeedChecker.assertQ("The query return incorrect values", result,
+		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
+		    "//*[@name='"
+			    + FullTextFields.NAME.getValue()
+			    + "'][.='" + city.getName()
+			    + "']");
+	} catch (FullTextSearchException e) {
+	    fail("error during search : " + e.getMessage());
+	}
+    }
+    
+    @Test
+    public void testExecuteQueryToStringShouldNotFindFeatureID() {
 	Long featureId = 1001L;
 	City city = GisgraphyTestHelper.createCity("Saint-André", 1.5F, 2F, featureId);
 	this.cityDao.save(city);
@@ -728,11 +757,7 @@ public class FulltextSearchEngineTest extends
 	    String result = fullTextSearchEngine
 		    .executeQueryToString(fulltextQuery);
 	    FeedChecker.assertQ("The query return incorrect values", result,
-		    "//*[@numFound='1']", "//*[@name='status'][.='0']",
-		    "//*[@name='"
-			    + FullTextFields.NAME.getValue()
-			    + "'][.='" + city.getName()
-			    + "']");
+		    "//*[@numFound='0']", "//*[@name='status'][.='0']");
 	} catch (FullTextSearchException e) {
 	    fail("error during search : " + e.getMessage());
 	}
@@ -755,7 +780,7 @@ public class FulltextSearchEngineTest extends
     	    Output output = Output.withFormat(OutputFormat.XML)
     		    .withLanguageCode("FR").withStyle(OutputStyle.FULL)
     		    .withIndentation();
-    	    FulltextQuery fulltextQuery = new FulltextQuery(street.getOpenstreetmapId().toString(),
+    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+street.getOpenstreetmapId().toString(),
     		    pagination, output, Constants.STREET_PLACETYPE, null);
     	    
     	    FulltextResultsDto results = fullTextSearchEngine
@@ -786,7 +811,7 @@ public class FulltextSearchEngineTest extends
     	this.solRSynchroniser.commit();
 
     	try {
-    	    FulltextQuery fulltextQuery = new FulltextQuery(street.getOpenstreetmapId().toString());
+    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+street.getOpenstreetmapId().toString());
     	    
     	    FulltextResultsDto results = fullTextSearchEngine
     		    .executeQuery(fulltextQuery);

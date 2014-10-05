@@ -36,8 +36,8 @@
 					  <a href="${proximitySearchUrl}" class="greenlink"><@s.text name="global.findNearestCity"/></a>
 					<div class="summary">
 					<ul>
-					<li><@s.text name="global.latitude"/> : ${result.lat}</li>
-					<li><@s.text name="global.longitude"/> : ${result.lng}</li>
+					<li><@s.text name="global.latitude"/> : ${result.lat?c}</li>
+					<li><@s.text name="global.longitude"/> : ${result.lng?c}</li>
 					<li><@s.text name="global.placetype"/> : ${result.placetype}</li>
 					<#if result.feature_class?? && result.feature_code??><li><@s.text name="global.typeDescription"/> : <@s.text name="${result.feature_class}_${result.feature_code}"/></li></#if>
 					<li><@s.text name="global.name"/> : ${result.name}</li>

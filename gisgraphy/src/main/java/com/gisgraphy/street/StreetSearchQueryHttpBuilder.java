@@ -24,6 +24,7 @@ package com.gisgraphy.street;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.gisgraphy.geoloc.GeolocQuery;
 import com.gisgraphy.geoloc.GeolocQueryHttpBuilder;
 import com.gisgraphy.servlet.GisgraphyServlet;
 import com.gisgraphy.servlet.StreetServlet;
@@ -89,7 +90,10 @@ public class StreetSearchQueryHttpBuilder extends GeolocQueryHttpBuilder {
 		return  false;
 	    }
    
-
+    @Override
+    protected int getMaxResults() {
+		return StreetSearchQuery.DEFAULT_MAX_RESULTS;
+	}
 	
     
 }

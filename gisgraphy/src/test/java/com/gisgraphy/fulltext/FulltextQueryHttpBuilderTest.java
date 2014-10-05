@@ -263,39 +263,53 @@ public class FulltextQueryHttpBuilderTest {
 	request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
 	request.removeParameter(FulltextServlet.TO_PARAMETER);
 	query = buildQuery(request);
-	 int expectedLastPagination = (DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+	 int expectedLastPagination = (FulltextQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 	    assertEquals(
 	           GisgraphyServlet.TO_PARAMETER
 		    + " is wrong when no "+GisgraphyServlet.TO_PARAMETER+" is specified ",
 		    expectedLastPagination, query
 		    .getLastPaginationIndex());
-	assertEquals(
-		"When no "
-			+ FulltextServlet.TO_PARAMETER
-			+ " is specified, the  parameter should be set to limit results to "
-			+ DEFAULT_MAX_RESULTS,
-		DEFAULT_MAX_RESULTS, query
-			.getMaxNumberOfResults());
+		
+	// with too high value specified
+		request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
+		request.removeParameter(FulltextServlet.TO_PARAMETER);
+		request.setParameter(FulltextServlet.TO_PARAMETER, "100");
+		query = buildQuery(request);
+		expectedLastPagination = (FulltextQuery.DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+		    assertEquals(
+		           GisgraphyServlet.TO_PARAMETER
+			    + " is too high, to should be limited ",
+			    expectedLastPagination, query
+			    .getLastPaginationIndex());
+		assertEquals(
+			"When no "
+				+ FulltextServlet.TO_PARAMETER
+				+ " is specified, the  parameter should be set to limit results to "
+				+ FulltextQuery.DEFAULT_MAX_RESULTS,
+				FulltextQuery.DEFAULT_MAX_RESULTS, query
+				.getMaxNumberOfResults());
+	
+	
+	
 	// with a wrong value
 	request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
 	request.setParameter(FulltextServlet.TO_PARAMETER, "2");// to<from
 	query = buildQuery(request);
-	 expectedLastPagination = (DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+	 expectedLastPagination = (FulltextQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 	    assertEquals( GisgraphyServlet.TO_PARAMETER
 		    + " is wrong when wrong "+GisgraphyServlet.TO_PARAMETER+" is specified ",
 		    expectedLastPagination, query
 			    .getLastPaginationIndex());
 	assertEquals("When a wrong " + FulltextServlet.TO_PARAMETER
-		+ " is specified, the number of results should be "
-		+ DEFAULT_MAX_RESULTS,
-		DEFAULT_MAX_RESULTS, query.getMaxNumberOfResults());
+		+ " is specified, the number of results should be default nb results",
+		FulltextQuery.DEFAULT_NB_RESULTS, query.getMaxNumberOfResults());
 	assertEquals("a wrong to does not change the from value", 3, query
 		.getFirstPaginationIndex());
 	request = GisgraphyTestHelper.createMockHttpServletRequestForFullText();
 	//non numeric
 	request.setParameter(FulltextServlet.TO_PARAMETER, "a");
 	query = buildQuery(request);
-	expectedLastPagination = (DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+	expectedLastPagination = (FulltextQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 	assertEquals( GisgraphyServlet.TO_PARAMETER
 		    + " is wrong when non numeric "+GisgraphyServlet.TO_PARAMETER+" is specified ",
 		    expectedLastPagination, query
@@ -304,8 +318,8 @@ public class FulltextQueryHttpBuilderTest {
 		.getFirstPaginationIndex());
 	assertEquals("When a wrong " + FulltextServlet.TO_PARAMETER
 		+ " is specified, the numberOf results should be "
-		+ DEFAULT_MAX_RESULTS,
-		DEFAULT_MAX_RESULTS, query.getMaxNumberOfResults());
+		+ FulltextQuery.DEFAULT_NB_RESULTS,
+		FulltextQuery.DEFAULT_NB_RESULTS, query.getMaxNumberOfResults());
 
 	// test countrycode
 	// with no value specified

@@ -209,15 +209,63 @@ public class FulltextQuerySolrHelperTest {
 				OutputFormat.JSON.getParameterValue(),
 				parameters.get(Constants.OUTPUT_FORMAT_PARAMETER).get(0));
 		assertEquals("wrong query type parameter found",
-				Constants.SolrQueryType.numeric.toString(),
+				Constants.SolrQueryType.advanced.toString(),
 				parameters.get(Constants.QT_PARAMETER).get(0));
-		assertEquals("wrong query parameter found ", searchTerm, parameters
-				.get(Constants.QUERY_PARAMETER).get(0));
-		assertEquals("wrong query parameter", searchTerm,
+		assertEquals("wrong query parameter", String.format(
+				FulltextQuerySolrHelper.NESTED_QUERY_NUMERIC_TEMPLATE, searchTerm),
 				parameters.get(Constants.QUERY_PARAMETER).get(0));
-
+		
+		
 		assertNull(
-				"spellchecker query should not be set when basic numeric query",
+				"spellchecker query should not be set when basic id numeric query",
+				parameters.get(Constants.SPELLCHECKER_QUERY_PARAMETER));
+	}
+	
+	@Test
+	public void testToQueryStringShouldreturnCorrectParamsForFeatureIdNumericQuery() {
+		Pagination pagination = paginate().from(3).to(10);
+		Output output = Output.withFormat(OutputFormat.JSON)
+				.withLanguageCode("FR").withStyle(OutputStyle.SHORT)
+				.withIndentation();
+		String searchTerms = "feature_id:1001";
+		FulltextQuery fulltextQuery = new FulltextQuery(searchTerms,
+				pagination, output,
+				com.gisgraphy.fulltext.Constants.ONLY_CITY_PLACETYPE, "FR");
+		// split parameters
+		String queryString = FulltextQuerySolrHelper
+				.toQueryString(fulltextQuery);
+		HashMap<String, List<String>> parameters = GisgraphyTestHelper
+				.splitURLParams(queryString, "&");
+		// check parameters
+		assertEquals(outputStyleHelper.getFulltextFieldList(
+				Output.OutputStyle.SHORT, "FR"),
+				parameters.get(Constants.FL_PARAMETER).get(0));
+		assertEquals("wrong indent parameter found", "on",
+				parameters.get(Constants.INDENT_PARAMETER).get(0));
+		assertEquals("wrong echoparams parameter found", "none", parameters
+				.get(Constants.ECHOPARAMS_PARAMETER).get(0));
+		assertEquals("wrong start parameter found", "2",
+				parameters.get(Constants.START_PARAMETER).get(0));
+		assertEquals("wrong rows parameter found", "8",
+				parameters.get(Constants.ROWS_PARAMETER).get(0));
+		assertEquals("wrong output format parameter found",
+				OutputFormat.JSON.getParameterValue(),
+				parameters.get(Constants.OUTPUT_FORMAT_PARAMETER).get(0));
+		assertEquals("wrong query type parameter found",
+				Constants.SolrQueryType.advanced.toString(),
+				parameters.get(Constants.QT_PARAMETER).get(0));
+		assertEquals("wrong query parameter", String.format(
+				FulltextQuerySolrHelper.NESTED_QUERY_ID_TEMPLATE, "1001"),
+				parameters.get(Constants.QUERY_PARAMETER).get(0));
+		assertEquals("wrong filter query parameter for placetype",
+				"placetype:(City)",
+				parameters.get(Constants.FILTER_QUERY_PARAMETER).get(1));
+
+		assertEquals("wrong filter query parameter for countrycode",
+				"country_code:FR",
+				parameters.get(Constants.FILTER_QUERY_PARAMETER).get(0));
+		assertNull(
+				"spellchecker query should not be set when advanced numeric query",
 				parameters.get(Constants.SPELLCHECKER_QUERY_PARAMETER));
 	}
 
@@ -252,9 +300,10 @@ public class FulltextQuerySolrHelperTest {
 				OutputFormat.JSON.getParameterValue(),
 				parameters.get(Constants.OUTPUT_FORMAT_PARAMETER).get(0));
 		assertEquals("wrong query type parameter found",
-				Constants.SolrQueryType.numeric.toString(),
+				Constants.SolrQueryType.advanced.toString(),
 				parameters.get(Constants.QT_PARAMETER).get(0));
-		assertEquals("wrong query parameter ", searchTerms,
+		assertEquals("wrong query parameter", String.format(
+				FulltextQuerySolrHelper.NESTED_QUERY_NUMERIC_TEMPLATE, searchTerms),
 				parameters.get(Constants.QUERY_PARAMETER).get(0));
 		assertEquals("wrong filter query parameter for placetype",
 				"placetype:(City)",
@@ -735,7 +784,7 @@ public class FulltextQuerySolrHelperTest {
 		String searchTerm = "Saint-André";
 		FulltextQuery fulltextQuery = new FulltextQuery(searchTerm, pagination,
 				output, com.gisgraphy.fulltext.Constants.ONLY_ADM_PLACETYPE,
-				"fr").withAllWordsRequired(true).withRadius(0);
+				"fr").withAllWordsRequired(true).withRadius(1000);
 		Float longitude = 20F;
 		Float latitude = 30F;
 		fulltextQuery.around(GeolocHelper.createPoint(longitude, latitude));
@@ -788,8 +837,8 @@ public class FulltextQuerySolrHelperTest {
 				parameters.get(Constants.FILTER_QUERY_PARAMETER).get(0));
 		assertEquals("wrong filter query parameter for geoloc, point",
 				"30.0,20.0", parameters.get(Constants.POINT_PARAMETER).get(0));
-		assertNull("wrong filter query parameter for geoloc, distance",
-				parameters.get(Constants.DISTANCE_PARAMETER));
+		assertEquals("wrong filter query parameter for geoloc, distance","1.0",
+				parameters.get(Constants.DISTANCE_PARAMETER).get(0));
 
 		// (String.format(Locale.US,FulltextQuerySolrHelper.GEOLOC_QUERY_TEMPLATE,
 		// fulltextQuery.getPoint().getY(),fulltextQuery.getPoint().getX(),fulltextQuery.getRadius()/1000)));
@@ -864,8 +913,9 @@ public class FulltextQuerySolrHelperTest {
 				parameters.get(Constants.FILTER_QUERY_PARAMETER).get(0));
 		assertEquals("wrong filter query parameter for geoloc, point",
 				"30.0,20.0", parameters.get(Constants.POINT_PARAMETER).get(0));
-		assertNull("wrong filter query parameter for geoloc, distance should not be present if radius = 0",
-				parameters.get(Constants.DISTANCE_PARAMETER));
+		assertEquals("wrong filter query parameter for geoloc, distance should not be set to max if radius = 0",
+				FulltextQuerySolrHelper.MAX_RADIUS+"",
+				parameters.get(Constants.DISTANCE_PARAMETER).get(0));
 		assertNotNull("spellchecker query should be set when numeric query",
 				parameters.get(Constants.SPELLCHECKER_QUERY_PARAMETER));
 	}

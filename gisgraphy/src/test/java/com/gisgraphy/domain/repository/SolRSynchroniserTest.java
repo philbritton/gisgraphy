@@ -74,6 +74,7 @@ import com.gisgraphy.fulltext.AbstractIntegrationHttpSolrTestCase;
 import com.gisgraphy.fulltext.FullTextFields;
 import com.gisgraphy.fulltext.FullTextSearchException;
 import com.gisgraphy.fulltext.FulltextQuery;
+import com.gisgraphy.fulltext.FulltextQuerySolrHelper;
 import com.gisgraphy.fulltext.FulltextResultsDto;
 import com.gisgraphy.fulltext.IsolrClient;
 import com.gisgraphy.fulltext.spell.ISpellCheckerIndexer;
@@ -1143,7 +1144,7 @@ public class SolRSynchroniserTest extends AbstractIntegrationHttpSolrTestCase {
     	openStreetMapDao.save(street);
     	solRSynchroniser.commit();
     	
-    	FulltextQuery query =new FulltextQuery(featureId.toString());
+    	FulltextQuery query =new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+featureId.toString());
     	FulltextResultsDto results = fullTextSearchEngine.executeQuery(query);
     	Assert.assertEquals(1, results.getResultsSize());
     	Assert.assertNull(results.getResults().get(0).getName());

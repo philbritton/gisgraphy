@@ -29,10 +29,13 @@ import com.gisgraphy.domain.valueobject.GisgraphyConfig;
 import com.gisgraphy.domain.valueobject.GisgraphyServiceType;
 import com.gisgraphy.domain.valueobject.Output;
 import com.gisgraphy.domain.valueobject.Pagination;
+import com.gisgraphy.fulltext.FulltextQuery;
 import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
+import com.gisgraphy.service.AbstractGisQuery;
+import com.gisgraphy.servlet.FulltextServlet;
 import com.gisgraphy.servlet.GisgraphyServlet;
 import com.vividsolutions.jts.geom.Point;
 
@@ -125,14 +128,15 @@ public class GeolocQueryHttpBuilder {
 	}
 
 	try {
-	    to = Integer.valueOf(req.getParameter(GisgraphyServlet.TO_PARAMETER))
+	    to = Integer
+		    .valueOf(req.getParameter(FulltextServlet.TO_PARAMETER))
 		    .intValue();
 	} catch (NumberFormatException e) {
-	    to = -1;
+	    to = from+AbstractGisQuery.DEFAULT_NB_RESULTS-1;
 	}
 
-	pagination = Pagination.paginateWithMaxResults(geolocQuery.getMaxLimitResult()).from(from).to(to)
-		.limitNumberOfResults(geolocQuery.getMaxLimitResult());
+	pagination = Pagination.paginateWithMaxResults(getMaxResults()).from(from).to(to)
+		.limitNumberOfResults(getMaxResults());
 	// output format
 	OutputFormat format = OutputFormat.getFromString(req
 		.getParameter(GisgraphyServlet.FORMAT_PARAMETER));
@@ -187,6 +191,11 @@ public class GeolocQueryHttpBuilder {
 	return geolocQuery;
 
 }
+
+
+	protected int getMaxResults() {
+		return GeolocQuery.DEFAULT_MAX_RESULTS;
+	}
 
 	/**
 	 * Create a basic GeolocQuery. this method must be overide 

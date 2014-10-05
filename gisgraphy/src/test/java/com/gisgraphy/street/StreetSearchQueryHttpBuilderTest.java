@@ -97,8 +97,8 @@ public class StreetSearchQueryHttpBuilderTest {
 		    request = GisgraphyTestHelper.createMockHttpServletRequestForStreetGeoloc();
 		    request.removeParameter(GisgraphyServlet.TO_PARAMETER);
 		    query = buildQuery(request);
-		    // non specify
-		    int expectedLastPagination = (StreetSearchQuery.DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+		    // not specify
+		    int expectedLastPagination = (StreetSearchQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 		   	    assertEquals(
 			           GisgraphyServlet.TO_PARAMETER
 				    + " is wrong when no "+GisgraphyServlet.TO_PARAMETER+" is specified ",
@@ -107,23 +107,40 @@ public class StreetSearchQueryHttpBuilderTest {
 		   	    
 		   	 assertEquals("When no "
 				    + GisgraphyServlet.TO_PARAMETER
-				    + " is specified, the maxnumberOfResults should not be > "
-				    + StreetSearchQuery.DEFAULT_MAX_RESULTS,
-				    StreetSearchQuery.DEFAULT_MAX_RESULTS, query
+				    + " is specified, the maxnumberOfResults should be "
+				    + StreetSearchQuery.DEFAULT_NB_RESULTS,
+				    StreetSearchQuery.DEFAULT_NB_RESULTS, query
 					    .getMaxNumberOfResults());
+		  // too high
+		   	 request = GisgraphyTestHelper.createMockHttpServletRequestForStreetGeoloc();
+		   	 request.removeParameter(GisgraphyServlet.TO_PARAMETER);
+			    request.setParameter(GisgraphyServlet.TO_PARAMETER,StreetSearchQuery.DEFAULT_MAX_RESULTS+100+"");
+			    query = buildQuery(request);
+			 expectedLastPagination = (StreetSearchQuery.DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+			   	    assertEquals("when "+
+				           GisgraphyServlet.TO_PARAMETER
+					    + " is too high "+GisgraphyServlet.TO_PARAMETER+" should be limited",
+					    expectedLastPagination, query
+					    .getLastPaginationIndex());
+			   	    
+			   	 assertEquals("when "+
+				           GisgraphyServlet.TO_PARAMETER
+					    + " is too high "+GisgraphyServlet.TO_PARAMETER+" should be limited",
+					    StreetSearchQuery.DEFAULT_MAX_RESULTS, query
+						    .getMaxNumberOfResults()); 
 		    // with a wrong value
 		    request = GisgraphyTestHelper.createMockHttpServletRequestForStreetGeoloc();
 		    request.setParameter(GisgraphyServlet.TO_PARAMETER, "2");// to<from
 		    query = buildQuery(request);
-		    expectedLastPagination = (StreetSearchQuery.DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+		    expectedLastPagination = (StreetSearchQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 		    assertEquals( GisgraphyServlet.TO_PARAMETER
 			    + " is wrong when wrong "+GisgraphyServlet.TO_PARAMETER+" is specified ",
 			    expectedLastPagination, query
 				    .getLastPaginationIndex());
 		    assertEquals("When a wrong " + GisgraphyServlet.TO_PARAMETER
-			    + " is specified, the maxnumberOfResults should not be > "
-			    + StreetSearchQuery.DEFAULT_MAX_RESULTS,
-			    StreetSearchQuery.DEFAULT_MAX_RESULTS, query
+			    + " is specified, the maxnumberOfResults should  be  "
+			    + StreetSearchQuery.DEFAULT_NB_RESULTS,
+			    StreetSearchQuery.DEFAULT_NB_RESULTS, query
 				    .getMaxNumberOfResults());
 		    
 		    assertEquals("a wrong to does not change the from value", 3, query
@@ -134,15 +151,15 @@ public class StreetSearchQueryHttpBuilderTest {
 		    query = buildQuery(request);
 		    assertEquals("a wrong to does not change the from value", 3, query
 			    .getFirstPaginationIndex());
-		    expectedLastPagination = (StreetSearchQuery.DEFAULT_MAX_RESULTS+query.getFirstPaginationIndex()-1);
+		    expectedLastPagination = (StreetSearchQuery.DEFAULT_NB_RESULTS+query.getFirstPaginationIndex()-1);
 		    assertEquals( GisgraphyServlet.TO_PARAMETER
 			    + " is wrong when non numeric "+GisgraphyServlet.TO_PARAMETER+" is specified ",
 			    expectedLastPagination, query
 				    .getLastPaginationIndex());
 		    assertEquals("When a wrong " + GisgraphyServlet.TO_PARAMETER
 			    + " is specified, the maxnumberOfResults should not be > "
-			    + StreetSearchQuery.DEFAULT_MAX_RESULTS,
-			    StreetSearchQuery.DEFAULT_MAX_RESULTS, query
+			    + StreetSearchQuery.DEFAULT_NB_RESULTS,
+			    StreetSearchQuery.DEFAULT_NB_RESULTS, query
 				    .getMaxNumberOfResults());
 
 		    // test indentation

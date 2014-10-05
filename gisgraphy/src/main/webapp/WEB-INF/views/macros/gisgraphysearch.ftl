@@ -219,7 +219,7 @@ doAjaxSearch = function(formName){
 					<#if result.feature_class?? && result.feature_code??><@s.text name="global.typeDescription"/> : <@s.text name="${result.feature_class}_${result.feature_code}"/><br/>
 					<@s.text name="global.featureClassCode"/> : ${result.feature_class}.${result.feature_code}<br/></#if>
 					<#if result.fully_qualified_name??>${result.fully_qualified_name}<br/></#if>
-					<@s.text name="global.latitude"/> : ${result.lat};<br/> <@s.text name="global.longitude"/> : ${result.lng}<br/>
+					<@s.text name="global.latitude"/> : ${result.lat?c};<br/> <@s.text name="global.longitude"/> : ${result.lng?c}<br/>
 					<#if result.is_in??><@s.text name="global.is.in"/> : ${result.is_in};<br/></#if>
 					<#if result.openstreetmap_id??><@s.text name="global.openstreetmapId"/> : ${result.openstreetmap_id?c};<br/></#if>
 					<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
@@ -345,9 +345,9 @@ doAjaxSearch = function(formName){
 						<#if result.feature_class?? && result.feature_code??><@s.text name="global.typeDescription"/> : <@s.text name="${result.featureClass}_${result.featureCode}"/><br/>
 						<@s.text name="global.featureClassCode"/> : ${result.featureClass}.${result.featureCode}<br/>
 						</#if>
-						<@s.text name="global.latitude"/> : ${result.lat}; 
+						<@s.text name="global.latitude"/> : ${result.lat?c}; 
 						<br/>
-						<@s.text name="global.longitude"/> : ${result.lng}<br/>
+						<@s.text name="global.longitude"/> : ${result.lng?c}<br/>
 						<#if result.population??><@s.text name="global.population"/> : ${result.population};<br/></#if>
 						<#if result.elevation??><@s.text name="global.elevation"/> : ${result.elevation} m<br/></#if>
 						<img src="/images/world_link.png" alt="Maps links" />&nbsp;<a href="${result.google_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnGoogleMap"/></a> | <a href="${result.openstreetmap_map_url}" class="greenlink" target="gisgraphyMap"><@s.text name="global.viewOnOpenStreetmapMap"/></a>
@@ -673,8 +673,8 @@ toggleAddressForm = function(structured){
 
 						<div class="summary">
 							<#if result.confidence?? ><li><@s.text name="address.confidence"/> : ${result.confidence}</li></#if>
-							<#if result.lat??><li><@s.text name="global.latitude"/> : ${result.lat}</li></#if>
-							<#if result.lng??><li><@s.text name="global.longitude"/> : ${result.lng}</li></#if>
+							<#if result.lat??><li><@s.text name="global.latitude"/> : ${result.lat?c}</li></#if>
+							<#if result.lng??><li><@s.text name="global.longitude"/> : ${result.lng?c}</li></#if>
 							<#if result.name??><li><@s.text name="global.name"/> : ${result.name}</li></#if>
 							<#if result.recipientName??><li><@s.text name="global.name"/> : ${result.recipientName}</li></#if>
 							<#if result.houseNumber??><li><@s.text name="address.houseNumber"/> : ${result.houseNumber}</li></#if>
@@ -761,9 +761,9 @@ toggleAddressForm = function(structured){
 						<div class="separator"><hr/></div>
 					
 						<div class="summary">
-						<@s.text name="global.latitude"/> : ${result.lat}; 
+						<@s.text name="global.latitude"/> : ${result.lat?c}; 
 						<br/>
-						<@s.text name="global.longitude"/> : ${result.lng}
+						<@s.text name="global.longitude"/> : ${result.lng?c}
 						<br/>
 						<@s.text name="global.length"/> : ${result.length} m(s); 
 						<br/>
