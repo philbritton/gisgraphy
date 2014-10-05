@@ -766,6 +766,11 @@
 				add smart street detection
 			</action>
 			
+			<action dev="David Masclet" type="add">
+				add the abbility to specify the default number of result and the max one 
+				separatetly, for service that are paginate (fulltext=>10/20, street=>10/50, geoloc=>10/10)
+			</action>
+			
 			
 			</release>
 			

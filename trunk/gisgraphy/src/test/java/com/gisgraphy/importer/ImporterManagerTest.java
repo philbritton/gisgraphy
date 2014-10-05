@@ -97,12 +97,6 @@ public class ImporterManagerTest extends AbstractIntegrationHttpSolrTestCase {
 
     private static final String ADM1_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin1CodesWithWrongNumberOfFields.txt";
 
-    private static final String ADM2_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin2CodesWithWrongNumberOfFields.txt";
-
-    private static final String ADM3_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin3CodesWithWrongNumberOfFields.txt";
-
-    private static final String ADM4_FILENAME_WITH_WRONG_NUMBER_OF_FIELDS = "admin4CodesWithWrongNumberOfFields.txt";
-
     private static final String ADM1_FILENAME_WITH_MISSING_FIELDS = "admin1CodesWithMissingFields.txt";
 
     private static final String ADM2_FILENAME_WITH_MISSING_FIELDS = "admin2CodesWithMissingFields.txt";

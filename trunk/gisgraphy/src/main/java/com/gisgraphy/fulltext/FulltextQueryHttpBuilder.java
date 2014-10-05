@@ -38,6 +38,7 @@ import com.gisgraphy.helper.GeolocHelper;
 import com.gisgraphy.helper.GisHelper;
 import com.gisgraphy.helper.OutputFormatHelper;
 import com.gisgraphy.serializer.common.OutputFormat;
+import com.gisgraphy.service.AbstractGisQuery;
 import com.gisgraphy.servlet.FulltextServlet;
 import com.gisgraphy.servlet.GisgraphyServlet;
 import com.vividsolutions.jts.geom.Point;
@@ -149,11 +150,11 @@ public class FulltextQueryHttpBuilder {
 		    .valueOf(req.getParameter(FulltextServlet.TO_PARAMETER))
 		    .intValue();
 	} catch (NumberFormatException e) {
-	    to = -1;
+	    to = from+AbstractGisQuery.DEFAULT_NB_RESULTS-1;
 	}
 
-	pagination = Pagination.paginateWithMaxResults(query.getMaxLimitResult()).from(from).to(to)
-		.limitNumberOfResults(query.getMaxLimitResult());
+	pagination = Pagination.paginateWithMaxResults(FulltextQuery.DEFAULT_MAX_RESULTS).from(from).to(to)
+		.limitNumberOfResults(FulltextQuery.DEFAULT_MAX_RESULTS);
 	// output
 	OutputFormat format = OutputFormat.getFromString(req
 		.getParameter(FulltextServlet.FORMAT_PARAMETER));

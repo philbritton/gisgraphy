@@ -43,6 +43,10 @@ import com.gisgraphy.serializer.common.OutputFormat;
  */
 public class FulltextQuerySolrHelper {
 	
+	public static final String FEATUREID_PREFIX = FullTextFields.FEATUREID.getValue()+":";
+	
+	static final int MAX_RADIUS = 37000;
+
 	private static SmartStreetDetection smartStreetDetection = new SmartStreetDetection();
 
 	private static OutputStyleHelper outputStyleHelper = new OutputStyleHelper();
@@ -57,7 +61,9 @@ public class FulltextQuerySolrHelper {
 	protected static final String CITY_BOOST_QUERY="placetype:city^16";
 	protected static final String STREET_BOOST_QUERY="placetype:street^16";
 	// we need to consider adm1name for andora and brooklin
-	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1 zipcode^1.2 pf=name^1.1' bf=population^2.0}%s\"";
+	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='zipcode^1.2 pf=name^1.1'  bq='placetype:City^2 population^2'}%s\"";
+	
+	protected static final String NESTED_QUERY_ID_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1'}%s\"";
     
 	protected static final String FQ_COUNTRYCODE = FullTextFields.COUNTRYCODE.getValue()+":%s";
 	protected static final String FQ_PLACETYPE = FullTextFields.PLACETYPE.getValue()+":";
@@ -78,6 +84,7 @@ public class FulltextQuerySolrHelper {
 	 * @return A Representation of all the needed parameters
 	 */
 	public static ModifiableSolrParams parameterize(FulltextQuery query) {
+		boolean spellchecker = true;
 		ModifiableSolrParams parameters = new ModifiableSolrParams();
 
 
@@ -128,7 +135,9 @@ public class FulltextQuerySolrHelper {
 				parameters.add(Constants.POINT_PARAMETER,query.getPoint().getY()+","+query.getPoint().getX());
 				if(query.getRadius() != 0){
 					parameters.add(Constants.DISTANCE_PARAMETER,query.getRadius()/1000+"");
-				}
+				} else if(query.getRadius() == 0){
+					parameters.add(Constants.DISTANCE_PARAMETER,MAX_RADIUS+"");
+				}  
 		}
 		if (query.getCountryCode()!=null && !"".equals(query.getCountryCode().trim())){
 			parameters.add(Constants.FQ_PARAMETER, String.format(FQ_COUNTRYCODE,query.getCountryCode().toUpperCase()));
@@ -155,8 +164,11 @@ public class FulltextQuerySolrHelper {
 		boolean isNumericQuery = isNumericQuery(query.getQuery());
 		StringBuffer querybuffer ;
 		
-		if (query.getQuery().startsWith(FullTextFields.FEATUREID.getValue()+":")){
-			parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
+		if (query.getQuery().startsWith(FEATUREID_PREFIX)){
+			spellchecker=false;
+			String id = query.getQuery().substring(FEATUREID_PREFIX.length());
+			String queryString = String.format(NESTED_QUERY_ID_TEMPLATE,id);
+			parameters.set(Constants.QUERY_PARAMETER, queryString);
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
 					.toString());
 			/*if (query.getPoint() != null ){
@@ -171,9 +183,10 @@ public class FulltextQuerySolrHelper {
 				parameters.set(Constants.BF_PARAMETER, BF_NEAREST);
 			}
 		} else if (isNumericQuery(query.getQuery())) {
-			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.numeric
+			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
 					.toString());
-			parameters.set(Constants.QUERY_PARAMETER, query.getQuery());
+			String queryString = String.format(NESTED_QUERY_NUMERIC_TEMPLATE,query.getQuery());
+			parameters.set(Constants.QUERY_PARAMETER, queryString);
 		} else {
 			// we overide the query type
 			/*parameters.set(Constants.QT_PARAMETER,
@@ -205,7 +218,7 @@ public class FulltextQuerySolrHelper {
 
 
 
-		if (SpellCheckerConfig.enabled && query.hasSpellChecking() && !isNumericQuery && !query.isSuggest()){
+		if (SpellCheckerConfig.enabled && query.hasSpellChecking() && !isNumericQuery && !query.isSuggest() && spellchecker){
 			parameters.set(Constants.SPELLCHECKER_ENABLED_PARAMETER,"true");
 			parameters.set(Constants.SPELLCHECKER_QUERY_PARAMETER, query.getQuery());
 			parameters.set(Constants.SPELLCHECKER_COLLATE_RESULTS_PARAMETER,SpellCheckerConfig.collateResults);
