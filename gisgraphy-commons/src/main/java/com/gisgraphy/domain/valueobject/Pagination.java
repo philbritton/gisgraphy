@@ -61,6 +61,8 @@ public class Pagination {
      */
     public static final int DEFAULT_MAX_RESULTS = 10;
     
+    public static final int DEFAULT_NB_RESULTS = 10;
+    
     
     /**
      * max result the pagination should have
@@ -72,6 +74,12 @@ public class Pagination {
      * incorrect
      */
     public static final int DEFAULT_FROM = 1;
+    
+    /**
+     * the default 'from' parameters if the one specified is missing or
+     * incorrect
+     */
+    public static final int DEFAULT_TO = 10;
 
     /**
      * @author <a href="mailto:david.masclet@gisgraphy.com">David Masclet</a>
@@ -98,7 +106,7 @@ public class Pagination {
 
 	private int from;
 	private int to;
-	private int maxResults = DEFAULT_MAX_RESULTS;
+	private int maxResults = 100000000;
 
 	private PaginationBuilder() {
 
@@ -216,7 +224,8 @@ public class Pagination {
      */
     private Pagination to(int to) {
 	this.to = (to > 0 && to >= this.from) ? to : this.from
-		+ maxResult - 1;
+		+ DEFAULT_NB_RESULTS - 1;
+	limitNumberOfResults(maxResult);
 	return this;
     }
 
@@ -236,7 +245,7 @@ public class Pagination {
 
     /**
      * Do a post-treatment on the current pagination to limit number of results.
-     * 'from will be unchanged, only 'to' will be changed if limit is <=0, there
+     * 'from will be unchanged, only 'to' will be changed. if limit is <=0, there
      * is no effect
      * 
      * @param limit
@@ -254,12 +263,12 @@ public class Pagination {
      * @return how many results will be return according the from and to
      *         parameters (the max expected numbers of results). it can be less
      *         than expected if there is less results to return. e.g :
-     *         from(1).to(5) can nly return 2 results if there is only 2
+     *         from(1).to(5) can only return 2 results if there is only 2
      *         parameters but this method return the max expected numbers of
      *         results) it will return 0 if from and to equals 0
      */
     public int getMaxNumberOfResults() {
-	return (to - from) + 1;
+    	return (to - from) + 1;
     }
 
     /* (non-Javadoc)

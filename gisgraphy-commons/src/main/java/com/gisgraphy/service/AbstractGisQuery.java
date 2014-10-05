@@ -48,7 +48,9 @@ public abstract class AbstractGisQuery {
     
     private static Pattern callbackValidationPattern = Pattern.compile("\\w+");
     
-    private static Logger logger = Logger.getLogger(AbstractGisQuery.class); 
+    private static Logger logger = Logger.getLogger(AbstractGisQuery.class);
+    
+    public static final int DEFAULT_NB_RESULTS = 10;
 
     /* (non-Javadoc)
      * @see java.lang.Object#hashCode()

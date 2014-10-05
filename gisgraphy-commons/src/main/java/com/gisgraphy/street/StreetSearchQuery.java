@@ -39,6 +39,7 @@ public class StreetSearchQuery extends GeolocQuery {
 	    public static final String ONEWAY_PARAMETER = "oneway";
 	    public static final String NAME_PARAMETER = "name";
     public static final int DEFAULT_MAX_RESULTS = 50;
+    public static final int DEFAULT_NB_RESULTS = 10;
 
     /**
      * @param point

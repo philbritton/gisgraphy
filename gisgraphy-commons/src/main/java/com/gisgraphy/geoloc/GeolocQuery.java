@@ -47,7 +47,9 @@ public class GeolocQuery extends AbstractGisQuery {
 	    public static final String CALLBACK_PARAMETER = "callback";
 	    public static final String MUNICIPALITY_PARAMETER = "municipalityFilter";
 
-    public static final int DEFAULT_MAX_RESULTS = 10;
+    public static final int DEFAULT_MAX_RESULTS = 20;
+    
+    public static final int DEFAULT_NB_RESULTS = 10;
    
 
 
