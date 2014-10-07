@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-include("../header.inc");
+include("../../header.inc");
 ?>
 <style>
 .flag{
@@ -21,6 +21,7 @@ text-indent:10px;
 }
 </style>
 <?php
+error_reporting(0);
 function _format_bytes($size)
 {
   $sizes = array(" Bytes", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
@@ -63,4 +64,4 @@ if (file_exists("../readme.txt")){ include("../readme.txt"); } ?>
 <?=$dirlist?>
 <?=$fileList?>
 </ul>
-<?php include("../footer.inc");?>
+<?php include("../../footer.inc");?>
