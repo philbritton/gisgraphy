@@ -412,6 +412,7 @@ text-decoration: underline;
 .serviceslist{
 float:left;
 width:1000px;
+height: 300px;
 }
 
 .servicewraper{
@@ -421,6 +422,7 @@ padding-left:20px;
 padding-right:20px;
 padding-bottom:45px;
 list-style:none;
+height: 46px;
 }
 
 .serviceheader{

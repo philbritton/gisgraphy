@@ -1,6 +1,6 @@
 <?php
 error_reporting(0);
-include("../header.inc");
+include("../../header.inc");
 ?>
 <style>
 .flag{
@@ -57,10 +57,10 @@ sort($dirFiles, SORT_LOCALE_STRING);
 ?>
 <h1>Download server</h1>
 <div style="font-family: Arial,Verdana,sans-serif;background-color: rgb(235, 245, 252);font-size: 1em;padding: 25px;text-align: left;"><?php
-if (file_exists("../readme.txt")){ include("../readme.txt"); } ?>
+if (file_exists("../../readme.txt")){ include("../../readme.txt"); } ?>
 </div>
 <ul>
 <?=$dirlist?>
 <?=$fileList?>
 </ul>
-<?php include("../footer.inc");?>
+<?php include("../../footer.inc");?>
