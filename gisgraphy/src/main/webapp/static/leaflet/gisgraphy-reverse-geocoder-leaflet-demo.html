@@ -1,0 +1,32 @@
+<html>
+<head>
+        <title>Gisgraphy leaflet reverse geocoder plugin demo</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+</head>
+<body>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="js/gisgraphy-leaflet-reverse-geocoder.js"></script>
+<script src="js/util/NumberFormatter.js"></script>
+
+
+        <div id="map" style="background: none repeat scroll 0 0 #FFFFFF; height: 98%;position: absolute;width: 98%;"></div>
+
+        <script>
+
+                var map = L.map('map',{ zoomControl:false }).setView([50.63803046, 3.06638718], 13);
+
+                L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+                        maxZoom: 18,
+                        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                        id: 'examples.map-i875mjb7'
+                }).addTo(map);
+
+//new L.Control.gisgraphyreversegeocoder();
+   </script>
+</body>
+</html>
+
