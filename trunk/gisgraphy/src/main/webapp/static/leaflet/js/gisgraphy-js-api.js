@@ -49,7 +49,7 @@ function getZoomByPlaceType(placetype){
 console.log(placetype);
  if (typeof placetype != 'undefined'){
        if (placetype.toUpperCase() == 'STREET'){
-          zoom = 15;
+          zoom = 18;
       } else if (placetype.toUpperCase() == 'CITY'){
           zoom = 12;
       }  else if (placetype.toUpperCase() == 'ADM'){

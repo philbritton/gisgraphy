@@ -1,5 +1,5 @@
 <span style="font-size:1em;">
-Welcome to Gisgraphy download server.Since 2006, Gisgraphy is a free opensource geocoder based on <a href="http://www.openstreetmap.org" target="gis">Openstreetmap</a>, <a href="http://www.geonames.org" target="gis">Geonames</a> and  <a href="http://quattroshapes.com/" target="gis">Quatroshapes</a> data.
+Welcome to Gisgraphy download server. Since 2006, Gisgraphy is a free opensource geocoder based on <a href="http://www.openstreetmap.org" target="gis">Openstreetmap</a>, <a href="http://www.geonames.org" target="gis">Geonames</a> and  <a href="http://quattroshapes.com/" target="gis">Quatroshapes</a> data.
 More informations on the <a href="http://www.gisgraphy.com">Gisgraphy web site</a>.<br/>
 <strong>
 <ul>
@@ -19,6 +19,7 @@ Gisgraphy process pipeline (click to enlarge).
 
 <br/>
 On these server, you will find several directories :<br/>
+\_<b><a href="/quattroshapes/">quattroshapes</a></b> : shapes of cities with their geonames id extracted from quatroshapes and compressed in tar.bz2<br/>
 \_<b><a href="/openstreetmap/">openstreetmap</a></b> : <br/>
 <span style="margin:20px;">\_<b><a href="/openstreetmap/pbf/">pbf</a></b> : PBF files extracted from Openstreetmap, splited by country, they ARE NOT used by the Gisgraphy importer.<br/>
 <span style="margin:20px;">\_<b><a href="/openstreetmap/csv/">csv</a></b> : CSV files of streets, houses, cities, and Pois, extracted from Openstreetmap, splited by country. Those files are downloaded by the Gisgraphy importer but can be used for anything else.<br/>
