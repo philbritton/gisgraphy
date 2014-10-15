@@ -68,7 +68,7 @@
 						<li><a href="http://www.gisgraphy.com/documentation/user-guide.htm">User guide</a></li>
 						<li><a href="http://www.gisgraphy.com/documentation/relevance-and-performance.htm">Relevance & perfs</a>
 						<li><a href="http://www.gisgraphy.com/documentation/addressparser.htm">Address parser</a></li>
-						<li><a href="http://www.gisgraphy.com/leaflet.htm">leaflet plugins - JS API</a></li>
+						<li><a href="http://www.gisgraphy.com/leaflet.htm">Leaflet plugins</a></li>
 						<li><a href="http://www.gisgraphy.com/gisgraphoid.htm">Gisgraphoid</a></li>
 						<li><a href="http://www.gisgraphy.com/documentation/installation/index.htm">Installation</a></li>
 						<li><a href="http://www.gisgraphy.com/forum/"  target="gisgraphyservices">Forum</a></li>
@@ -137,6 +137,7 @@
 						<li><a href="http://www.gisgraphy.com/premium/index.htm">What's this</a></li>
 						<li><a href="http://www.gisgraphy.com/premium/index.htm#installation">Installation</a></li>
 						<li><a href="http://www.gisgraphy.com/premium/index.htm#dump">Dump</a></li>
+						<li><a href="http://www.gisgraphy.com/premium/index.htm#data">Openstreetmap data extraction</a></li>
 						<li><a href="http://www.gisgraphy.com/premium/index.htm#sla">Premium webservice</a></li>
 						<li><a href="http://www.gisgraphy.com/premium/index.htm#developement">Developement</a></li>
 						<li><a href="http://www.gisgraphy.com/faq-premium.html">FAQ</a></li>
