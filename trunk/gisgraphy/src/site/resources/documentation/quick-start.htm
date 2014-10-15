@@ -3,7 +3,7 @@
 <h2>Yet an other Geocoder ?</h2>
 <p>
 
-<b>Yest but No :) Gisgraphy has a different philosophy : An Address is not a string !</b>
+<b>Yes but No :) Gisgraphy has a different philosophy : An Address is not a string !</b>
 
 After more than 7 years of doing geocoding, that's the conclusion : An address is not a string ! it is tha cardinality of all of their possible names of the different parts :
 '3355 S Las Vegas Blvd, Las Vegas ' and 'the venitian, the strip NV 89109 USA' is the same address but there is no common word between the two addresses
@@ -83,6 +83,14 @@ Here is a matrix that will help you to choose the right webservice for the right
 			street or address, please use fulltext webservice </li></td>
 	</tr>
 	<tr>
+		<td>Reverse geocoding</td>
+		<td>GPS position<br />
+		</td>
+		<td><ul><li>Find an address and the distance from a GPS point</li>
+			<li>To the house level, if information available</li></ul>
+		</td>
+	</tr>
+	<tr>
 		<td>Street search</td>
 		<td>GPS position and Partial street name (optional)<br />
 		</td>
@@ -113,10 +121,14 @@ Here is a matrix that will help you to choose the right webservice for the right
 		<td>Fulltext</td>
 		<td>A user given string, a GPS point (optional), one or more
 			placetypes (optional)</td>
-		<td><ul><li>Find <a href="/documentation/user-guide.htm#fulltextserviceoutputfieldsdescription">plenty of informations</a> for place of the given placetypes
+		<td><ul>
+		<li><b>important : </b>This webservice search for places (a street or a city or a state or a placetype) while geocoding service is specialized in address (a combination of house street city, state)</li>	
+		<li>Find <a href="/documentation/user-guide.htm#fulltextserviceoutputfieldsdescription">plenty of informations</a> for place of the given placetypes
+		<li>Autocompletion auto suggetions</li>
 			(optional), in several languages, in fulltext mode, restrict search
 			around the given point (optional)</li><li>You can set 'allwordsrequired' option to false
-			if you want a more permissive search, or find a place in a sentence</li></ul></td>
+			if you want a more permissive search, or find a place in a sentence</li>
+		</ul></td>
 	</tr>
 </table>
 
