@@ -4,6 +4,7 @@ Quick access to premium services :
 	<ul>				
 				<li><a href="#installation">Installation</a></li>
 				<li><a href="#dump">Recent Dump</a></li>
+				<li><a href="#data">Openstreetmap data extraction</a></li>
 				<li><a href="#sla">Premium webservice</a></li>
 				<li><a href="#developement">Developement</a></li>
 				<li><a href="#other">More ?</a></li>
@@ -12,7 +13,7 @@ Quick access to premium services :
 				<li><a href="/faq-premium.html">FAQ</a></li>
 	</ul>
 </div>
-<h2 class="mainsection">Wat's this?</h2>
+<h2 class="mainsection">What's this?</h2>
 Gisgraphy is a totally free open source framework under the <a href="/license.html">LGPL license</a> : <ul><li>You can <a href="/xref/index.html">consult</a>, <a href="/source-repository.html">download</a> or modify the code as you wish.</li>
 <li> You can <a href="/documentation/installation/index.htm">install</a> it on your own server as it is deployed on <a href="http://services.gisgraphy.com">services.gisgraphy.com</a> and use it as you want (commercial use included), the data are also free and <a href="/download/download_data.htm">downloadable</a>.
 <li>Webservices on <a href="http://services.gisgraphy.com">services.gisgraphy.com</a> are availables for free (for non benefit and non commercial use, see <a href="http://www.gisgraphy.com/free-access.htm">Terms and Conditions</a>), and no waranty are given on the availability.</li>
@@ -62,7 +63,7 @@ We can install Gisgraphy, once postgres and Postgis is setup, or we can install 
 		<div class="price_cell odd"><img src="/images/icons/check.png" alt="included" title="included"/></div>
 		<div class="price_cell even bigheight"><img src="/images/icons/check.png" alt="included" title="included"/><br/>By importer</div>
 		<div class="price_cell odd"></div>
-		<div class="price_cell even "><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even "><span class="price">400</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell odd bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Basic%20installation" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
@@ -70,7 +71,7 @@ We can install Gisgraphy, once postgres and Postgis is setup, or we can install 
 		<div class="price_cell odd"><img src="/images/icons/check.png" alt="included" title="included"/></div>
 		<div class="price_cell even bigheight"><img src="/images/icons/check.png" alt="included" title="included"/><br/>by dump (faster)</div>
 		<div class="price_cell odd"></div>
-		<div class="price_cell even"><span class="price">400</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even"><span class="price">500</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell odd bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Extended%20installation" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
@@ -78,7 +79,7 @@ We can install Gisgraphy, once postgres and Postgis is setup, or we can install 
 		<div class="price_cell odd"><img src="/images/icons/check.png" alt="included" title="included"/></div>
 		<div class="price_cell even bigheight"><img src="/images/icons/check.png" alt="included" title="included"/><br/>by dump (faster)</div>
 		<div class="price_cell odd"><img src="/images/icons/check.png" alt="included" title="included"/></div>
-		<div class="price_cell even"><span class="price">500</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even"><span class="price">600</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell odd bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Full%20installation" class="roundbluebutton">Order</a></div>
 	</div>
 </div>
@@ -96,30 +97,27 @@ Advice :
 <a name="dump"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2 class="mainsection">Recent dump</h2>
-<a href="http://www.geonages.org">Geonames</a> and <a href="http://openstreetmap.org">Openstreetmap</a> datas are totally free. The Gisgraphy importer download it from the <a href="http://download.geonames.org/export/dump/">Geonames download server</a> for geonames data, or from the <a href="http://download.gisgraphy.com">Gisgraphy download server</a> (The reasons why data are not directly downloaded from Openstreetmap is because the data are pre-processed. We extract streets, calculate length, middle point, clean up some values, improve names (especially for fleet tracking), and so on. The other reason is because we thought that it is simple to import csv, instead of a complicated XML one ;)), We compute Openstreetmap in csv format but due to the time it takes, we do it only one or two times a year. and we also compute sql dump (with geonames and openstreetmap data) that can be directly inject into postgres to be used by gisgraphy. If you need a more recent dump, we can process it and send you the file. we need : <ul>
-<li>The country(code) you want</li>
-<li>To know if you need Geonames, Openstreetmap or both</li>
-</ul>
+<a href="http://www.geonages.org">Geonames</a> and <a href="http://openstreetmap.org">Openstreetmap</a> datas are totally free. The Gisgraphy importer download it from the <a href="http://download.geonames.org/export/dump/">Geonames download server</a> for geonames data, or from the <a href="http://download.gisgraphy.com">Gisgraphy download server</a> (The reasons why data are not directly downloaded from Openstreetmap is because the data are pre-processed. We extract streets, calculate length, middle point, clean up some values, improve names (especially for fleet tracking), and so on. The other reason is because we thought that it is simple to import csv, instead of a complicated XML one ;)), We compute Openstreetmap in csv format but due to the time it takes, we do it only one or two times a year. and we also compute sql dump (with geonames and openstreetmap data) that can be directly inject into postgres to be used by gisgraphy. If you need a more recent dump, we can process it and send you the file. 
 <br/>
 <div style="margin:0 auto;width:610px;"><img src="/images/icons/euro.png" alt="price in euro"/><span style="font-size:2em;vertical-align:middle;">&#x21C4;</span><img src="/images/icons/dollar.png" alt="price in dollar"/> 1 euro = 1.4 dollar</div>
 <div style="clear:both;"></div>
 <div class="price_container">
 	<div class="price_col ">
 		<div class="price_cell even price_header first_col">&nbsp; </div>
-		<div class="price_cell odd first_col bigheight">Openstreetmap and Geonames SQL dump</div>
+		<div class="price_cell odd first_col bigheight">Openstreetmap and Geonames SQL dump + solr dump</div>
 		<div class="price_cell even first_col bigheight">Price</div>
 		<div class="price_cell odd first_col bigheight">&nbsp;</div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">All countries</div>
 		<div class="price_cell odd bigheight"><img src="/images/icons/check.png" alt="included" title="included"/></div>
-		<div class="price_cell even bigheight"><span class="price">600</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even bigheight"><span class="price">1800</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell odd bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Dump%20All%20countries" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">US only</div>
 		<div class="price_cell odd bigheight"><img src="/images/icons/check.png" alt="included" title="included"/></div>
-		<div class="price_cell even bigheight"><span class="price">400</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even bigheight"><span class="price">1200</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell odd bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Dump%20US" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
@@ -135,69 +133,91 @@ Advice :
 <u>About disk space :</u> 
 <table>
 <tr><td>dataset</td><td>Uncompressed</td><td>Compressed</td></tr>
-<tr><td>Geonames only (place, city, zipcode,...)</td><td>30 Go (25 Go for the fulltext enginge + 5 Go for Postgres)</td><td>5.2 GO</td></tr>
-<tr><td>Geonames and Openstreetmap</td><td>66 Go (41 Go for the fulltext engine + 25 GO for Postgres)</td><td>19.6 GO</td></tr>
+<tr><td>Solr dump</td><td>200 Go</td><td>32 GO</td></tr>
+<tr><td>SQL dump</td><td>52 Go</td><td>17 GO</td></tr>
 </table>
 <br/>
 so you need at least uncompressed disk space *2 on your server (one for decompression, one for import) 
 
-
+<br/>
+<a name="data"></a>
+<div align="right"><a href="#top">[top]</a></div>
+<h2 class="mainsection">Openstreetmap data extraction</h2>
+We are already provide giga bytes of data on our <a href="http://download.gisgraphy.com/" target="gis">download server</a> : 
+<ul>
+<li>34 Milions of house numbers; 76 millions of streets; 7 millions of Pois; 4,3 millions of cities; 216 000 shapes of cities. Splited by country in CSV / TSV format</li>
+<li><a href="http://wiki.openstreetmap.org/wiki/PBF_Format" target="gis">PBF</a> files splited by country.</li>
+</ul>
+<br>
+Based on our experience of the openstreetmap model, we can provide some extractions of Openstreetmap data. We can extract :
+<ul>
+<li>Addresses : The gisgraphy importer links houses to streets, streets to city, city to sate, and state to country. so we can extract addresses.</li>
+<li>Extraction based on Openstreetmap tags</li>
+<li>Custom tag extract for streets, zipcodes, house numbers, Points of interest, city, whatever. </li>
+<li><a href="http://wiki.openstreetmap.org/wiki/PBF_Format" target="gis">PBF</a> files / metro extracts for a particular area</li>
+<li>In several formats (sql, CSV, json,wkt, shape,...)</li>
+<li>With periodic updates</li>
+<li>For a city, a sate, a country, a bouding box, or the entire planet.</li>
+</ul>
+<br/> Feel free to <a href="mailto:davidmasclet@gisgraphy.com">contact us</a>, we will do a free quotation.
 <a name="sla"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2 class="mainsection">Premium webservice (beta)</h2>
-No downloading, no installation and configuration, don't worry about the technical details, just use it! buy a number of requests (6 months validity) and a rate (number of requests per minuts) and we garantee performance. You have a dedicated supervision interface that is real time updated. It allow you to see how many requests you got left and some others usefull informations. The price is a 'by webservice price', and you can buy requests for each <a href="/">Gisgraphy webservice</a>. There is a rescue server in case the main one is down. we recommend to include failover handling on the client side. Note that if you opt for a one year fee, you only pay 10 month.
+No downloading, no installation and configuration, don't worry about the technical details, just use it! choose a rate (number of requests per minuts) and we take care of everything. You have a dedicated supervision interface that is real time updated. It allow you to see if you have exceed the rate allow and how many times and some others usefull informations. The price is a 'by webservice price'. There is a rescue server in case the main one is down. we recommend to include failover handling on the client side. Note that if you opt for a one year fee, you only pay 10 month. All our webservice are scalable.
 <br/><br/>
 <div style="margin:0 auto;width:610px;"><img src="/images/icons/euro.png" alt="price in euro"/><span style="font-size:2em;vertical-align:middle;">&#x21C4;</span><img src="/images/icons/dollar.png" alt="price in dollar"/> 1 euro = 1.4 dollar</div>
 <div style="clear:both;"></div>
 <div class="price_container" style="width:800px;">
 	<div class="price_col ">
 		<div class="price_cell even price_header ">Credits \ Rate </div>
-		<div class="price_cell odd">1 000 000 cdts</div>
+		<!--<div class="price_cell odd">1 000 000 cdts</div>
 		<div class="price_cell even">5 000 000 cdts</div>
-		<div class="price_cell odd">10 000 000 cdts</div>
+		<div class="price_cell odd">10 000 000 cdts</div>-->
 		<div class="price_cell even">Unlimited / month</div>
 		<div class="price_cell odd">Unlimited / year</div>
 		<div class="price_cell even bigheight">&nbsp;</div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">A (30 req/min)</div>
-		<div class="price_cell odd"><span class="price">50</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<!--<div class="price_cell odd"><span class="price">50</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even"><span class="price">80</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell odd"><span class="price">100</span>&nbsp;&nbsp;<span class="curency price">€</span></div>-->
 		<div class="price_cell odd"><span class="price">100</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell even"><span class="price">80</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="pricestrike">960</span><span class="price">800</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even"><span class="pricestrike">1200</span><span class="price">1000</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Hosting%20level%20A" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">B (60 req/min)</div>
-		<div class="price_cell odd"><span class="price">80</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<!--<div class="price_cell odd"><span class="price">80</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even"><span class="price">150</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="price">200</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell even"><span class="price">150</span>&nbsp;&nbsp;<span class="curency price">€</span><br/></div>
-		<div class="price_cell odd"><span class="pricestrike">1800</span><span class="price">1500</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell odd"><span class="price">200</span>&nbsp;&nbsp;<span class="curency price">€</span></div>-->
+		<div class="price_cell odd"><span class="price">150</span>&nbsp;&nbsp;<span class="curency price">€</span><br/></div>
+		<div class="price_cell even"><span class="pricestrike">1800</span><span class="price">1500</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Hosting%20level%20B" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">C (120 req/min)</div>
-		<div class="price_cell odd"><span class="price">120</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<!--<div class="price_cell odd"><span class="price">120</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even"><span class="price">250</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell even"><span class="price">200</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="pricestrike">2400</span><span class="price">2000</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell odd"><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>-->
+		<div class="price_cell odd"><span class="price">200</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even"><span class="pricestrike">2400</span><span class="price">2000</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Hosting%20level%20C" class="roundbluebutton">Order</a></div>
 	</div>
 	<div class="price_col ">
 		<div class="price_cell even price_header">D (300 req/min)</div>
-		<div class="price_cell odd"><span class="price">150</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<!--<div class="price_cell odd"><span class="price">150</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even"><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="price">400</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell even"><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
-		<div class="price_cell odd"><span class="pricestrike">3600</span><span class="price">3000</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell odd"><span class="price">400</span>&nbsp;&nbsp;<span class="curency price">€</span></div>-->
+		<div class="price_cell odd"><span class="price">300</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
+		<div class="price_cell even"><span class="pricestrike">3600</span><span class="price">3000</span>&nbsp;&nbsp;<span class="curency price">€</span></div>
 		<div class="price_cell even bigheight"><a href="mailto:davidmasclet@gisgraphy.com?subject=[order]%20Hosting%20level%20D" class="roundbluebutton">Order</a></div>
 	</div>
 </div>
 <div style="clear:both;"></div>
-You should wonder why per month is cheaper, the reason is simple : if you choose 'unlimited by month', it is more simple to manage servers, if you choose a credit, we don't know how long it will take for you to use your credits (6 month max)
+<br/>
+<b>If you need more request, we can also provide dedicated hosting.</b>
+<br/>
 <a name="developement"></a>
 <div align="right"><a href="#top">[top]</a></div>
 <h2 class="mainsection">Developement</h2>
