@@ -85,7 +85,6 @@
 				<li><a href="#" class="dir">Community &nbsp;&#x25BC;&nbsp;</a>
 					<ul>
 						<li><a href="http://www.gisgraphy.com/forum/">Forum</a></li>
-						<li><a href="http://www.gisgraphy.com/planet-gisgraphy.htm">Planet Gisgraphy</a></li>
 						<li><a href="http://www.gisgraphy.com/aboutme.htm">About me</a></li>
 						<li><a href="http://www.gisgraphy.com/what-s-new.htm">What's new</a></li>
 						<li><a href="http://www.gisgraphy.com/logos.htm">Logos</a></li>
@@ -128,7 +127,6 @@
 						<li><a href="http://www.gisgraphy.com/apidocs/index.html"  target="gisgraphy">Javadocs</a></li>
 						<li><a href="http://gisgraphy.free.fr/mavenrepo" target="gisgraphy">Maven Repository</a></li>
 						<li><a href="http://www.gisgraphy.com/bench.htm">Benchs</a></li>
-						<li><a href="http://www.gisgraphy.com/road-map.htm">Road map</a></li>
 						<li><a href="http://www.gisgraphy.com/changes-report.html">Changes Report</a></li>
 					</ul>
 				</li>
