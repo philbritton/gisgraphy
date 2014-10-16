@@ -16,11 +16,18 @@
 First edit the jdbc properties in /webapps/ROOT/WEB-INF/classes/jdbc.properties
 Optionnaly setup some preferences in webapps/ROOT/WEB-INF/classes/env.properties
 
-To start Gisgraphy, use
-
-* on linux/unix : launch.sh
-* on Macintosch : launch.cmd
-* on windows : launch.bat
+Some scripts are provided to manage gisgraphy, most of them are for unix / linux :
+- launch : run gisgraphy and output logs to the console.
+- start : starts Gisgraphy.
+- stop : Shutdown gisgraphy (clean way).
+- force-stop : kill gisgraphy (doesn't check the status).
+- status : tell whether gisgraphy is started or not.
+- logs : output logs file to the console.
+- respawn : check gisgraphy status and re-launch it if it has gone.
+- watch : run the respawner.
+- unwatch : stop the respawner.
+- startupscript : script to run gisgraphy as a daemon.
+- setGisgrapgyAsService : intall the startup script (unix only).
 
 
 Read the installation guide in the "docs" directory or online (last updates and corrections) : http://www.gisgraphy.com/documentation/installation/index.htm
