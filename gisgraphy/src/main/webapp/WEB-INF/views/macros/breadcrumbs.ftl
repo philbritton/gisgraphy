@@ -37,6 +37,9 @@
 		}
 	}
 </script>
+<div style="margin:auto auto;width:100%;text-align:center;height:auto">
+<!--<img src="/images/map-icon.png" style="width:80px;vertical-align:middle;"/>--><span style="font-size:1.2em;"><@s.text name="search.try.demo"/><br/><br/></span>
+</div>
 <div id="navbar">
  <ul id="cssdropdown" class="dropdown dropdown-horizontal">
 		<li>
