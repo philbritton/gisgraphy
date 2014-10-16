@@ -14,7 +14,7 @@
  
         <META NAME="Author" CONTENT="David Masclet"/>
 		<META NAME="Keywords" CONTENT="geocoding, webservices, find nearby,geonames,openstreetmap, geolocalisation"/>
-		<META NAME="Description" CONTENT="Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices. Results can be output in XML, Atom, RSS, JSON, PHP, Ruby, and Python."/>
+		<META NAME="Description" CONTENT="Since 2006, Gisgraphy is a free, open source framework that offers the possibility to do geolocalisation and geocoding via Java APIs or REST webservices. Results can be output in XML, Atom, RSS, JSON, PHP, Ruby, and Python."/>
     	<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     	<script type="text/javascript" src="/scripts/jquery-1.6.1.min.js" ></script>
     	
