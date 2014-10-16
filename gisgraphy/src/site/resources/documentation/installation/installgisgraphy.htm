@@ -100,15 +100,20 @@ that's all, you can now start gisgraphy
 <li>Launch the launch script (.sh on Linux, .command on mac and .bat on windows </code>"</li>
 </ul>
 <br/>
-Some useful scripts are provided (for linux only) : 
+Some useful scripts are provided, most of them are for unix / linux : 
 <ul>
-<li>The start script start Gisgraphy.</li>
-<li>The launch script, start Gisgraphy and print logs in the console</li>
-<li>The restart script stop (kill) Gisgraphy and restart.</li>
-<li>The stop script, stop Gisgraphy</li>
-<li>The force-stop script stop (kill) Gisgraphy.</li>
-<li>The status script give you informations if Gisgraphy is started or not</li>
-<li>watch, unwatch, and respawn scripts are useful when you want to restart Gisgraphy at startup or if it crash () </li>
+<li>launch : run gisgraphy and output logs to the console.</li>
+<li>start : starts Gisgraphy.</li>
+<li>stop : Shutdown gisgraphy (clean way).</li>
+<li>force-stop : kill gisgraphy (doesn't check the status).</li>
+<li>Status : tell whether gisgraphy is started or not.</li>
+<li>logs : output logs file to the console.</li>
+<li>respawn : check gisgraphy status and re-launch it if it has gone.</li>
+<li>watch : run the respawner.</li>
+<li>unwatch : stop the respawner.</li>
+<li>startupscript : script to run gisgraphy as a daemon.</li>
+<li>setGisgrapgyAsService : intall the startup script (unix only).</li>
+</ul>
 
 
 <div class="tip redtip">

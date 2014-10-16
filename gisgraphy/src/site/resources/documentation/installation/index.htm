@@ -15,7 +15,7 @@ If you are familiar with their installations, you can skip the 'Environment setu
 <blockquote>
 To install gisgraphy you need a server with: 
 <ul>
-<li>155 go of free disk space if you import all the countries (only 70 Go are needed for data, but Gisgraphy needs some temporary disk space during the import, after the import you only need 70 Go)</li>
+<li>280 go of free disk space if you import all the countries </li>
 <li>Internet access to download data files (you can skip it)</li>
 <li>Java 1.5 or greater(oracle JVM is strongly recommended)</li>
 <li> <a href="http://www.postgresql.org/">PostgreSQL</a> with <a href="http://postgis.refractions.net/">Postgis</a> extension (It is HIGHLY recommended to have postgis 1.3.1 or greater, for good performances... <a href="/documentation/user-guide.htm#postgis1.1.3">more</a> ).</li>
@@ -41,6 +41,25 @@ Once you have <a href="/download/index.htm">downloading gisgraphy</a>, Choose th
 <a name="gisgraphy"></a>
 <h2>Gisgraphy installation</h2>
 <blockQuote><img src="http://www.gisgraphy.com/images/logos/logo_70.png"/><a href="installgisgraphy.htm">Gisgraphy installation guide</a>. Once postgres, postgis and java are installed, Gisgraphy takes 5 minutes to get installed. You just need to run some sql scripts </blockQuote>
+<br/>
+<a name="run"></a>
+<h2>Run Gisgraphy</h2>
+<blockQuote>Some scripts are provided to manage gisgraphy, most of them are for unix / linux :
+<ul>
+<li>launch : run gisgraphy and output logs to the console.</li>
+<li>start : starts Gisgraphy.</li>
+<li>stop : Shutdown gisgraphy (clean way).</li>
+<li>force-stop : kill gisgraphy (doesn't check the status).</li>
+<li>Status : tell whether gisgraphy is started or not.</li>
+<li>logs : output logs file to the console.</li>
+<li>respawn : check gisgraphy status and re-launch it if it has gone.</li>
+<li>watch : run the respawner.</li>
+<li>unwatch : stop the respawner.</li>
+<li>startupscript : script to run gisgraphy as a daemon.</li>
+<li>setGisgrapgyAsService : intall the startup script (unix only).</li>
+</ul>
+
+</blockQuote>
 <br/>
 <a name="premium"></a>
 <h2>We install it for you</h2>
