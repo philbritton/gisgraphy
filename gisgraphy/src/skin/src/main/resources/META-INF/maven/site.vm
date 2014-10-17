@@ -96,10 +96,10 @@
 				<li><a href="#" class="dir">Free online webservices &nbsp;&#x25BC;&nbsp;</a>
 					<ul>
 						<li><a href="http://www.gisgraphy.com/free-access.htm" >Free access</a></li>
-						<li><a href="http://services.gisgraphy.com/static/leaflet/" >Demo on map (leaflet plugin)</a></li>
+						<li><a href="http://services.gisgraphy.com/static/leaflet/index.html" >Demo on map (leaflet plugin)</a></li>
 						<li class="empty"><a href="#" >Geocoding</a></li>
 							<li><a href="http://services.gisgraphy.com/public/geocoding.html" target="gisgraphyservices">Geocoding</a></li>
-							<li><a href="http://services.gisgraphy.com/static/leaflet/"  target="gisgraphyservices">With autocompletion</a></li>
+							<li><a href="http://services.gisgraphy.com/static/leaflet/index.html"  target="gisgraphyservices">With autocompletion</a></li>
 						<li class="empty"><a href="#" >Reverse Geocoding</a></li>
 							<li><a href="http://services.gisgraphy.com/public/reverse_geocoding_worldwide.html"  target="gisgraphyservices">Reverse geocoding</a></li>
 						<li class="empty"><a href="#" >Address Parser</a></li>
@@ -108,7 +108,7 @@
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?placetype=street"  target="gisgraphyservices">By name</a></li>
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?placetype=street&advancedSearch=true"  target="gisgraphyservices">By name and GPS</a></li>
 							<li><a href="http://services.gisgraphy.com/public/streetSearch.html"  target="gisgraphyservices">By GPS position</a></li>
-							<li><a href="http://services.gisgraphy.com/static/leaflet/"  target="gisgraphyservices">With autocopmletion</a></li>
+							<li><a href="http://services.gisgraphy.com/static/leaflet/index.html"  target="gisgraphyservices">With autocopmletion</a></li>
 						<li class="empty"><a href="#">Place search</a></li>
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html"  target="gisgraphyservices">By text</a></li>
 							<li><a href="http://services.gisgraphy.com/ajaxfulltextsearch.html?advancedSearch=true"  target="gisgraphyservices">By text and GPS</a></li>

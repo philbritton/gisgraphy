@@ -218,7 +218,7 @@ var el = this._resultBoxNode;
 if ($('#'+this.resultBoxNodeID).length >0){
  el =$('#'+this.resultBoxNodeID);
 }
- el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#'+this.resultBoxNodeID+'\').empty().hide();" >&nbsp;</span><br/>Since 2006, Gisgraphy is a free open source framework that provides 5 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'restaurant new york\')">restaurant new york</a></li></ul>');
+ el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#'+this.resultBoxNodeID+'\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 5 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\''+this.inputSearchNodeID+'\',\'restaurant new york\')">restaurant new york</a></li></ul><a href="http://www.gisgraphy.com/"><span style="display:block;background-color:#1465B7;height:25px;width:150px;margin:auto auto;text-align:center;color:#FFFFFF;font-size:1.2em;line_height:1.2em;vertical-align:middle;border-radius: 8px 8px 8px 8px;" ><b>Gisgraphy project &rarr;</b></span></a>');
 if ($('#'+this.resultBoxNodeID).length >0){ 
 	if ( $('#'+this.resultBoxNodeID ).is( ":hidden" ) ) {
 		        $( '#'+this.resultBoxNodeID ).slideDown(200);
@@ -296,13 +296,13 @@ function doProcessGeocodingResults(data){
 					}
 					if (value.streetName){
 						hasName=true;
-						content+="<strong>"+value.streetName+" </strong>";
+						content+="<strong>"+value.streetName+" </strong>, ";
 					} else if (value.name){
 						hasName=true;
-						content+="<strong>"+value.name+" </strong>";
+						content+="<strong>"+value.name+" </strong>, ";
 					}
 					if (value.city){
-						content+='<span class="isin-autocomplete">, '+value.city+'</span>';
+						content+='<span class="isin-autocomplete">'+value.city+'</span>';
 					}
 					if (value.lat && value.lng){
 						content+="<br/>("+value.lat+","+value.lng+")";
