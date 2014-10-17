@@ -191,3 +191,11 @@ margin-left:10px;
 width:390px;
 background-color : #FFF;
 }
+
+
+.leaflet-control-help {
+font-family : "Helvetica Neue",Arial,Helvetica,sans-serif;
+font-size:14px;
+padding:5px;
+background-color:#FFFFFF;
+}

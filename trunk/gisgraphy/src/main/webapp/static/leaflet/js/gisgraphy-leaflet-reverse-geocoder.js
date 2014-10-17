@@ -1,3 +1,21 @@
+
+L.Control.reversehelp = L.Control.extend({
+options: {
+position: 'topright',
+},
+
+onAdd: function(map) {
+	this._container = L.DomUtil.create('div', 'leaflet-control-help');
+//	this._href = L.DomUtil.create('a', null, this._container);
+//	container = this._container = L.DomUtil.create('div');
+	this._container.id="reversehelp";
+	this._container.innerHTML += '<span class="closable" onclick="$(\'#reversehelp\').empty().hide();"> </span><div>Tips : Right click on the map to reverse geocode</div>';
+//	this._href.innerHTML = "right click to reverse geocode";
+	return this._container;
+}
+
+});
+
 var reverseGeocoderMarker = undefined;
 L.Map.mergeOptions({
 	contextmenuItems: []
@@ -5,10 +23,11 @@ L.Map.mergeOptions({
 
 L.Control.gisgraphyreversegeocoder = L.Handler.extend({
 options: {
+help:true,
 },
 
 initialize: function (map) {
-console.log('init reverse');
+//console.log('init reverse');
 		L.Handler.prototype.initialize.call(this, map);
 
 		this._items = [];
@@ -23,7 +42,10 @@ console.log('init reverse');
 			.on(map, 'dblclick', L.DomEvent.stop)
 			.on(map, 'contextmenu', L.DomEvent.stop);*/
 	 map.on('contextmenu', this._show);
- map.on('mousedown', this._onMouseDown);
+// map.on('mousedown', this._onMouseDown);
+if (this.options.help){
+	map.addControl(new L.Control.reversehelp());
+}
 	},
 
 
@@ -84,13 +106,13 @@ _show: function (e) {
                                         }
                                         if (address.streetName){
                                                 hasName=true;
-                                                content+="<strong>"+address.streetName+" </strong>";
+                                                content+="<strong>"+address.streetName+" </strong>, ";
                                         } else if (address.name){
                                                 hasName=true;
-                                                content+="<strong>"+address.name+" </strong>";
+                                                content+="<strong>"+address.name+" </strong>, ";
                                         }
                                         if (address.city){
-                                                content+=', '+address.city;
+                                                content+=address.city;
                                         }
 //                                        if (address.lat && address.lng){
 //                                                content+="<br/>("+address.lat+","+address.lng+")";
@@ -132,12 +154,6 @@ _reversegeocode: function(){
             }
         });*/
     },
-_onMouseDown: function (e) {
-		console.log('do geocode mousedown');
-	},
-_onMouseDown2: function (e) {
-                console.log('do geocode mousedown');
-        },
 
 onRemove: function (map) {
 /*map.off('mousemove', this._onMouseMove)*/
