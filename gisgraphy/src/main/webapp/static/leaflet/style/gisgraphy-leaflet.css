@@ -3,6 +3,8 @@
   src: url(../font/Prociono-Regular-webfont.ttf);
 }
 */
+
+
 .tt-dropdown-menu,
 .gist {
   text-align: left;
@@ -147,6 +149,8 @@ background-color : #FFF;
 
 }
 
+
+
 #gisgraphy-leaflet .resultBox {
 font-size:11px;
 width: 340px;
@@ -198,4 +202,34 @@ font-family : "Helvetica Neue",Arial,Helvetica,sans-serif;
 font-size:14px;
 padding:5px;
 background-color:#FFFFFF;
+}
+
+
+
+#header{
+/*height:9%;*/
+vertical-align:middle;
+line-height:50px;
+text-align:center;
+border-bottom: 2px solid #777;
+color: #333;
+font-family: Arial,Verdana,sans-serif;
+display:block;
+width:100%;
+font-size: 14px;
+margin:auto;
+background-color:#2D81BE;
+}
+
+#header a{
+color:#FFFFFF;
+font-weight:bold;
+}
+
+
+#map{
+background: none repeat scroll 0 0 #FFFFFF; 
+height:90%;
+position: absolute;
+width: 100%;
 }
