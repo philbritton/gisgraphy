@@ -6,16 +6,18 @@
         <link href="style/gisgraphy-leaflet.css" rel="stylesheet" type="text/css">
 
 </head>
-<body>
+<body style="margin:0 ">
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 <script src="js/gisgraphy-leaflet-reverse-geocoder.js"></script>
 <script src="js/util/NumberFormatter.js"></script>
 
 
-        <div id="map" style="background: none repeat scroll 0 0 #FFFFFF; height: 98%;position: absolute;width: 98%;"></div>
+       <div id="header" ><a href="http://www.gisgraphy.com"><img src="http://www.gisgraphy.com/images/logos/logo_48.png" style="vertical-align:middle;"/>Gisgraphy project</a> | <a href="http://services.gisgraphy.com/public/geocoding.html">Play with webservices</a> | <a href="http://www.gisgraphy.com/premium">Premium plans</a> | <a href="http://download.gisgraphy.com">Download Openstreetmap Data</a> | <a href="http://www.gisgraphy.com/documentation/index.htm">Documentation</a> </div>
+<!-- <div id="header" style="border-bottom:2px solid #777;"></div>-->
+        <div id="map" ></div>
 
-        <script>
+ <script>
 
                 var map = L.map('map',{ zoomControl:false }).setView([50.63803046, 3.06638718], 13);
 
