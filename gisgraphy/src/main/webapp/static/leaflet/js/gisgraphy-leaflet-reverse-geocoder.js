@@ -106,12 +106,15 @@ _show: function (e) {
                                         }
                                         if (address.streetName){
                                                 hasName=true;
-                                                content+="<strong>"+address.streetName+" </strong>, ";
+                                                content+="<strong>"+address.streetName+"</strong>";
                                         } else if (address.name){
                                                 hasName=true;
-                                                content+="<strong>"+address.name+" </strong>, ";
+                                                content+="<strong>"+address.name+"</strong>";
                                         }
                                         if (address.city){
+						if (hasName == true){
+							content+=', ';
+						}
                                                 content+=address.city;
                                         }
 //                                        if (address.lat && address.lng){

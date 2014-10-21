@@ -24,6 +24,19 @@ function detectLanguage(){
 	return lang? lang.toUpperCase():"EN";
 }
 
+$( document ).ajaxStart(function() {
+console.log( "Triggered ajaxStart handler." );
+$('#gisgraphy-leaflet-searchButton').css("background-image","url(img/loading.gif)");
+$('#gisgraphy-leaflet-searchButton').addClass("searching");
+});
+
+$( document ).ajaxStop(function() {
+console.log( "Triggered ajaxStop handler." );
+$('#gisgraphy-leaflet-searchButton').css("background-image",'url("img/search.png")');
+$('#gisgraphy-leaflet-searchButton').removeClass("searching");
+});
+
+
 function setSearchText(htmlId,text){
 	$('#'+htmlId).val(text);
 }
@@ -296,12 +309,15 @@ function doProcessGeocodingResults(data){
 					}
 					if (value.streetName){
 						hasName=true;
-						content+="<strong>"+value.streetName+" </strong>, ";
+						content+="<strong>"+value.streetName+"</strong>";
 					} else if (value.name){
 						hasName=true;
-						content+="<strong>"+value.name+" </strong>, ";
+						content+="<strong>"+value.name+"</strong>";
 					}
 					if (value.city){
+						if (hasName == true){
+							content+=', ';
+						}
 						content+='<span class="isin-autocomplete">'+value.city+'</span>';
 					}
 					if (value.lat && value.lng){
@@ -443,11 +459,11 @@ $('#'+this.inputSearchNodeID).typeahead({
 				var is_in='';
 				if (obj['is_in'] || obj['adm1_name'] ){
 					if (obj['is_in']){
-					is_in=obj['is_in'];
-					} else if (obj['adm1_name']){
+					is_in=obj['is_in']+', ';
+					} /*else if (obj['adm1_name']){
 					is_in=obj['adm1_name'];
-					}
-					return obj['name']+' , '+is_in;
+					}*/
+					return obj['name']+is_in;
 				} else {
 					return obj['name']
 				}
