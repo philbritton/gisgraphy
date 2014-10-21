@@ -1,3 +1,3 @@
 <%@ include file="/common/taglibs.jsp"%>
 <%@ page session="false" %>
-<c:redirect url="/public/geocoding.html"/>
+<c:redirect url="/static/leaflet/index.html"/>
