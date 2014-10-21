@@ -107,7 +107,7 @@ public class Address implements Serializable {
     //31
     private String state;
     //32
-    private String prefecture;//mainly for china
+    private String prefecture;//mainly for china and japan
     //33
     private String country;
     //34
@@ -126,6 +126,8 @@ public class Address implements Serializable {
     private String confidence;
     //40
     private Double distance;
+    //41
+    private Double ward;
     
     public String getCountry() {
         return country;
@@ -1046,6 +1048,14 @@ public String toString() {
 
 	public void setLote(String lote) {
 		this.lote = lote;
+	}
+
+	public Double getWard() {
+		return ward;
+	}
+
+	public void setWard(Double ward) {
+		this.ward = ward;
 	}
 
 
