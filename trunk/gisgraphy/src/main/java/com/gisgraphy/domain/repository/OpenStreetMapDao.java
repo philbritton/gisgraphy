@@ -438,6 +438,7 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 				});
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public OpenStreetMap getNearestByosmIds(final Point point,final List<Long> ids) {
 		if (ids==null || ids.size()==0){
 			return null;
@@ -521,19 +522,20 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
     
     public OpenStreetMap getNearestRoadFrom(
     	    final Point point) {
-    	return getNearestFrom(point,true);
+    	return getNearestFrom(point,true,true);
     
     }
     
     public OpenStreetMap getNearestFrom(
     	    final Point point) {
-    	return getNearestFrom(point,false);
+    	return getNearestFrom(point,false,true);
     }
     
  
     
-    protected OpenStreetMap getNearestFrom(
-	    final Point point,final boolean onlyroad) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public OpenStreetMap getNearestFrom(
+	    final Point point,final boolean onlyroad,final boolean filterEmptyName) {
     	if (point==null){
     		return null;
     	}
@@ -549,6 +551,9 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 					criteria.add(new DistanceRestriction(point,DEFAULT_DISTANCE,true));
 					if (onlyroad) {
 						criteria = criteria.add(Restrictions.ne("streetType",StreetType.FOOTWAY));
+					}
+					if (filterEmptyName){
+						criteria = criteria.add(Restrictions.isNotNull("name"));
 					}
 					
 					String pointAsString = "ST_GeometryFromText('POINT("+point.getX()+" "+point.getY()+")',"+SRID.WGS84_SRID.getSRID()+")";

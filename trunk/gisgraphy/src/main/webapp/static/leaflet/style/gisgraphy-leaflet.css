@@ -204,6 +204,18 @@ padding:5px;
 background-color:#FFFFFF;
 }
 
+.searching {
+background-repeat: no-repeat;
+/*background-color:#FF0000;*/
+background-image: url(../img/loading.gif);
+}
+#gisgraphy-leaflet .help{
+margin-left:8px;
+margin-right:8px;
+cursor:help;
+background-color : #FFF;
+
+}
 
 
 #header{
