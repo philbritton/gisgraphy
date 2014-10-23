@@ -83,6 +83,10 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
     private String shape = null;
 
     private OpenStreetMap result = null;
+    
+    private String lat;
+
+    private String lng;
 
     public static final String ERROR = "error";
     
@@ -222,6 +226,26 @@ public class DisplayStreetAction extends ActionSupport implements GoogleMapApiKe
 
 	public String getShape() {
 		return shape;
+	}
+
+
+	public String getLat() {
+		return lat;
+	}
+
+
+	public void setLat(String lat) {
+		this.lat = lat;
+	}
+
+
+	public String getLng() {
+		return lng;
+	}
+
+
+	public void setLng(String lng) {
+		this.lng = lng;
 	}
 
 

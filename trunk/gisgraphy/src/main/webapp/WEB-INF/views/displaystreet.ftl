@@ -16,7 +16,7 @@
 						<span class="flag" >
 							<img src="/images/flags/${result.countryCode}.png" alt="country flag"/>
 						</span>
-								<span class="resultheaderleft">${preferedName}</span>
+								<span class="resultheaderleft">${preferedName}<#if result.isIn??>, ${result.isIn}</#if></span>
 						</div>
 					
 						<div class="separator"><hr/></div>
@@ -63,7 +63,7 @@
 
 						
 						<@gisgraphysearch.leafletMap width="700" heigth="400" 
-						googleMapAPIKey=googleMapAPIKey CSSClass="center" />
+						googleMapAPIKey=googleMapAPIKey CSSClass="center" zoom=18 />
 						<br/><br/>
 						<#--<@gisgraphysearch.googleStreetPanorama width="700" heigth="300" 
 						googleMapAPIKey=googleMapAPIKey CSSClass="center" />-->
@@ -75,7 +75,7 @@
 						    }
 						}
 
-						displayMap(commadot('${result.location.y}-0.001'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
+						displayMap(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
 						//viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
 						</script>
 						</div>
