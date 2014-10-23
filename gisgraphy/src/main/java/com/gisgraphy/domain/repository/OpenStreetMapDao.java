@@ -23,8 +23,6 @@
 package com.gisgraphy.domain.repository;
 
 import static com.gisgraphy.hibernate.projection.SpatialProjection.DISTANCE_SPHERE_FUNCTION;
-import static com.gisgraphy.hibernate.projection.SpatialProjection.ST_LINE_INTERPOLATE_POINT_FUNCTION;
-import static com.gisgraphy.hibernate.projection.SpatialProjection.ST_LINE_LOCATE_POINT_FUNCTION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -461,16 +459,11 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 							.append("(")
 								.append(pointAsString)
 								.append(",")
-								.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
+								.append(SpatialProjection.ST_CLOSEST_POINT)
 								.append("(")
 									.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
 									.append(",")
-									.append(ST_LINE_LOCATE_POINT_FUNCTION)
-									.append("(")
-										.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
-										.append(",")
-										.append(pointAsString)
-									.append(")")
+									.append(pointAsString)
 								.append(")")
 							.append(")")
 							.toString();
@@ -562,16 +555,11 @@ public class OpenStreetMapDao extends GenericDao<OpenStreetMap, Long> implements
 					.append("(")
 						.append(pointAsString)
 						.append(",")
-						.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
+						.append(SpatialProjection.ST_CLOSEST_POINT)
 						.append("(")
 							.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
 							.append(",")
-							.append(ST_LINE_LOCATE_POINT_FUNCTION)
-							.append("(")
-								.append("this_.").append(OpenStreetMap.SHAPE_COLUMN_NAME)
-								.append(",")
-								.append(pointAsString)
-							.append(")")
+							.append(pointAsString)
 						.append(")")
 					.append(")")
 					.toString();

@@ -54,6 +54,7 @@ public class SpatialProjection {
     public static final String DISTANCE_FUNCTION = "st_distance";
     public static final String DISTANCE_SPHERE_FUNCTION = "st_distance_sphere";
     public static String ST_LINE_INTERPOLATE_POINT_FUNCTION = "st_line_interpolate_point";
+    public static String ST_CLOSEST_POINT = "ST_ClosestPoint";
     public static String ST_LINE_LOCATE_POINT_FUNCTION = "st_line_locate_point";
     public static String LINEMERGE_FUNCTION = "st_linemerge";
 
@@ -103,17 +104,12 @@ public class SpatialProjection {
 			.append("(")
 			.append(pointAsString)
 			.append(",")
-			.append(ST_LINE_INTERPOLATE_POINT_FUNCTION)
-			.append("(")
-			.append(shape)
-			.append(",")
-			.append(ST_LINE_LOCATE_POINT_FUNCTION)
-			.append("(")
-			.append(shape)
-			.append(",")
-			.append(pointAsString)
-			.append(")")
-			.append(")")
+			.append(ST_CLOSEST_POINT)
+				.append("(")
+					.append(shape)
+					.append(",")
+					.append(pointAsString)
+				.append(")")
 			.append(")")
 			.append("as y").append(position).append("_")
 			.toString();
