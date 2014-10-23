@@ -491,9 +491,11 @@ public class GeocodingService implements IGeocodingService {
 		}
 		for (HouseNumberDto candidate :houseNumbersList){
 			if (candidate!=null && candidate.getNumber()!=null && candidate.getNumber().equals(HouseNumberToFind)){
+				logger.info("house number candidate found : "+candidate.getNumber());
 				return candidate;
 			}
 		}
+		logger.info("no house number candidate found for "+houseNumberToFind);
 		return null;
 	}
 
@@ -693,8 +695,11 @@ public class GeocodingService implements IGeocodingService {
 	protected String findHouseNumber(String address,String countryCode){
 		Matcher m = HOUSENUMBERPATTERN.matcher(address);
 		if (m.find()) {
-			return m.group();
+			String houseNumber = m.group();
+			logger.info("found house number"+houseNumber+" in "+address);
+			return houseNumber;
 		} else {
+			logger.info("no house number found in "+address);
 			return null;
 		}
 		
