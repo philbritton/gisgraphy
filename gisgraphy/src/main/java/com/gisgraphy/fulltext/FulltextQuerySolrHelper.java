@@ -63,7 +63,7 @@ public class FulltextQuerySolrHelper {
 	// we need to consider adm1name for andora and brooklin
 	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='zipcode^1.2 pf=name^1.1'  bq='placetype:City^2 population^2'}%s\"";
 	
-	protected static final String NESTED_QUERY_ID_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 openstreetmap_id^1.1'}%s\"";
+	protected static final String NESTED_QUERY_ID_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 '}%s\"";//openstreetmap_id^1.1
     
 	protected static final String FQ_COUNTRYCODE = FullTextFields.COUNTRYCODE.getValue()+":%s";
 	protected static final String FQ_PLACETYPE = FullTextFields.PLACETYPE.getValue()+":";
