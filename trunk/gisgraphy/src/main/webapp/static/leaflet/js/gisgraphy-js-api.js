@@ -251,7 +251,7 @@ if ($('#'+this.resultBoxNodeID).length >0){
 			}	
 			var fulltextUrlWithParam =  this.fulltextURL +'?format=json&suggest=true&allwordsrequired=false&style=long'
 			if (this.userLat && this.userLng){
-				fulltextUrlWithParam = fulltextUrlWithParam+"&lat="+this.userLat+"&lng="+this.userLng+"&radius=25000000";
+				fulltextUrlWithParam = fulltextUrlWithParam+"&lat="+this.userLat+"&lng="+this.userLng+"&radius=0";
 		}
 			if(!$('#'+this.placetypeNodeID).val()){
 				fulltextUrlWithParam = fulltextUrlWithParam+'&placetype=city&placetype=adm&placetype=street';

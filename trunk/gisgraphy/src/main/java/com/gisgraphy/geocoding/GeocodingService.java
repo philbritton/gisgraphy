@@ -506,6 +506,10 @@ public class GeocodingService implements IGeocodingService {
 			if (logger.isDebugEnabled()) {
 				logger.debug("found " + solResponseDtos.size() + " results");
 			}
+			String lastName=null;
+			String lastIsin=null;
+			boolean housenumberFound =false;
+			int numberOfStreetThatHaveTheSameName = 0;
 			for (SolrResponseDto solrResponseDto : solResponseDtos) {
 				Address address = new Address();
 				if (solrResponseDto == null) {
@@ -527,24 +531,97 @@ public class GeocodingService implements IGeocodingService {
 					address.setZipCode(solrResponseDto.getZipcodes().iterator().next());
 				}
 				if (solrResponseDto.getPlacetype().equalsIgnoreCase(Street.class.getSimpleName())) {
-					address.setStreetName(solrResponseDto.getName());
-					address.setStreetType(solrResponseDto.getStreet_type());
-					address.setCity(solrResponseDto.getIs_in());
-					address.setState(solrResponseDto.getIs_in_adm());
-					if (solrResponseDto.getIs_in_zip()!=null && solrResponseDto.getIs_in_zip().size()>=1){
-						address.setZipCode(solrResponseDto.getIs_in_zip().iterator().next());
-					}
-					address.setDependentLocality(solrResponseDto.getIs_in_place());
-					//now search for houseNumber
-					List<HouseNumberDto> houseNumbersList = solrResponseDto.getHouse_numbers();
+					String streetName = solrResponseDto.getName();
+					String isIn = solrResponseDto.getIs_in();
+					if (!isEmptyString(solrResponseDto.getName())){ 
+						if(streetName.equals(lastName) && isIn!=null && isIn.equalsIgnoreCase(lastIsin)){//probably the same street
+							if (housenumberFound){
+								continue;
+								//do nothing it has already been found in the street
+								//TODO do we have to search and if we find, we add it?
+							}else {
+								numberOfStreetThatHaveTheSameName++;
+							address.setStreetName(solrResponseDto.getName());
+							address.setStreetType(solrResponseDto.getStreet_type());
+							address.setCity(solrResponseDto.getIs_in());
+							address.setState(solrResponseDto.getIs_in_adm());
+							if (solrResponseDto.getIs_in_zip()!=null && solrResponseDto.getIs_in_zip().size()>=1){
+								address.setZipCode(solrResponseDto.getIs_in_zip().iterator().next());
+							}
+							address.setDependentLocality(solrResponseDto.getIs_in_place());
+							//now search for houseNumber
+							List<HouseNumberDto> houseNumbersList = solrResponseDto.getHouse_numbers();
+							if(houseNumberToFind!=null && houseNumbersList!=null && houseNumbersList.size()>0){
+								HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,solrResponseDto.getCountry_code());
+								if (houseNumber !=null){
+									housenumberFound=true;
+									address.setHouseNumber(houseNumber.getNumber());
+									address.setLat(houseNumber.getLocation().getY());
+									address.setLng(houseNumber.getLocation().getX());
+									//remove the last results added
+									for (numberOfStreetThatHaveTheSameName--;numberOfStreetThatHaveTheSameName>=0;numberOfStreetThatHaveTheSameName--){
+										addresses.remove(addresses.size()-1-numberOfStreetThatHaveTheSameName);
+									}
+								} else{
+									housenumberFound=false;
+								}
+							}
+						}
+						} else { //the streetName is different, 
+							
+							//remove the last results added
+							for (numberOfStreetThatHaveTheSameName--;numberOfStreetThatHaveTheSameName>=0;numberOfStreetThatHaveTheSameName--){
+								addresses.remove(addresses.size()-1-numberOfStreetThatHaveTheSameName);
+							}
+							numberOfStreetThatHaveTheSameName=0;
+							//populate fields
+							address.setStreetName(solrResponseDto.getName());
+							address.setStreetType(solrResponseDto.getStreet_type());
+							address.setCity(solrResponseDto.getIs_in());
+							address.setState(solrResponseDto.getIs_in_adm());
+							if (solrResponseDto.getIs_in_zip()!=null && solrResponseDto.getIs_in_zip().size()>=1){
+								address.setZipCode(solrResponseDto.getIs_in_zip().iterator().next());
+							}
+							address.setDependentLocality(solrResponseDto.getIs_in_place());
+							//search for housenumber
+							List<HouseNumberDto> houseNumbersList = solrResponseDto.getHouse_numbers();
+							if(houseNumberToFind!=null && houseNumbersList!=null && houseNumbersList.size()>0){
+							HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,solrResponseDto.getCountry_code());
+							if (houseNumber !=null){
+								housenumberFound=true;
+								address.setHouseNumber(houseNumber.getNumber());
+								address.setLat(houseNumber.getLocation().getY());
+								address.setLng(houseNumber.getLocation().getX());
+							} else {
+								housenumberFound=false;
+							}
+							}
+						}
+			  } else {//streetname is null, we search for housenumber anyway
+				  List<HouseNumberDto> houseNumbersList = solrResponseDto.getHouse_numbers();
 					if(houseNumberToFind!=null && houseNumbersList!=null && houseNumbersList.size()>0){
 					HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,solrResponseDto.getCountry_code());
 					if (houseNumber !=null){
+						housenumberFound=true;
 						address.setHouseNumber(houseNumber.getNumber());
 						address.setLat(houseNumber.getLocation().getY());
 						address.setLng(houseNumber.getLocation().getX());
+					} else {
+						housenumberFound=false;
 					}
-					}
+				}
+			  }
+					lastName=streetName;
+					lastIsin = isIn;
+					
+					
+					
+					
+					
+					
+					
+					
+					
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(City.class.getSimpleName())){
 					address.setCity(solrResponseDto.getName());
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(CitySubdivision.class.getSimpleName())) {

@@ -780,7 +780,7 @@ public class FulltextSearchEngineTest extends
     	    Output output = Output.withFormat(OutputFormat.XML)
     		    .withLanguageCode("FR").withStyle(OutputStyle.FULL)
     		    .withIndentation();
-    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+street.getOpenstreetmapId().toString(),
+    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.OPENSTREETMAPID_PREFIX+street.getOpenstreetmapId().toString(),
     		    pagination, output, Constants.STREET_PLACETYPE, null);
     	    
     	    FulltextResultsDto results = fullTextSearchEngine
@@ -811,7 +811,7 @@ public class FulltextSearchEngineTest extends
     	this.solRSynchroniser.commit();
 
     	try {
-    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.FEATUREID_PREFIX+street.getOpenstreetmapId().toString());
+    	    FulltextQuery fulltextQuery = new FulltextQuery(FulltextQuerySolrHelper.OPENSTREETMAPID_PREFIX+street.getOpenstreetmapId().toString());
     	    
     	    FulltextResultsDto results = fullTextSearchEngine
     		    .executeQuery(fulltextQuery);

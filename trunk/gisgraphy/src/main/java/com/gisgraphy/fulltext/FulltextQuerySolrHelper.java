@@ -45,6 +45,8 @@ public class FulltextQuerySolrHelper {
 	
 	public static final String FEATUREID_PREFIX = FullTextFields.FEATUREID.getValue()+":";
 	
+	public static final String OPENSTREETMAPID_PREFIX = FullTextFields.OPENSTREETMAP_ID.getValue()+":";
+	
 	static final int MAX_RADIUS = 37000;
 
 	private static SmartStreetDetection smartStreetDetection = new SmartStreetDetection();
@@ -61,9 +63,11 @@ public class FulltextQuerySolrHelper {
 	protected static final String CITY_BOOST_QUERY="placetype:city^16";
 	protected static final String STREET_BOOST_QUERY="placetype:street^16";
 	// we need to consider adm1name for andora and brooklin
-	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='zipcode^1.2 pf=name^1.1'  bq='placetype:City^2 population^2'}%s\"";
+	protected static final String NESTED_QUERY_NUMERIC_TEMPLATE =          "_query_:\"{!dismax qf='zipcode^1.2 pf=name^1.1'  bq='placetype:City^2 population^2' bf='pow(map(population,0,0,0.0001),0.3)     pow(map(city_population,0,0,0.0000001),0.3)' }%s\"";
 	
 	protected static final String NESTED_QUERY_ID_TEMPLATE =          "_query_:\"{!dismax qf='feature_id^1.1 '}%s\"";//openstreetmap_id^1.1
+	
+	protected static final String NESTED_QUERY_OPENSTREETMAP_ID_TEMPLATE =          "_query_:\"{!dismax qf='openstreetmap_id^1.1 '}%s\"";//openstreetmap_id^1.1
     
 	protected static final String FQ_COUNTRYCODE = FullTextFields.COUNTRYCODE.getValue()+":%s";
 	protected static final String FQ_PLACETYPE = FullTextFields.PLACETYPE.getValue()+":";
@@ -174,6 +178,13 @@ public class FulltextQuerySolrHelper {
 			/*if (query.getPoint() != null ){
 			parameters.set(Constants.BF_PARAMETER, BF_NEAREST);
 			}*/
+		} else if (query.getQuery().startsWith(OPENSTREETMAPID_PREFIX)){
+			spellchecker=false;
+			String id = query.getQuery().substring(OPENSTREETMAPID_PREFIX.length());
+			String queryString = String.format(NESTED_QUERY_OPENSTREETMAP_ID_TEMPLATE,id);
+			parameters.set(Constants.QUERY_PARAMETER, queryString);
+			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.advanced
+					.toString());
 		}
 		else if (query.isSuggest()){
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.suggest
