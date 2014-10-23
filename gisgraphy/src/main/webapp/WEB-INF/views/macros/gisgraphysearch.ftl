@@ -652,7 +652,7 @@ toggleAddressForm = function(structured){
 									
 								        <#if result.id?? && result.id!=0 ><a href="${displayURL}"></#if>
 									<#if result.id?? && result.id!=0>
-										<#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if> <#if result.id?? && result.id!=0 ></a></#if>  
+										<#if result.houseNumber??>${result.houseNumber} </#if><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
 									<#else>
 										<@s.text name="user.address.address" />
 									</#if>
@@ -971,16 +971,15 @@ toggleAddressForm = function(structured){
 					}
 					var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 					var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-					var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 16, attribution: osmAttrib});
+					var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 20, attribution: osmAttrib});
 					map.addLayer(osm);
 					
 		
-					var greenIcon = L.icon({
-		   			 iconUrl: '/images/marker-icon.png',
-					});			
 					if (typeof htmlToDisplayParam != 'undefined'){
-					var marker = L.marker([lat, lng],{icon: greenIcon}).addTo(map);
-					marker.bindPopup(htmlToDisplayParam).openPopup();
+						var popup = L.popup()
+						   .setLatLng([lat, lng-0.0005])
+   						 .setContent(htmlToDisplayParam)
+   						 .openOn(map);
 					}
 			 }
 
