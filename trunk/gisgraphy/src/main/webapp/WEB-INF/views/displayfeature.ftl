@@ -172,7 +172,9 @@
 <script>
 displayMap(${result.lat?c},${result.lng?c},undefined);
 <#if shape??>
-omnivore.wkt.parse('${shape}').addTo(map);
+var shapelayer = omnivore.wkt.parse('${shape}')
+  .addTo(map);
+ map.fitBounds(shapelayer.getBounds());
 </#if>
 </script>
 </body>
