@@ -1,6 +1,7 @@
 autocompleteGisgraphyCounter = 0;
 autocompleteGisgraphy = [];
 
+
 currentRequests = {};
 
 defaultAjax = {
@@ -170,12 +171,30 @@ DEFAULT_LANGUAGE = detectLanguage();
                 ajax: defaultAjax,
                 filter: function(d, e) {
                     var names = [];
+		    var docMap ={};	
+		    var seen = {};
                     if (d && d.response && d.response['docs']) {
                         $.each(d.response['docs'], function(key, value) {
                             if (value.name) {
-                                names.push(value);
+				var keyMap = value.feature_id;
+				 if (value.is_in && value.is_in.length >=0){
+					var keyMap = value.name+value.is_in;
+			    	  }
+				if(!docMap.hasOwnProperty(keyMap)) {
+                                    docMap[keyMap] = value;
+				} else {
+				   if (value.house_numbers && docMap[keyMap]){
+					if (!docMap[keyMap].house_numbers || docMap[keyMap].house_numbers.length ==0){
+						docMap[keyMap].house_numbers=[];
+					}
+					docMap[keyMap].house_numbers= docMap[keyMap].house_numbers.concat(value.house_numbers);
+				   }
+				}	
                             }
                         });
+			 $.each(docMap, function(key, value) {
+				names.push(value)
+			});
                     } else if (d && d.result && d.result[0]) {
                         names.push(convertAddress(d.result[0]));
                     }
@@ -222,6 +241,22 @@ DEFAULT_LANGUAGE = detectLanguage();
             else
                 return opts.inverse(this);
         });
+	Handlebars.registerHelper('housenumber', function(house_numbers, autocompleteGisgraphyNumber) {
+	var found = false;
+	var idElement = autocompleteGisgraphyNumber;
+	var number = extractHouseNumber($('#'+idElement).val());
+  	if (house_numbers && number.length >= 0){
+	 $.each(house_numbers, function(key, value) {
+	      var hnArray = value.split(':');
+	      if (number == hnArray[0]){	      
+			console.log('found house number :'+hnArray[0]+' is at '+hnArray[1]);
+			found = true;
+		}
+	});
+ 	 return found == true ? number+'':"";
+	}
+	});
+
 
         Handlebars.registerHelper('l10n', $.proxy(function(keyword) {
             var target = translation[keyword][this.currentLanguage];
@@ -271,7 +306,8 @@ DEFAULT_LANGUAGE = detectLanguage();
             if (!$('#' + this.placetypeNodeID).val()) {
                 fulltextUrlWithParam = fulltextUrlWithParam + '&placetype=city&placetype=adm&placetype=street';
             }
-            fulltextUrlWithParam = fulltextUrlWithParam + "&from=1&to=10&" + $('#' + this.formNodeID).serialize();
+            fulltextUrlWithParam = fulltextUrlWithParam + "&from=1&to=10";
+	    fulltextUrlWithParam = fulltextUrlWithParam +"&q=" + replaceHouseNumber($('#' + this.inputSearchNodeID).val());
             if (this.apiKey != undefined) {
                 fulltextUrlWithParam = fulltextUrlWithParam + '&apikey=' + this.apiKey;
             }
@@ -476,6 +512,8 @@ DEFAULT_LANGUAGE = detectLanguage();
             }, {
                 name: this.ELEMENT_ID + '',
                 displayKey: function(obj) {
+		    this;
+		    var housenumber = extractHouseNumber($('#'+this.name+'-inputSearch').val());
                     var is_in = '';
                     if (obj['is_in'] || obj['adm1_name'] || obj['is_in_place']) {
 			if(obj['is_in_place']){
@@ -488,9 +526,9 @@ DEFAULT_LANGUAGE = detectLanguage();
                         /*else if (obj['adm1_name']){
                         					is_in=obj['adm1_name'];
                         					}*/
-                        return obj['name'] + is_in;
+                        return housenumber+', '+obj['name'] + is_in;
                     } else {
-                        return obj['name']
+                        return housenumber+', '+obj['name'];
                     }
                 },
                 // `ttAdapter` wraps the suggestion engine in an adapter that
@@ -498,7 +536,7 @@ DEFAULT_LANGUAGE = detectLanguage();
                 source: this.geocoding.ttAdapter(),
                 templates: {
                     empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
-                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{#if houseNumber}} {{houseNumber}}</span>{{/if}} {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
+                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}}{{#if houseNumber}} {{houseNumber}}</span>{{/if}} {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
                     footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com/">Gisgraphy.com</a></div>'
                 }
             });
@@ -747,3 +785,30 @@ function convertToLatLong(str) {
     }
     return obj;
 }
+
+num_reg = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
+
+function extractHouseNumber(str){
+if (!str){
+   return '';
+}
+var re = new RegExp(num_reg);
+res = str.match(re);
+if (res && res.length >=0){
+res = res[0].replace(/\W+/g, "").trim();
+console.log('find "'+res+'" in "'+str+'"');
+return res;
+} else {
+return '';
+}
+}
+
+function replaceHouseNumber(str){
+if (!str){
+   return str;
+}
+strReplaced = str.replace(num_reg, "").trim();
+console.log(str+'=>'+strReplaced);
+return strReplaced;
+}
+
