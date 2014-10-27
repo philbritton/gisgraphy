@@ -230,13 +230,19 @@ DEFAULT_LANGUAGE = detectLanguage();
         }
         gisgraphyAutocomplete.normalize = function normalize(input) {
             $.each(charMap, function(unnormalizedChar, normalizedChar) {
-                var regex = new RegExp(unnormalizedChar, 'gi');
-                input = input.replace(regex, normalizedChar);
+		var normalizeRegex = new RegExp(unnormalizedChar, 'gi');
+                input = input.replace(normalizeRegex, normalizedChar);
             });
             return input.replace(/\W+/, '');
         }
         Handlebars.registerHelper('if_eq', function(a, b, opts) {
             if (a == b)
+                return opts.fn(this);
+            else
+                return opts.inverse(this);
+        });
+	Handlebars.registerHelper('if_number_after', function(a, opts) {
+            if ($.inArray(a, ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"]) >=0 )
                 return opts.fn(this);
             else
                 return opts.inverse(this);
@@ -248,12 +254,12 @@ DEFAULT_LANGUAGE = detectLanguage();
   	if (house_numbers && number.length >= 0){
 	 $.each(house_numbers, function(key, value) {
 	      var hnArray = value.split(':');
-	      if (number == hnArray[0]){	      
+	      if (number == hnArray[0] && !found){	      
 			console.log('found house number :'+hnArray[0]+' is at '+hnArray[1]);
 			found = true;
 		}
 	});
- 	 return found == true ? number+'':"";
+ 	 return found == true ? number:"";
 	}
 	});
 
@@ -280,7 +286,7 @@ DEFAULT_LANGUAGE = detectLanguage();
             if ($('#' + this.resultBoxNodeID).length > 0) {
                 el = $('#' + this.resultBoxNodeID);
             }
-            el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#' + this.resultBoxNodeID + '\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 5 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'restaurant new york\')">restaurant new york</a></li></ul><a href="http://www.gisgraphy.com/"><span style="display:block;background-color:#2D81BE;height:25px;width:150px;margin:auto auto;text-align:center;color:#FFFFFF;font-size:1.2em;line_height:1.2em;vertical-align:middle;border-radius: 8px 8px 8px 8px;" ><b>Gisgraphy project &rarr;</b></span></a>');
+            el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#' + this.resultBoxNodeID + '\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 6 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'restaurant new york\')">restaurant new york</a></li></ul><a href="http://www.gisgraphy.com/"><span style="display:block;background-color:#2D81BE;height:25px;width:150px;margin:auto auto;text-align:center;color:#FFFFFF;font-size:1.2em;line_height:1.2em;vertical-align:middle;border-radius: 8px 8px 8px 8px;" ><b>Gisgraphy project &rarr;</b></span></a>');
             if ($('#' + this.resultBoxNodeID).length > 0) {
                 if ($('#' + this.resultBoxNodeID).is(":hidden")) {
                     $('#' + this.resultBoxNodeID).slideDown(200);
@@ -512,8 +518,28 @@ DEFAULT_LANGUAGE = detectLanguage();
             }, {
                 name: this.ELEMENT_ID + '',
                 displayKey: function(obj) {
-		    this;
+		    if (obj && obj['country_code'] && obj['country_code'].length == 2 && ( obj['country_code'] == 'DE' ||  obj['country_code'] == 'BE')){
+			var addressFormated = obj['name'];			 
+			var housenumber = extractHouseNumber($('#'+this.name+'-inputSearch').val());
+			if (housenumber && housenumber.length >0){
+				addressFormated += ' '+housenumber;
+		    	}
+ 			if (obj['is_in'] || obj['is_in_place']) {
+				if(obj['is_in_place']){
+                        	   addressFormated +=', '+obj['is_in_place'];
+                        	}
+
+                       		 if (obj['is_in']) {
+                        		    addressFormated += ', ' + obj['is_in'];
+                       		 }
+                   	 }
+                        return addressFormated;
+			
+		    } else {
 		    var housenumber = extractHouseNumber($('#'+this.name+'-inputSearch').val());
+		    if (housenumber && housenumber.length >0){
+			housenumber= housenumber+', ';
+		    }
                     var is_in = '';
                     if (obj['is_in'] || obj['adm1_name'] || obj['is_in_place']) {
 			if(obj['is_in_place']){
@@ -526,17 +552,18 @@ DEFAULT_LANGUAGE = detectLanguage();
                         /*else if (obj['adm1_name']){
                         					is_in=obj['adm1_name'];
                         					}*/
-                        return housenumber+', '+obj['name'] + is_in;
+                        return housenumber+''+obj['name'] + is_in;
                     } else {
-                        return housenumber+', '+obj['name'];
+                        return housenumber+''+obj['name'];
                     }
+		}
                 },
                 // `ttAdapter` wraps the suggestion engine in an adapter that
                 // is compatible with the typeahead jQuery plugin
                 source: this.geocoding.ttAdapter(),
                 templates: {
                     empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
-                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}}{{#if houseNumber}} {{houseNumber}}</span>{{/if}} {{/if}}<strong>{{name}} {{#if_eq zipcode.length 1}}({{zipcode}}){{/if_eq}}</strong>{{#if is_in}} <span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}} <span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
+                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{/if}}{{#if_number_after country_code }}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong> {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}}{{#if houseNumber}}{{houseNumber}}</span>{{/if}}{{else}} {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}} {{#if houseNumber}}{{houseNumber}}</span>{{/if}}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong>{{/if_number_after}}{{#if is_in}}<span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}}<span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
                     footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com/">Gisgraphy.com</a></div>'
                 }
             });
@@ -581,13 +608,24 @@ DEFAULT_LANGUAGE = detectLanguage();
             		console.log('moving to '+datum.lat+','+datum.lng);
                                             map.panTo(new L.LatLng(datum.lat,datum.lng));
             }*/
-            moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+	   if (datum.house_numbers && datum.house_numbers.length > 0){
+		var coord = getHouseNumbercoordinate(datum.house_numbers,obj.currentTarget.id);
+		if (coord && coord.hasOwnProperty("lat") && coord.hasOwnProperty("long")){
+			this.result = datum;
+		        this.result.house_coordinate = coord;
+			moveCenterOfMapTo(coord.lat, coord.long,datum.placetype);
+		}
+            } else {	
+                 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+		 this.result = datum
+		}
             this.itemSelected = true;
-            console.log('selected');
+            /*console.log('selected');
             console.log(obj);
             console.log(datum);
-            console.log(name);
-            this.result = datum
+            console.log(name);*/
+           
+	   
             return false;
 
         }, this);
@@ -786,14 +824,15 @@ function convertToLatLong(str) {
     return obj;
 }
 
-num_reg = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
+num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
+var num_p = new RegExp(num_pattern);
 
 function extractHouseNumber(str){
 if (!str){
    return '';
 }
-var re = new RegExp(num_reg);
-res = str.match(re);
+
+res = str.match(num_p);
 if (res && res.length >=0){
 res = res[0].replace(/\W+/g, "").trim();
 console.log('find "'+res+'" in "'+str+'"');
@@ -802,13 +841,36 @@ return res;
 return '';
 }
 }
+ function getHouseNumbercoordinate(house_numbers, autocompleteid) {
+	var found = false;
+	var number = extractHouseNumber($('#'+autocompleteid).val());
+  	if (house_numbers && number.length >= 0){
+	coord = {};
+	 $.each(house_numbers, function(key, value) {
+	      var hnArray = value.split(':');
+	      if (number == hnArray[0]){
+		if(hnArray[1] && !found){	      
+			var latLongAsStr=hnArray[1].split(',');
+			console.log('found house number :'+hnArray[0]+' is at '+latLongAsStr[0]+' and '+latLongAsStr[1]);
+			found = true;
+		 	coord = {
+			    "lat": latLongAsStr[1],
+			    "long": latLongAsStr[0]
+			};
+		}
+	     }
+	});
+ 	 return coord;
+	}
+	}
 
 function replaceHouseNumber(str){
 if (!str){
    return str;
 }
-strReplaced = str.replace(num_reg, "").trim();
+strReplaced = str.replace(num_pattern, "").trim();
 console.log(str+'=>'+strReplaced);
 return strReplaced;
 }
+
 
