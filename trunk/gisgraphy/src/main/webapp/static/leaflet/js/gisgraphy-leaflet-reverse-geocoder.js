@@ -98,25 +98,49 @@ _show: function (e) {
                 	console.log(address);               
 			  var content ='';
                                         var hasName=false;
+					var hasNumber=false;
                                         if (address.countryCode){
                                         content+='<img src="img/'+address.countryCode+'.png" alt="'+address.countryCode+'" width="20px;"/>&nbsp;&nbsp;';
                                         }
-                                        if (address.houseNumber){
-                                        content+=address.houseNumber+" ";
-                                        }
-                                        if (address.streetName){
-                                                hasName=true;
-                                                content+="<strong>"+address.streetName+"</strong>";
-                                        } else if (address.name){
-                                                hasName=true;
-                                                content+="<strong>"+address.name+"</strong>";
-                                        }
-                                        if (address.city){
-						if (hasName == true){
-							content+=', ';
-						}
-                                                content+=address.city;
-                                        }
+					if (address.countryCode && $.inArray(address.countryCode, ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"]) >=0){
+						 if (address.streetName){
+		                                        hasName=true;
+		                                        content+="<strong>"+address.streetName+" </strong>";
+		                                } else if (address.name){
+		                                        hasName=true;
+		                                        content+="<strong>"+address.name+" </strong>";
+		                                }
+						if (address.houseNumber){
+							hasNumber = true;
+			                                content+=address.houseNumber;
+		                                }
+						if (address.city){
+							if (hasNumber == true){
+								content+=', ';
+							} else {
+								content+=" ";
+							}
+		                                        content+=address.city;
+		                                }
+
+					} else {
+		                                if (address.houseNumber){
+		                                content+=address.houseNumber+" ";
+		                                }
+		                                if (address.streetName){
+		                                        hasName=true;
+		                                        content+="<strong>"+address.streetName+"</strong>";
+		                                } else if (address.name){
+		                                        hasName=true;
+		                                        content+="<strong>"+address.name+"</strong>";
+		                                }
+		                                if (address.city){
+							if (hasName == true){
+								content+=', ';
+							}
+		                                        content+=address.city;
+		                                }
+					}
 //                                        if (address.lat && address.lng){
 //                                                content+="<br/>("+address.lat+","+address.lng+")";
 //                                        }
