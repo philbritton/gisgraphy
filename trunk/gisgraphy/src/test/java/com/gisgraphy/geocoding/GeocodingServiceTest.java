@@ -1734,13 +1734,16 @@ public class GeocodingServiceTest {
     @Test
     public void findHouseNumber(){
     	GeocodingService geocodingService = new GeocodingService();
+    	Assert.assertEquals("4", geocodingService.findHouseNumber("4-6 rue de la gare 59000 lille",null));
     	Assert.assertEquals("3", geocodingService.findHouseNumber("3 rue de la gare 59000 lille",null));
+    	Assert.assertEquals(null, geocodingService.findHouseNumber("3rd rue de la gare 59000 lille",null));
+    	Assert.assertEquals(null, geocodingService.findHouseNumber("2nd rue de la gare 59000 lille",null));
+    	Assert.assertEquals(null, geocodingService.findHouseNumber("1st rue de la gare 59000 lille",null));
     	Assert.assertEquals("36", geocodingService.findHouseNumber("36 rue de la gare 59000 lille",null));
     	Assert.assertEquals("367", geocodingService.findHouseNumber("367 rue de la gare 59000 lille",null));
     	Assert.assertEquals("3677", geocodingService.findHouseNumber("3677 rue de la gare 59000 lille",null));
     	Assert.assertEquals("5900", geocodingService.findHouseNumber("rue de la gare 5900 lille",null));
     	Assert.assertEquals(null, geocodingService.findHouseNumber("rue de la gare 59000 lille",null));
-    	Assert.assertEquals("4", geocodingService.findHouseNumber("4-6 rue de la gare 59000 lille",null));
     }
 
    
