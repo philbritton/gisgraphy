@@ -196,7 +196,7 @@ DEFAULT_LANGUAGE = detectLanguage();
 				names.push(value)
 			});
                     } else if (d && d.result && d.result[0]) {
-                        names.push(convertAddress(d.result[0]));
+                        names.push(convertAddressToDatum(d.result[0]));
                     }
                     return names;
 
@@ -242,7 +242,7 @@ DEFAULT_LANGUAGE = detectLanguage();
                 return opts.inverse(this);
         });
 	Handlebars.registerHelper('if_number_after', function(a, opts) {
-            if ($.inArray(a, ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"]) >=0 )
+            if ($.inArray(a, NAME_HOUSE_COUNTRYCODE) >=0 )
                 return opts.fn(this);
             else
                 return opts.inverse(this);
@@ -362,7 +362,30 @@ DEFAULT_LANGUAGE = detectLanguage();
                             if (value.countryCode) {
                                 content += '<img src="img/' + value.countryCode + '.png" alt="' + value.countryCode + '" class="flag-autocomplete"/>';
                             }
-                            if (value.houseNumber) {
+			if (value && value.countryCode && value.countryCode.length == 2 && $.inArray(value.countryCode, NAME_HOUSE_COUNTRYCODE) >=0){
+					     if (value.streetName) {
+                                hasName = true;
+                                content += "<strong>" + value.streetName + "</strong>";
+                            } else if (value.name) {
+                                hasName = true;
+                                content += "<strong>" + value.name + "</strong>";
+                            }
+			    if (value.houseNumber) {
+                                content += " "+value.houseNumber;
+                            }
+                            if (value.city) {
+                                if (hasName == true && value.dependentLocality) {
+                                    content += ', ';
+                                }
+				 if (value.dependentLocality){
+                                        content+='<span class="isin-autocomplete">' + value.dependentLocality + '</span>';
+                               }
+                                content += '<span class="isin-autocomplete">, ' + value.city + '</span>';
+                            }
+				
+                            
+			} else {
+				if (value.houseNumber) {
                                 content += value.houseNumber + " ";
                             }
                             if (value.streetName) {
@@ -381,6 +404,7 @@ DEFAULT_LANGUAGE = detectLanguage();
                                }
                                 content += '<span class="isin-autocomplete">, ' + value.city + '</span>';
                             }
+			}
                             if (value.lat && value.lng) {
                                 content += "<br/>(" + value.lat + "," + value.lng + ")";
                             }
@@ -518,7 +542,7 @@ DEFAULT_LANGUAGE = detectLanguage();
             }, {
                 name: this.ELEMENT_ID + '',
                 displayKey: function(obj) {
-		    if (obj && obj['country_code'] && obj['country_code'].length == 2 && ( obj['country_code'] == 'DE' ||  obj['country_code'] == 'BE')){
+		    if (obj && obj['country_code'] && obj['country_code'].length == 2 && $.inArray(obj['country_code'], NAME_HOUSE_COUNTRYCODE) >=0){
 			var addressFormated = obj['name'];			 
 			var housenumber = extractHouseNumber($('#'+this.name+'-inputSearch').val());
 			if (housenumber && housenumber.length >0){
@@ -614,10 +638,13 @@ DEFAULT_LANGUAGE = detectLanguage();
 			this.result = datum;
 		        this.result.house_coordinate = coord;
 			moveCenterOfMapTo(coord.lat, coord.long,datum.placetype);
+		} else {
+			 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+	                 this.result = datum;
 		}
             } else {	
                  moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
-		 this.result = datum
+		 this.result = datum;
 		}
             this.itemSelected = true;
             /*console.log('selected');
@@ -680,7 +707,7 @@ DEFAULT_LANGUAGE = detectLanguage();
         }
 
 
-        function convertAddress(address) {
+        function convertAddressToDatum(address) {
             var doc = {};
             if (address) {
                 doc = {
@@ -824,7 +851,7 @@ function convertToLatLong(str) {
     return obj;
 }
 
-num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
+num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b|rd\b|nd\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
 var num_p = new RegExp(num_pattern);
 
 function extractHouseNumber(str){
@@ -873,4 +900,4 @@ console.log(str+'=>'+strReplaced);
 return strReplaced;
 }
 
-
+NAME_HOUSE_COUNTRYCODE = ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"];
