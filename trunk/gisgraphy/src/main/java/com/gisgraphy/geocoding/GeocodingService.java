@@ -598,6 +598,13 @@ public class GeocodingService implements IGeocodingService {
 							}
 						}
 			  } else {//streetname is null, we search for housenumber anyway
+				  address.setStreetType(solrResponseDto.getStreet_type());
+					address.setCity(solrResponseDto.getIs_in());
+					address.setState(solrResponseDto.getIs_in_adm());
+					if (solrResponseDto.getIs_in_zip()!=null && solrResponseDto.getIs_in_zip().size()>=1){
+						address.setZipCode(solrResponseDto.getIs_in_zip().iterator().next());
+					}
+					address.setDependentLocality(solrResponseDto.getIs_in_place());
 				  List<HouseNumberDto> houseNumbersList = solrResponseDto.getHouse_numbers();
 					if(houseNumberToFind!=null && houseNumbersList!=null && houseNumbersList.size()>0){
 					HouseNumberDto houseNumber = searchHouseNumber(houseNumberToFind,houseNumbersList,solrResponseDto.getCountry_code());
@@ -613,15 +620,6 @@ public class GeocodingService implements IGeocodingService {
 			  }
 					lastName=streetName;
 					lastIsin = isIn;
-					
-					
-					
-					
-					
-					
-					
-					
-					
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(City.class.getSimpleName())){
 					address.setCity(solrResponseDto.getName());
 				} else if (solrResponseDto.getPlacetype().equalsIgnoreCase(CitySubdivision.class.getSimpleName())) {
