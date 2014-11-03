@@ -651,11 +651,11 @@ toggleAddressForm = function(structured){
 									</#if>
 									
 								        <#if result.id?? && result.id!=0 ><a href="${displayURL}"></#if>
-									<#if result.id?? && result.id!=0>
-										<#if result.houseNumber??>${result.houseNumber} </#if><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
-									<#else>
-										<@s.text name="user.address.address" />
-									</#if>
+											<#if result.id?? && result.id!=0>
+												<#if result.houseNumber??>${result.houseNumber} </#if><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
+											<#else>
+												<@s.text name="user.address.address" />
+											</#if>
 									</div>
 									<#if result.distance??><div class="resultheaderright">${result.distance} m</div></#if>
 								<#else>
