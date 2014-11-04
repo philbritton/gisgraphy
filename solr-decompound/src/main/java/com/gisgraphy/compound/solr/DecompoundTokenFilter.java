@@ -27,6 +27,12 @@ import org.apache.lucene.util.AttributeSource;
 
 import com.gisgraphy.compound.Decompounder;
 
+/**
+ * @author david masclet
+ * @see http://solr.pl/en/2013/02/04/developing-your-own-solr-filter-part-2/
+ * @see https://github.com/jprante/elasticsearch-analysis-decompound/blob/master/src/main/java/org/xbib/elasticsearch/index/analysis/DecompoundTokenFilterFactory.java
+ *
+ */
 public class DecompoundTokenFilter extends TokenFilter {
 
     protected final LinkedList<DecompoundToken> tokens;
