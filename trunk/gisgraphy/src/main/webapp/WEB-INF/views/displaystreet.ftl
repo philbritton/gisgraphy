@@ -22,9 +22,9 @@
 						<div class="separator"><hr/></div>
 					
 						<div class="summary">
-						<@s.text name="global.latitude"/> : ${result.location.y?c}; 
+						<@s.text name="global.latitude"/> : <#if lat??>${lat}<#else>${result.location.y?c}</#if> 
 						<br/>
-						<@s.text name="global.longitude"/> : ${result.location.x?c}
+						<@s.text name="global.longitude"/> : <#if lng??>${lng}<#else>${result.location.x?c}</#if>
 						<br/>
 						<@s.text name="global.length"/> : ${result.length} m(s); 
 						<br/>
@@ -75,7 +75,7 @@
 						    }
 						}
 
-						displayMap(commadot('${result.location.y}'),commadot('${result.location.x}'),"<strong>${preferedName}</strong><br/>Lat :${result.location.y}<br/>long:${result.location.x}");
+						displayMap(commadot('<#if lat??>${lat}<#else>${result.location.y?c}</#if>'),commadot('<#if lng??>${lng}<#else>${result.location.x?c}</#if>'),"<strong>${preferedName}</strong><br/>Lat :<#if lat??>${lat}<#else><#if lng??>${lng}<#else>${result.location.x?c}</#if></#if><br/>long:<#if lng??>${lng}<#else>${result.location.x?c}</#if>");
 						//viewStreetPanorama(commadot('${result.location.y}'),commadot('${result.location.x}'));
 						</script>
 						</div>

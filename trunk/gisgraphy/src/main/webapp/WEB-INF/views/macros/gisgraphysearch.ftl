@@ -1,3 +1,4 @@
+<#assign number_after_street_countrycode = ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"]>
 <#import "utils.ftl" as utils>
 <#import "breadcrumbs.ftl" as breadcrumbs>
 
@@ -645,14 +646,27 @@ toggleAddressForm = function(structured){
 								<div class="resultheaderleft">
 								<#if (result.getGeocodingLevel().toString().toLowerCase().contains("street") || result.getGeocodingLevel().toString().toLowerCase().contains("house"))>
 									<#if result.id?? && result.id!=0>
-										<@s.url id="displayURL" action="displaystreet" includeParams="none" namespace="/public" >
-						  					<@s.param name="gid" value="${result.id?c}" />
-						 				</@s.url>
+										<#if result.houseNumber??>
+											<@s.url id="displayURL" action="displaystreet" includeParams="none" namespace="/public" >
+						  						<@s.param name="gid" value="${result.id?c}" />
+												<@s.param name="lat" value="${result.lat?c}" />
+												<@s.param name="lng" value="${result.lng?c}" />
+						 					</@s.url>
+										<#else>
+											<@s.url id="displayURL" action="displaystreet" includeParams="none" namespace="/public" >
+						  						<@s.param name="gid" value="${result.id?c}" />
+						 					</@s.url>
+										</#if>
 									</#if>
 									
 								        <#if result.id?? && result.id!=0 ><a href="${displayURL}"></#if>
 											<#if result.id?? && result.id!=0>
-												<#if result.houseNumber??>${result.houseNumber} </#if><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
+											<#if result.countryCode?? && number_after_street_countrycode?seq_contains(result.countryCode)>
+
+<#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.houseNumber??> ${result.houseNumber}</#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
+											<#else>
+											<#if result.houseNumber??>${result.houseNumber} </#if><#if result.streetName??>${result.streetName?cap_first}<#else><@s.text name="global.street.noname" /></#if><#if result.city??>, ${result.city}</#if><#if result.id?? && result.id!=0 ></a></#if>  
+											</#if>
 											<#else>
 												<@s.text name="user.address.address" />
 											</#if>
