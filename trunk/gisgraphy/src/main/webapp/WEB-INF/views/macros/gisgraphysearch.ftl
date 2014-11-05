@@ -395,18 +395,22 @@ toggleAddressForm = function(structured){
 		$("unstructuredaddressfields").hide();
 		$("address").disable();
 		$("structuredaddressfields").show();
+		$("unstructuredbutton").setStyle({border:' 0px solid #000000'});
+		$("structuredbutton").setStyle({border: '2px solid #000000'});
 	} else {
 		$("postalcheckbox").show();
 		$("unstructuredaddressfields").show();
 		$("structuredaddressfields").hide();
 		$("address").enable();
+		$("structuredbutton").setStyle({border: '0px solid #000000'});
+		$("unstructuredbutton").setStyle({border: '2px solid #000000'});
 	}
 };
 </script>
 	<@s.form action="${url}" method="get" id="addressform" cssStyle="background-color:#ebf5fc;padding-top:25px;">
 <#if url.contains('geocod')>
 <div style="600px;padding-bottom:20px;margin:auto;" class="center">
-<span style="padding:10px 50px;background-color:#3C78B5;margin:10px;color:#FFFFFF;text-decoration:underline;" onclick="toggleAddressForm(false);"><@s.text name="search.address.unstructured.label" /></span><span style="padding:10px 50px;background-color:#0F0A38;color:#FFFFFF;text-decoration:underline;" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
+<span style="padding:10px 50px;background-color:#888888;margin:10px;color:#FFFFFF;text-decoration:underline;border-radius:10px;border: 2px solid #000000;" id="unstructuredbutton" onclick="toggleAddressForm(false);"><@s.text name="search.address.unstructured.label" /></span><span style="padding:10px 50px;background-color:#888888;color:#FFFFFF;text-decoration:underline;border-radius:10px" id="structuredbutton" onclick="toggleAddressForm(true);"><@s.text name="search.address.structured.label" /></span>
 </div>
 </#if>
 		<div id="simplesearch" style="width:600px;">
