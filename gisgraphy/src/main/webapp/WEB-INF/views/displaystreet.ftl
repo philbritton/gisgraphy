@@ -73,6 +73,7 @@
 						    if (that.indexOf(",") >= 0) {
 						       return that.replace(/\,/g,".");
 						    }
+						    return that;
 						}
 
 						displayMap(commadot('<#if lat??>${lat}<#else>${result.location.y?c}</#if>'),commadot('<#if lng??>${lng}<#else>${result.location.x?c}</#if>'),"<strong>${preferedName}</strong><br/>Lat :<#if lat??>${lat}<#else><#if lng??>${lng}<#else>${result.location.x?c}</#if></#if><br/>long:<#if lng??>${lng}<#else>${result.location.x?c}</#if>");
