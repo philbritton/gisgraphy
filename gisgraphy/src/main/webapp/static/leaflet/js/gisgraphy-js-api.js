@@ -33,6 +33,8 @@ function detectLanguage() {
     return lang ? lang.toUpperCase() : "EN";
 }
 
+
+
 $(document).ajaxStart(function() {
     console.log("Triggered ajaxStart handler.");
     $('#gisgraphy-leaflet-searchButton').css("background-image", "url(img/loading.gif)");
@@ -51,6 +53,7 @@ function setSearchText(htmlId, text) {
 }
 
 var marker = undefined;
+var markerGeoloc = undefined;
 
 function moveCenterOfMapTo(lat, lng, placetype) {
     if (typeof map != 'undefined') {
@@ -85,6 +88,7 @@ function getZoomByPlaceType(placetype) {
 DEFAULT_LANGUAGE = detectLanguage();
 
 
+
 (function(root) {
     "use strict";
     if (typeof console == "undefined") {
@@ -108,6 +112,7 @@ DEFAULT_LANGUAGE = detectLanguage();
 
         //user options
         this.geocoding;
+	this.instanceCounter = 0;
         this.autocompleteGisgraphyCounter = autocompleteGisgraphyCounter + '';
         this.ELEMENT_ID = o.ELEMENT_ID;
         this.currentLanguage = (o.currentLanguage || DEFAULT_LANGUAGE).toUpperCase();
@@ -117,6 +122,7 @@ DEFAULT_LANGUAGE = detectLanguage();
         this.fulltextURL = o.fulltextURL || '/fulltext/suggest';
         this.reversegeocodingUrl = o.reversegeocodingUrl || '/reversegeocoding/search';
         this.geocodingUrl = o.geocodingUrl || '/geocoding/search';
+        this.geolocUrl = o.geolocUrl || '/geoloc/search'
         this.enableReverseGeocoding = o.enableReverseGeocoding || true; //todo if enable check reversegeocodingUrl is defined
         this.limit = o.limit || 20;
         this.apiKey = o.apiKey || undefined;
@@ -147,7 +153,9 @@ DEFAULT_LANGUAGE = detectLanguage();
         this.changeLanguage = changeLanguage;
         this.replace = $.proxy(replace, this);
         this.doGeocoding = o.doGeocoding || doGeocoding;
+	this.findAround = o.findAround || findAround;
         this.doProcessGeocodingResults = o.doProcessGeocodingResults || $.proxy(doProcessGeocodingResults, this);
+	this.doProcessGeolocResults = o.doProcessGeolocResults || $.proxy(doProcessGeolocResults, this);
         //used to know what to do when enter is press whether an itme is selected or not
         this.itemSelected = false;
         this.result = undefined;
@@ -286,7 +294,7 @@ DEFAULT_LANGUAGE = detectLanguage();
             if ($('#' + this.resultBoxNodeID).length > 0) {
                 el = $('#' + this.resultBoxNodeID);
             }
-            el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#' + this.resultBoxNodeID + '\').empty().hide();" >&nbsp;</span><br/>Gisgraphy is a free open source framework that provides 6 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'restaurant new york\')">restaurant new york</a></li></ul><a href="http://www.gisgraphy.com/"><span style="display:block;background-color:#2D81BE;height:25px;width:150px;margin:auto auto;text-align:center;color:#FFFFFF;font-size:1.2em;line_height:1.2em;vertical-align:middle;border-radius: 8px 8px 8px 8px;" ><b>Gisgraphy project &rarr;</b></span></a>');
+            el.html('<strong>Welcome to Gisgraphy !</strong><span class="closable" onclick="$(\'#' + this.resultBoxNodeID + '\').empty().hide();" >&nbsp;</span><br/>Since 2006, Gisgraphy is a free open source framework that provides 6 webservices (geocoding, reverse geocoding, find nearby, street search, fulltext / autocompletion / autosuggestion, address parsing).<ul><li> Up to house number, worldwide, internationalized</li><li> IT DOES ALL BY ITSELF, LOCALLY, no link to Google, yahoo, etc</li><li> It use free data (OpenstreetMap, Geonames, Quattroshapes,...) in its own database. </li><li>UI is modeled after google.com\'s search box</li></ul><br/>This leaflet plugin is kind of show case that use those webservices. try : <ul><li>A place : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'paris\')">paris</a>, <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'big Apple\')">big apple</a></li><li>An address : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'Avenue des Champs-Élysées Paris\')">Avenue des Champs-Élysées Paris</a></li><li>A GPS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'48.873409271240234,2.29619002342224\')">48.873409271240234,2.29619002342224</a></li><li>A DMS : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'40:26:46.302N 079:56:55.903W\')">40:26:46.302N 079:56:55.903W</a></li><li>A magic phrase : <a href="javascript:setSearchText(\'' + this.inputSearchNodeID + '\',\'restaurant new york\')">restaurant new york</a></li></ul><a href="http://www.gisgraphy.com/"><span style="display:block;background-color:#2D81BE;height:25px;width:150px;margin:auto auto;text-align:center;color:#FFFFFF;font-size:1.2em;line_height:1.2em;vertical-align:middle;border-radius: 8px 8px 8px 8px;" ><b>Gisgraphy project &rarr;</b></span></a>');
             if ($('#' + this.resultBoxNodeID).length > 0) {
                 if ($('#' + this.resultBoxNodeID).is(":hidden")) {
                     $('#' + this.resultBoxNodeID).slideDown(200);
@@ -312,7 +320,7 @@ DEFAULT_LANGUAGE = detectLanguage();
             if (!$('#' + this.placetypeNodeID).val()) {
                 fulltextUrlWithParam = fulltextUrlWithParam + '&placetype=city&placetype=adm&placetype=street';
             }
-            fulltextUrlWithParam = fulltextUrlWithParam + "&from=1&to=10";
+            fulltextUrlWithParam = fulltextUrlWithParam + "&from=1&to=20";
 	    fulltextUrlWithParam = fulltextUrlWithParam +"&q=" + replaceHouseNumber($('#' + this.inputSearchNodeID).val());
             if (this.apiKey != undefined) {
                 fulltextUrlWithParam = fulltextUrlWithParam + '&apikey=' + this.apiKey;
@@ -351,6 +359,7 @@ DEFAULT_LANGUAGE = detectLanguage();
             }
 
             $('#' + this.resultBoxNodeID).empty();
+		var numResult=1;
             if (data) {
                 $('<div>').html('<strong></strong><span class="closable" onclick="$(\'#' + this.resultBoxNodeID + '\').empty().hide();" >&nbsp;</span><br/>').appendTo('#' + this.resultBoxNodeID);
                 if (data.numFound && data.numFound > 0) {
@@ -408,8 +417,22 @@ DEFAULT_LANGUAGE = detectLanguage();
                             if (value.lat && value.lng) {
                                 content += "<br/>(" + value.lat + "," + value.lng + ")";
                             }
-                            $('<div onclick="moveCenterOfMapTo(' + value.lat + ',' + value.lng + ',' + value.placetype + ')">').html(content).appendTo('#' + this.resultBoxNodeID);
-                            if (index + 1 < data.result.length) {
+                            $('<div onclick="moveCenterOfMapTo(' + value.lat + ',' + value.lng + ',\'' + value.placetype + '\')">').html(content).appendTo('#' + this.resultBoxNodeID);
+                           
+			//TODO : add search around
+			//if (data.numFound ==1){
+				$('<div>').attr('id', this.ELEMENT_ID+"result"+numResult).html('<a href="#" onclick="$(\'#'+this.ELEMENT_ID+"resultSearchAroundform"+numResult+'\').css(\'display\',\'inline\')">'+translation['searcharound'][this.currentLanguage]+'</a>'+' | <a href="#" onclick="alert(\'coming soon, we will soon provide some facilities with open sources route planner\')">'+translation['routeto'][this.currentLanguage]+'</a>').appendTo('#' + this.resultBoxNodeID);
+				$('<form>').attr('id', this.ELEMENT_ID+"resultSearchAroundform"+numResult).attr('action', this.geolocUrl).appendTo('#' + this.resultBoxNodeID).css("display","none");
+				$('<input>').attr('id', this.ELEMENT_ID+"resultSearchAroundlat"+numResult).attr('type', "hidden").attr("name","lat").attr("value",value.lat).appendTo('#' + this.ELEMENT_ID+"resultSearchAroundform"+numResult);
+				$('<input>').attr('id', this.ELEMENT_ID+"resultSearchAroundlng"+numResult).attr('type', "hidden").attr("name","lng").attr("value",value.lng).appendTo('#' + this.ELEMENT_ID+"resultSearchAroundform"+numResult);
+				$('<span>').attr('id', this.ELEMENT_ID+"resultSearchAroundPlacetype"+numResult).appendTo("#"+this.ELEMENT_ID+"resultSearchAroundform"+numResult);
+			        this.buildPlaceTypeDropBox(DEFAULT_LANGUAGE,this.ELEMENT_ID+"resultSearchAroundPlacetype"+numResult);
+				 $('#' + this.ELEMENT_ID+"resultSearchAroundPlacetype"+numResult + ' option[value="Restaurant"]').prop('selected', true);
+				$("#"+this.ELEMENT_ID+"resultSearchAroundPlacetype"+numResult);
+				$('<input>').attr('id', this.ELEMENT_ID+"resultSearchAroundbtn"+numResult).attr('type', "button").attr("value",translation['search'][this.currentLanguage]).attr("onclick","autocompleteGisgraphy[" + this.instanceCounter + "].findAround(\'"+this.ELEMENT_ID+"resultSearchAroundform"+numResult+"\')").appendTo('#' + this.ELEMENT_ID+"resultSearchAroundform"+numResult);
+				numResult++;
+			//}
+ if (index + 1 < data.result.length) {
                                 $('<hr>').appendTo('#' + this.resultBoxNodeID);
                             }
                         }, this)
@@ -429,17 +452,81 @@ DEFAULT_LANGUAGE = detectLanguage();
             $('#' + this.resultBoxNodeID).slideDown(200);
         };
 
+       function findAround(formId){
+	 $('#'+formId).serialize()
+ 	        $.ajax({
+                     url:'/geoloc/search?format=json&'+$('#'+formId).serialize(),
+                })
+                .done($.proxy(doProcessGeolocResults, this));
+	return false;
+	}
+
+function doProcessGeolocResults(data){
+ 	if (console && console.log) {
+                	      console.log(data.result );
+         }
+var RedIcon = L.Icon.Default.extend({
+            options: {
+            	    iconUrl: 'img/marker-icon-red.png' 
+            }
+         });
+ var redIcon = new RedIcon();
+       if (data  && typeof map != 'undefined') {
+		if (data.result && data.result.length >0){
+		 if (typeof markerGeoloc != 'undefined') {
+			 map.removeLayer(markerGeoloc)
+		}
+			var markerGeolocArray = [];
+                    $.each(data.result,
+                       function(index, value) {
+				console.log(value);
+				var content='';
+				 if (value.countryCode) {
+                        	        content += '<img src="img/' + value.countryCode + '.png" alt="' + value.countryCode + '" class="flag-autocomplete"/>';
+                       		}
+				if (value.name){
+                            		content+= value.name+"<br/>"
+				}
+				if (value.placetype){
+					content+=value.placetype;
+				}
+				if (value.amenity){
+					if (value.placetype){
+						content+="|";
+					}
+					content+=value.amenity;
+				}
+			
+				if (value.lat && value.lng){
+					content += "<br/>("+value.lat+","+value.lng+")";	
+				}
+				var marker =L.marker([value.lat, value.lng], {icon: redIcon}).bindPopup(content);
+				markerGeolocArray.push(marker);
+			}
+                    );
+		   markerGeoloc = L.featureGroup(markerGeolocArray);
+	           markerGeoloc.addTo(map);
+		map.fitBounds(markerGeoloc.getBounds());
+			
+       		} else {
+                    $('<div>').text('sorry no result found').appendTo('#' + this.resultBoxNodeID);
+                }
+      } else {
+                $('<div>').text('sorry no data recieved').appendTo('#' + this.resultBoxNodeID);
+      }
+      
+}
 
 
 
-        function buildPlaceTypeDropBox(lang) {
+        function buildPlaceTypeDropBox(lang,placetypeNodeID) {
             if (!lang) {
                 lang = DEFAULT_LANGUAGE;
             }
             $('#lang' + lang).attr('checked', 'true');
             lang = lang.toUpperCase();
-            var dropBoxHtml = $("#" + this.placetypeNodeID);
-            var sel = $('<select>').attr('id', this.placetypeNodeID).attr('name', 'placetype').addClass('placetypes');
+            var sel = $('<select>').attr('id', placetypeNodeID).attr('name', 'placetype').addClass('placetypes');
+            var dropBoxHtml = $("#" + placetypeNodeID);
             if (dropBoxHtml.length > 0) {
                 dropBoxHtml.replaceWith(sel);
             } else {
@@ -462,6 +549,7 @@ DEFAULT_LANGUAGE = detectLanguage();
 
                 });
             });
+	return sel;
         };
 
         function BuildLanguageSelector(lang) {
@@ -516,7 +604,7 @@ DEFAULT_LANGUAGE = detectLanguage();
                 this.BuildLanguageSelector(DEFAULT_LANGUAGE);
             }
             if (this.allowPoiSelection) {
-                this.buildPlaceTypeDropBox(DEFAULT_LANGUAGE);
+                this.buildPlaceTypeDropBox(DEFAULT_LANGUAGE,this.placetypeNodeID);
             }
             this.buildSearchBox();
             if ($('#' + this.ELEMENT_ID).length > 0) {
@@ -611,17 +699,91 @@ DEFAULT_LANGUAGE = detectLanguage();
                     }
                 }, this));
 
-            $('#' + this.inputSearchNodeID).bind('typeahead:selected', doOnChoose);
+            $('#' + this.inputSearchNodeID).bind('typeahead:selected', doOnSelect);
             $('#' + this.inputSearchNodeID).bind('typeahead:cursorchanged', doOnChoose);
-            $('#' + this.inputSearchNodeID).bind('typeahead:autocompleted', doOnChoose);
+            $('#' + this.inputSearchNodeID).bind('typeahead:autocompleted', doOnAutocompleted);
             $('#' + this.inputSearchNodeID).focus();
         }
 
-        this.initAutoCompletion();
+       // this.initAutoCompletion();
         window.autocompleteGisgraphy[autocompleteGisgraphyCounter] = this;
+        this.instanceCounter= autocompleteGisgraphyCounter; 
         autocompleteGisgraphyCounter++;
 
-        var doOnChoose = $.proxy(function(obj, datum, name) {
+        var doOnAutocompleted = $.proxy(function(obj, datum, name) {
+            console.log('doOnAutocompleted');
+            if (datum && datum.poiType && this.allowPoiSelection) {
+                $('#' + this.placetypeNodeID + ' option[value="' + datum.poiType + '"]').prop('selected', true);
+            } else {
+                $('#' + this.placetypeNodeID + ' option[value=""]').prop('selected', true);
+            }
+            /*if (typeof map != 'undefined' && datum && datum.lat && datum.lng){
+            		console.log('moving to '+datum.lat+','+datum.lng);
+                                            map.panTo(new L.LatLng(datum.lat,datum.lng));
+            }*/
+	   if (datum.house_numbers && datum.house_numbers.length > 0){
+		var coord = getHouseNumbercoordinate(datum.house_numbers,obj.currentTarget.id);
+		if (coord && coord.hasOwnProperty("lat") && coord.hasOwnProperty("long")){
+			this.result = datum;
+		        this.result.house_coordinate = coord;
+			moveCenterOfMapTo(coord.lat, coord.long,datum.placetype);
+		} else {
+			 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+	                 this.result = datum;
+		}
+            } else {	
+                 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+		 this.result = datum;
+		}
+            this.itemSelected = true;
+            /*console.log('selected');
+            console.log(obj);
+            console.log(datum);
+            console.log(name);*/
+           
+	   
+            return false;
+
+        }, this);
+
+	 var doOnSelect = $.proxy(function(obj, datum, name) {
+            console.log('doOnSelect');
+            if (datum && datum.poiType && this.allowPoiSelection) {
+                $('#' + this.placetypeNodeID + ' option[value="' + datum.poiType + '"]').prop('selected', true);
+            } else {
+                $('#' + this.placetypeNodeID + ' option[value=""]').prop('selected', true);
+            }
+            /*if (typeof map != 'undefined' && datum && datum.lat && datum.lng){
+            		console.log('moving to '+datum.lat+','+datum.lng);
+                                            map.panTo(new L.LatLng(datum.lat,datum.lng));
+            }*/
+	   if (datum.house_numbers && datum.house_numbers.length > 0){
+		var coord = getHouseNumbercoordinate(datum.house_numbers,obj.currentTarget.id);
+		if (coord && coord.hasOwnProperty("lat") && coord.hasOwnProperty("long")){
+			this.result = datum;
+		        this.result.house_coordinate = coord;
+			moveCenterOfMapTo(coord.lat, coord.long,datum.placetype);
+		} else {
+			 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+	                 this.result = datum;
+		}
+            } else {	
+                 moveCenterOfMapTo(datum.lat, datum.lng, datum.placetype);
+		 this.result = datum;
+		}
+            this.itemSelected = true;
+            /*console.log('selected');
+            console.log(obj);
+            console.log(datum);
+            console.log(name);*/
+	    var data={"numFound":1,"result":[convertDatumToAddress(datum,coord)]};
+            var displayBox =  $.proxy(doProcessGeocodingResults, this)
+	    displayBox(data);
+            return false;
+
+        }, this);
+
+	var doOnChoose = $.proxy(function(obj, datum, name) {
             console.log('doOnChosse');
             if (datum && datum.poiType && this.allowPoiSelection) {
                 $('#' + this.placetypeNodeID + ' option[value="' + datum.poiType + '"]').prop('selected', true);
@@ -695,7 +857,7 @@ DEFAULT_LANGUAGE = detectLanguage();
         function changeLanguage(lang) {
             this.currentLanguage = lang;
             if (this.allowPoiSelection) {
-                this.buildPlaceTypeDropBox(lang);
+                this.buildPlaceTypeDropBox(lang,this.placetypeNodeID);
                 this.pois = buildPoisArray(lang);
             }
             this.geocoding.clear();
@@ -706,6 +868,28 @@ DEFAULT_LANGUAGE = detectLanguage();
 
         }
 
+ function convertDatumToAddress(datum,hnCoord) {
+            var address = {};
+            if (datum) {
+	                     address["countryCode"] = datum.country_code;
+			     address["placetype"] = datum.placetype;
+			     if (datum.is_in){
+	                     	address["streetName"] =  datum.name;
+			     	address["city" ] =  datum.is_in;
+                             } else {
+	                      	address["name"] = datum.name;
+			     }
+			     if (hnCoord && hnCoord["lat"] && hnCoord["long"]){
+		             	address["houseNumber"] = hnCoord.number;
+			      	address["lat"] = hnCoord.lat;
+			      	address["lng"] = hnCoord.long;
+		       	     } else {
+			        address["lat"] = datum.lat;
+			        address["lng"] = datum.lng;
+			    }
+            }
+            return address;
+        }
 
         function convertAddressToDatum(address) {
             var doc = {};
@@ -882,7 +1066,8 @@ return '';
 			found = true;
 		 	coord = {
 			    "lat": latLongAsStr[1],
-			    "long": latLongAsStr[0]
+			    "long": latLongAsStr[0],
+			    "number":number
 			};
 		}
 	     }
@@ -901,3 +1086,5 @@ return strReplaced;
 }
 
 NAME_HOUSE_COUNTRYCODE = ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"];
+
+
