@@ -20,7 +20,7 @@
       <question>Is it possible to import geonames and not Openstreetmap dataset and vice et versa ?</question>
       <answer>
         <p>
-          yes! just choose the dataset(s) you are interested in on the confirm import page. If you want to import an other dataset later, a <a href="http://www.gisgraphy.com/forum/viewtopic.php?f=3&amp;t=219">workaround is possible</a>
+          Yes! Just choose the dataset(s) you are interested in on the confirm import page. If you want to import an other dataset later, a <a href="http://www.gisgraphy.com/forum/viewtopic.php?f=3&amp;t=219">workaround is possible</a>
         </p>
       </answer>
     </faq>
@@ -41,9 +41,9 @@
         <p>
           The import is long because :
           <ul>
-          <li>There are a lot of features to import (more than 55 Millions)</li> 
-          <li>Gisgraphy try to do error correction to detect the correct ADM, and a lot of request is made to the database for each line. this is the "price to pay" to have a parent/child ADM tree</li>
-          <li>for each feature or alternate names imported, the fulltext engine is synchronized</li>
+          <li>There are a lot of features to import (more than 100 Million)</li> 
+          <li>Gisgraphy tries to do error correction to detect the correct ADM, and a lot of request is made to the database for each line. this is the "price to pay" to have a parent/child ADM tree</li>
+          <li>For each feature or alternate names imported, the fulltext engine is synchronized.</li>
           <li>A lot of request to the fulltext engine (45 000 000 to search the nearest city for each streets) and the geoloc one (to search the nearest city for each zipcode) </li>
           </ul>  
           The openstreetmap import take less time because data are pre-processed (length, middle point,...) to CSV. so no error correction is necessary.
@@ -90,8 +90,8 @@
      <question>Is Gisgraphy available for MySQL or Oracle 10g ?</question>
       <answer>
         <p>
-		No (and it will never be). Oracle is commercial and does not follow opensource philosophy, and MySQL needs MyISAM database.
-		You can not do GIS with MySQL and InnoDB. It is a real limitation because foreign keys are missing in MyISAM.
+		No (and it will never be). Oracle is commercial and it does not follow opensource philosophy, and MySQL needs MyISAM database.
+		You can not do GIS with MySQL and InnoDB. There is a real limitation because foreign keys are missing in MyISAM.
         </p>
       </answer>
     </faq>

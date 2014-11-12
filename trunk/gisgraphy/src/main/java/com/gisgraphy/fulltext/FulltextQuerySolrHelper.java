@@ -165,6 +165,7 @@ public class FulltextQuerySolrHelper {
 		}
 		
 		
+		
 		boolean isNumericQuery = isNumericQuery(query.getQuery());
 		StringBuffer querybuffer ;
 		
@@ -187,6 +188,10 @@ public class FulltextQuerySolrHelper {
 					.toString());
 		}
 		else if (query.isSuggest()){
+			if (smartStreetDetection.getStreetTypes(query.getQuery()).size()==1){
+			//	parameters.set(Constants.BQ_PARAMETER, STREET_BOOST_QUERY);
+				parameters.set(Constants.FILTER_QUERY_PARAMETER, FullTextFields.PLACETYPE.getValue()+":"+Street.class.getSimpleName());
+			}
 			parameters.set(Constants.QT_PARAMETER, Constants.SolrQueryType.suggest
 					.toString());
 			parameters.set(Constants.QUERY_PARAMETER, query.getQuery());

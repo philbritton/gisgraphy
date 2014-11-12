@@ -95,6 +95,52 @@ public class FulltextQuerySolrHelperTest {
 		assertNull("spellchecker query should not be set",
 				parameters.get(Constants.SPELLCHECKER_QUERY_PARAMETER));
 	}
+	
+	@Test
+	public void testToQueryStringShouldreturnCorrectParamsForSuggestQuery_smartDetection() {
+		Country france = GisgraphyTestHelper.createCountryForFrance();
+		Pagination pagination = paginate().from(3).to(10);
+		Output output = Output.withFormat(OutputFormat.XML)
+				.withLanguageCode("FR").withStyle(OutputStyle.SHORT)
+				.withIndentation();
+		String searchTerm = "Rue Saint-André";
+		FulltextQuery fulltextQuery = new FulltextQuery(searchTerm, pagination,
+				output, null, null).withAllWordsRequired(true)
+				.withSuggest(true).withSpellChecking();
+		// split parameters
+		HashMap<String, List<String>> parameters = GisgraphyTestHelper
+				.splitURLParams(
+						FulltextQuerySolrHelper.toQueryString(fulltextQuery),
+						"&");
+		// check parameters
+		assertNotNull(
+				"field list parameter are by default, we use the one in the suggest request handler",
+				parameters.get(Constants.FL_PARAMETER));
+		assertEquals("wrong indent parameter found", "on",
+				parameters.get(Constants.INDENT_PARAMETER).get(0));
+		assertEquals("wrong echoparams parameter found", "none", parameters
+				.get(Constants.ECHOPARAMS_PARAMETER).get(0));
+		assertEquals("wrong start parameter found", "2",
+				parameters.get(Constants.START_PARAMETER).get(0));
+		assertEquals("wrong rows parameter found", "8",
+				parameters.get(Constants.ROWS_PARAMETER).get(0));
+		assertEquals("wrong output format parameter found",
+				OutputFormat.JSON.getParameterValue(),
+				parameters.get(Constants.OUTPUT_FORMAT_PARAMETER).get(0));
+		assertEquals("wrong query type parameter found",
+				Constants.SolrQueryType.suggest.toString(),
+				parameters.get(Constants.QT_PARAMETER).get(0));
+		assertTrue(
+				"wrong query parameter found",
+				parameters.get(Constants.QUERY_PARAMETER).get(0)
+						.equals(searchTerm));
+		assertTrue(
+				"wrong FilterQuery with smart street detection",
+				parameters.get(Constants.FILTER_QUERY_PARAMETER).get(0)
+						.equals("placetype:Street"));
+		assertNull("spellchecker query should not be set",
+				parameters.get(Constants.SPELLCHECKER_QUERY_PARAMETER));
+	}
 
 	@Test
 	public void testToQueryStringShouldreturnCorrectParamsForBasicQuery_spellcheckingEnabled() {

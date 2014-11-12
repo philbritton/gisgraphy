@@ -466,6 +466,24 @@ translation={
 "EN": "no suggestions, please click the search button",
 "ES": "ninguna sugerencia, por favor haga clic en el botón de búsqueda",
 "DE": "keine Vorschläge, bitte klicken Sie auf die Suchtaste"
+},
+"searcharound":{
+"FR": "chercher aux alentours",
+"EN": "search around",
+"ES": "buscar alrededor",
+"DE": "herumsuchen"
+},
+"search":{
+"FR": "chercher",
+"EN": "find",
+"ES": "encontrar",
+"DE": "Suche"
+},
+"routeto":{
+"FR": "Itinéraire",
+"EN": "Route",
+"ES": "Ruta",
+"DE": "Route"
 }
 
 
