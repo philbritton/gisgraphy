@@ -200,9 +200,24 @@ DEFAULT_LANGUAGE = detectLanguage();
 				}	
                             }
                         });
-			 $.each(docMap, function(key, value) {
-				names.push(value)
+			 $.each(d.response['docs'], function(key, value) {
+				var found = false;
+				 if (value.feature_id) {
+					$.each(docMap, function(keyMap, valueMap) {
+						if (found == true){
+							return
+						}
+						if (valueMap.feature_id == value.feature_id){
+							names.push(valueMap);
+							found=true;
+
+						}
+					});
+			    	 }
 			});
+			/* $.each(docMap, function(key, value) {
+				names.push(value)
+			});*/
                     } else if (d && d.result && d.result[0]) {
                         names.push(convertAddressToDatum(d.result[0]));
                     }
@@ -1086,5 +1101,4 @@ return strReplaced;
 }
 
 NAME_HOUSE_COUNTRYCODE = ["DE","BE","HR","IS","LV","NL","NO","NZ","PL","RU","SI","SK","SW","TR"];
-
 
