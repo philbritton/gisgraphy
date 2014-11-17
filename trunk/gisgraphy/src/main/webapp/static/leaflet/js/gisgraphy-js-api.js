@@ -164,6 +164,7 @@ DEFAULT_LANGUAGE = detectLanguage();
         this.userLat = undefined;//50.455; //undefined;
         this.userLng = undefined;//3.204; //undefined;
         this.allowUserPositionDetection = o.allowUserPositionDetection || true;
+	this.locationBias = o.locationBias || false;
         this.withHelp = o.withHelp || true;
         this.displayHelp = displayHelp;
         this.initUI();
@@ -329,7 +330,7 @@ DEFAULT_LANGUAGE = detectLanguage();
                 }
             }
             var fulltextUrlWithParam = this.fulltextURL + '?format=json&suggest=true&allwordsrequired=false&style=long'
-            if (this.userLat && this.userLng) {
+            if (this.userLat && this.userLng & this.locationBias) {
                 fulltextUrlWithParam = fulltextUrlWithParam + "&lat=" + this.userLat + "&lng=" + this.userLng + "&radius=0";
             }
             if (!$('#' + this.placetypeNodeID).val()) {
@@ -1050,7 +1051,7 @@ function convertToLatLong(str) {
     return obj;
 }
 
-num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b|rd\b|nd\b))(?=\w+))|\s(?:\d{1,3}$))/gi;
+num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b|rd\b|nd\b))(?=\w+))|\s(?:\d{1,3}$))/i;
 var num_p = new RegExp(num_pattern);
 
 function extractHouseNumber(str){
