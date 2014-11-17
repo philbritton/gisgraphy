@@ -95,7 +95,6 @@ To suggest a change or a correction to any part of the documentation, please sen
 <div class="indexlevel3"><a href="#geocodingserviceoutputfieldsdescription" />Output fields description</a></div>
 <div class="indexlevel3"><a href="#geocodingservicejavaapi" />Java API</a></div>
 <div class="indexlevel2"><a href="#addressparser" />AdressParser</a></div>
-
 <div class="indexlevel2"><a href="#reversegeocodingservice" />Reverse geocoding</a></div>
 <div class="indexlevel3"><a href="#reversegeocodingservicedescription" />Description</a></div>
 <div class="indexlevel3"><a href="#reversegeocodingserviceoutputformat" />Output formats and languages</a></div>
@@ -1904,11 +1903,11 @@ combined with the other parameters of the fulltext engine (latitude, longitude, 
 You can : 
 <ul>
 <li>Promote nearest by specifying radius to 0</li>
+<li>or...Suggest only in a bounding box by specifying a radius superior to 0</li>
 <li>Suggest place for a specific country with the countrycode parameter</li>
-<li>Suggest  only in a bounding box by specifying a radius > 0</li>
 <li>Detect or specify lat/long to improve user experience</li>
 <li>Detect GPS coordinate and resolve them as an address</li>
-<li>Detect degree/minute/second coordinate and resolve them as an address</li>
+<li>Detect degree / minute / second coordinates and resolve them as an address</li>
 <li>Use magic sentence</li>
 <li>Prefetch some results</li>
 <li>So much more...feel free to <a href="mailto:david.masclet@gisgraphy.com">contact me</a> me for more details</li>
@@ -1916,7 +1915,14 @@ You can :
 <br/>
 You can use the gisgraphy js API to instanciate an auto completion input text very simply, or use the gisgraphy leaflet geocoder plugin to use aucocompletion on a map.
 there is also a reverse geocoding plugin.
- See the gisgraphy leaflet plugin for more details.
+<br/>
+Note that adding a Lat/Long and a radus impact performance because the distance is calculated for all the result, but the relevance will probably be better : the user in 75% of uses cases search for someting near them.
+To do autocompletion, simply add the 'suggest' parameter to true. e.g 
+<div class="code">
+/fulltext/suggest?format=json&suggest=true&allwordsrequired=false&style=long&lat=50.4589901&lng=3.2124411&radius=0&placetype=city&placetype=adm&placetype=street&from=1&to=20&q=paris&apikey=12
+</div>
+<br/>
+See the gisgraphy leaflet plugin for more details.
 
 <br/>
 
