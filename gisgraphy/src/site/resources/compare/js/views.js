@@ -10,10 +10,12 @@ var Yonder = Yonder || {};
       // create the tile layer with correct attribution
 	  var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	  var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-	  var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 12, attribution: osmAttrib});	
+	  var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 18, attribution: osmAttrib});	
+
+	
 
       this.map.addLayer(this.layerGroup);
-      this.map.setView(new L.LatLng(0, 0), 2).addLayer(osm);
+      this.map.setView(new L.LatLng(40.7305991, -73.9865812), 2).addLayer(osm);
 
       this.collection.bind('change', this.render, this);
     },
@@ -33,13 +35,13 @@ var Yonder = Yonder || {};
 
         // Init bounds to contain the points
         bounds = new L.LatLngBounds();
-
+	var counter = 1; 
         this.collection.each(function(model) {
           var pt;
 
           if (model.has('Latitude') && model.has('Longitude')) {
-            pt = new L.LatLng(model.get('Latitude'), model.get('Longitude'));
-            
+            pt = new L.LatLng(model.get('Latitude')+counter*0.00001, model.get('Longitude')-counter*0.00001);
+            counter++
             // Add markers to the map
             view.layerGroup.addLayer(new L.CircleMarker(pt, {
               color: model.color,

@@ -34,7 +34,7 @@ var Yonder = Yonder || {};
               format: 'json',
               country: $('#countrylist').val()
             },
-            url: 'http://services.gisgraphy.com/geocoding/geocode',
+            url: 'http://server2.gisgraphy.com/geocoding/geocode',
             success: function (res) {
               if (res.numFound && res.numFound > 0) {
                   model.set(model.parse(res.result[0]));
@@ -53,11 +53,12 @@ var Yonder = Yonder || {};
       parse: function(res) {
         var spacesRe = / {2,}/g,
           normalRes = {
-            'Address': [res.name, res.city].join(' ').replace(spacesRe, ' '),
+            'Address': [res.houseNumber, res.name, res.city].join(' ').replace(spacesRe, ' '),
             'Longitude': parseFloat(res.lng),
             'Latitude': parseFloat(res.lat),
             'Quality': res.geocodingLevel,
-            'Raw': JSON.stringify(res, null, ' ')
+            'Raw': JSON.stringify(res, null, ' '),
+	    'provider':'gisgraphy'
           };
 
         return normalRes;
@@ -103,12 +104,60 @@ var Yonder = Yonder || {};
             'Longitude': parseFloat(res.lon),
             'Latitude': parseFloat(res.lat),
             'Quality': res.type,
-            'Raw': JSON.stringify(res, null, ' ')
+            'Raw': JSON.stringify(res, null, ' '),
+	    'provider':'nominatim'
           };
 
         return normalRes;
       }
-    }),    
+    }), 
+    //photon
+   Y.GeocoderModel.extend({
+      //Include a unique geocoder name for display
+      type: 'Photon',
+      name: 'photon',
+      color: '#000000',
+      // Geocode the address and call success or error when complete
+      geocode: function(addr) {
+        var model = this;
+
+        try {
+          $.ajax({
+            dataType: 'json',
+            data: {
+              q: addr,
+              limit: 1
+            },
+            url: 'http://photon.komoot.de/api/',
+            success: function (res) {
+              if (res && res.features && res.features && res.features.length >0) {
+                  model.set(model.parse(res.features[0]));
+              } else {
+                model.set({'Error': 'No results.'});
+              }
+            }
+          });
+        } catch (e) {
+          model.set({'Error': 'Error parsing results.'});
+        }
+
+      },
+      // Override parse to set normalized attributes for display.
+      // The res param is the raw respsone from the geocoder
+      parse: function(res) {
+        var spacesRe = / {2,}/g,
+          normalRes = {
+            'Address': [res.properties.name, res.properties.country].join(' ').replace(spacesRe, ' '),
+            'Longitude': parseFloat(res.geometry.coordinates[0]),
+            'Latitude': parseFloat(res.geometry.coordinates[1]),
+            'Quality': res.type,
+            'Raw': JSON.stringify(res, null, ' '),
+	    'provider':'Photon'
+          };
+
+        return normalRes;
+      }
+    }),   
 // Google Maps
     Y.GeocoderModel.extend({
       //Include a unique geocoder name for display
@@ -140,7 +189,8 @@ var Yonder = Yonder || {};
           'Longitude': res.geometry.location.lng(),
           'Latitude': res.geometry.location.lat(),
           'Quality': res.geometry.location_type,
-          'Raw': JSON.stringify(res, null, ' ')
+          'Raw': JSON.stringify(res, null, ' '),
+	  'provider':'Google'
         };
 
         return normalRes;
@@ -193,13 +243,13 @@ var Yonder = Yonder || {};
             'Longitude': parseFloat(res.longitude),
             'Latitude': parseFloat(res.latitude),
             'Quality': res.quality,
-            'Raw': JSON.stringify(res, null, ' ')
+            'Raw': JSON.stringify(res, null, ' '),
+	    'provider':'Yahoo'
           };
 
         return normalRes;
       }
     }),
-
     //MapQuest
     Y.GeocoderModel.extend({
       //Include a unique geocoder name for display
@@ -241,7 +291,8 @@ var Yonder = Yonder || {};
             'Longitude': parseFloat(res.displayLatLng.lng),
             'Latitude': parseFloat(res.displayLatLng.lat),
             'Quality': res.geocodeQuality,
-            'Raw': JSON.stringify(res, null, ' ')
+            'Raw': JSON.stringify(res, null, ' '),
+	    'provider':'Mapquest'
           };
 
         return normalRes;
