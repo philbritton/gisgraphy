@@ -141,7 +141,7 @@ var Yonder = Yonder || {};
       if (addr) {
         // Triggers a fetch for each model in the collection
         this.geocoders.fetch( { 'address': addr });  
-	$('div.span5').css("height","720")      
+	$('div.span5').css("height","780")      
 	} else {
 	    alert("Please enter an address");
 	}
