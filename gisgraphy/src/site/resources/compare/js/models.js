@@ -34,7 +34,7 @@ var Yonder = Yonder || {};
               format: 'json',
               country: $('#countrylist').val()
             },
-            url: 'http://server2.gisgraphy.com/geocoding/geocode',
+            url: 'http://185.13.36.133/geocoding/geocode',
             success: function (res) {
               if (res.numFound && res.numFound > 0) {
                   model.set(model.parse(res.result[0]));
@@ -53,7 +53,7 @@ var Yonder = Yonder || {};
       parse: function(res) {
         var spacesRe = / {2,}/g,
           normalRes = {
-            'Address': [res.houseNumber, res.name, res.city].join(' ').replace(spacesRe, ' '),
+            'Address': [res.houseNumber, res.name, res.zipCode,res.city, res.countryCode].join(' ').replace(spacesRe, ' ').trim(),
             'Longitude': parseFloat(res.lng),
             'Latitude': parseFloat(res.lat),
             'Quality': res.geocodingLevel,
@@ -147,7 +147,7 @@ var Yonder = Yonder || {};
       parse: function(res) {
         var spacesRe = / {2,}/g,
           normalRes = {
-            'Address': [res.properties.name, res.properties.country].join(' ').replace(spacesRe, ' '),
+            'Address': [res.properties.name, res.properties.postcode, res.properties.city, res.properties.country].join(' ').replace(spacesRe, ' '),
             'Longitude': parseFloat(res.geometry.coordinates[0]),
             'Latitude': parseFloat(res.geometry.coordinates[1]),
             'Quality': res.type,

@@ -239,7 +239,9 @@ DEFAULT_LANGUAGE = detectLanguage();
                 this.userLat = position.coords.latitude;
                 this.userLng = position.coords.longitude;
                 if (typeof map != 'undefined') {
-                    map.panTo(new L.LatLng(this.userLat, this.userLng));
+		    // map.panTo(new L.LatLng(this.userLat, this.userLng));
+		    // map.setZoom(18);
+		     moveCenterOfMapTo(this.userLat,this.userLng,'STREET');
                 }
             }
         }
@@ -388,12 +390,17 @@ DEFAULT_LANGUAGE = detectLanguage();
                                 content += '<img src="img/' + value.countryCode + '.png" alt="' + value.countryCode + '" class="flag-autocomplete"/>';
                             }
 			if (value && value.countryCode && value.countryCode.length == 2 && $.inArray(value.countryCode, NAME_HOUSE_COUNTRYCODE) >=0){
-					     if (value.streetName) {
+			   if (value.streetName) {
                                 hasName = true;
                                 content += "<strong>" + value.streetName + "</strong>";
                             } else if (value.name) {
                                 hasName = true;
-                                content += "<strong>" + value.name + "</strong>";
+         		       var zip='';
+                               if (value.zipCode && value.placetype && value.placetype=='City'){
+                                        zip=' ('+value.zipCode+')';
+                               }
+
+                                content += "<strong>" + value.name + zip + "</strong>";
                             }
 			    if (value.houseNumber) {
                                 content += " "+value.houseNumber;
@@ -405,7 +412,11 @@ DEFAULT_LANGUAGE = detectLanguage();
 				 if (value.dependentLocality){
                                         content+='<span class="isin-autocomplete">' + value.dependentLocality + '</span>';
                                }
-                                content += '<span class="isin-autocomplete">, ' + value.city + '</span>';
+			       var zip =' ';
+                               if (value.zipCode){
+                                        zip+=value.zipCode+' ';
+                               }
+                                content += '<span class="isin-autocomplete">,'+zip + value.city + '</span>';
                             }
 				
                             
@@ -418,16 +429,25 @@ DEFAULT_LANGUAGE = detectLanguage();
                                 content += "<strong>" + value.streetName + "</strong>";
                             } else if (value.name) {
                                 hasName = true;
-                                content += "<strong>" + value.name + "</strong>";
+				var zip='';
+                               if (value.zipCode && value.placetype && value.placetype=='City'){
+                                        zip=' ('+value.zipCode+')';
+                               }
+
+                                content += "<strong>" + value.name + zip +"</strong>";
                             }
                             if (value.city) {
                                 if (hasName == true && value.dependentLocality) {
                                     content += ', ';
                                 }
-				 if (value.dependentLocality){
+			       if (value.dependentLocality){
                                         content+='<span class="isin-autocomplete">' + value.dependentLocality + '</span>';
                                }
-                                content += '<span class="isin-autocomplete">, ' + value.city + '</span>';
+			       var zip=' ';
+			       if (value.zipCode){
+                                        zip+=value.zipCode+' ';
+                               }
+                                content += '<span class="isin-autocomplete">,'+zip + value.city + '</span>';
                             }
 			}
                             if (value.lat && value.lng) {
@@ -656,9 +676,12 @@ var RedIcon = L.Icon.Default.extend({
 				if(obj['is_in_place']){
                         	   addressFormated +=', '+obj['is_in_place'];
                         	}
-
+				var zip='';
+                                 if (obj['is_in_zip'] && obj['is_in_zip'].length ==1){
+				 	addressFormated+=', '+obj['is_in_zip'][0]+' ';
+				}
                        		 if (obj['is_in']) {
-                        		    addressFormated += ', ' + obj['is_in'];
+                        		addressFormated+= ', ' + obj['is_in'];
                        		 }
                    	 }
                         return addressFormated;
@@ -669,11 +692,14 @@ var RedIcon = L.Icon.Default.extend({
 			housenumber= housenumber+', ';
 		    }
                     var is_in = '';
-                    if (obj['is_in'] || obj['adm1_name'] || obj['is_in_place']) {
+                    if (obj['is_in'] || obj['is_in_place']) {
 			if(obj['is_in_place']){
                            is_in +=', '+obj['is_in_place'];
                         }
-
+			var zip='';
+                        if (obj['is_in_zip'] && obj['is_in_zip'].length ==1){
+                                       is_in+=', '+obj['is_in_zip'][0];
+                        }
                         if (obj['is_in']) {
                             is_in += ', ' + obj['is_in'];
                         }
@@ -691,7 +717,7 @@ var RedIcon = L.Icon.Default.extend({
                 source: this.geocoding.ttAdapter(),
                 templates: {
                     empty: Handlebars.compile('<div class="empty-message">{{l10n "nosuggestion" currentLanguage}}</div>'),
-                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{/if}}{{#if_number_after country_code }}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong> {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}}{{#if houseNumber}}{{houseNumber}}</span>{{/if}}{{else}} {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}} {{#if houseNumber}}{{houseNumber}}</span>{{/if}}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong>{{/if_number_after}}{{#if is_in}}<span class="isin-autocomplete">, {{is_in}}</span> {{else}}{{#if adm1_name}}<span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
+                    suggestion: Handlebars.compile('{{#if name}}<p>{{#if country_code}}<img src="img/{{country_code}}.png" alt={{country_code}} class="flag-autocomplete"/>{{/if}}{{#if_number_after country_code }}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong> {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}}{{#if houseNumber}}{{houseNumber}}</span>{{/if}}{{else}} {{{housenumber house_numbers "'+this.inputSearchNodeID+'"}}} {{#if houseNumber}}{{houseNumber}}</span>{{/if}}<strong>{{name}}{{#if_eq zipcode.length 1}} ({{zipcode}}){{/if_eq}}</strong>{{/if_number_after}}{{#if is_in}}<span class="isin-autocomplete">, {{#if_eq is_in_zip.length 1}} {{is_in_zip}}{{/if_eq}} {{is_in}}</span> {{else}}{{#if adm1_name}}<span class="isin-autocomplete">, {{adm1_name}}</span>{{/if}}{{/if}}</p>{{/if}}'),
                     footer: '<div class="footer">powered by <a href="http://www.gisgraphy.com/">Gisgraphy.com</a></div>'
                 }
             });
@@ -883,12 +909,17 @@ var RedIcon = L.Icon.Default.extend({
             $('#' + this.inputSearchNodeID).attr('placeholder', translation['placeholder'][lang])
 
         }
-
+//use to display the address when we select datum
  function convertDatumToAddress(datum,hnCoord) {
             var address = {};
             if (datum) {
 	                     address["countryCode"] = datum.country_code;
 			     address["placetype"] = datum.placetype;
+			     if (datum.zipcode && datum.zipcode.length ==1){
+				address['zipCode']=datum.zipcode[0];
+		             } else if (datum.is_in_zip && datum.is_in_zip && datum.is_in_zip.length ==1){
+				address['zipCode']= datum.is_in_zip[0];
+			     }
 			     if (datum.is_in){
 	                     	address["streetName"] =  datum.name;
 			     	address["city" ] =  datum.is_in;
@@ -906,10 +937,15 @@ var RedIcon = L.Icon.Default.extend({
             }
             return address;
         }
-
+// use when reverse geocoding for a gps/DMS
         function convertAddressToDatum(address) {
             var doc = {};
-            if (address) {
+	   
+           if (address) {
+		var zips = [];
+		if (address.zipCode){
+			zips[O]=address.zipCode;
+		}	
                 doc = {
                     "name": address.streetName,
                     "is_in": address.city,
@@ -918,7 +954,8 @@ var RedIcon = L.Icon.Default.extend({
                     "lat": address.lat,
                     "lng": address.lng,
                     "distance": address.distance,
-                    "houseNumber": address.houseNumber
+                    "houseNumber": address.houseiNumber,
+		    "zipcode":zips,
                 };
             }
             return doc;
@@ -1051,7 +1088,7 @@ function convertToLatLong(str) {
     return obj;
 }
 
-num_pattern = /(((?:(?:\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b|rd\b|nd\b))(?=\w+))|\s(?:\d{1,3}$))/i;
+num_pattern = /(((?:(?:\b\d{1,3}))\b(?:[\s,;]+)(?!(?:st\b|th\b|rd\b|nd\b))(?=\w+))|\s(?:\b\d{1,3}$))/i;
 var num_p = new RegExp(num_pattern);
 
 function extractHouseNumber(str){

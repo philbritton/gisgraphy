@@ -93,7 +93,7 @@ public class GeocodingService implements IGeocodingService {
 	public final static Pagination ONE_RESULT_PAGINATION = Pagination.paginate().from(0).to(1);
 	public final static Pagination FIVE_RESULT_PAGINATION = Pagination.paginate().from(0).to(5);
 	public final static SolrResponseDtoDistanceComparator comparator = new SolrResponseDtoDistanceComparator();
-	public final static Pattern HOUSENUMBERPATTERN = Pattern.compile("((?:^\\d{1,4})(?!(?:st\\b|th\\b|rd\\b|nd\\b))|(((?:\\b\\d{1,4}))\\b(?:[\\s,;]+)(?!(?:st\\b|th\\b|rd\\b|nd\\b))(?=\\w+)+?)|\\s?(?:\\d{1,4}$))");
+	public final static Pattern HOUSENUMBERPATTERN = Pattern.compile("((?:^\\b\\d{1,3})(?!(?:st\\b|th\\b|rd\\b|nd\\b))|(((?:\\b\\d{1,4}))\\b(?:[\\s,;]+)(?!(?:st\\b|th\\b|rd\\b|nd\\b))(?=\\w+)+?)|\\s?(?:\\b\\d{1,3}$))");
 
 	/**
 	 * The logger
